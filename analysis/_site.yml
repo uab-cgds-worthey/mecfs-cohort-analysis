@@ -5,8 +5,11 @@ navbar:
   left:
   - text: Home
     href: index.html
-  - text: About
-    href: about.html
+  - text: Background
+    href: background.html
+  - text: Analysis
+    href: analysis.html
+  right:
   - text: License
     href: license.html
 output:
