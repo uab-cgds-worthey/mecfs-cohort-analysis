@@ -107,6 +107,9 @@ pheatmap(sampleDistMatrix, clustering_distance_rows=sampleDists, clustering_dist
 pcaData = plotPCA(vsd, intgroup=c("Batch", "Family", "Affected"), returnData=TRUE) 
 percentVar = round(100 * attr(pcaData, "percentVar")) 
 
+ggplot(pcaData, aes(PC1, PC2, shape=factor(Batch), fill=factor(Affected),  color=factor(Family)))  + 
+  geom_point(size=5) + xlab(paste0("PC1: ",percentVar[1],"% variance")) + ylab(paste0("PC2: ",percentVar[2],"% variance")) + coord_fixed()
+
 ggplot(pcaData, aes(PC1, PC2, shape=factor(Batch), color=factor(Affected)))  + 
   geom_point(size=5) + xlab(paste0("PC1: ",percentVar[1],"% variance")) + ylab(paste0("PC2: ",percentVar[2],"% variance")) + coord_fixed()
 ```
@@ -120,7 +123,6 @@ mat = assay(vsd_limma)[ topVarGenes, ]
 mat = mat - rowMeans(mat)
 df = as.data.frame(colData(vsd)[,c("Batch", "Affected")])
 pheatmap(mat, annotation_col=df)
-
 ```
 
 ```{r}
@@ -154,9 +156,7 @@ topgenes_aff_vs_unaff_05
 topgenes_aff_vs_unaff_05 = assay(vsd_limma)[topgenes_aff_vs_unaff_05,] 
 topgenes_aff_vs_unaff_05 = topgenes_aff_vs_unaff_05 - rowMeans(topgenes_aff_vs_unaff_05)
 df = as.data.frame(colData(vsd_limma)[,c("Batch", "Family", "Affected")])
-png("output/heatmap_res_aff_vs_unaff_05_top-50.png", width = 1024, height = 768)
 pheatmap(topgenes_aff_vs_unaff_05, annotation_col=df)
-dev.off()
 ```
 
 ```{r, adding gene name}
