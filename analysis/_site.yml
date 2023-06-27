@@ -10,8 +10,8 @@ navbar:
   - text: Analysis
     href: analysis.html
   right:
-  - text: License
-    href: license.html
+  - icon: fa-github
+    href: https://github.com/uab-cgds-worthey/mecfs-dge-analysis
 output:
   workflowr::wflow_html:
     toc: yes

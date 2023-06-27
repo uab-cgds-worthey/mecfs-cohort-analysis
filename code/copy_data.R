@@ -11,6 +11,7 @@ counts_file <- "salmon.merged.gene_counts_length_scaled.tsv"
 dir_create(path = "data/star-salmon", recurse = TRUE)
 
 # Copy files from analysis directory to workflowr project directory
+# This line ONLY works on Cheaha
 file_copy(path(analysis_dir, "star_salmon", counts_file), path("data", "star-salmon", counts_file))
 
 # Create subdirectories in workflowr output folder
