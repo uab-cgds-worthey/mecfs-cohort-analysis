@@ -20,6 +20,17 @@ Ensure you have all necessary libraries installed.
 
 At a later date, `renv` will be integrated to ensure reproducibility of this analysis.
 
+Use the below code to install these packages:
+
+```r
+# Install packages from CRAN
+install.packages(c("tidyverse", "RColorBrewer", "pheatmap", "gprofiler2", "plotly"))
+
+# Install packages from Bioconductor
+install.packages("BiocManager")
+BiocManager::install(c("DESeq2", "genefilter", "limma", "biomaRt"))
+```
+
 ```{r, load libraries}
 library(tidyverse) # Available via CRAN
 library(DESeq2) # Available via Bioconductor
@@ -89,9 +100,9 @@ Perform count data transformation by variance stabilizing transformation (vst) o
 vsd = vst(dds, blind=FALSE) 
 ```
 
-### Batch correction, transformation and plotting
+### Batch correction with limma
 
-```{r}
+```{r, limma}
 counts_vst = assay(vsd)
 write.csv(counts_vst, file="output/counts_vst.csv")
 mm = model.matrix(~ Family + Affected, colData(vsd))
@@ -105,7 +116,8 @@ assay(vsd_limma) = counts_vst_limma
 ```
 
 ### Sample distances heatmap
-```{r}
+
+```{r, sample-dist-heatmap}
 sampleDists = dist(t(assay(vsd_limma)))
 sampleDistMatrix = as.matrix(sampleDists) 
 rownames(sampleDistMatrix) = paste(vsd_limma$Batch, vsd_limma$Family, sep=" | ") 
@@ -118,7 +130,7 @@ pheatmap(sampleDistMatrix, clustering_distance_rows=sampleDists, clustering_dist
 
 ### Principal Components Analysis
 
-```{r}
+```{r, principal-components-analysis}
 pcaData = plotPCA(vsd, intgroup=c("Batch", "Family", "Affected"), returnData=TRUE) 
 percentVar = round(100 * attr(pcaData, "percentVar")) 
 
