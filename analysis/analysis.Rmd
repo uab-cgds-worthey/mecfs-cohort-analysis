@@ -1,8 +1,10 @@
 ---
-title: "Differential Gene Expression Analysis"
+title: "Differential Gene Expression (DGE) Analysis"
 output:
   workflowr::wflow_html:
-    toc: false
+    toc: true
+    toc_depth: 3
+    toc_float: true
     code_folding: hide
 editor_options:
   chunk_output_type: console
@@ -12,6 +14,11 @@ editor_options:
 knitr::opts_chunk$set(echo = TRUE, warning = FALSE, message = FALSE)
 ```
 
+# DGE Analysis Setup {.tabset}
+
+Ensure you have all necessary libraries installed.
+
+At a later date, `renv` will be integrated to ensure reproducibility of this analysis.
 
 ```{r, load libraries}
 library(tidyverse) # Available via CRAN
@@ -20,13 +27,15 @@ library(RColorBrewer) # Available via CRAN
 library(pheatmap) # Available via CRAN
 library(genefilter) # Available via Bioconductor
 library(limma) # Available via Bioconductor
+library(gprofiler2) # Available via CRAN
+library(biomaRt) # Available via Bioconductor
+library(plotly) # Available via CRAN
 ```
 
 ## Data Import
 
 We will be importing counts data from the star-salmon pipeline and our metadata 
-for the project which is hosted on Box. This code block also ensures data is properly ordered
-by sample id.
+for the project which is hosted on Box. This also ensures data is properly ordered by sample id.
 
 ```{r, import data}
 counts <- read_tsv("data/star-salmon/salmon.merged.gene_counts_length_scaled.tsv")
@@ -80,7 +89,7 @@ Perform count data transformation by variance stabilizing transformation (vst) o
 vsd = vst(dds, blind=FALSE) 
 ```
 
-#### Batch correction, transformation and plotting
+### Batch correction, transformation and plotting
 
 ```{r}
 counts_vst = assay(vsd)
@@ -95,7 +104,7 @@ vsd_limma = vsd
 assay(vsd_limma) = counts_vst_limma
 ```
 
-#### Sample distances heatmap
+### Sample distances heatmap
 ```{r}
 sampleDists = dist(t(assay(vsd_limma)))
 sampleDistMatrix = as.matrix(sampleDists) 
@@ -107,22 +116,23 @@ pheatmap(sampleDistMatrix, clustering_distance_rows=sampleDists, clustering_dist
 ```
 
 
-#### Principal Components Analysis
+### Principal Components Analysis
 
 ```{r}
 pcaData = plotPCA(vsd, intgroup=c("Batch", "Family", "Affected"), returnData=TRUE) 
 percentVar = round(100 * attr(pcaData, "percentVar")) 
 
-ggplot(pcaData, aes(PC1, PC2, shape=factor(Batch), fill=factor(Affected),  color=factor(Family)))  + 
-  geom_point(size=5) + xlab(paste0("PC1: ",percentVar[1],"% variance")) + ylab(paste0("PC2: ",percentVar[2],"% variance")) + coord_fixed()
+p1 <- ggplot(pcaData, aes(PC1, PC2, shape=factor(Batch), fill=factor(Affected),  color=factor(Family))) + geom_point(size=5) + xlab(paste0("PC1: ",percentVar[1],"% variance")) + ylab(paste0("PC2: ",percentVar[2],"% variance")) + coord_fixed()
+p1
+ggplotly(p1)
 
 ggplot(pcaData, aes(PC1, PC2, shape=factor(Batch), color=factor(Affected)))  + 
   geom_point(size=5) + xlab(paste0("PC1: ",percentVar[1],"% variance")) + ylab(paste0("PC2: ",percentVar[2],"% variance")) + coord_fixed()
 ```
 
-#### Heatmap of top 50  & top 100 genes
+### Heatmap of top 50  & top 100 genes
 
-This is a heatmap for 50 genes with the highest variance across samples 
+This is a heatmap for 50 genes with the highest variance across samples. 
 ```{r, top50-heatmap, out.height="570px", out.width ="800px"}
 topVarGenes = head(order(-rowVars(assay(vsd))),50)
 mat = assay(vsd_limma)[ topVarGenes, ]
@@ -131,7 +141,7 @@ df = as.data.frame(colData(vsd)[,c("Batch", "Affected")])
 pheatmap(mat, annotation_col=df, fontsize = 5)
 ```
 
-This is a heatmap of the top 100 genes with the highest variance across samples 
+This is a heatmap of the top 100 genes with the highest variance across samples. 
 ```{r, top100-heatmap, out.width = "1200px"}
 topVarGenes = head(order(-rowVars(assay(vsd_limma))),100)
 mat = assay(vsd_limma)[ topVarGenes, ]
@@ -140,7 +150,8 @@ df = as.data.frame(colData(vsd_limma)[,c("Batch", "Family", "Affected")])
 pheatmap(mat, annotation_col=df, fontsize = 6)
 ```
 
-#### Comparison/Contrast of Affected_Yes_vs_No 
+### Comparison/Contrast of Affected_Yes_vs_No 
+
 ```{r}
 res_aff_vs_unaff = results(dds, contrast=c("Affected", "Yes", "No"))
 res_aff_vs_unaff= res_aff_vs_unaff[order(res_aff_vs_unaff$padj),]
@@ -158,6 +169,8 @@ topgenes_aff_vs_unaff_05 = topgenes_aff_vs_unaff_05 - rowMeans(topgenes_aff_vs_u
 # Convert ensemblids
 ensemblids <- topgenes_byensemblid
 rownames(topgenes_aff_vs_unaff_05) <- gene_names$gene_name[match(ensemblids, gene_names$Ensembl_ID)]
+
+topgenes_aff_vs_unaff_05[order(row.names(topgenes_aff_vs_unaff_05)), ]
 
 df = as.data.frame(colData(vsd_limma)[,c("Batch", "Family", "Affected")])
 pheatmap(topgenes_aff_vs_unaff_05, annotation_col=df, fontsize = 5)
@@ -179,4 +192,16 @@ write.csv(res_aff_vs_unaff_df_genename_05, file="output/res_aff_vs_unaff_df_gene
 ```
 
 
+## Enrichment analysis with gprofiler
 
+```{r}
+mart <- useMart(biomart = "ensembl", dataset = "hsapiens_gene_ensembl")
+all_genes_mart <- getBM(attributes = c('ensembl_gene_id_version',
+                     'entrezgene_id', 'ensembl_gene_id', 'description', 'genecards'),
+      filters = 'ensembl_gene_id_version', 
+      values = gene_names$Ensembl_ID,
+      mart = mart)
+all_genes_res <- gost(query = all_genes_mart$ensembl_gene_id, organism = "hsapiens", significant = TRUE)
+
+gostplot(all_genes_res, capped = FALSE, interactive = TRUE)
+```
