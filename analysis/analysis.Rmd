@@ -16,13 +16,14 @@ knitr::opts_chunk$set(echo = TRUE, warning = FALSE, message = FALSE)
 
 # DGE Analysis Setup {.tabset}
 
-Ensure you have all necessary libraries installed.
+Ensure you have all necessary libraries installed and load the helper code.
 
 At a later date, `renv` will be integrated to ensure reproducibility of this analysis.
 
 Use the below code to install these packages:
 
-```r
+
+```
 # Install packages from CRAN
 install.packages(c("tidyverse", "RColorBrewer", "pheatmap", "gprofiler2", "plotly"))
 
@@ -41,6 +42,12 @@ library(limma) # Available via Bioconductor
 library(gprofiler2) # Available via CRAN
 library(biomaRt) # Available via Bioconductor
 library(plotly) # Available via CRAN
+library(ggpubr)
+```
+
+```{r, include=FALSE}
+source("code/helpers.R", local = knitr::knit_global())
+# or sys.source("your-script.R", envir = knitr::knit_global())
 ```
 
 ## Data Import
@@ -50,22 +57,22 @@ for the project which is hosted on Box. This also ensures data is properly order
 
 ```{r, import data}
 counts <- read_tsv("data/star-salmon/salmon.merged.gene_counts_length_scaled.tsv")
+
 # Use first column (gene_id) for row names
 counts = data.frame(counts, row.names = 1)
 counts$Ensembl_ID = row.names(counts)
 drop = c("Ensembl_ID","gene_name")
-gene_names = counts[,drop]    
+gene_info = counts[,drop]    
 counts = counts[ , !(names(counts) %in% drop)]     # remove both columns
 
 # Import metadata
-sample_metadata <- read_csv("data/MECFS_RNAseq_metadata_CORRECTED.csv")
+sample_metadata <- read_csv("data/MECFS_RNAseq_metadata_2023_06_23.csv")
 row.names(sample_metadata) <- sample_metadata$RNA_Samples_id
-# Order sample_metadata
-sample_metadata <- arrange(sample_metadata, RNA_Samples_id)
 
 # Check that data is ordered properly
-all(rownames(sample_metadata) %in% colnames(counts))                   
-all(rownames(sample_metadata) == colnames(counts))   
+check_order(sample_metadata = sample_metadata, counts = counts)
+
+genes_biomart <- retrieve_gene_info(values = gene_info$Ensembl_ID, filters = 'ensembl_gene_id_version')
 ```
 
 ## DESeq2 Analysis
@@ -79,14 +86,12 @@ sample_metadata$Gender = factor(sample_metadata$Gender)
 # Account for Family later but batch is accounted for
 dds <- DESeqDataSetFromMatrix(countData = round(counts), colData = sample_metadata, design = ~ Batch + Affected)
 
-# Pre-filtering: Keep only rows that have atleast 10 reads total
+# Pre-filtering: Keep only rows that have at least 10 reads total
 keep = rowSums(counts(dds)) >= 10 
 dds = dds[keep,]
 
 # Run DESeq function
 dds = DESeq(dds)
-head(counts(dds, normalized=TRUE))
-resultsNames(dds)
 
 # Normalize gene counts for differences in seq. depth/global differences
 counts_norm = counts(dds, normalized=TRUE)
@@ -180,18 +185,19 @@ topgenes_aff_vs_unaff_05 = topgenes_aff_vs_unaff_05 - rowMeans(topgenes_aff_vs_u
 
 # Convert ensemblids
 ensemblids <- topgenes_byensemblid
-rownames(topgenes_aff_vs_unaff_05) <- gene_names$gene_name[match(ensemblids, gene_names$Ensembl_ID)]
+rownames(topgenes_aff_vs_unaff_05) <- gene_info$gene_name[match(ensemblids, gene_info$Ensembl_ID)]
 
-topgenes_aff_vs_unaff_05[order(row.names(topgenes_aff_vs_unaff_05)), ]
+topgenes_aff_vs_unaff_05 <- topgenes_aff_vs_unaff_05[order(row.names(topgenes_aff_vs_unaff_05)), ]
 
 df = as.data.frame(colData(vsd_limma)[,c("Batch", "Family", "Affected")])
 pheatmap(topgenes_aff_vs_unaff_05, annotation_col=df, fontsize = 5)
 ```
 
+
 ```{r, all-genes}
 res_aff_vs_unaff_df_genename = res_aff_vs_unaff_df
 res_aff_vs_unaff_df_genename$Ensembl_ID = row.names(res_aff_vs_unaff_df)
-res_aff_vs_unaff_df_genename = merge(x=res_aff_vs_unaff_df_genename, y=gene_names, by.x ="Ensembl_ID", by.y="Ensembl_ID", all.x=T)
+res_aff_vs_unaff_df_genename = merge(x=res_aff_vs_unaff_df_genename, y=gene_info, by.x ="Ensembl_ID", by.y="Ensembl_ID", all.x=T)
 res_aff_vs_unaff_df_genename = res_aff_vs_unaff_df_genename[,c(dim(res_aff_vs_unaff_df_genename)[2],1:dim(res_aff_vs_unaff_df_genename)[2]-1)]
 res_aff_vs_unaff_df_genename = res_aff_vs_unaff_df_genename[order(res_aff_vs_unaff_df_genename[,"padj"]),]
 write.csv(res_aff_vs_unaff_df_genename,file="output/res_aff_vs_unaff_genename.csv" )
@@ -203,17 +209,37 @@ res_aff_vs_unaff_df_genename_05 = res_aff_vs_unaff_df_genename_05[order(res_aff_
 write.csv(res_aff_vs_unaff_df_genename_05, file="output/res_aff_vs_unaff_df_genename_05.csv")
 ```
 
+```{r, maplot}
+# Select specific genes to show
+# set top = 0, then specify genes using label.select argument
+ggmaplot(res_aff_vs_unaff_df_genename, main = "Affected vs Unaffected",
+         fdr = .05, fc = 2, size = 0.4,
+         genenames = as.vector(res_aff_vs_unaff_df_genename$gene_name),
+         ggtheme = ggplot2::theme_minimal(),
+         legend = "top", top = 19, font.label = c("bold", 8), label.rectangle = TRUE,
+         font.legend = "bold", font.main = "bold"
+)
+```
 
-## Enrichment analysis with gprofiler
+
+## Enrichment analysis
 
 ```{r}
-mart <- useMart(biomart = "ensembl", dataset = "hsapiens_gene_ensembl")
-all_genes_mart <- getBM(attributes = c('ensembl_gene_id_version',
-                     'entrezgene_id', 'ensembl_gene_id', 'description', 'genecards'),
-      filters = 'ensembl_gene_id_version', 
-      values = gene_names$Ensembl_ID,
-      mart = mart)
-all_genes_res <- gost(query = all_genes_mart$ensembl_gene_id, organism = "hsapiens", significant = TRUE)
+all_genes_res <- gost(query = genes_biomart$ensembl_gene_id, organism = "hsapiens", significant = TRUE)
 
 gostplot(all_genes_res, capped = FALSE, interactive = TRUE)
+```
+
+
+## Genes of Interest
+
+```{r}
+genes_of_interest <- c("ACAD9/CFAP92", "ACADM", "ADORA2A", "ADRA1D", "ANKZF1", "AVPR1B", "CARMIL2", "CCDC178", "CENPF", "COQ2", "CR2", "DCTPP1", "DNASE1L3", "DPEP1", "EN03", "FCRL3", "FASTKD1", "GCKR", "GIMAP2", "HAGHL", "HSD11B1", "IRF2BP2", "KCNJ18", "LRCOL1", "LRBA, MAB21L2", "MFN1", "MRPS18B", "NLRP12", "P2RX7", "PGP", "PIEZO1", "PLCG2", "RERGL", "RPS6KC1", "SCN4A", "SIAE", "SLC11A2", "SLC12A3", "SLC4A1", "SLC6A12", "SLC9A9", "TDO2", "THEMIS", "TF", "TRAFD1", "UBASH3B", "WASHC5")
+
+genes_interest_mart <- retrieve_gene_info(values = genes_of_interest, filters = "hgnc_symbol")
+
+filtered_by_interest <- filter(res_aff_vs_unaff_df_genename, Ensembl_ID %in% genes_interest_mart$ensembl_gene_id_version)
+
+filtered_by_interest
+
 ```
