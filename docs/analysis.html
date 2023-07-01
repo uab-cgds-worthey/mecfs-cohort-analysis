@@ -504,7 +504,7 @@ class="glyphicon glyphicon-ok text-success" aria-hidden="true"></span>
 <div class="tab-content">
 <div id="summary" class="tab-pane fade in active">
 <p>
-<strong>Last updated:</strong> 2023-06-28
+<strong>Last updated:</strong> 2023-07-01
 </p>
 <p>
 <strong>Checks:</strong> <span
@@ -635,15 +635,15 @@ project makes it easier to run your code on other machines.</p>
 <div class="panel panel-default">
 <div class="panel-heading">
 <p class="panel-title">
-<a data-toggle="collapse" data-parent="#workflowr-checks" href="#strongRepositoryversionstrongahrefhttpsgithubcomuabcgdswortheymecfsdgeanalysistree5fa935d0bff7b4eb00271f42547e9f6de10d4e31targetblank5fa935da">
+<a data-toggle="collapse" data-parent="#workflowr-checks" href="#strongRepositoryversionstrongahrefhttpsgithubcomuabcgdswortheymecfsdgeanalysistreeb5cecfb72c2b020c9f00fefba23959002600bf27targetblankb5cecfba">
 <span class="glyphicon glyphicon-ok text-success"
 aria-hidden="true"></span> <strong>Repository version:</strong>
-<a href="https://github.com/uab-cgds-worthey/mecfs-dge-analysis/tree/5fa935d0bff7b4eb00271f42547e9f6de10d4e31" target="_blank">5fa935d</a>
+<a href="https://github.com/uab-cgds-worthey/mecfs-dge-analysis/tree/b5cecfb72c2b020c9f00fefba23959002600bf27" target="_blank">b5cecfb</a>
 </a>
 </p>
 </div>
 <div
-id="strongRepositoryversionstrongahrefhttpsgithubcomuabcgdswortheymecfsdgeanalysistree5fa935d0bff7b4eb00271f42547e9f6de10d4e31targetblank5fa935da"
+id="strongRepositoryversionstrongahrefhttpsgithubcomuabcgdswortheymecfsdgeanalysistreeb5cecfb72c2b020c9f00fefba23959002600bf27targetblankb5cecfba"
 class="panel-collapse collapse">
 <div class="panel-body">
 <p>
@@ -653,7 +653,7 @@ reproducibility.
 </p>
 <p>
 The results in this page were generated with repository version
-<a href="https://github.com/uab-cgds-worthey/mecfs-dge-analysis/tree/5fa935d0bff7b4eb00271f42547e9f6de10d4e31" target="_blank">5fa935d</a>.
+<a href="https://github.com/uab-cgds-worthey/mecfs-dge-analysis/tree/b5cecfb72c2b020c9f00fefba23959002600bf27" target="_blank">b5cecfb</a>.
 See the <em>Past versions</em> tab to see a history of the changes made
 to the R Markdown and HTML files.
 </p>
@@ -674,9 +674,21 @@ Ignored files:
     Ignored:    data/.DS_Store
     Ignored:    output/batch-correction-limma/
 
+Untracked files:
+    Untracked:  data/MECFS_RNAseq_metadata_2023_06_23.csv
+    Untracked:  data/RNAseq Variants of Interest List_V2.xlsx
+
 Unstaged changes:
     Deleted:    Rplot.png
+    Modified:   code/helpers.R
     Deleted:    data/CPAM0066_PCS_slides_NM_001173543.1(BANP) c.1372G-A, p.Val458Met.pptx
+    Deleted:    data/MECFS_RNAseq_metadata_CORRECTED.csv
+    Deleted:    data/MECFS_RNAseq_metadata_CORRECTED.xlsx
+    Modified:   output/counts_vst.csv
+    Modified:   output/counts_vst_limma.csv
+    Modified:   output/res_aff_vs_unaff.csv
+    Modified:   output/res_aff_vs_unaff_df_genename_05.csv
+    Modified:   output/res_aff_vs_unaff_genename.csv
 
 </code></pre>
 <p>
@@ -722,6 +734,40 @@ Message
 </tr>
 </thead>
 <tbody>
+<tr>
+<td>
+Rmd
+</td>
+<td>
+<a href="https://github.com/uab-cgds-worthey/mecfs-dge-analysis/blob/b5cecfb72c2b020c9f00fefba23959002600bf27/analysis/analysis.Rmd" target="_blank">b5cecfb</a>
+</td>
+<td>
+sdhutchins
+</td>
+<td>
+2023-07-01
+</td>
+<td>
+wflow_publish("analysis/*")
+</td>
+</tr>
+<tr>
+<td>
+html
+</td>
+<td>
+<a href="https://rawcdn.githack.com/uab-cgds-worthey/mecfs-dge-analysis/597034daf6d9bfa65ba200fa716e748f8360d8be/docs/analysis.html" target="_blank">597034d</a>
+</td>
+<td>
+sdhutchins
+</td>
+<td>
+2023-06-28
+</td>
+<td>
+Build site.
+</td>
+</tr>
 <tr>
 <td>
 html
@@ -901,16 +947,17 @@ wflow_publish("analysis/")
 </div>
 <div id="dge-analysis-setup" class="section level1 tabset">
 <h1 class="tabset">DGE Analysis Setup</h1>
-<p>Ensure you have all necessary libraries installed.</p>
+<p>Ensure you have all necessary libraries installed and load the helper
+code.</p>
 <p>At a later date, <code>renv</code> will be integrated to ensure
 reproducibility of this analysis.</p>
 <p>Use the below code to install these packages:</p>
-<div class="sourceCode" id="cb1"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb1-1"><a href="#cb1-1" tabindex="-1"></a><span class="co"># Install packages from CRAN</span></span>
-<span id="cb1-2"><a href="#cb1-2" tabindex="-1"></a><span class="fu">install.packages</span>(<span class="fu">c</span>(<span class="st">&quot;tidyverse&quot;</span>, <span class="st">&quot;RColorBrewer&quot;</span>, <span class="st">&quot;pheatmap&quot;</span>, <span class="st">&quot;gprofiler2&quot;</span>, <span class="st">&quot;plotly&quot;</span>))</span>
-<span id="cb1-3"><a href="#cb1-3" tabindex="-1"></a></span>
-<span id="cb1-4"><a href="#cb1-4" tabindex="-1"></a><span class="co"># Install packages from Bioconductor</span></span>
-<span id="cb1-5"><a href="#cb1-5" tabindex="-1"></a><span class="fu">install.packages</span>(<span class="st">&quot;BiocManager&quot;</span>)</span>
-<span id="cb1-6"><a href="#cb1-6" tabindex="-1"></a>BiocManager<span class="sc">::</span><span class="fu">install</span>(<span class="fu">c</span>(<span class="st">&quot;DESeq2&quot;</span>, <span class="st">&quot;genefilter&quot;</span>, <span class="st">&quot;limma&quot;</span>, <span class="st">&quot;biomaRt&quot;</span>))</span></code></pre></div>
+<pre><code># Install packages from CRAN
+install.packages(c(&quot;tidyverse&quot;, &quot;RColorBrewer&quot;, &quot;pheatmap&quot;, &quot;gprofiler2&quot;, &quot;plotly&quot;))
+
+# Install packages from Bioconductor
+install.packages(&quot;BiocManager&quot;)
+BiocManager::install(c(&quot;DESeq2&quot;, &quot;genefilter&quot;, &quot;limma&quot;, &quot;biomaRt&quot;))</code></pre>
 <div class="sourceCode" id="cb2"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb2-1"><a href="#cb2-1" tabindex="-1"></a><span class="fu">library</span>(tidyverse) <span class="co"># Available via CRAN</span></span>
 <span id="cb2-2"><a href="#cb2-2" tabindex="-1"></a><span class="fu">library</span>(DESeq2) <span class="co"># Available via Bioconductor</span></span>
 <span id="cb2-3"><a href="#cb2-3" tabindex="-1"></a><span class="fu">library</span>(RColorBrewer) <span class="co"># Available via CRAN</span></span>
@@ -919,131 +966,78 @@ reproducibility of this analysis.</p>
 <span id="cb2-6"><a href="#cb2-6" tabindex="-1"></a><span class="fu">library</span>(limma) <span class="co"># Available via Bioconductor</span></span>
 <span id="cb2-7"><a href="#cb2-7" tabindex="-1"></a><span class="fu">library</span>(gprofiler2) <span class="co"># Available via CRAN</span></span>
 <span id="cb2-8"><a href="#cb2-8" tabindex="-1"></a><span class="fu">library</span>(biomaRt) <span class="co"># Available via Bioconductor</span></span>
-<span id="cb2-9"><a href="#cb2-9" tabindex="-1"></a><span class="fu">library</span>(plotly) <span class="co"># Available via CRAN</span></span></code></pre></div>
+<span id="cb2-9"><a href="#cb2-9" tabindex="-1"></a><span class="fu">library</span>(plotly) <span class="co"># Available via CRAN</span></span>
+<span id="cb2-10"><a href="#cb2-10" tabindex="-1"></a><span class="fu">library</span>(ggpubr)</span></code></pre></div>
 <div id="data-import" class="section level2">
 <h2>Data Import</h2>
 <p>We will be importing counts data from the star-salmon pipeline and
 our metadata for the project which is hosted on Box. This also ensures
 data is properly ordered by sample id.</p>
 <div class="sourceCode" id="cb3"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb3-1"><a href="#cb3-1" tabindex="-1"></a>counts <span class="ot">&lt;-</span> <span class="fu">read_tsv</span>(<span class="st">&quot;data/star-salmon/salmon.merged.gene_counts_length_scaled.tsv&quot;</span>)</span>
-<span id="cb3-2"><a href="#cb3-2" tabindex="-1"></a><span class="co"># Use first column (gene_id) for row names</span></span>
-<span id="cb3-3"><a href="#cb3-3" tabindex="-1"></a>counts <span class="ot">=</span> <span class="fu">data.frame</span>(counts, <span class="at">row.names =</span> <span class="dv">1</span>)</span>
-<span id="cb3-4"><a href="#cb3-4" tabindex="-1"></a>counts<span class="sc">$</span>Ensembl_ID <span class="ot">=</span> <span class="fu">row.names</span>(counts)</span>
-<span id="cb3-5"><a href="#cb3-5" tabindex="-1"></a>drop <span class="ot">=</span> <span class="fu">c</span>(<span class="st">&quot;Ensembl_ID&quot;</span>,<span class="st">&quot;gene_name&quot;</span>)</span>
-<span id="cb3-6"><a href="#cb3-6" tabindex="-1"></a>gene_names <span class="ot">=</span> counts[,drop]    </span>
-<span id="cb3-7"><a href="#cb3-7" tabindex="-1"></a>counts <span class="ot">=</span> counts[ , <span class="sc">!</span>(<span class="fu">names</span>(counts) <span class="sc">%in%</span> drop)]     <span class="co"># remove both columns</span></span>
-<span id="cb3-8"><a href="#cb3-8" tabindex="-1"></a></span>
-<span id="cb3-9"><a href="#cb3-9" tabindex="-1"></a><span class="co"># Import metadata</span></span>
-<span id="cb3-10"><a href="#cb3-10" tabindex="-1"></a>sample_metadata <span class="ot">&lt;-</span> <span class="fu">read_csv</span>(<span class="st">&quot;data/MECFS_RNAseq_metadata_CORRECTED.csv&quot;</span>)</span>
-<span id="cb3-11"><a href="#cb3-11" tabindex="-1"></a><span class="fu">row.names</span>(sample_metadata) <span class="ot">&lt;-</span> sample_metadata<span class="sc">$</span>RNA_Samples_id</span>
-<span id="cb3-12"><a href="#cb3-12" tabindex="-1"></a><span class="co"># Order sample_metadata</span></span>
-<span id="cb3-13"><a href="#cb3-13" tabindex="-1"></a>sample_metadata <span class="ot">&lt;-</span> <span class="fu">arrange</span>(sample_metadata, RNA_Samples_id)</span>
-<span id="cb3-14"><a href="#cb3-14" tabindex="-1"></a></span>
-<span id="cb3-15"><a href="#cb3-15" tabindex="-1"></a><span class="co"># Check that data is ordered properly</span></span>
-<span id="cb3-16"><a href="#cb3-16" tabindex="-1"></a><span class="fu">all</span>(<span class="fu">rownames</span>(sample_metadata) <span class="sc">%in%</span> <span class="fu">colnames</span>(counts))                   </span></code></pre></div>
-<pre><code>[1] TRUE</code></pre>
-<div class="sourceCode" id="cb5"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb5-1"><a href="#cb5-1" tabindex="-1"></a><span class="fu">all</span>(<span class="fu">rownames</span>(sample_metadata) <span class="sc">==</span> <span class="fu">colnames</span>(counts))   </span></code></pre></div>
-<pre><code>[1] TRUE</code></pre>
+<span id="cb3-2"><a href="#cb3-2" tabindex="-1"></a></span>
+<span id="cb3-3"><a href="#cb3-3" tabindex="-1"></a><span class="co"># Use first column (gene_id) for row names</span></span>
+<span id="cb3-4"><a href="#cb3-4" tabindex="-1"></a>counts <span class="ot">=</span> <span class="fu">data.frame</span>(counts, <span class="at">row.names =</span> <span class="dv">1</span>)</span>
+<span id="cb3-5"><a href="#cb3-5" tabindex="-1"></a>counts<span class="sc">$</span>Ensembl_ID <span class="ot">=</span> <span class="fu">row.names</span>(counts)</span>
+<span id="cb3-6"><a href="#cb3-6" tabindex="-1"></a>drop <span class="ot">=</span> <span class="fu">c</span>(<span class="st">&quot;Ensembl_ID&quot;</span>,<span class="st">&quot;gene_name&quot;</span>)</span>
+<span id="cb3-7"><a href="#cb3-7" tabindex="-1"></a>gene_info <span class="ot">=</span> counts[,drop]    </span>
+<span id="cb3-8"><a href="#cb3-8" tabindex="-1"></a>counts <span class="ot">=</span> counts[ , <span class="sc">!</span>(<span class="fu">names</span>(counts) <span class="sc">%in%</span> drop)]     <span class="co"># remove both columns</span></span>
+<span id="cb3-9"><a href="#cb3-9" tabindex="-1"></a></span>
+<span id="cb3-10"><a href="#cb3-10" tabindex="-1"></a><span class="co"># Import metadata</span></span>
+<span id="cb3-11"><a href="#cb3-11" tabindex="-1"></a>sample_metadata <span class="ot">&lt;-</span> <span class="fu">read_csv</span>(<span class="st">&quot;data/MECFS_RNAseq_metadata_2023_06_23.csv&quot;</span>)</span>
+<span id="cb3-12"><a href="#cb3-12" tabindex="-1"></a><span class="fu">row.names</span>(sample_metadata) <span class="ot">&lt;-</span> sample_metadata<span class="sc">$</span>RNA_Samples_id</span>
+<span id="cb3-13"><a href="#cb3-13" tabindex="-1"></a></span>
+<span id="cb3-14"><a href="#cb3-14" tabindex="-1"></a><span class="co"># Check that data is ordered properly</span></span>
+<span id="cb3-15"><a href="#cb3-15" tabindex="-1"></a><span class="fu">check_order</span>(<span class="at">sample_metadata =</span> sample_metadata, <span class="at">counts =</span> counts)</span></code></pre></div>
+<pre><code>[1] &quot;Data matches and is ordered by sample id.&quot;</code></pre>
+<div class="sourceCode" id="cb5"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb5-1"><a href="#cb5-1" tabindex="-1"></a>genes_biomart <span class="ot">&lt;-</span> <span class="fu">retrieve_gene_info</span>(<span class="at">values =</span> gene_info<span class="sc">$</span>Ensembl_ID, <span class="at">filters =</span> <span class="st">&#39;ensembl_gene_id_version&#39;</span>)</span></code></pre></div>
 </div>
 <div id="deseq2-analysis" class="section level2">
 <h2>DESeq2 Analysis</h2>
-<div class="sourceCode" id="cb7"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb7-1"><a href="#cb7-1" tabindex="-1"></a>sample_metadata<span class="sc">$</span>Family <span class="ot">=</span> <span class="fu">factor</span>(sample_metadata<span class="sc">$</span>Family)  </span>
-<span id="cb7-2"><a href="#cb7-2" tabindex="-1"></a>sample_metadata<span class="sc">$</span>Affected <span class="ot">=</span> <span class="fu">factor</span>(sample_metadata<span class="sc">$</span>Affected) </span>
-<span id="cb7-3"><a href="#cb7-3" tabindex="-1"></a>sample_metadata<span class="sc">$</span>Batch <span class="ot">=</span> <span class="fu">factor</span>(sample_metadata<span class="sc">$</span>Batch)</span>
-<span id="cb7-4"><a href="#cb7-4" tabindex="-1"></a>sample_metadata<span class="sc">$</span>Gender <span class="ot">=</span> <span class="fu">factor</span>(sample_metadata<span class="sc">$</span>Gender)</span>
-<span id="cb7-5"><a href="#cb7-5" tabindex="-1"></a></span>
-<span id="cb7-6"><a href="#cb7-6" tabindex="-1"></a><span class="co"># Account for Family later but batch is accounted for</span></span>
-<span id="cb7-7"><a href="#cb7-7" tabindex="-1"></a>dds <span class="ot">&lt;-</span> <span class="fu">DESeqDataSetFromMatrix</span>(<span class="at">countData =</span> <span class="fu">round</span>(counts), <span class="at">colData =</span> sample_metadata, <span class="at">design =</span> <span class="sc">~</span> Batch <span class="sc">+</span> Affected)</span>
-<span id="cb7-8"><a href="#cb7-8" tabindex="-1"></a></span>
-<span id="cb7-9"><a href="#cb7-9" tabindex="-1"></a><span class="co"># Pre-filtering: Keep only rows that have atleast 10 reads total</span></span>
-<span id="cb7-10"><a href="#cb7-10" tabindex="-1"></a>keep <span class="ot">=</span> <span class="fu">rowSums</span>(<span class="fu">counts</span>(dds)) <span class="sc">&gt;=</span> <span class="dv">10</span> </span>
-<span id="cb7-11"><a href="#cb7-11" tabindex="-1"></a>dds <span class="ot">=</span> dds[keep,]</span>
-<span id="cb7-12"><a href="#cb7-12" tabindex="-1"></a></span>
-<span id="cb7-13"><a href="#cb7-13" tabindex="-1"></a><span class="co"># Run DESeq function</span></span>
-<span id="cb7-14"><a href="#cb7-14" tabindex="-1"></a>dds <span class="ot">=</span> <span class="fu">DESeq</span>(dds)</span>
-<span id="cb7-15"><a href="#cb7-15" tabindex="-1"></a><span class="fu">head</span>(<span class="fu">counts</span>(dds, <span class="at">normalized=</span><span class="cn">TRUE</span>))</span></code></pre></div>
-<pre><code>                       LW001974    LW001975     LW001976     LW001977
-ENSG00000000003.15     6.283344     2.05296     7.223942     4.264822
-ENSG00000000419.14   921.557182  1043.92997   850.017210   859.361676
-ENSG00000000457.14  1114.246411   746.25082   829.549373   916.936776
-ENSG00000000460.17   234.578192   189.89876   193.842452   328.391311
-ENSG00000000938.13 12201.207645 11118.82929 15551.943765 17490.035904
-ENSG00000000971.17    83.777926   130.36294   167.354663   197.248027
-                       LW001978    LW001979     LW001980    LW001981
-ENSG00000000003.15     3.565091    14.47998     4.573315    10.46587
-ENSG00000000419.14   910.286661   866.16626   868.015180  1118.80153
-ENSG00000000457.14  1100.424867   971.47523  1048.203789  1003.67696
-ENSG00000000460.17   294.714219   276.43604   185.676587   252.22747
-ENSG00000000938.13 10116.540921 10099.13001 18749.676681 21708.30816
-ENSG00000000971.17   553.777525   143.48347   222.263107   216.64352
-                      LW001982     LW001983     LW001984     LW001985
-ENSG00000000003.15    17.45822     6.161279     5.718447     9.434676
-ENSG00000000419.14   979.40627  1059.740056   924.754609   919.356806
-ENSG00000000457.14  1104.23256   635.844033   901.880820   939.274457
-ENSG00000000460.17   374.47887   144.173938   303.894624   263.122644
-ENSG00000000938.13 19973.95218 23219.397520 19682.078435 13836.477178
-ENSG00000000971.17   107.36807    27.109629    86.593629   116.361010
-                     LW001986     LW001987    LW001988    LW001989     LW001990
-ENSG00000000003.15    14.3010     8.261848    20.80204    11.32375     7.592455
-ENSG00000000419.14   894.8338   840.642993   896.56804   949.93645   832.458476
-ENSG00000000457.14  1046.6967   747.008720   897.60814   859.34649  1079.755586
-ENSG00000000460.17   305.7689   232.708707   200.73971   223.95853   264.651294
-ENSG00000000938.13 14919.3442 14147.037031 13752.23045 14215.07557 13223.345284
-ENSG00000000971.17   222.6869   227.200809   160.17573   163.56522   143.172011
-                       LW001991    LW001992     LW001993    LW001994
-ENSG00000000003.15     5.130748    3.925784     7.688938    12.43332
-ENSG00000000419.14  1002.206201  917.324885   997.639691   920.06541
-ENSG00000000457.14   903.866855 1092.676575   897.683498   885.63469
-ENSG00000000460.17   217.201685  378.183869   149.934289   273.53296
-ENSG00000000938.13 14667.099624 8978.268242 13184.606244 15375.23032
-ENSG00000000971.17   149.646830  294.433808   152.817641   124.33316
-                       LW001995    LW001996    LW001997   LW001998     LW001999
-ENSG00000000003.15     4.865262    13.74314    6.723075   11.82344     3.302019
-ENSG00000000419.14  1119.010269   992.12394  808.113622 1212.74707   893.746405
-ENSG00000000457.14   904.938740   897.23081  935.852048  728.83058   989.504949
-ENSG00000000460.17   515.717776   293.84146  404.729118  143.57034   159.597572
-ENSG00000000938.13 15497.481354 14288.28620 9146.071308 8941.89828 16707.114147
-ENSG00000000971.17   229.478193   126.96045  208.415327  369.06021   184.913049
-                     LW002000    LW002001     LW002080
-ENSG00000000003.15   10.49324     9.01276     4.661212
-ENSG00000000419.14 1437.57367   736.47124   918.258773
-ENSG00000000457.14 1143.76299   987.54098  1041.780892
-ENSG00000000460.17  339.71860   350.21010   205.093330
-ENSG00000000938.13 8890.39630 10409.73770 12261.318282
-ENSG00000000971.17  247.90276   133.90386   209.754542</code></pre>
-<div class="sourceCode" id="cb9"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb9-1"><a href="#cb9-1" tabindex="-1"></a><span class="fu">resultsNames</span>(dds)</span></code></pre></div>
-<pre><code>[1] &quot;Intercept&quot;          &quot;Batch_B2_vs_B1&quot;     &quot;Batch_B3_vs_B1&quot;    
-[4] &quot;Affected_Yes_vs_No&quot;</code></pre>
-<div class="sourceCode" id="cb11"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb11-1"><a href="#cb11-1" tabindex="-1"></a><span class="co"># Normalize gene counts for differences in seq. depth/global differences</span></span>
-<span id="cb11-2"><a href="#cb11-2" tabindex="-1"></a>counts_norm <span class="ot">=</span> <span class="fu">counts</span>(dds, <span class="at">normalized=</span><span class="cn">TRUE</span>)</span></code></pre></div>
+<div class="sourceCode" id="cb6"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb6-1"><a href="#cb6-1" tabindex="-1"></a>sample_metadata<span class="sc">$</span>Family <span class="ot">=</span> <span class="fu">factor</span>(sample_metadata<span class="sc">$</span>Family)  </span>
+<span id="cb6-2"><a href="#cb6-2" tabindex="-1"></a>sample_metadata<span class="sc">$</span>Affected <span class="ot">=</span> <span class="fu">factor</span>(sample_metadata<span class="sc">$</span>Affected) </span>
+<span id="cb6-3"><a href="#cb6-3" tabindex="-1"></a>sample_metadata<span class="sc">$</span>Batch <span class="ot">=</span> <span class="fu">factor</span>(sample_metadata<span class="sc">$</span>Batch)</span>
+<span id="cb6-4"><a href="#cb6-4" tabindex="-1"></a>sample_metadata<span class="sc">$</span>Gender <span class="ot">=</span> <span class="fu">factor</span>(sample_metadata<span class="sc">$</span>Gender)</span>
+<span id="cb6-5"><a href="#cb6-5" tabindex="-1"></a></span>
+<span id="cb6-6"><a href="#cb6-6" tabindex="-1"></a><span class="co"># Account for Family later but batch is accounted for</span></span>
+<span id="cb6-7"><a href="#cb6-7" tabindex="-1"></a>dds <span class="ot">&lt;-</span> <span class="fu">DESeqDataSetFromMatrix</span>(<span class="at">countData =</span> <span class="fu">round</span>(counts), <span class="at">colData =</span> sample_metadata, <span class="at">design =</span> <span class="sc">~</span> Batch <span class="sc">+</span> Affected)</span>
+<span id="cb6-8"><a href="#cb6-8" tabindex="-1"></a></span>
+<span id="cb6-9"><a href="#cb6-9" tabindex="-1"></a><span class="co"># Pre-filtering: Keep only rows that have at least 10 reads total</span></span>
+<span id="cb6-10"><a href="#cb6-10" tabindex="-1"></a>keep <span class="ot">=</span> <span class="fu">rowSums</span>(<span class="fu">counts</span>(dds)) <span class="sc">&gt;=</span> <span class="dv">10</span> </span>
+<span id="cb6-11"><a href="#cb6-11" tabindex="-1"></a>dds <span class="ot">=</span> dds[keep,]</span>
+<span id="cb6-12"><a href="#cb6-12" tabindex="-1"></a></span>
+<span id="cb6-13"><a href="#cb6-13" tabindex="-1"></a><span class="co"># Run DESeq function</span></span>
+<span id="cb6-14"><a href="#cb6-14" tabindex="-1"></a>dds <span class="ot">=</span> <span class="fu">DESeq</span>(dds)</span>
+<span id="cb6-15"><a href="#cb6-15" tabindex="-1"></a></span>
+<span id="cb6-16"><a href="#cb6-16" tabindex="-1"></a><span class="co"># Normalize gene counts for differences in seq. depth/global differences</span></span>
+<span id="cb6-17"><a href="#cb6-17" tabindex="-1"></a>counts_norm <span class="ot">=</span> <span class="fu">counts</span>(dds, <span class="at">normalized=</span><span class="cn">TRUE</span>)</span></code></pre></div>
 <div id="data-transformation-and-visualization" class="section level3">
 <h3>Data transformation and visualization</h3>
 <p>Perform count data transformation by variance stabilizing
 transformation (vst) on normalized counts.</p>
-<div class="sourceCode" id="cb12"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb12-1"><a href="#cb12-1" tabindex="-1"></a>vsd <span class="ot">=</span> <span class="fu">vst</span>(dds, <span class="at">blind=</span><span class="cn">FALSE</span>) </span></code></pre></div>
+<div class="sourceCode" id="cb7"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb7-1"><a href="#cb7-1" tabindex="-1"></a>vsd <span class="ot">=</span> <span class="fu">vst</span>(dds, <span class="at">blind=</span><span class="cn">FALSE</span>) </span></code></pre></div>
 </div>
 <div id="batch-correction-with-limma" class="section level3">
 <h3>Batch correction with limma</h3>
-<div class="sourceCode" id="cb13"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb13-1"><a href="#cb13-1" tabindex="-1"></a>counts_vst <span class="ot">=</span> <span class="fu">assay</span>(vsd)</span>
-<span id="cb13-2"><a href="#cb13-2" tabindex="-1"></a><span class="fu">write.csv</span>(counts_vst, <span class="at">file=</span><span class="st">&quot;output/counts_vst.csv&quot;</span>)</span>
-<span id="cb13-3"><a href="#cb13-3" tabindex="-1"></a>mm <span class="ot">=</span> <span class="fu">model.matrix</span>(<span class="sc">~</span> Family <span class="sc">+</span> Affected, <span class="fu">colData</span>(vsd))</span>
-<span id="cb13-4"><a href="#cb13-4" tabindex="-1"></a></span>
-<span id="cb13-5"><a href="#cb13-5" tabindex="-1"></a>counts_vst_limma <span class="ot">=</span> limma<span class="sc">::</span><span class="fu">removeBatchEffect</span>(counts_vst, <span class="at">batch=</span>vsd<span class="sc">$</span>Batch, <span class="at">design=</span>mm)</span></code></pre></div>
+<div class="sourceCode" id="cb8"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb8-1"><a href="#cb8-1" tabindex="-1"></a>counts_vst <span class="ot">=</span> <span class="fu">assay</span>(vsd)</span>
+<span id="cb8-2"><a href="#cb8-2" tabindex="-1"></a><span class="fu">write.csv</span>(counts_vst, <span class="at">file=</span><span class="st">&quot;output/counts_vst.csv&quot;</span>)</span>
+<span id="cb8-3"><a href="#cb8-3" tabindex="-1"></a>mm <span class="ot">=</span> <span class="fu">model.matrix</span>(<span class="sc">~</span> Family <span class="sc">+</span> Affected, <span class="fu">colData</span>(vsd))</span>
+<span id="cb8-4"><a href="#cb8-4" tabindex="-1"></a></span>
+<span id="cb8-5"><a href="#cb8-5" tabindex="-1"></a>counts_vst_limma <span class="ot">=</span> limma<span class="sc">::</span><span class="fu">removeBatchEffect</span>(counts_vst, <span class="at">batch=</span>vsd<span class="sc">$</span>Batch, <span class="at">design=</span>mm)</span></code></pre></div>
 <pre><code>Coefficients not estimable: batch2 </code></pre>
-<div class="sourceCode" id="cb15"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb15-1"><a href="#cb15-1" tabindex="-1"></a><span class="fu">write.csv</span>(counts_vst_limma, <span class="at">file=</span><span class="st">&quot;output/counts_vst_limma.csv&quot;</span>)</span>
-<span id="cb15-2"><a href="#cb15-2" tabindex="-1"></a></span>
-<span id="cb15-3"><a href="#cb15-3" tabindex="-1"></a>vsd_limma <span class="ot">=</span> vsd</span>
-<span id="cb15-4"><a href="#cb15-4" tabindex="-1"></a><span class="fu">assay</span>(vsd_limma) <span class="ot">=</span> counts_vst_limma</span></code></pre></div>
+<div class="sourceCode" id="cb10"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb10-1"><a href="#cb10-1" tabindex="-1"></a><span class="fu">write.csv</span>(counts_vst_limma, <span class="at">file=</span><span class="st">&quot;output/counts_vst_limma.csv&quot;</span>)</span>
+<span id="cb10-2"><a href="#cb10-2" tabindex="-1"></a></span>
+<span id="cb10-3"><a href="#cb10-3" tabindex="-1"></a>vsd_limma <span class="ot">=</span> vsd</span>
+<span id="cb10-4"><a href="#cb10-4" tabindex="-1"></a><span class="fu">assay</span>(vsd_limma) <span class="ot">=</span> counts_vst_limma</span></code></pre></div>
 </div>
 <div id="sample-distances-heatmap" class="section level3">
 <h3>Sample distances heatmap</h3>
-<div class="sourceCode" id="cb16"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb16-1"><a href="#cb16-1" tabindex="-1"></a>sampleDists <span class="ot">=</span> <span class="fu">dist</span>(<span class="fu">t</span>(<span class="fu">assay</span>(vsd_limma)))</span>
-<span id="cb16-2"><a href="#cb16-2" tabindex="-1"></a>sampleDistMatrix <span class="ot">=</span> <span class="fu">as.matrix</span>(sampleDists) </span>
-<span id="cb16-3"><a href="#cb16-3" tabindex="-1"></a><span class="fu">rownames</span>(sampleDistMatrix) <span class="ot">=</span> <span class="fu">paste</span>(vsd_limma<span class="sc">$</span>Batch, vsd_limma<span class="sc">$</span>Family, <span class="at">sep=</span><span class="st">&quot; | &quot;</span>) </span>
-<span id="cb16-4"><a href="#cb16-4" tabindex="-1"></a><span class="fu">colnames</span>(sampleDistMatrix) <span class="ot">=</span> <span class="fu">paste</span>(vsd_limma<span class="sc">$</span>RNA_Samples_id, vsd_limma<span class="sc">$</span>Family, <span class="at">sep=</span><span class="st">&quot; | &quot;</span>) </span>
-<span id="cb16-5"><a href="#cb16-5" tabindex="-1"></a>colors <span class="ot">=</span> <span class="fu">colorRampPalette</span>(<span class="fu">rev</span>(<span class="fu">brewer.pal</span>(<span class="dv">9</span>, <span class="st">&quot;Blues&quot;</span>)))(<span class="dv">255</span>) </span>
-<span id="cb16-6"><a href="#cb16-6" tabindex="-1"></a></span>
-<span id="cb16-7"><a href="#cb16-7" tabindex="-1"></a><span class="fu">pheatmap</span>(sampleDistMatrix, <span class="at">clustering_distance_rows=</span>sampleDists, <span class="at">clustering_distance_cols=</span>sampleDists, <span class="at">col=</span>colors)</span></code></pre></div>
+<div class="sourceCode" id="cb11"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb11-1"><a href="#cb11-1" tabindex="-1"></a>sampleDists <span class="ot">=</span> <span class="fu">dist</span>(<span class="fu">t</span>(<span class="fu">assay</span>(vsd_limma)))</span>
+<span id="cb11-2"><a href="#cb11-2" tabindex="-1"></a>sampleDistMatrix <span class="ot">=</span> <span class="fu">as.matrix</span>(sampleDists) </span>
+<span id="cb11-3"><a href="#cb11-3" tabindex="-1"></a><span class="fu">rownames</span>(sampleDistMatrix) <span class="ot">=</span> <span class="fu">paste</span>(vsd_limma<span class="sc">$</span>Batch, vsd_limma<span class="sc">$</span>Family, <span class="at">sep=</span><span class="st">&quot; | &quot;</span>) </span>
+<span id="cb11-4"><a href="#cb11-4" tabindex="-1"></a><span class="fu">colnames</span>(sampleDistMatrix) <span class="ot">=</span> <span class="fu">paste</span>(vsd_limma<span class="sc">$</span>RNA_Samples_id, vsd_limma<span class="sc">$</span>Family, <span class="at">sep=</span><span class="st">&quot; | &quot;</span>) </span>
+<span id="cb11-5"><a href="#cb11-5" tabindex="-1"></a>colors <span class="ot">=</span> <span class="fu">colorRampPalette</span>(<span class="fu">rev</span>(<span class="fu">brewer.pal</span>(<span class="dv">9</span>, <span class="st">&quot;Blues&quot;</span>)))(<span class="dv">255</span>) </span>
+<span id="cb11-6"><a href="#cb11-6" tabindex="-1"></a></span>
+<span id="cb11-7"><a href="#cb11-7" tabindex="-1"></a><span class="fu">pheatmap</span>(sampleDistMatrix, <span class="at">clustering_distance_rows=</span>sampleDists, <span class="at">clustering_distance_cols=</span>sampleDists, <span class="at">col=</span>colors)</span></code></pre></div>
 <p><img src="figure/analysis.Rmd/sample-dist-heatmap-1.png" width="672" style="display: block; margin: auto;" /></p>
 <p>
 <button type="button" class="btn btn-default btn-xs btn-workflowr btn-workflowr-fig" data-toggle="collapse" data-target="#fig-sample-dist-heatmap-1">
@@ -1085,11 +1079,11 @@ sdhutchins
 </div>
 <div id="principal-components-analysis" class="section level3">
 <h3>Principal Components Analysis</h3>
-<div class="sourceCode" id="cb17"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb17-1"><a href="#cb17-1" tabindex="-1"></a>pcaData <span class="ot">=</span> <span class="fu">plotPCA</span>(vsd, <span class="at">intgroup=</span><span class="fu">c</span>(<span class="st">&quot;Batch&quot;</span>, <span class="st">&quot;Family&quot;</span>, <span class="st">&quot;Affected&quot;</span>), <span class="at">returnData=</span><span class="cn">TRUE</span>) </span>
-<span id="cb17-2"><a href="#cb17-2" tabindex="-1"></a>percentVar <span class="ot">=</span> <span class="fu">round</span>(<span class="dv">100</span> <span class="sc">*</span> <span class="fu">attr</span>(pcaData, <span class="st">&quot;percentVar&quot;</span>)) </span>
-<span id="cb17-3"><a href="#cb17-3" tabindex="-1"></a></span>
-<span id="cb17-4"><a href="#cb17-4" tabindex="-1"></a>p1 <span class="ot">&lt;-</span> <span class="fu">ggplot</span>(pcaData, <span class="fu">aes</span>(PC1, PC2, <span class="at">shape=</span><span class="fu">factor</span>(Batch), <span class="at">fill=</span><span class="fu">factor</span>(Affected),  <span class="at">color=</span><span class="fu">factor</span>(Family))) <span class="sc">+</span> <span class="fu">geom_point</span>(<span class="at">size=</span><span class="dv">5</span>) <span class="sc">+</span> <span class="fu">xlab</span>(<span class="fu">paste0</span>(<span class="st">&quot;PC1: &quot;</span>,percentVar[<span class="dv">1</span>],<span class="st">&quot;% variance&quot;</span>)) <span class="sc">+</span> <span class="fu">ylab</span>(<span class="fu">paste0</span>(<span class="st">&quot;PC2: &quot;</span>,percentVar[<span class="dv">2</span>],<span class="st">&quot;% variance&quot;</span>)) <span class="sc">+</span> <span class="fu">coord_fixed</span>()</span>
-<span id="cb17-5"><a href="#cb17-5" tabindex="-1"></a>p1</span></code></pre></div>
+<div class="sourceCode" id="cb12"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb12-1"><a href="#cb12-1" tabindex="-1"></a>pcaData <span class="ot">=</span> <span class="fu">plotPCA</span>(vsd, <span class="at">intgroup=</span><span class="fu">c</span>(<span class="st">&quot;Batch&quot;</span>, <span class="st">&quot;Family&quot;</span>, <span class="st">&quot;Affected&quot;</span>), <span class="at">returnData=</span><span class="cn">TRUE</span>) </span>
+<span id="cb12-2"><a href="#cb12-2" tabindex="-1"></a>percentVar <span class="ot">=</span> <span class="fu">round</span>(<span class="dv">100</span> <span class="sc">*</span> <span class="fu">attr</span>(pcaData, <span class="st">&quot;percentVar&quot;</span>)) </span>
+<span id="cb12-3"><a href="#cb12-3" tabindex="-1"></a></span>
+<span id="cb12-4"><a href="#cb12-4" tabindex="-1"></a>p1 <span class="ot">&lt;-</span> <span class="fu">ggplot</span>(pcaData, <span class="fu">aes</span>(PC1, PC2, <span class="at">shape=</span><span class="fu">factor</span>(Batch), <span class="at">fill=</span><span class="fu">factor</span>(Affected),  <span class="at">color=</span><span class="fu">factor</span>(Family))) <span class="sc">+</span> <span class="fu">geom_point</span>(<span class="at">size=</span><span class="dv">5</span>) <span class="sc">+</span> <span class="fu">xlab</span>(<span class="fu">paste0</span>(<span class="st">&quot;PC1: &quot;</span>,percentVar[<span class="dv">1</span>],<span class="st">&quot;% variance&quot;</span>)) <span class="sc">+</span> <span class="fu">ylab</span>(<span class="fu">paste0</span>(<span class="st">&quot;PC2: &quot;</span>,percentVar[<span class="dv">2</span>],<span class="st">&quot;% variance&quot;</span>)) <span class="sc">+</span> <span class="fu">coord_fixed</span>()</span>
+<span id="cb12-5"><a href="#cb12-5" tabindex="-1"></a>p1</span></code></pre></div>
 <p><img src="figure/analysis.Rmd/principal-components-analysis-1.png" width="672" style="display: block; margin: auto;" /></p>
 <p>
 <button type="button" class="btn btn-default btn-xs btn-workflowr btn-workflowr-fig" data-toggle="collapse" data-target="#fig-principal-components-analysis-1">
@@ -1128,11 +1122,11 @@ sdhutchins
 </table>
 </div>
 </div>
-<div class="sourceCode" id="cb18"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb18-1"><a href="#cb18-1" tabindex="-1"></a><span class="fu">ggplotly</span>(p1)</span></code></pre></div>
+<div class="sourceCode" id="cb13"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb13-1"><a href="#cb13-1" tabindex="-1"></a><span class="fu">ggplotly</span>(p1)</span></code></pre></div>
 <div class="plotly html-widget html-fill-item-overflow-hidden html-fill-item" id="htmlwidget-e56eaee8d12915f7b927" style="width:672px;height:480px;"></div>
-<script type="application/json" data-for="htmlwidget-e56eaee8d12915f7b927">{"x":{"data":[{"x":[2.3550557857932084],"y":[5.2142140755936479],"text":"PC1:   2.3550558<br />PC2:   5.2142141<br />factor(Batch): B1<br />factor(Affected): No<br />factor(Family): 1","type":"scatter","mode":"markers","marker":{"autocolorscale":false,"color":"rgba(248,118,109,1)","opacity":1,"size":18.897637795275593,"symbol":"circle","line":{"width":1.8897637795275593,"color":"rgba(248,118,109,1)"}},"hoveron":"points","name":"(B1,No,1)","legendgroup":"(B1,No,1)","showlegend":true,"xaxis":"x","yaxis":"y","hoverinfo":"text","frame":null},{"x":[21.351994559545972],"y":[-0.8972362158895888],"text":"PC1:  21.3519946<br />PC2:  -0.8972362<br />factor(Batch): B1<br />factor(Affected): No<br />factor(Family): 2","type":"scatter","mode":"markers","marker":{"autocolorscale":false,"color":"rgba(248,118,109,1)","opacity":1,"size":18.897637795275593,"symbol":"circle","line":{"width":1.8897637795275593,"color":"rgba(230,134,19,1)"}},"hoveron":"points","name":"(B1,No,2)","legendgroup":"(B1,No,2)","showlegend":true,"xaxis":"x","yaxis":"y","hoverinfo":"text","frame":null},{"x":[7.7879031357436421],"y":[2.6386452760786794],"text":"PC1:   7.7879031<br />PC2:   2.6386453<br />factor(Batch): B1<br />factor(Affected): No<br />factor(Family): 3","type":"scatter","mode":"markers","marker":{"autocolorscale":false,"color":"rgba(248,118,109,1)","opacity":1,"size":18.897637795275593,"symbol":"circle","line":{"width":1.8897637795275593,"color":"rgba(205,150,0,1)"}},"hoveron":"points","name":"(B1,No,3)","legendgroup":"(B1,No,3)","showlegend":true,"xaxis":"x","yaxis":"y","hoverinfo":"text","frame":null},{"x":[-20.119554691985424],"y":[2.6583354442531242],"text":"PC1: -20.1195547<br />PC2:   2.6583354<br />factor(Batch): B1<br />factor(Affected): No<br />factor(Family): 4","type":"scatter","mode":"markers","marker":{"autocolorscale":false,"color":"rgba(248,118,109,1)","opacity":1,"size":18.897637795275593,"symbol":"circle","line":{"width":1.8897637795275593,"color":"rgba(171,163,0,1)"}},"hoveron":"points","name":"(B1,No,4)","legendgroup":"(B1,No,4)","showlegend":true,"xaxis":"x","yaxis":"y","hoverinfo":"text","frame":null},{"x":[11.716667062742101],"y":[1.9004399082869019],"text":"PC1:  11.7166671<br />PC2:   1.9004399<br />factor(Batch): B1<br />factor(Affected): No<br />factor(Family): 5","type":"scatter","mode":"markers","marker":{"autocolorscale":false,"color":"rgba(248,118,109,1)","opacity":1,"size":18.897637795275593,"symbol":"circle","line":{"width":1.8897637795275593,"color":"rgba(124,174,0,1)"}},"hoveron":"points","name":"(B1,No,5)","legendgroup":"(B1,No,5)","showlegend":true,"xaxis":"x","yaxis":"y","hoverinfo":"text","frame":null},{"x":[12.77190062456844],"y":[-24.607296544986511],"text":"PC1:  12.7719006<br />PC2: -24.6072965<br />factor(Batch): B1<br />factor(Affected): No<br />factor(Family): 6","type":"scatter","mode":"markers","marker":{"autocolorscale":false,"color":"rgba(248,118,109,1)","opacity":1,"size":18.897637795275593,"symbol":"circle","line":{"width":1.8897637795275593,"color":"rgba(12,183,2,1)"}},"hoveron":"points","name":"(B1,No,6)","legendgroup":"(B1,No,6)","showlegend":true,"xaxis":"x","yaxis":"y","hoverinfo":"text","frame":null},{"x":[-6.5694482503745508],"y":[4.4625458354455159],"text":"PC1:  -6.5694483<br />PC2:   4.4625458<br />factor(Batch): B1<br />factor(Affected): Yes<br />factor(Family): 1","type":"scatter","mode":"markers","marker":{"autocolorscale":false,"color":"rgba(0,191,196,1)","opacity":1,"size":18.897637795275593,"symbol":"circle","line":{"width":1.8897637795275593,"color":"rgba(248,118,109,1)"}},"hoveron":"points","name":"(B1,Yes,1)","legendgroup":"(B1,Yes,1)","showlegend":true,"xaxis":"x","yaxis":"y","hoverinfo":"text","frame":null},{"x":[-4.7816333578611427],"y":[3.9955562871884722],"text":"PC1:  -4.7816334<br />PC2:   3.9955563<br />factor(Batch): B1<br />factor(Affected): Yes<br />factor(Family): 2","type":"scatter","mode":"markers","marker":{"autocolorscale":false,"color":"rgba(0,191,196,1)","opacity":1,"size":18.897637795275593,"symbol":"circle","line":{"width":1.8897637795275593,"color":"rgba(230,134,19,1)"}},"hoveron":"points","name":"(B1,Yes,2)","legendgroup":"(B1,Yes,2)","showlegend":true,"xaxis":"x","yaxis":"y","hoverinfo":"text","frame":null},{"x":[14.963052952305997],"y":[1.0824641324258706],"text":"PC1:  14.9630530<br />PC2:   1.0824641<br />factor(Batch): B1<br />factor(Affected): Yes<br />factor(Family): 3","type":"scatter","mode":"markers","marker":{"autocolorscale":false,"color":"rgba(0,191,196,1)","opacity":1,"size":18.897637795275593,"symbol":"circle","line":{"width":1.8897637795275593,"color":"rgba(205,150,0,1)"}},"hoveron":"points","name":"(B1,Yes,3)","legendgroup":"(B1,Yes,3)","showlegend":true,"xaxis":"x","yaxis":"y","hoverinfo":"text","frame":null},{"x":[13.577019132340178],"y":[1.0756795295341302],"text":"PC1:  13.5770191<br />PC2:   1.0756795<br />factor(Batch): B1<br />factor(Affected): Yes<br />factor(Family): 4","type":"scatter","mode":"markers","marker":{"autocolorscale":false,"color":"rgba(0,191,196,1)","opacity":1,"size":18.897637795275593,"symbol":"circle","line":{"width":1.8897637795275593,"color":"rgba(171,163,0,1)"}},"hoveron":"points","name":"(B1,Yes,4)","legendgroup":"(B1,Yes,4)","showlegend":true,"xaxis":"x","yaxis":"y","hoverinfo":"text","frame":null},{"x":[8.9573442345664329],"y":[2.5977323902495861],"text":"PC1:   8.9573442<br />PC2:   2.5977324<br />factor(Batch): B1<br />factor(Affected): Yes<br />factor(Family): 5","type":"scatter","mode":"markers","marker":{"autocolorscale":false,"color":"rgba(0,191,196,1)","opacity":1,"size":18.897637795275593,"symbol":"circle","line":{"width":1.8897637795275593,"color":"rgba(124,174,0,1)"}},"hoveron":"points","name":"(B1,Yes,5)","legendgroup":"(B1,Yes,5)","showlegend":true,"xaxis":"x","yaxis":"y","hoverinfo":"text","frame":null},{"x":[9.4762702848749427],"y":[-2.8993922781291763],"text":"PC1:   9.4762703<br />PC2:  -2.8993923<br />factor(Batch): B1<br />factor(Affected): Yes<br />factor(Family): 6","type":"scatter","mode":"markers","marker":{"autocolorscale":false,"color":"rgba(0,191,196,1)","opacity":1,"size":18.897637795275593,"symbol":"circle","line":{"width":1.8897637795275593,"color":"rgba(12,183,2,1)"}},"hoveron":"points","name":"(B1,Yes,6)","legendgroup":"(B1,Yes,6)","showlegend":true,"xaxis":"x","yaxis":"y","hoverinfo":"text","frame":null},{"x":[-3.7086424748209437],"y":[-20.593863832895881],"text":"PC1:  -3.7086425<br />PC2: -20.5938638<br />factor(Batch): B2<br />factor(Affected): No<br />factor(Family): 11","type":"scatter","mode":"markers","marker":{"autocolorscale":false,"color":"rgba(248,118,109,1)","opacity":1,"size":18.897637795275593,"symbol":"triangle-up","line":{"width":1.8897637795275593,"color":"rgba(0,169,255,1)"}},"hoveron":"points","name":"(B2,No,11)","legendgroup":"(B2,No,11)","showlegend":true,"xaxis":"x","yaxis":"y","hoverinfo":"text","frame":null},{"x":[12.568254319400015],"y":[0.76319094451557623],"text":"PC1:  12.5682543<br />PC2:   0.7631909<br />factor(Batch): B2<br />factor(Affected): Yes<br />factor(Family): 5","type":"scatter","mode":"markers","marker":{"autocolorscale":false,"color":"rgba(0,191,196,1)","opacity":1,"size":18.897637795275593,"symbol":"triangle-up","line":{"width":1.8897637795275593,"color":"rgba(124,174,0,1)"}},"hoveron":"points","name":"(B2,Yes,5)","legendgroup":"(B2,Yes,5)","showlegend":true,"xaxis":"x","yaxis":"y","hoverinfo":"text","frame":null},{"x":[-13.630270897454194],"y":[0.62720629806101025],"text":"PC1: -13.6302709<br />PC2:   0.6272063<br />factor(Batch): B2<br />factor(Affected): Yes<br />factor(Family): 6","type":"scatter","mode":"markers","marker":{"autocolorscale":false,"color":"rgba(0,191,196,1)","opacity":1,"size":18.897637795275593,"symbol":"triangle-up","line":{"width":1.8897637795275593,"color":"rgba(12,183,2,1)"}},"hoveron":"points","name":"(B2,Yes,6)","legendgroup":"(B2,Yes,6)","showlegend":true,"xaxis":"x","yaxis":"y","hoverinfo":"text","frame":null},{"x":[-16.878220180614676],"y":[-1.2987278379338034],"text":"PC1: -16.8782202<br />PC2:  -1.2987278<br />factor(Batch): B2<br />factor(Affected): Yes<br />factor(Family): 7","type":"scatter","mode":"markers","marker":{"autocolorscale":false,"color":"rgba(0,191,196,1)","opacity":1,"size":18.897637795275593,"symbol":"triangle-up","line":{"width":1.8897637795275593,"color":"rgba(0,190,103,1)"}},"hoveron":"points","name":"(B2,Yes,7)","legendgroup":"(B2,Yes,7)","showlegend":true,"xaxis":"x","yaxis":"y","hoverinfo":"text","frame":null},{"x":[-40.409235292983674],"y":[1.412491631914659],"text":"PC1: -40.4092353<br />PC2:   1.4124916<br />factor(Batch): B2<br />factor(Affected): Yes<br />factor(Family): 8","type":"scatter","mode":"markers","marker":{"autocolorscale":false,"color":"rgba(0,191,196,1)","opacity":1,"size":18.897637795275593,"symbol":"triangle-up","line":{"width":1.8897637795275593,"color":"rgba(0,193,154,1)"}},"hoveron":"points","name":"(B2,Yes,8)","legendgroup":"(B2,Yes,8)","showlegend":true,"xaxis":"x","yaxis":"y","hoverinfo":"text","frame":null},{"x":[-16.342379298229098,-6.7178322574120006],"y":[2.1326095150947251,3.313531801842367],"text":["PC1: -16.3423793<br />PC2:   2.1326095<br />factor(Batch): B2<br />factor(Affected): Yes<br />factor(Family): 9","PC1:  -6.7178323<br />PC2:   3.3135318<br />factor(Batch): B2<br />factor(Affected): Yes<br />factor(Family): 9"],"type":"scatter","mode":"markers","marker":{"autocolorscale":false,"color":"rgba(0,191,196,1)","opacity":1,"size":18.897637795275593,"symbol":"triangle-up","line":{"width":1.8897637795275593,"color":"rgba(0,191,196,1)"}},"hoveron":"points","name":"(B2,Yes,9)","legendgroup":"(B2,Yes,9)","showlegend":true,"xaxis":"x","yaxis":"y","hoverinfo":"text","frame":null},{"x":[-4.9188099907817708,-9.7009378428008723],"y":[-3.9216871620608234,-19.793185985353858],"text":["PC1:  -4.9188100<br />PC2:  -3.9216872<br />factor(Batch): B2<br />factor(Affected): Yes<br />factor(Family): 10","PC1:  -9.7009378<br />PC2: -19.7931860<br />factor(Batch): B2<br />factor(Affected): Yes<br />factor(Family): 10"],"type":"scatter","mode":"markers","marker":{"autocolorscale":false,"color":"rgba(0,191,196,1)","opacity":1,"size":18.897637795275593,"symbol":"triangle-up","line":{"width":1.8897637795275593,"color":"rgba(0,184,231,1)"}},"hoveron":"points","name":"(B2,Yes,10)","legendgroup":"(B2,Yes,10)","showlegend":true,"xaxis":"x","yaxis":"y","hoverinfo":"text","frame":null},{"x":[-0.44505909265695187],"y":[-2.0408633930973439],"text":"PC1:  -0.4450591<br />PC2:  -2.0408634<br />factor(Batch): B2<br />factor(Affected): Yes<br />factor(Family): 11","type":"scatter","mode":"markers","marker":{"autocolorscale":false,"color":"rgba(0,191,196,1)","opacity":1,"size":18.897637795275593,"symbol":"triangle-up","line":{"width":1.8897637795275593,"color":"rgba(0,169,255,1)"}},"hoveron":"points","name":"(B2,Yes,11)","legendgroup":"(B2,Yes,11)","showlegend":true,"xaxis":"x","yaxis":"y","hoverinfo":"text","frame":null},{"x":[-0.99331196669754407],"y":[7.5254062487890865],"text":"PC1:  -0.9933120<br />PC2:   7.5254062<br />factor(Batch): B3<br />factor(Affected): Yes<br />factor(Family): 12","type":"scatter","mode":"markers","marker":{"autocolorscale":false,"color":"rgba(0,191,196,1)","opacity":1,"size":18.897637795275593,"symbol":"square","line":{"width":1.8897637795275593,"color":"rgba(132,148,255,1)"}},"hoveron":"points","name":"(B3,Yes,12)","legendgroup":"(B3,Yes,12)","showlegend":true,"xaxis":"x","yaxis":"y","hoverinfo":"text","frame":null},{"x":[-6.1490783664588573,-7.7773225486800923,26.764983148448781],"y":[7.2738437295146543,7.0241475245003366,7.1628548028907861],"text":["PC1:  -6.1490784<br />PC2:   7.2738437<br />factor(Batch): B3<br />factor(Affected): Yes<br />factor(Family): 13","PC1:  -7.7773225<br />PC2:   7.0241475<br />factor(Batch): B3<br />factor(Affected): Yes<br />factor(Family): 13","PC1:  26.7649831<br />PC2:   7.1628548<br />factor(Batch): B3<br />factor(Affected): Yes<br />factor(Family): 13"],"type":"scatter","mode":"markers","marker":{"autocolorscale":false,"color":"rgba(0,191,196,1)","opacity":1,"size":18.897637795275593,"symbol":"square","line":{"width":1.8897637795275593,"color":"rgba(199,124,255,1)"}},"hoveron":"points","name":"(B3,Yes,13)","legendgroup":"(B3,Yes,13)","showlegend":true,"xaxis":"x","yaxis":"y","hoverinfo":"text","frame":null},{"x":[4.0367994776967038],"y":[2.2914723625296878],"text":"PC1:   4.0367995<br />PC2:   2.2914724<br />factor(Batch): B3<br />factor(Affected): Yes<br />factor(Family): 14","type":"scatter","mode":"markers","marker":{"autocolorscale":false,"color":"rgba(0,191,196,1)","opacity":1,"size":18.897637795275593,"symbol":"square","line":{"width":1.8897637795275593,"color":"rgba(237,104,237,1)"}},"hoveron":"points","name":"(B3,Yes,14)","legendgroup":"(B3,Yes,14)","showlegend":true,"xaxis":"x","yaxis":"y","hoverinfo":"text","frame":null},{"x":[-0.26938586729926073],"y":[6.0247412346202696],"text":"PC1:  -0.2693859<br />PC2:   6.0247412<br />factor(Batch): B3<br />factor(Affected): Yes<br />factor(Family): 15","type":"scatter","mode":"markers","marker":{"autocolorscale":false,"color":"rgba(0,191,196,1)","opacity":1,"size":18.897637795275593,"symbol":"square","line":{"width":1.8897637795275593,"color":"rgba(255,97,204,1)"}},"hoveron":"points","name":"(B3,Yes,15)","legendgroup":"(B3,Yes,15)","showlegend":true,"xaxis":"x","yaxis":"y","hoverinfo":"text","frame":null},{"x":[13.083877659084637],"y":[4.8751442770179647],"text":"PC1:  13.0838777<br />PC2:   4.8751443<br />factor(Batch): B3<br />factor(Affected): Yes<br />factor(Family): 16","type":"scatter","mode":"markers","marker":{"autocolorscale":false,"color":"rgba(0,191,196,1)","opacity":1,"size":18.897637795275593,"symbol":"square","line":{"width":1.8897637795275593,"color":"rgba(255,104,161,1)"}},"hoveron":"points","name":"(B3,Yes,16)","legendgroup":"(B3,Yes,16)","showlegend":true,"xaxis":"x","yaxis":"y","hoverinfo":"text","frame":null}],"layout":{"margin":{"t":26.228310502283108,"r":7.3059360730593621,"b":40.182648401826498,"l":43.105022831050235},"plot_bgcolor":"rgba(235,235,235,1)","paper_bgcolor":"rgba(255,255,255,1)","font":{"color":"rgba(0,0,0,1)","family":"","size":14.611872146118724},"xaxis":{"domain":[0,1],"automargin":true,"type":"linear","autorange":false,"range":[-43.767946215055296,30.123694070520404],"tickmode":"array","ticktext":["-40","-20","0","20"],"tickvals":[-40,-20,0,20],"categoryorder":"array","categoryarray":["-40","-20","0","20"],"nticks":null,"ticks":"outside","tickcolor":"rgba(51,51,51,1)","ticklen":3.6529680365296811,"tickwidth":0.66417600664176002,"showticklabels":true,"tickfont":{"color":"rgba(77,77,77,1)","family":"","size":11.68949771689498},"tickangle":-0,"showline":false,"linecolor":null,"linewidth":0,"showgrid":true,"gridcolor":"rgba(255,255,255,1)","gridwidth":0.66417600664176002,"zeroline":false,"anchor":"y","title":{"text":"PC1: 32% variance","font":{"color":"rgba(0,0,0,1)","family":"","size":14.611872146118724}},"scaleanchor":"y","scaleratio":1,"hoverformat":".2f"},"yaxis":{"domain":[0,1],"automargin":true,"type":"linear","autorange":false,"range":[-26.213931684675291,9.132041388477866],"tickmode":"array","ticktext":["-20","-10","0"],"tickvals":[-20,-10,0],"categoryorder":"array","categoryarray":["-20","-10","0"],"nticks":null,"ticks":"outside","tickcolor":"rgba(51,51,51,1)","ticklen":3.6529680365296811,"tickwidth":0.66417600664176002,"showticklabels":true,"tickfont":{"color":"rgba(77,77,77,1)","family":"","size":11.68949771689498},"tickangle":-0,"showline":false,"linecolor":null,"linewidth":0,"showgrid":true,"gridcolor":"rgba(255,255,255,1)","gridwidth":0.66417600664176002,"zeroline":false,"anchor":"x","title":{"text":"PC2: 10% variance","font":{"color":"rgba(0,0,0,1)","family":"","size":14.611872146118724}},"scaleanchor":"x","scaleratio":1,"hoverformat":".2f"},"shapes":[{"type":"rect","fillcolor":null,"line":{"color":null,"width":0,"linetype":[]},"yref":"paper","xref":"paper","x0":0,"x1":1,"y0":0,"y1":1}],"showlegend":true,"legend":{"bgcolor":"rgba(255,255,255,1)","bordercolor":"transparent","borderwidth":1.8897637795275593,"font":{"color":"rgba(0,0,0,1)","family":"","size":11.68949771689498},"title":{"text":"factor(Family)<br />factor(Affected)<br />factor(Batch)","font":{"color":"rgba(0,0,0,1)","family":"","size":14.611872146118724}}},"hovermode":"closest","barmode":"relative"},"config":{"doubleClick":"reset","modeBarButtonsToAdd":["hoverclosest","hovercompare"],"showSendToCloud":false},"source":"A","attrs":{"d9fb602c4472":{"x":{},"y":{},"shape":{},"fill":{},"colour":{},"type":"scatter"}},"cur_data":"d9fb602c4472","visdat":{"d9fb602c4472":["function (y) ","x"]},"highlight":{"on":"plotly_click","persistent":false,"dynamic":false,"selectize":false,"opacityDim":0.20000000000000001,"selected":{"opacity":1},"debounce":0},"shinyEvents":["plotly_hover","plotly_click","plotly_selected","plotly_relayout","plotly_brushed","plotly_brushing","plotly_clickannotation","plotly_doubleclick","plotly_deselect","plotly_afterplot","plotly_sunburstclick"],"base_url":"https://plot.ly"},"evals":[],"jsHooks":[]}</script>
-<div class="sourceCode" id="cb19"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb19-1"><a href="#cb19-1" tabindex="-1"></a><span class="fu">ggplot</span>(pcaData, <span class="fu">aes</span>(PC1, PC2, <span class="at">shape=</span><span class="fu">factor</span>(Batch), <span class="at">color=</span><span class="fu">factor</span>(Affected)))  <span class="sc">+</span> </span>
-<span id="cb19-2"><a href="#cb19-2" tabindex="-1"></a>  <span class="fu">geom_point</span>(<span class="at">size=</span><span class="dv">5</span>) <span class="sc">+</span> <span class="fu">xlab</span>(<span class="fu">paste0</span>(<span class="st">&quot;PC1: &quot;</span>,percentVar[<span class="dv">1</span>],<span class="st">&quot;% variance&quot;</span>)) <span class="sc">+</span> <span class="fu">ylab</span>(<span class="fu">paste0</span>(<span class="st">&quot;PC2: &quot;</span>,percentVar[<span class="dv">2</span>],<span class="st">&quot;% variance&quot;</span>)) <span class="sc">+</span> <span class="fu">coord_fixed</span>()</span></code></pre></div>
+<script type="application/json" data-for="htmlwidget-e56eaee8d12915f7b927">{"x":{"data":[{"x":[2.2925865798256257],"y":[5.2203950149491716],"text":"PC1:   2.2925866<br />PC2:   5.2203950<br />factor(Batch): B1<br />factor(Affected): No<br />factor(Family): 1","type":"scatter","mode":"markers","marker":{"autocolorscale":false,"color":"rgba(248,118,109,1)","opacity":1,"size":18.897637795275593,"symbol":"circle","line":{"width":1.8897637795275593,"color":"rgba(248,118,109,1)"}},"hoveron":"points","name":"(B1,No,1)","legendgroup":"(B1,No,1)","showlegend":true,"xaxis":"x","yaxis":"y","hoverinfo":"text","frame":null},{"x":[-3.7531467269071155],"y":[-21.292360627731632],"text":"PC1:  -3.7531467<br />PC2: -21.2923606<br />factor(Batch): B1<br />factor(Affected): No<br />factor(Family): 2","type":"scatter","mode":"markers","marker":{"autocolorscale":false,"color":"rgba(248,118,109,1)","opacity":1,"size":18.897637795275593,"symbol":"circle","line":{"width":1.8897637795275593,"color":"rgba(230,134,19,1)"}},"hoveron":"points","name":"(B1,No,2)","legendgroup":"(B1,No,2)","showlegend":true,"xaxis":"x","yaxis":"y","hoverinfo":"text","frame":null},{"x":[7.7762026606073658],"y":[2.701663012025322],"text":"PC1:   7.7762027<br />PC2:   2.7016630<br />factor(Batch): B1<br />factor(Affected): No<br />factor(Family): 3","type":"scatter","mode":"markers","marker":{"autocolorscale":false,"color":"rgba(248,118,109,1)","opacity":1,"size":18.897637795275593,"symbol":"circle","line":{"width":1.8897637795275593,"color":"rgba(205,150,0,1)"}},"hoveron":"points","name":"(B1,No,3)","legendgroup":"(B1,No,3)","showlegend":true,"xaxis":"x","yaxis":"y","hoverinfo":"text","frame":null},{"x":[-6.088447398591522],"y":[7.467526359359792],"text":"PC1:  -6.0884474<br />PC2:   7.4675264<br />factor(Batch): B1<br />factor(Affected): No<br />factor(Family): 4","type":"scatter","mode":"markers","marker":{"autocolorscale":false,"color":"rgba(248,118,109,1)","opacity":1,"size":18.897637795275593,"symbol":"circle","line":{"width":1.8897637795275593,"color":"rgba(171,163,0,1)"}},"hoveron":"points","name":"(B1,No,4)","legendgroup":"(B1,No,4)","showlegend":true,"xaxis":"x","yaxis":"y","hoverinfo":"text","frame":null},{"x":[12.752953252848876],"y":[-25.166040687834723],"text":"PC1:  12.7529533<br />PC2: -25.1660407<br />factor(Batch): B1<br />factor(Affected): No<br />factor(Family): 5","type":"scatter","mode":"markers","marker":{"autocolorscale":false,"color":"rgba(248,118,109,1)","opacity":1,"size":18.897637795275593,"symbol":"circle","line":{"width":1.8897637795275593,"color":"rgba(124,174,0,1)"}},"hoveron":"points","name":"(B1,No,5)","legendgroup":"(B1,No,5)","showlegend":true,"xaxis":"x","yaxis":"y","hoverinfo":"text","frame":null},{"x":[8.9943355492494117],"y":[2.6644579757817577],"text":"PC1:   8.9943355<br />PC2:   2.6644580<br />factor(Batch): B1<br />factor(Affected): No<br />factor(Family): 6","type":"scatter","mode":"markers","marker":{"autocolorscale":false,"color":"rgba(248,118,109,1)","opacity":1,"size":18.897637795275593,"symbol":"circle","line":{"width":1.8897637795275593,"color":"rgba(12,183,2,1)"}},"hoveron":"points","name":"(B1,No,6)","legendgroup":"(B1,No,6)","showlegend":true,"xaxis":"x","yaxis":"y","hoverinfo":"text","frame":null},{"x":[-6.5820538861605868],"y":[4.6168286200627318],"text":"PC1:  -6.5820539<br />PC2:   4.6168286<br />factor(Batch): B1<br />factor(Affected): Yes<br />factor(Family): 1","type":"scatter","mode":"markers","marker":{"autocolorscale":false,"color":"rgba(0,191,196,1)","opacity":1,"size":18.897637795275593,"symbol":"circle","line":{"width":1.8897637795275593,"color":"rgba(248,118,109,1)"}},"hoveron":"points","name":"(B1,Yes,1)","legendgroup":"(B1,Yes,1)","showlegend":true,"xaxis":"x","yaxis":"y","hoverinfo":"text","frame":null},{"x":[-20.204210484852315],"y":[3.1226899009900375],"text":"PC1: -20.2042105<br />PC2:   3.1226899<br />factor(Batch): B1<br />factor(Affected): Yes<br />factor(Family): 2","type":"scatter","mode":"markers","marker":{"autocolorscale":false,"color":"rgba(0,191,196,1)","opacity":1,"size":18.897637795275593,"symbol":"circle","line":{"width":1.8897637795275593,"color":"rgba(230,134,19,1)"}},"hoveron":"points","name":"(B1,Yes,2)","legendgroup":"(B1,Yes,2)","showlegend":true,"xaxis":"x","yaxis":"y","hoverinfo":"text","frame":null},{"x":[15.023478485103121],"y":[0.99121588367717939],"text":"PC1:  15.0234785<br />PC2:   0.9912159<br />factor(Batch): B1<br />factor(Affected): Yes<br />factor(Family): 3","type":"scatter","mode":"markers","marker":{"autocolorscale":false,"color":"rgba(0,191,196,1)","opacity":1,"size":18.897637795275593,"symbol":"circle","line":{"width":1.8897637795275593,"color":"rgba(205,150,0,1)"}},"hoveron":"points","name":"(B1,Yes,3)","legendgroup":"(B1,Yes,3)","showlegend":true,"xaxis":"x","yaxis":"y","hoverinfo":"text","frame":null},{"x":[-16.425406958591413],"y":[2.2789544930379284],"text":"PC1: -16.4254070<br />PC2:   2.2789545<br />factor(Batch): B1<br />factor(Affected): Yes<br />factor(Family): 4","type":"scatter","mode":"markers","marker":{"autocolorscale":false,"color":"rgba(0,191,196,1)","opacity":1,"size":18.897637795275593,"symbol":"circle","line":{"width":1.8897637795275593,"color":"rgba(171,163,0,1)"}},"hoveron":"points","name":"(B1,Yes,4)","legendgroup":"(B1,Yes,4)","showlegend":true,"xaxis":"x","yaxis":"y","hoverinfo":"text","frame":null},{"x":[-0.98122936967863728],"y":[7.6222393441890661],"text":"PC1:  -0.9812294<br />PC2:   7.6222393<br />factor(Batch): B1<br />factor(Affected): Yes<br />factor(Family): 5","type":"scatter","mode":"markers","marker":{"autocolorscale":false,"color":"rgba(0,191,196,1)","opacity":1,"size":18.897637795275593,"symbol":"circle","line":{"width":1.8897637795275593,"color":"rgba(124,174,0,1)"}},"hoveron":"points","name":"(B1,Yes,5)","legendgroup":"(B1,Yes,5)","showlegend":true,"xaxis":"x","yaxis":"y","hoverinfo":"text","frame":null},{"x":[-5.1361502114851048],"y":[-4.0135084572199364],"text":"PC1:  -5.1361502<br />PC2:  -4.0135085<br />factor(Batch): B1<br />factor(Affected): Yes<br />factor(Family): 6","type":"scatter","mode":"markers","marker":{"autocolorscale":false,"color":"rgba(0,191,196,1)","opacity":1,"size":18.897637795275593,"symbol":"circle","line":{"width":1.8897637795275593,"color":"rgba(12,183,2,1)"}},"hoveron":"points","name":"(B1,Yes,6)","legendgroup":"(B1,Yes,6)","showlegend":true,"xaxis":"x","yaxis":"y","hoverinfo":"text","frame":null},{"x":[9.5454162895791512],"y":[-2.9181372097167118],"text":"PC1:   9.5454163<br />PC2:  -2.9181372<br />factor(Batch): B2<br />factor(Affected): No<br />factor(Family): 11","type":"scatter","mode":"markers","marker":{"autocolorscale":false,"color":"rgba(248,118,109,1)","opacity":1,"size":18.897637795275593,"symbol":"triangle-up","line":{"width":1.8897637795275593,"color":"rgba(0,169,255,1)"}},"hoveron":"points","name":"(B2,No,11)","legendgroup":"(B2,No,11)","showlegend":true,"xaxis":"x","yaxis":"y","hoverinfo":"text","frame":null},{"x":[-0.53888579816118587],"y":[-2.0611874093157971],"text":"PC1:  -0.5388858<br />PC2:  -2.0611874<br />factor(Batch): B2<br />factor(Affected): Yes<br />factor(Family): 5","type":"scatter","mode":"markers","marker":{"autocolorscale":false,"color":"rgba(0,191,196,1)","opacity":1,"size":18.897637795275593,"symbol":"triangle-up","line":{"width":1.8897637795275593,"color":"rgba(124,174,0,1)"}},"hoveron":"points","name":"(B2,Yes,5)","legendgroup":"(B2,Yes,5)","showlegend":true,"xaxis":"x","yaxis":"y","hoverinfo":"text","frame":null},{"x":[12.468333566102908],"y":[0.7797366055525935],"text":"PC1:  12.4683336<br />PC2:   0.7797366<br />factor(Batch): B2<br />factor(Affected): Yes<br />factor(Family): 6","type":"scatter","mode":"markers","marker":{"autocolorscale":false,"color":"rgba(0,191,196,1)","opacity":1,"size":18.897637795275593,"symbol":"triangle-up","line":{"width":1.8897637795275593,"color":"rgba(12,183,2,1)"}},"hoveron":"points","name":"(B2,Yes,6)","legendgroup":"(B2,Yes,6)","showlegend":true,"xaxis":"x","yaxis":"y","hoverinfo":"text","frame":null},{"x":[13.680304555405224],"y":[1.2124118744172954],"text":"PC1:  13.6803046<br />PC2:   1.2124119<br />factor(Batch): B2<br />factor(Affected): Yes<br />factor(Family): 7","type":"scatter","mode":"markers","marker":{"autocolorscale":false,"color":"rgba(0,191,196,1)","opacity":1,"size":18.897637795275593,"symbol":"triangle-up","line":{"width":1.8897637795275593,"color":"rgba(0,190,103,1)"}},"hoveron":"points","name":"(B2,Yes,7)","legendgroup":"(B2,Yes,7)","showlegend":true,"xaxis":"x","yaxis":"y","hoverinfo":"text","frame":null},{"x":[-9.880202501190265],"y":[-20.529457930319371],"text":"PC1:  -9.8802025<br />PC2: -20.5294579<br />factor(Batch): B2<br />factor(Affected): Yes<br />factor(Family): 8","type":"scatter","mode":"markers","marker":{"autocolorscale":false,"color":"rgba(0,191,196,1)","opacity":1,"size":18.897637795275593,"symbol":"triangle-up","line":{"width":1.8897637795275593,"color":"rgba(0,193,154,1)"}},"hoveron":"points","name":"(B2,Yes,8)","legendgroup":"(B2,Yes,8)","showlegend":true,"xaxis":"x","yaxis":"y","hoverinfo":"text","frame":null},{"x":[-13.637273253277495,-40.182317570792456],"y":[0.7252047828497058,1.4283013163380169],"text":["PC1: -13.6372733<br />PC2:   0.7252048<br />factor(Batch): B2<br />factor(Affected): Yes<br />factor(Family): 9","PC1: -40.1823176<br />PC2:   1.4283013<br />factor(Batch): B2<br />factor(Affected): Yes<br />factor(Family): 9"],"type":"scatter","mode":"markers","marker":{"autocolorscale":false,"color":"rgba(0,191,196,1)","opacity":1,"size":18.897637795275593,"symbol":"triangle-up","line":{"width":1.8897637795275593,"color":"rgba(0,191,196,1)"}},"hoveron":"points","name":"(B2,Yes,9)","legendgroup":"(B2,Yes,9)","showlegend":true,"xaxis":"x","yaxis":"y","hoverinfo":"text","frame":null},{"x":[-16.992549802639015,-4.6536826999052785],"y":[-1.2597795116716706,4.0146523308900086],"text":["PC1: -16.9925498<br />PC2:  -1.2597795<br />factor(Batch): B2<br />factor(Affected): Yes<br />factor(Family): 10","PC1:  -4.6536827<br />PC2:   4.0146523<br />factor(Batch): B2<br />factor(Affected): Yes<br />factor(Family): 10"],"type":"scatter","mode":"markers","marker":{"autocolorscale":false,"color":"rgba(0,191,196,1)","opacity":1,"size":18.897637795275593,"symbol":"triangle-up","line":{"width":1.8897637795275593,"color":"rgba(0,184,231,1)"}},"hoveron":"points","name":"(B2,Yes,10)","legendgroup":"(B2,Yes,10)","showlegend":true,"xaxis":"x","yaxis":"y","hoverinfo":"text","frame":null},{"x":[13.311363454342089],"y":[4.9090948133613503],"text":"PC1:  13.3113635<br />PC2:   4.9090948<br />factor(Batch): B2<br />factor(Affected): Yes<br />factor(Family): 11","type":"scatter","mode":"markers","marker":{"autocolorscale":false,"color":"rgba(0,191,196,1)","opacity":1,"size":18.897637795275593,"symbol":"triangle-up","line":{"width":1.8897637795275593,"color":"rgba(0,169,255,1)"}},"hoveron":"points","name":"(B2,Yes,11)","legendgroup":"(B2,Yes,11)","showlegend":true,"xaxis":"x","yaxis":"y","hoverinfo":"text","frame":null},{"x":[-6.8050736843946922],"y":[3.3602446001409678],"text":"PC1:  -6.8050737<br />PC2:   3.3602446<br />factor(Batch): B3<br />factor(Affected): Yes<br />factor(Family): 12","type":"scatter","mode":"markers","marker":{"autocolorscale":false,"color":"rgba(0,191,196,1)","opacity":1,"size":18.897637795275593,"symbol":"square","line":{"width":1.8897637795275593,"color":"rgba(132,148,255,1)"}},"hoveron":"points","name":"(B3,Yes,12)","legendgroup":"(B3,Yes,12)","showlegend":true,"xaxis":"x","yaxis":"y","hoverinfo":"text","frame":null},{"x":[-7.6855063272647586,21.346998779302751,11.757000805333947],"y":[7.0625986365202671,-0.95190488008617624,2.1178205429950019],"text":["PC1:  -7.6855063<br />PC2:   7.0625986<br />factor(Batch): B3<br />factor(Affected): Yes<br />factor(Family): 13","PC1:  21.3469988<br />PC2:  -0.9519049<br />factor(Batch): B3<br />factor(Affected): Yes<br />factor(Family): 13","PC1:  11.7570008<br />PC2:   2.1178205<br />factor(Batch): B3<br />factor(Affected): Yes<br />factor(Family): 13"],"type":"scatter","mode":"markers","marker":{"autocolorscale":false,"color":"rgba(0,191,196,1)","opacity":1,"size":18.897637795275593,"symbol":"square","line":{"width":1.8897637795275593,"color":"rgba(199,124,255,1)"}},"hoveron":"points","name":"(B3,Yes,13)","legendgroup":"(B3,Yes,13)","showlegend":true,"xaxis":"x","yaxis":"y","hoverinfo":"text","frame":null},{"x":[-0.29650945283291363],"y":[6.1670755942003943],"text":"PC1:  -0.2965095<br />PC2:   6.1670756<br />factor(Batch): B3<br />factor(Affected): Yes<br />factor(Family): 14","type":"scatter","mode":"markers","marker":{"autocolorscale":false,"color":"rgba(0,191,196,1)","opacity":1,"size":18.897637795275593,"symbol":"square","line":{"width":1.8897637795275593,"color":"rgba(237,104,237,1)"}},"hoveron":"points","name":"(B3,Yes,14)","legendgroup":"(B3,Yes,14)","showlegend":true,"xaxis":"x","yaxis":"y","hoverinfo":"text","frame":null},{"x":[26.826187430577711],"y":[7.2092219529085506],"text":"PC1:  26.8261874<br />PC2:   7.2092220<br />factor(Batch): B3<br />factor(Affected): Yes<br />factor(Family): 15","type":"scatter","mode":"markers","marker":{"autocolorscale":false,"color":"rgba(0,191,196,1)","opacity":1,"size":18.897637795275593,"symbol":"square","line":{"width":1.8897637795275593,"color":"rgba(255,97,204,1)"}},"hoveron":"points","name":"(B3,Yes,15)","legendgroup":"(B3,Yes,15)","showlegend":true,"xaxis":"x","yaxis":"y","hoverinfo":"text","frame":null},{"x":[4.0674847184465523],"y":[2.5200430596488941],"text":"PC1:   4.0674847<br />PC2:   2.5200431<br />factor(Batch): B3<br />factor(Affected): Yes<br />factor(Family): 16","type":"scatter","mode":"markers","marker":{"autocolorscale":false,"color":"rgba(0,191,196,1)","opacity":1,"size":18.897637795275593,"symbol":"square","line":{"width":1.8897637795275593,"color":"rgba(255,104,161,1)"}},"hoveron":"points","name":"(B3,Yes,16)","legendgroup":"(B3,Yes,16)","showlegend":true,"xaxis":"x","yaxis":"y","hoverinfo":"text","frame":null}],"layout":{"margin":{"t":26.228310502283108,"r":7.3059360730593621,"b":40.182648401826498,"l":43.105022831050235},"plot_bgcolor":"rgba(235,235,235,1)","paper_bgcolor":"rgba(255,255,255,1)","font":{"color":"rgba(0,0,0,1)","family":"","size":14.611872146118724},"xaxis":{"domain":[0,1],"automargin":true,"type":"linear","autorange":false,"range":[-43.532742820860967,30.176612680646219],"tickmode":"array","ticktext":["-40","-20","0","20"],"tickvals":[-40,-20,-7.1054273576010019e-15,20],"categoryorder":"array","categoryarray":["-40","-20","0","20"],"nticks":null,"ticks":"outside","tickcolor":"rgba(51,51,51,1)","ticklen":3.6529680365296811,"tickwidth":0.66417600664176002,"showticklabels":true,"tickfont":{"color":"rgba(77,77,77,1)","family":"","size":11.68949771689498},"tickangle":-0,"showline":false,"linecolor":null,"linewidth":0,"showgrid":true,"gridcolor":"rgba(255,255,255,1)","gridwidth":0.66417600664176002,"zeroline":false,"anchor":"y","title":{"text":"PC1: 31% variance","font":{"color":"rgba(0,0,0,1)","family":"","size":14.611872146118724}},"scaleanchor":"y","scaleratio":1,"hoverformat":".2f"},"yaxis":{"domain":[0,1],"automargin":true,"type":"linear","autorange":false,"range":[-26.805454689435912,9.2616533457902559],"tickmode":"array","ticktext":["-20","-10","0"],"tickvals":[-20,-10,0],"categoryorder":"array","categoryarray":["-20","-10","0"],"nticks":null,"ticks":"outside","tickcolor":"rgba(51,51,51,1)","ticklen":3.6529680365296811,"tickwidth":0.66417600664176002,"showticklabels":true,"tickfont":{"color":"rgba(77,77,77,1)","family":"","size":11.68949771689498},"tickangle":-0,"showline":false,"linecolor":null,"linewidth":0,"showgrid":true,"gridcolor":"rgba(255,255,255,1)","gridwidth":0.66417600664176002,"zeroline":false,"anchor":"x","title":{"text":"PC2: 11% variance","font":{"color":"rgba(0,0,0,1)","family":"","size":14.611872146118724}},"scaleanchor":"x","scaleratio":1,"hoverformat":".2f"},"shapes":[{"type":"rect","fillcolor":null,"line":{"color":null,"width":0,"linetype":[]},"yref":"paper","xref":"paper","x0":0,"x1":1,"y0":0,"y1":1}],"showlegend":true,"legend":{"bgcolor":"rgba(255,255,255,1)","bordercolor":"transparent","borderwidth":1.8897637795275593,"font":{"color":"rgba(0,0,0,1)","family":"","size":11.68949771689498},"title":{"text":"factor(Family)<br />factor(Affected)<br />factor(Batch)","font":{"color":"rgba(0,0,0,1)","family":"","size":14.611872146118724}}},"hovermode":"closest","barmode":"relative"},"config":{"doubleClick":"reset","modeBarButtonsToAdd":["hoverclosest","hovercompare"],"showSendToCloud":false},"source":"A","attrs":{"18084285152e":{"x":{},"y":{},"shape":{},"fill":{},"colour":{},"type":"scatter"}},"cur_data":"18084285152e","visdat":{"18084285152e":["function (y) ","x"]},"highlight":{"on":"plotly_click","persistent":false,"dynamic":false,"selectize":false,"opacityDim":0.20000000000000001,"selected":{"opacity":1},"debounce":0},"shinyEvents":["plotly_hover","plotly_click","plotly_selected","plotly_relayout","plotly_brushed","plotly_brushing","plotly_clickannotation","plotly_doubleclick","plotly_deselect","plotly_afterplot","plotly_sunburstclick"],"base_url":"https://plot.ly"},"evals":[],"jsHooks":[]}</script>
+<div class="sourceCode" id="cb14"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb14-1"><a href="#cb14-1" tabindex="-1"></a><span class="fu">ggplot</span>(pcaData, <span class="fu">aes</span>(PC1, PC2, <span class="at">shape=</span><span class="fu">factor</span>(Batch), <span class="at">color=</span><span class="fu">factor</span>(Affected)))  <span class="sc">+</span> </span>
+<span id="cb14-2"><a href="#cb14-2" tabindex="-1"></a>  <span class="fu">geom_point</span>(<span class="at">size=</span><span class="dv">5</span>) <span class="sc">+</span> <span class="fu">xlab</span>(<span class="fu">paste0</span>(<span class="st">&quot;PC1: &quot;</span>,percentVar[<span class="dv">1</span>],<span class="st">&quot;% variance&quot;</span>)) <span class="sc">+</span> <span class="fu">ylab</span>(<span class="fu">paste0</span>(<span class="st">&quot;PC2: &quot;</span>,percentVar[<span class="dv">2</span>],<span class="st">&quot;% variance&quot;</span>)) <span class="sc">+</span> <span class="fu">coord_fixed</span>()</span></code></pre></div>
 <p><img src="figure/analysis.Rmd/principal-components-analysis-3.png" width="672" style="display: block; margin: auto;" /></p>
 <p>
 <button type="button" class="btn btn-default btn-xs btn-workflowr btn-workflowr-fig" data-toggle="collapse" data-target="#fig-principal-components-analysis-3">
@@ -1176,11 +1170,11 @@ sdhutchins
 <h3>Heatmap of top 50 &amp; top 100 genes</h3>
 <p>This is a heatmap for 50 genes with the highest variance across
 samples.</p>
-<div class="sourceCode" id="cb20"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb20-1"><a href="#cb20-1" tabindex="-1"></a>topVarGenes <span class="ot">=</span> <span class="fu">head</span>(<span class="fu">order</span>(<span class="sc">-</span><span class="fu">rowVars</span>(<span class="fu">assay</span>(vsd))),<span class="dv">50</span>)</span>
-<span id="cb20-2"><a href="#cb20-2" tabindex="-1"></a>mat <span class="ot">=</span> <span class="fu">assay</span>(vsd_limma)[ topVarGenes, ]</span>
-<span id="cb20-3"><a href="#cb20-3" tabindex="-1"></a>mat <span class="ot">=</span> mat <span class="sc">-</span> <span class="fu">rowMeans</span>(mat)</span>
-<span id="cb20-4"><a href="#cb20-4" tabindex="-1"></a>df <span class="ot">=</span> <span class="fu">as.data.frame</span>(<span class="fu">colData</span>(vsd)[,<span class="fu">c</span>(<span class="st">&quot;Batch&quot;</span>, <span class="st">&quot;Affected&quot;</span>)])</span>
-<span id="cb20-5"><a href="#cb20-5" tabindex="-1"></a><span class="fu">pheatmap</span>(mat, <span class="at">annotation_col=</span>df, <span class="at">fontsize =</span> <span class="dv">5</span>)</span></code></pre></div>
+<div class="sourceCode" id="cb15"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb15-1"><a href="#cb15-1" tabindex="-1"></a>topVarGenes <span class="ot">=</span> <span class="fu">head</span>(<span class="fu">order</span>(<span class="sc">-</span><span class="fu">rowVars</span>(<span class="fu">assay</span>(vsd))),<span class="dv">50</span>)</span>
+<span id="cb15-2"><a href="#cb15-2" tabindex="-1"></a>mat <span class="ot">=</span> <span class="fu">assay</span>(vsd_limma)[ topVarGenes, ]</span>
+<span id="cb15-3"><a href="#cb15-3" tabindex="-1"></a>mat <span class="ot">=</span> mat <span class="sc">-</span> <span class="fu">rowMeans</span>(mat)</span>
+<span id="cb15-4"><a href="#cb15-4" tabindex="-1"></a>df <span class="ot">=</span> <span class="fu">as.data.frame</span>(<span class="fu">colData</span>(vsd)[,<span class="fu">c</span>(<span class="st">&quot;Batch&quot;</span>, <span class="st">&quot;Affected&quot;</span>)])</span>
+<span id="cb15-5"><a href="#cb15-5" tabindex="-1"></a><span class="fu">pheatmap</span>(mat, <span class="at">annotation_col=</span>df, <span class="at">fontsize =</span> <span class="dv">5</span>)</span></code></pre></div>
 <p><img src="figure/analysis.Rmd/top50-heatmap-1.png" width="800px" height="570px" style="display: block; margin: auto;" /></p>
 <p>
 <button type="button" class="btn btn-default btn-xs btn-workflowr btn-workflowr-fig" data-toggle="collapse" data-target="#fig-top50-heatmap-1">
@@ -1221,11 +1215,11 @@ sdhutchins
 </div>
 <p>This is a heatmap of the top 100 genes with the highest variance
 across samples.</p>
-<div class="sourceCode" id="cb21"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb21-1"><a href="#cb21-1" tabindex="-1"></a>topVarGenes <span class="ot">=</span> <span class="fu">head</span>(<span class="fu">order</span>(<span class="sc">-</span><span class="fu">rowVars</span>(<span class="fu">assay</span>(vsd_limma))),<span class="dv">100</span>)</span>
-<span id="cb21-2"><a href="#cb21-2" tabindex="-1"></a>mat <span class="ot">=</span> <span class="fu">assay</span>(vsd_limma)[ topVarGenes, ]</span>
-<span id="cb21-3"><a href="#cb21-3" tabindex="-1"></a>mat <span class="ot">=</span> mat <span class="sc">-</span> <span class="fu">rowMeans</span>(mat)</span>
-<span id="cb21-4"><a href="#cb21-4" tabindex="-1"></a>df <span class="ot">=</span> <span class="fu">as.data.frame</span>(<span class="fu">colData</span>(vsd_limma)[,<span class="fu">c</span>(<span class="st">&quot;Batch&quot;</span>, <span class="st">&quot;Family&quot;</span>, <span class="st">&quot;Affected&quot;</span>)])</span>
-<span id="cb21-5"><a href="#cb21-5" tabindex="-1"></a><span class="fu">pheatmap</span>(mat, <span class="at">annotation_col=</span>df, <span class="at">fontsize =</span> <span class="dv">6</span>)</span></code></pre></div>
+<div class="sourceCode" id="cb16"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb16-1"><a href="#cb16-1" tabindex="-1"></a>topVarGenes <span class="ot">=</span> <span class="fu">head</span>(<span class="fu">order</span>(<span class="sc">-</span><span class="fu">rowVars</span>(<span class="fu">assay</span>(vsd_limma))),<span class="dv">100</span>)</span>
+<span id="cb16-2"><a href="#cb16-2" tabindex="-1"></a>mat <span class="ot">=</span> <span class="fu">assay</span>(vsd_limma)[ topVarGenes, ]</span>
+<span id="cb16-3"><a href="#cb16-3" tabindex="-1"></a>mat <span class="ot">=</span> mat <span class="sc">-</span> <span class="fu">rowMeans</span>(mat)</span>
+<span id="cb16-4"><a href="#cb16-4" tabindex="-1"></a>df <span class="ot">=</span> <span class="fu">as.data.frame</span>(<span class="fu">colData</span>(vsd_limma)[,<span class="fu">c</span>(<span class="st">&quot;Batch&quot;</span>, <span class="st">&quot;Family&quot;</span>, <span class="st">&quot;Affected&quot;</span>)])</span>
+<span id="cb16-5"><a href="#cb16-5" tabindex="-1"></a><span class="fu">pheatmap</span>(mat, <span class="at">annotation_col=</span>df, <span class="at">fontsize =</span> <span class="dv">6</span>)</span></code></pre></div>
 <p><img src="figure/analysis.Rmd/top100-heatmap-1.png" width="1200px" style="display: block; margin: auto;" /></p>
 <p>
 <button type="button" class="btn btn-default btn-xs btn-workflowr btn-workflowr-fig" data-toggle="collapse" data-target="#fig-top100-heatmap-1">
@@ -1268,273 +1262,34 @@ sdhutchins
 <div id="comparisoncontrast-of-affected_yes_vs_no"
 class="section level3">
 <h3>Comparison/Contrast of Affected_Yes_vs_No</h3>
-<div class="sourceCode" id="cb22"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb22-1"><a href="#cb22-1" tabindex="-1"></a>res_aff_vs_unaff <span class="ot">=</span> <span class="fu">results</span>(dds, <span class="at">contrast=</span><span class="fu">c</span>(<span class="st">&quot;Affected&quot;</span>, <span class="st">&quot;Yes&quot;</span>, <span class="st">&quot;No&quot;</span>))</span>
-<span id="cb22-2"><a href="#cb22-2" tabindex="-1"></a>res_aff_vs_unaff<span class="ot">=</span> res_aff_vs_unaff[<span class="fu">order</span>(res_aff_vs_unaff<span class="sc">$</span>padj),]</span>
-<span id="cb22-3"><a href="#cb22-3" tabindex="-1"></a><span class="fu">summary</span>(res_aff_vs_unaff)</span></code></pre></div>
+<div class="sourceCode" id="cb17"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb17-1"><a href="#cb17-1" tabindex="-1"></a>res_aff_vs_unaff <span class="ot">=</span> <span class="fu">results</span>(dds, <span class="at">contrast=</span><span class="fu">c</span>(<span class="st">&quot;Affected&quot;</span>, <span class="st">&quot;Yes&quot;</span>, <span class="st">&quot;No&quot;</span>))</span>
+<span id="cb17-2"><a href="#cb17-2" tabindex="-1"></a>res_aff_vs_unaff<span class="ot">=</span> res_aff_vs_unaff[<span class="fu">order</span>(res_aff_vs_unaff<span class="sc">$</span>padj),]</span>
+<span id="cb17-3"><a href="#cb17-3" tabindex="-1"></a><span class="fu">summary</span>(res_aff_vs_unaff)</span></code></pre></div>
 <pre><code>
-out of 29624 with nonzero total read count
+out of 29623 with nonzero total read count
 adjusted p-value &lt; 0.1
-LFC &gt; 0 (up)       : 34, 0.11%
-LFC &lt; 0 (down)     : 30, 0.1%
-outliers [1]       : 162, 0.55%
-low counts [2]     : 6, 0.02%
-(mean count &lt; 0)
+LFC &gt; 0 (up)       : 20, 0.068%
+LFC &lt; 0 (down)     : 10, 0.034%
+outliers [1]       : 134, 0.45%
+low counts [2]     : 3997, 13%
+(mean count &lt; 1)
 [1] see &#39;cooksCutoff&#39; argument of ?results
 [2] see &#39;independentFiltering&#39; argument of ?results</code></pre>
-<div class="sourceCode" id="cb24"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb24-1"><a href="#cb24-1" tabindex="-1"></a><span class="fu">write.csv</span>(res_aff_vs_unaff, <span class="at">file=</span><span class="st">&quot;output/res_aff_vs_unaff.csv&quot;</span>)      </span>
-<span id="cb24-2"><a href="#cb24-2" tabindex="-1"></a>res_aff_vs_unaff_df <span class="ot">=</span> <span class="fu">as.data.frame</span>(res_aff_vs_unaff)</span>
-<span id="cb24-3"><a href="#cb24-3" tabindex="-1"></a>res_aff_vs_unaff_05 <span class="ot">=</span> <span class="fu">subset</span>(res_aff_vs_unaff_df, padj <span class="sc">&lt;</span> <span class="fl">0.05</span>)                             </span></code></pre></div>
-<div class="sourceCode" id="cb25"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb25-1"><a href="#cb25-1" tabindex="-1"></a>topgenes_byensemblid <span class="ot">=</span> <span class="fu">head</span>(<span class="fu">rownames</span>(res_aff_vs_unaff_05),<span class="dv">50</span>)</span>
-<span id="cb25-2"><a href="#cb25-2" tabindex="-1"></a>topgenes_aff_vs_unaff_05 <span class="ot">=</span> <span class="fu">assay</span>(vsd_limma)[topgenes_byensemblid,] </span>
-<span id="cb25-3"><a href="#cb25-3" tabindex="-1"></a>topgenes_aff_vs_unaff_05 <span class="ot">=</span> topgenes_aff_vs_unaff_05 <span class="sc">-</span> <span class="fu">rowMeans</span>(topgenes_aff_vs_unaff_05)</span>
-<span id="cb25-4"><a href="#cb25-4" tabindex="-1"></a></span>
-<span id="cb25-5"><a href="#cb25-5" tabindex="-1"></a><span class="co"># Convert ensemblids</span></span>
-<span id="cb25-6"><a href="#cb25-6" tabindex="-1"></a>ensemblids <span class="ot">&lt;-</span> topgenes_byensemblid</span>
-<span id="cb25-7"><a href="#cb25-7" tabindex="-1"></a><span class="fu">rownames</span>(topgenes_aff_vs_unaff_05) <span class="ot">&lt;-</span> gene_names<span class="sc">$</span>gene_name[<span class="fu">match</span>(ensemblids, gene_names<span class="sc">$</span>Ensembl_ID)]</span>
-<span id="cb25-8"><a href="#cb25-8" tabindex="-1"></a></span>
-<span id="cb25-9"><a href="#cb25-9" tabindex="-1"></a>topgenes_aff_vs_unaff_05[<span class="fu">order</span>(<span class="fu">row.names</span>(topgenes_aff_vs_unaff_05)), ]</span></code></pre></div>
-<pre><code>                    LW001974     LW001975     LW001976     LW001977    LW001978
-BEX1             0.084174580  0.084174580  0.084174580  0.084174580 -0.61844502
-CBX3P2          -0.283866842  0.005489020 -0.190112533  0.615925081  0.22064986
-CD248           -0.045850497 -1.415183689  0.026783485 -0.647950124  0.63460154
-CDR2-DT          0.501888863 -0.192817939  0.280729197 -0.192817939 -0.11685349
-DEFA1            2.136607211  4.071634333  2.136607211  5.865657558 -7.71372983
-ENSG00000142539  1.846204345 -0.346184604 -0.346184604 -0.346184604  0.18220242
-ENSG00000224610  1.113746895  0.079203425  0.547842099  0.139660090 -0.39637477
-ENSG00000254732  0.308001320  2.061481854  0.308001320  1.718772217 -0.72545958
-ENSG00000259132 -0.356893561 -0.356893561 -0.356893561  1.113089311  0.20337247
-ENSG00000265337  0.111884250  0.894070645  0.111884250  0.937992351 -0.38745996
-ENSG00000269693 -0.072759550 -0.072759550 -0.072759550  2.431753005 -0.43054706
-ENSG00000273026 -0.245766347  0.242948195 -0.245766347  0.070125079 -0.12787269
-ENSG00000284554 -0.198860158 -0.198860158 -0.198860158 -0.198860158 -0.43924788
-ENSG00000285505  0.002530756  0.002530756  0.002530756  0.002530756 -0.58187629
-ENSG00000285952  0.015144387  0.015144387  0.015144387  0.015144387 -0.07269306
-ENSG00000289694  1.703168441  1.703168441  1.703168441  1.703168441 -7.42087389
-F8A2            -0.825295075 -0.825295075 -0.825295075 -0.825295075  2.69063206
-FOSL1           -0.010011828  0.478702714 -0.010011828  0.435842677 -0.85623689
-FSCN2            0.582589316 -0.082190517  0.408474089 -0.321311875  0.36044062
-GRAMD4          -0.463702485  0.670436790 -0.300319986  0.016157248 -0.15117289
-IGKV6-21         0.011579301 -0.303851390 -0.104433372 -0.237272997  0.38640908
-KCNQ5           -0.468219369 -0.524160750  0.446092771 -0.839538384  1.49409854
-KLHL4            0.096196227  0.907168301  0.096196227  0.893007998 -0.61811011
-LRRN3           -0.444166174 -2.105477365  0.090154017 -1.303858781  0.83877085
-MPPED2           0.518179709 -0.015560103  0.041642762 -0.853515814  0.51925976
-ODF3             0.671726366 -0.228176934  0.009392474 -0.228176934  0.15092548
-PIK3R3          -0.271136262  0.710754798  0.226625636  0.691701019 -0.39386173
-RNU1-3           1.524733140  4.548548231  1.524733140  1.524733140 -1.12323188
-RNVU1-18         0.280214615  3.270239125  0.280214615  0.280214615 -0.58765760
-SLC4A10         -1.146638037 -1.306420654  0.800180055 -0.338942737  1.07085746
-SNTG2            0.831023536 -0.264974290  0.329457899 -0.464837439  0.61661118
-STEAP1B          0.709934704 -0.372260329  0.743289875 -0.095043316  0.23577558
-TBC1D3F         -0.349340131 -0.349340131 -0.349340131 -0.349340131 -0.31094458
-TIPARP-AS1      -0.131703217  0.808795891 -0.131703217  0.533826188 -0.26817295
-TMEM37          -0.648631462 -0.648631462  0.392286471 -0.648631462  0.15696859
-VMO1            -0.496517839  1.380902461  0.082176290  1.043301903 -0.68377774
-VWA3A           -0.020262004  0.870959340 -0.020262004  0.477728553 -0.20523230
-XGY2            -0.047397034 -0.047397034 -0.047397034 -0.047397034 -0.17447399
-ZNF683          -0.547711638  0.702628376  0.360894933  0.636247448  0.76583626
-                   LW001979     LW001980      LW001981    LW001982     LW001983
-BEX1            -0.95186622  0.084174580  0.4397339854 -0.43384582  1.685061956
-CBX3P2          -0.13721452  0.079740762  0.1179529538 -0.02273535  0.476653231
-CD248            1.51637075 -0.677659475 -0.3742382975  0.08086894 -1.530328961
-CDR2-DT         -0.09943987  0.457211092  0.2184621472  0.02835961 -0.192817939
-DEFA1           -7.71372983  2.136607211  4.9351376463  1.94760605  2.136607211
-ENSG00000142539  0.18220242 -0.346184604 -0.0819910905 -0.08199109 -0.346184604
-ENSG00000224610 -0.27452919  0.322861777 -0.0697062897  0.24751174 -0.358330467
-ENSG00000254732 -1.13061426  0.308001320  0.2676934716  0.01108392  1.679283739
-ENSG00000259132  0.20337247 -0.356893561 -0.0767605459 -0.07676055 -0.356893561
-ENSG00000265337 -0.79536521  0.111884250 -0.3417404823 -0.05581094  0.111884250
-ENSG00000269693 -0.43054706 -0.072759550 -0.2516533042 -0.25165330 -0.072759550
-ENSG00000273026 -0.28739542 -0.038643871  0.0509934267  0.01293696  0.576565838
-ENSG00000284554 -0.43924788  2.485510653 -0.3190540174 -0.31905402 -0.198860158
-ENSG00000285505 -0.58187629  0.002530756 -0.2896727675 -0.28967277  0.002530756
-ENSG00000285952 -0.07269306  0.015144387 -0.0287743356 -0.02877434  0.015144387
-ENSG00000289694 -7.42087389  1.703168441  2.1473360271  2.85600782  5.319754046
-F8A2            -0.04895021  2.392664897 -0.4371226449 -0.43712264 -0.825295075
-FOSL1           -0.59731506 -0.010011828 -0.2381542851  0.08412286  1.042544713
-FSCN2            0.12371730  0.345284214 -0.3238577747 -0.28999243 -0.501208387
-GRAMD4           0.01079084  0.083697218 -0.3691514155 -0.46585165  0.612104207
-IGKV6-21         0.38109739  1.081902643 -0.1863383303  0.03344719 -0.683127501
-KCNQ5            1.05987635  0.480926673 -0.0674836674 -0.45050489 -2.141418617
-KLHL4           -0.42497762  0.096196227  0.0627955724  0.02473911  0.770596894
-LRRN3            2.15392330 -0.981871656 -0.1734605610 -0.13589955 -2.170085508
-MPPED2           0.41011850 -0.826831459 -0.4458550557 -0.14749500 -0.999683136
-ODF3            -0.31956566 -0.228176934 -0.0523422483  0.39186840 -0.228176934
-PIK3R3          -0.75566195 -0.094623927 -0.3627876819  0.25905387  0.604316787
-RNU1-3          -4.91098434  1.524733140  1.6932011511 -1.69312560  4.487558816
-RNVU1-18        -0.55368308  0.280214615  1.3220687107 -2.02760198  2.403672168
-SLC4A10          1.27760583 -0.780361264  0.5015448498 -0.22019291 -1.239471088
-SNTG2            0.33778118 -0.547994875 -0.0661206644 -0.27748139 -0.213959132
-STEAP1B          0.01001002  0.541844524 -0.0005006976  0.32219588 -1.359261566
-TBC1D3F         -0.31094458 -0.349340131  1.5731932722 -0.04421281 -0.349340131
-TIPARP-AS1      -0.41739720 -0.131703217 -0.0574680918  0.01819818  0.690628968
-TMEM37           0.58612720  0.001397569  0.3765261512 -0.24583143 -0.648631462
-VMO1            -0.39525757 -0.496517839 -0.5398897323 -0.24973341  0.038440307
-VWA3A           -0.22750772 -0.020262004 -0.0172836148 -0.19788710 -0.020262004
-XGY2            -0.17447399 -0.047397034 -0.1109355126 -0.11093551 -0.047397034
-ZNF683          -0.20569521  0.319673757 -0.6549798484 -0.92105630 -0.083416129
-                    LW001984     LW001985     LW001986    LW001987     LW001988
-BEX1             0.002559567  0.667361734  0.512360673  0.29977707  0.084174580
-CBX3P2           0.111547908  0.422436787 -0.058001489 -0.19466073 -0.610563416
-CD248           -0.697533515 -0.812514960  0.192271324 -0.57668229  0.557703486
-CDR2-DT         -0.125785166 -0.192817939  0.035288012  0.07932624 -0.192817939
-DEFA1           -2.788561309  2.136607211  5.357511798  3.17222851  2.136607211
-ENSG00000142539 -0.081991090 -0.346184604 -0.081991090 -0.08199109 -0.346184604
-ENSG00000224610 -0.410835162 -0.045092697 -0.080497753 -0.10927053  0.023439532
-ENSG00000254732 -0.399488019  0.308001320 -0.835893403  0.30011055  0.308001320
-ENSG00000259132 -0.076760546 -0.356893561 -0.076760546 -0.07676055 -0.356893561
-ENSG00000265337  0.094664902  0.111884250  0.161629588  0.13197471  0.111884250
-ENSG00000269693 -0.251653304 -0.072759550 -0.251653304 -0.25165330 -0.072759550
-ENSG00000273026  0.086925510  0.196357253  0.080382896 -0.07985972 -0.024923348
-ENSG00000284554 -0.319054017 -0.198860158 -0.319054017  1.87599086 -0.198860158
-ENSG00000285505 -0.289672767  0.002530756 -0.289672767  0.62925743  0.002530756
-ENSG00000285952  0.586087783  0.015144387 -0.028774336 -0.02877434  0.015144387
-ENSG00000289694  2.264255822  1.703168441  3.030884521  2.03993342  1.703168441
-F8A2            -0.437122645 -0.825295075 -0.437122645 -0.43712264  1.436760283
-FOSL1            0.063724703  0.211697804 -0.114658143  0.06714897  0.371758171
-FSCN2           -0.403400644 -0.592421899 -0.119353393  0.15141731  0.002197096
-GRAMD4           0.365989335  0.624952849 -0.287445816  0.08988092 -0.005351762
-IGKV6-21        -0.303560317 -0.683127501  0.271175133  0.03714131 -0.683127501
-KCNQ5           -0.763298534 -1.509680754  0.020349784 -0.42941102 -0.126566425
-KLHL4           -0.040418908  0.590027606  0.057509273  0.12713185  0.096196227
-LRRN3           -0.362084320 -1.418265837  0.925083163 -0.94290861 -0.137471685
-MPPED2          -0.467804171 -0.449763150  0.227578424 -0.29016589  0.556134169
-ODF3            -0.273871295 -0.228176934  0.035352360  0.16498269  0.352756591
-PIK3R3           0.723699719  0.181833690 -0.106854599  0.17418500  0.236461069
-RNU1-3           0.527888626  1.524733140 -1.693125600  1.05778008  1.524733140
-RNVU1-18         0.468055248  0.280214615 -2.027601978  0.79950312  0.280214615
-SLC4A10         -0.727745119 -1.886657605  1.264659449 -0.43723983 -0.251219394
-SNTG2           -0.636105165 -0.340111334  0.094235763 -0.26961111  0.083964254
-STEAP1B         -0.377199010 -0.865430188  0.011744320  0.30007727  0.240967779
-TBC1D3F         -0.330142353 -0.349340131  0.259007688 -0.07612014 -0.349340131
-TIPARP-AS1       0.093494099  0.715590081 -0.114421061 -0.07718514  0.089139782
-TMEM37          -0.245831434 -0.648631462  0.063392221 -0.24583143 -0.028175741
-VMO1             0.162693962  0.566492021 -0.349502793 -0.14071369  0.160953962
-VWA3A           -0.204473843  0.827031294 -0.001534345 -0.04145436 -0.020262004
-XGY2             1.332877261  0.174312597 -0.110935513 -0.11093551 -0.047397034
-ZNF683           0.368802959  1.029492208 -0.461755283  0.05241731 -0.993136083
-                    LW001989     LW001990     LW001991    LW001992     LW001993
-BEX1             0.084174580 -0.077821029 -0.087505874 -0.95186622  0.084174580
-CBX3P2          -0.014503688 -0.169610320 -0.019992379 -0.28474596 -0.636897075
-CD248           -0.198965261  0.213020357  0.055280931  2.11555335 -0.592549914
-CDR2-DT          0.398583600  0.204938462 -0.121267205  0.15268949 -0.192817939
-DEFA1            2.136607211  1.712523260  0.325771563 -5.32539793  2.136607211
-ENSG00000142539  1.160135639 -0.081991090 -0.081991090  0.18220242 -0.346184604
-ENSG00000224610  0.401703149  0.807983096 -0.011509130 -0.65756989  0.399117519
-ENSG00000254732  0.308001320  0.092356969 -0.094113569 -1.37682396  0.308001320
-ENSG00000259132 -0.356893561 -0.076760546 -0.076760546  0.20337247 -0.356893561
-ENSG00000265337  0.111884250 -0.116228497 -0.141461377 -0.54771479  0.111884250
-ENSG00000269693 -0.072759550 -0.251653304 -0.251653304  2.07889039 -0.072759550
-ENSG00000273026 -0.245766347 -0.000962990  0.055642153 -0.53577794 -0.245766347
-ENSG00000284554 -0.198860158 -0.319054017 -0.319054017 -0.43924788  1.404071287
-ENSG00000285505  2.344192823 -0.289672767 -0.289672767  1.16496463  0.002530756
-ENSG00000285952  0.015144387 -0.028774336 -0.028774336 -0.07269306  0.015144387
-ENSG00000289694  1.703168441  0.744248888  1.525759420 -7.42087389  1.703168441
-F8A2            -0.825295075  2.309399493 -0.437122645  2.27003153 -0.825295075
-FOSL1           -0.010011828  0.020643536  0.264395908 -0.31750509 -0.010011828
-FSCN2           -0.087415443  0.265366080 -0.319810922  0.13873142  0.537544381
-GRAMD4          -0.697472162 -0.045668660  0.082531226  0.27599633  0.164063945
-IGKV6-21         0.113108254  0.072459491  0.028051680  0.17798422  0.129109428
-KCNQ5           -0.469807555  0.499401433 -0.214462417  1.74820143 -0.177011974
-KLHL4            0.096196227 -0.060370902 -0.095959083 -0.85413623  0.096196227
-LRRN3           -0.351819357 -0.237998218  0.779128921  2.47549070 -0.456388758
-MPPED2           0.556137916  0.326672444  0.089738182  0.20834360 -0.180454411
-ODF3            -0.228176934  0.146959088  0.441474683 -0.31956566  0.682873041
-PIK3R3          -0.112664369 -0.474102115  0.161156918  0.11956210 -0.452079025
-RNU1-3           1.524733140  0.380994119 -1.693125600 -1.14290276  1.524733140
-RNVU1-18         0.280214615 -0.197764816  1.076918974 -0.64820963  0.280214615
-SLC4A10         -0.011368806 -0.733860526  0.851627877  0.35197979 -0.502372884
-SNTG2           -0.147049442  0.002585410 -0.466327369  0.46270888  0.242709560
-STEAP1B          0.006822994  0.499640274 -0.423416235 -0.34639808  0.232055301
-TBC1D3F         -0.349340131 -0.330142353  1.716782001 -0.31094458 -0.349340131
-TIPARP-AS1       0.459698322 -0.001278308 -0.023527193 -0.54219765 -0.131703217
-TMEM37          -0.648631462  0.030223155  0.200582864  1.10039280 -0.281562564
-VMO1             0.225327093 -0.096053539 -0.014331611  0.65698374  0.100257468
-VWA3A           -0.020262004  0.049425988 -0.000633661 -0.78020797 -0.020262004
-XGY2            -0.047397034 -0.110935513 -0.110935513 -0.17447399 -0.047397034
-ZNF683          -0.660135185 -0.325477295 -0.488892814  0.48005894 -0.276261045
-                    LW001994      LW001995    LW001996    LW001997     LW001998
-BEX1             0.262429511  0.2631077306  0.02810764 -0.59730507  0.608306646
-CBX3P2           0.227683668 -0.1552894243  0.02062985  0.04559873  0.042160839
-CD248            0.361519858  0.2721064630  0.05422390  1.32480092 -1.284196399
-CDR2-DT         -0.022300459 -0.3215463106  0.02829365 -0.09571353 -0.192817939
-DEFA1            3.978010653 -2.7885613088  1.72054362 -7.71372983  2.136607211
-ENSG00000142539 -0.081991090 -0.0819910905 -0.08199109  0.18220242 -0.346184604
-ENSG00000224610  0.317097921 -0.0001688187  0.60422879 -0.45798836 -0.358330467
-ENSG00000254732 -0.052406760 -0.8358934034  0.01092792 -1.08782851  0.308001320
-ENSG00000259132 -0.076760546 -0.0767605459 -0.07676055  0.20337247 -0.356893561
-ENSG00000265337 -0.129952406 -0.3417404823  0.04915470 -0.29518599  0.705276307
-ENSG00000269693 -0.251653304 -0.2516533042 -0.25165330  0.95897999 -0.072759550
-ENSG00000273026  0.125704121  0.0440280135 -0.21553104  0.07530819  0.197895945
-ENSG00000284554  1.850196060 -0.3190540174 -0.31905402 -0.43924788 -0.198860158
-ENSG00000285505 -0.289672767 -0.2896727675 -0.28967277 -0.58187629  0.002530756
-ENSG00000285952 -0.028774336 -0.0287743356 -0.02877434 -0.07269306  0.015144387
-ENSG00000289694  1.400741624  3.9337806223  2.33665209 -6.98716826  1.703168441
-F8A2            -0.437122645  0.8951947187 -0.43712264 -0.04895021 -0.825295075
-FOSL1           -0.128691659  0.1189643063 -0.12319283 -0.48117687  0.985798748
-FSCN2           -0.166419625  0.2703506952 -0.03034906  0.15658102 -0.319937192
-GRAMD4          -0.059176299  0.0478124672 -0.26045490  0.06677657 -0.174130417
-IGKV6-21         0.227288815  0.1427234749  0.27551623  0.43018774 -0.683127501
-KCNQ5            0.261380504 -0.5927614736  0.07351397  1.27099481 -1.319647173
-KLHL4           -0.012796490  0.0558301591  0.01192518 -0.42043060  0.440394421
-LRRN3            0.317831232 -0.3793207227 -0.06016470  2.15756772 -1.222965473
-MPPED2           0.125380512 -0.2395583664  0.30663542  0.88562782 -0.842884588
-ODF3            -0.062083219  0.0017430669  0.24930388 -0.06853842 -0.228176934
-PIK3R3          -0.023090877 -0.3024614549 -0.22140778 -0.20122929  0.738436913
-RNU1-3          -1.693125600 -1.6931256001 -1.69312560 -4.91098434  4.591922686
-RNVU1-18        -2.027601978 -2.0276019775  0.90696839 -4.33541857  3.317119901
-SLC4A10          0.308176729  0.5040004662  1.45487952  0.96179506 -1.935631844
-SNTG2           -0.129255024 -0.2706967315 -0.13790398  0.12731572 -0.393097910
-STEAP1B          0.155812083 -0.4144022690  0.32418302  0.16782253 -0.363450990
-TBC1D3F         -0.330142353 -0.3301423531  0.06075283 -0.31094458 -0.349340131
-TIPARP-AS1       0.006468736 -0.2752859721  0.02679868 -0.31085423  0.864107359
-TMEM37           0.311537636  0.3357778913  0.05732365  0.51152974 -0.648631462
-VMO1            -0.553627012 -0.2712635380 -0.11693589 -0.70904866  0.711821932
-VWA3A           -0.100989136 -0.2051982558 -0.15255852 -0.34650234  0.573130053
-XGY2             1.122979558 -0.1109355126 -0.11093551 -0.17447399 -0.047397034
-ZNF683           0.064341423 -0.8711098448 -0.18955877 -0.64534166  2.027284508
-                    LW001999    LW002000    LW002001    LW002080
-BEX1             0.537120656 -0.70392711 -0.60487524 -0.95186622
-CBX3P2           0.471944484  0.09589192 -0.09698711 -0.07912425
-CD248           -1.917774242  1.19983459  0.70542620  1.46106152
-CDR2-DT         -0.192817939  0.04379608 -0.10328371  0.11916682
-DEFA1            4.868809624 -7.71372983 -7.71372983 -7.71372983
-ENSG00000142539 -0.346184604  0.18220242  0.18220242  0.18220242
-ENSG00000224610  0.034332269 -0.21918567 -0.72548966 -0.86384943
-ENSG00000254732  1.374166731 -1.13209164 -1.24974759 -1.05952724
-ENSG00000259132  1.799844475  0.20337247  0.20337247  0.20337247
-ENSG00000265337  0.504546986 -0.54742611 -0.44837424 -0.22592371
-ENSG00000269693 -0.072759550 -0.43054706 -0.43054706 -0.43054706
-ENSG00000273026  0.532513669 -0.18556792  0.01090962  0.12036347
-ENSG00000284554 -0.198860158 -0.43924788 -0.43924788 -0.43924788
-ENSG00000285505  0.002530756 -0.58187629 -0.58187629  1.35018316
-ENSG00000285952  0.015144387 -0.07269306 -0.07269306 -0.07269306
-ENSG00000289694  1.703168441 -7.42087389 -5.78780746 -3.87573589
-F8A2            -0.825295075 -0.04895021 -0.04895021 -0.04895021
-FOSL1            0.495883794 -0.84432390 -0.74527203 -0.14464302
-FSCN2            0.034177021  0.17702811 -0.14648120  0.15025169
-GRAMD4           0.440002295 -0.28625678  0.07639897 -0.06143598
-IGKV6-21        -0.683127501  0.46012666  0.37357145 -0.08178558
-KCNQ5           -0.814056512  1.64294602  1.20620799  0.70403923
-KLHL4            0.323365794 -0.60619712 -0.85413623 -0.85413623
-LRRN3           -2.586007306  2.15192815  1.21784040  2.36249611
-MPPED2          -0.642640167  0.16512556  0.48164147  0.98399506
-ODF3            -0.228176934 -0.31956566  0.02742532 -0.08583581
-PIK3R3           0.289894079 -0.59810159 -0.36783226 -0.37978669
-RNU1-3           1.524733140 -4.91098434 -2.57258950 -1.28006121
-RNVU1-18         3.412489482 -1.06433370 -1.71053083 -2.01074589
-SLC4A10         -1.751434061  1.73836071  0.93761625  1.24627271
-SNTG2           -0.677420768  0.98171067  0.27056075  0.92228183
-STEAP1B          0.161216430  0.10371056 -0.22538439  0.07564392
-TBC1D3F         -0.349340131 -0.31094458  1.36653199  2.21143903
-TIPARP-AS1       0.321242860 -0.31884820 -0.72444283 -0.97009745
-TMEM37          -0.648631462  0.65103935  0.50395957  0.95721944
-VMO1             0.750674394 -0.20602462 -0.24355065 -0.31727940
-VWA3A           -0.020262004 -0.04350524 -0.35574014  0.24452934
-XGY2            -0.047397034 -0.17447399 -0.17447399 -0.17447399
-ZNF683           1.523633193 -0.89795893  0.03880148 -0.14762674</code></pre>
-<div class="sourceCode" id="cb27"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb27-1"><a href="#cb27-1" tabindex="-1"></a>df <span class="ot">=</span> <span class="fu">as.data.frame</span>(<span class="fu">colData</span>(vsd_limma)[,<span class="fu">c</span>(<span class="st">&quot;Batch&quot;</span>, <span class="st">&quot;Family&quot;</span>, <span class="st">&quot;Affected&quot;</span>)])</span>
-<span id="cb27-2"><a href="#cb27-2" tabindex="-1"></a><span class="fu">pheatmap</span>(topgenes_aff_vs_unaff_05, <span class="at">annotation_col=</span>df, <span class="at">fontsize =</span> <span class="dv">5</span>)</span></code></pre></div>
+<div class="sourceCode" id="cb19"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb19-1"><a href="#cb19-1" tabindex="-1"></a><span class="fu">write.csv</span>(res_aff_vs_unaff, <span class="at">file=</span><span class="st">&quot;output/res_aff_vs_unaff.csv&quot;</span>)      </span>
+<span id="cb19-2"><a href="#cb19-2" tabindex="-1"></a>res_aff_vs_unaff_df <span class="ot">=</span> <span class="fu">as.data.frame</span>(res_aff_vs_unaff)</span>
+<span id="cb19-3"><a href="#cb19-3" tabindex="-1"></a>res_aff_vs_unaff_05 <span class="ot">=</span> <span class="fu">subset</span>(res_aff_vs_unaff_df, padj <span class="sc">&lt;</span> <span class="fl">0.05</span>)                             </span></code></pre></div>
+<div class="sourceCode" id="cb20"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb20-1"><a href="#cb20-1" tabindex="-1"></a>topgenes_byensemblid <span class="ot">=</span> <span class="fu">head</span>(<span class="fu">rownames</span>(res_aff_vs_unaff_05),<span class="dv">50</span>)</span>
+<span id="cb20-2"><a href="#cb20-2" tabindex="-1"></a>topgenes_aff_vs_unaff_05 <span class="ot">=</span> <span class="fu">assay</span>(vsd_limma)[topgenes_byensemblid,] </span>
+<span id="cb20-3"><a href="#cb20-3" tabindex="-1"></a>topgenes_aff_vs_unaff_05 <span class="ot">=</span> topgenes_aff_vs_unaff_05 <span class="sc">-</span> <span class="fu">rowMeans</span>(topgenes_aff_vs_unaff_05)</span>
+<span id="cb20-4"><a href="#cb20-4" tabindex="-1"></a></span>
+<span id="cb20-5"><a href="#cb20-5" tabindex="-1"></a><span class="co"># Convert ensemblids</span></span>
+<span id="cb20-6"><a href="#cb20-6" tabindex="-1"></a>ensemblids <span class="ot">&lt;-</span> topgenes_byensemblid</span>
+<span id="cb20-7"><a href="#cb20-7" tabindex="-1"></a><span class="fu">rownames</span>(topgenes_aff_vs_unaff_05) <span class="ot">&lt;-</span> gene_info<span class="sc">$</span>gene_name[<span class="fu">match</span>(ensemblids, gene_info<span class="sc">$</span>Ensembl_ID)]</span>
+<span id="cb20-8"><a href="#cb20-8" tabindex="-1"></a></span>
+<span id="cb20-9"><a href="#cb20-9" tabindex="-1"></a>topgenes_aff_vs_unaff_05 <span class="ot">&lt;-</span> topgenes_aff_vs_unaff_05[<span class="fu">order</span>(<span class="fu">row.names</span>(topgenes_aff_vs_unaff_05)), ]</span>
+<span id="cb20-10"><a href="#cb20-10" tabindex="-1"></a></span>
+<span id="cb20-11"><a href="#cb20-11" tabindex="-1"></a>df <span class="ot">=</span> <span class="fu">as.data.frame</span>(<span class="fu">colData</span>(vsd_limma)[,<span class="fu">c</span>(<span class="st">&quot;Batch&quot;</span>, <span class="st">&quot;Family&quot;</span>, <span class="st">&quot;Affected&quot;</span>)])</span>
+<span id="cb20-12"><a href="#cb20-12" tabindex="-1"></a><span class="fu">pheatmap</span>(topgenes_aff_vs_unaff_05, <span class="at">annotation_col=</span>df, <span class="at">fontsize =</span> <span class="dv">5</span>)</span></code></pre></div>
 <p><img src="figure/analysis.Rmd/top%2050%20genes-1.png" width="800px" height="570px" style="display: block; margin: auto;" /></p>
 <p>
 <button type="button" class="btn btn-default btn-xs btn-workflowr btn-workflowr-fig" data-toggle="collapse" data-target="#fig-no-spaces-top-50-genes-1">
@@ -1573,30 +1328,110 @@ sdhutchins
 </table>
 </div>
 </div>
-<div class="sourceCode" id="cb28"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb28-1"><a href="#cb28-1" tabindex="-1"></a>res_aff_vs_unaff_df_genename <span class="ot">=</span> res_aff_vs_unaff_df</span>
-<span id="cb28-2"><a href="#cb28-2" tabindex="-1"></a>res_aff_vs_unaff_df_genename<span class="sc">$</span>Ensembl_ID <span class="ot">=</span> <span class="fu">row.names</span>(res_aff_vs_unaff_df)</span>
-<span id="cb28-3"><a href="#cb28-3" tabindex="-1"></a>res_aff_vs_unaff_df_genename <span class="ot">=</span> <span class="fu">merge</span>(<span class="at">x=</span>res_aff_vs_unaff_df_genename, <span class="at">y=</span>gene_names, <span class="at">by.x =</span><span class="st">&quot;Ensembl_ID&quot;</span>, <span class="at">by.y=</span><span class="st">&quot;Ensembl_ID&quot;</span>, <span class="at">all.x=</span>T)</span>
-<span id="cb28-4"><a href="#cb28-4" tabindex="-1"></a>res_aff_vs_unaff_df_genename <span class="ot">=</span> res_aff_vs_unaff_df_genename[,<span class="fu">c</span>(<span class="fu">dim</span>(res_aff_vs_unaff_df_genename)[<span class="dv">2</span>],<span class="dv">1</span><span class="sc">:</span><span class="fu">dim</span>(res_aff_vs_unaff_df_genename)[<span class="dv">2</span>]<span class="sc">-</span><span class="dv">1</span>)]</span>
-<span id="cb28-5"><a href="#cb28-5" tabindex="-1"></a>res_aff_vs_unaff_df_genename <span class="ot">=</span> res_aff_vs_unaff_df_genename[<span class="fu">order</span>(res_aff_vs_unaff_df_genename[,<span class="st">&quot;padj&quot;</span>]),]</span>
-<span id="cb28-6"><a href="#cb28-6" tabindex="-1"></a><span class="fu">write.csv</span>(res_aff_vs_unaff_df_genename,<span class="at">file=</span><span class="st">&quot;output/res_aff_vs_unaff_genename.csv&quot;</span> )</span></code></pre></div>
-<div class="sourceCode" id="cb29"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb29-1"><a href="#cb29-1" tabindex="-1"></a>res_aff_vs_unaff_df_genename_05<span class="ot">=</span> <span class="fu">subset</span>(res_aff_vs_unaff_df_genename, padj <span class="sc">&lt;</span> <span class="fl">0.05</span>)                   </span>
-<span id="cb29-2"><a href="#cb29-2" tabindex="-1"></a>res_aff_vs_unaff_df_genename_05 <span class="ot">=</span> res_aff_vs_unaff_df_genename_05[<span class="fu">order</span>(res_aff_vs_unaff_df_genename_05<span class="sc">$</span>padj),]</span>
-<span id="cb29-3"><a href="#cb29-3" tabindex="-1"></a><span class="fu">write.csv</span>(res_aff_vs_unaff_df_genename_05, <span class="at">file=</span><span class="st">&quot;output/res_aff_vs_unaff_df_genename_05.csv&quot;</span>)</span></code></pre></div>
+<div class="sourceCode" id="cb21"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb21-1"><a href="#cb21-1" tabindex="-1"></a>res_aff_vs_unaff_df_genename <span class="ot">=</span> res_aff_vs_unaff_df</span>
+<span id="cb21-2"><a href="#cb21-2" tabindex="-1"></a>res_aff_vs_unaff_df_genename<span class="sc">$</span>Ensembl_ID <span class="ot">=</span> <span class="fu">row.names</span>(res_aff_vs_unaff_df)</span>
+<span id="cb21-3"><a href="#cb21-3" tabindex="-1"></a>res_aff_vs_unaff_df_genename <span class="ot">=</span> <span class="fu">merge</span>(<span class="at">x=</span>res_aff_vs_unaff_df_genename, <span class="at">y=</span>gene_info, <span class="at">by.x =</span><span class="st">&quot;Ensembl_ID&quot;</span>, <span class="at">by.y=</span><span class="st">&quot;Ensembl_ID&quot;</span>, <span class="at">all.x=</span>T)</span>
+<span id="cb21-4"><a href="#cb21-4" tabindex="-1"></a>res_aff_vs_unaff_df_genename <span class="ot">=</span> res_aff_vs_unaff_df_genename[,<span class="fu">c</span>(<span class="fu">dim</span>(res_aff_vs_unaff_df_genename)[<span class="dv">2</span>],<span class="dv">1</span><span class="sc">:</span><span class="fu">dim</span>(res_aff_vs_unaff_df_genename)[<span class="dv">2</span>]<span class="sc">-</span><span class="dv">1</span>)]</span>
+<span id="cb21-5"><a href="#cb21-5" tabindex="-1"></a>res_aff_vs_unaff_df_genename <span class="ot">=</span> res_aff_vs_unaff_df_genename[<span class="fu">order</span>(res_aff_vs_unaff_df_genename[,<span class="st">&quot;padj&quot;</span>]),]</span>
+<span id="cb21-6"><a href="#cb21-6" tabindex="-1"></a><span class="fu">write.csv</span>(res_aff_vs_unaff_df_genename,<span class="at">file=</span><span class="st">&quot;output/res_aff_vs_unaff_genename.csv&quot;</span> )</span></code></pre></div>
+<div class="sourceCode" id="cb22"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb22-1"><a href="#cb22-1" tabindex="-1"></a>res_aff_vs_unaff_df_genename_05<span class="ot">=</span> <span class="fu">subset</span>(res_aff_vs_unaff_df_genename, padj <span class="sc">&lt;</span> <span class="fl">0.05</span>)                   </span>
+<span id="cb22-2"><a href="#cb22-2" tabindex="-1"></a>res_aff_vs_unaff_df_genename_05 <span class="ot">=</span> res_aff_vs_unaff_df_genename_05[<span class="fu">order</span>(res_aff_vs_unaff_df_genename_05<span class="sc">$</span>padj),]</span>
+<span id="cb22-3"><a href="#cb22-3" tabindex="-1"></a><span class="fu">write.csv</span>(res_aff_vs_unaff_df_genename_05, <span class="at">file=</span><span class="st">&quot;output/res_aff_vs_unaff_df_genename_05.csv&quot;</span>)</span></code></pre></div>
+<div class="sourceCode" id="cb23"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb23-1"><a href="#cb23-1" tabindex="-1"></a><span class="co"># Select specific genes to show</span></span>
+<span id="cb23-2"><a href="#cb23-2" tabindex="-1"></a><span class="co"># set top = 0, then specify genes using label.select argument</span></span>
+<span id="cb23-3"><a href="#cb23-3" tabindex="-1"></a><span class="fu">ggmaplot</span>(res_aff_vs_unaff_df_genename, <span class="at">main =</span> <span class="st">&quot;Affected vs Unaffected&quot;</span>,</span>
+<span id="cb23-4"><a href="#cb23-4" tabindex="-1"></a>         <span class="at">fdr =</span> .<span class="dv">05</span>, <span class="at">fc =</span> <span class="dv">2</span>, <span class="at">size =</span> <span class="fl">0.4</span>,</span>
+<span id="cb23-5"><a href="#cb23-5" tabindex="-1"></a>         <span class="at">genenames =</span> <span class="fu">as.vector</span>(res_aff_vs_unaff_df_genename<span class="sc">$</span>gene_name),</span>
+<span id="cb23-6"><a href="#cb23-6" tabindex="-1"></a>         <span class="at">ggtheme =</span> ggplot2<span class="sc">::</span><span class="fu">theme_minimal</span>(),</span>
+<span id="cb23-7"><a href="#cb23-7" tabindex="-1"></a>         <span class="at">legend =</span> <span class="st">&quot;top&quot;</span>, <span class="at">top =</span> <span class="dv">19</span>, <span class="at">font.label =</span> <span class="fu">c</span>(<span class="st">&quot;bold&quot;</span>, <span class="dv">8</span>), <span class="at">label.rectangle =</span> <span class="cn">TRUE</span>,</span>
+<span id="cb23-8"><a href="#cb23-8" tabindex="-1"></a>         <span class="at">font.legend =</span> <span class="st">&quot;bold&quot;</span>, <span class="at">font.main =</span> <span class="st">&quot;bold&quot;</span></span>
+<span id="cb23-9"><a href="#cb23-9" tabindex="-1"></a>)</span></code></pre></div>
+<p><img src="figure/analysis.Rmd/maplot-1.png" width="672" style="display: block; margin: auto;" /></p>
 </div>
 </div>
-<div id="enrichment-analysis-with-gprofiler" class="section level2">
-<h2>Enrichment analysis with gprofiler</h2>
-<div class="sourceCode" id="cb30"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb30-1"><a href="#cb30-1" tabindex="-1"></a>mart <span class="ot">&lt;-</span> <span class="fu">useMart</span>(<span class="at">biomart =</span> <span class="st">&quot;ensembl&quot;</span>, <span class="at">dataset =</span> <span class="st">&quot;hsapiens_gene_ensembl&quot;</span>)</span>
-<span id="cb30-2"><a href="#cb30-2" tabindex="-1"></a>all_genes_mart <span class="ot">&lt;-</span> <span class="fu">getBM</span>(<span class="at">attributes =</span> <span class="fu">c</span>(<span class="st">&#39;ensembl_gene_id_version&#39;</span>,</span>
-<span id="cb30-3"><a href="#cb30-3" tabindex="-1"></a>                     <span class="st">&#39;entrezgene_id&#39;</span>, <span class="st">&#39;ensembl_gene_id&#39;</span>, <span class="st">&#39;description&#39;</span>, <span class="st">&#39;genecards&#39;</span>),</span>
-<span id="cb30-4"><a href="#cb30-4" tabindex="-1"></a>      <span class="at">filters =</span> <span class="st">&#39;ensembl_gene_id_version&#39;</span>, </span>
-<span id="cb30-5"><a href="#cb30-5" tabindex="-1"></a>      <span class="at">values =</span> gene_names<span class="sc">$</span>Ensembl_ID,</span>
-<span id="cb30-6"><a href="#cb30-6" tabindex="-1"></a>      <span class="at">mart =</span> mart)</span>
-<span id="cb30-7"><a href="#cb30-7" tabindex="-1"></a>all_genes_res <span class="ot">&lt;-</span> <span class="fu">gost</span>(<span class="at">query =</span> all_genes_mart<span class="sc">$</span>ensembl_gene_id, <span class="at">organism =</span> <span class="st">&quot;hsapiens&quot;</span>, <span class="at">significant =</span> <span class="cn">TRUE</span>)</span>
-<span id="cb30-8"><a href="#cb30-8" tabindex="-1"></a></span>
-<span id="cb30-9"><a href="#cb30-9" tabindex="-1"></a><span class="fu">gostplot</span>(all_genes_res, <span class="at">capped =</span> <span class="cn">FALSE</span>, <span class="at">interactive =</span> <span class="cn">TRUE</span>)</span></code></pre></div>
+<div id="enrichment-analysis" class="section level2">
+<h2>Enrichment analysis</h2>
+<div class="sourceCode" id="cb24"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb24-1"><a href="#cb24-1" tabindex="-1"></a>all_genes_res <span class="ot">&lt;-</span> <span class="fu">gost</span>(<span class="at">query =</span> genes_biomart<span class="sc">$</span>ensembl_gene_id, <span class="at">organism =</span> <span class="st">&quot;hsapiens&quot;</span>, <span class="at">significant =</span> <span class="cn">TRUE</span>)</span>
+<span id="cb24-2"><a href="#cb24-2" tabindex="-1"></a></span>
+<span id="cb24-3"><a href="#cb24-3" tabindex="-1"></a><span class="fu">gostplot</span>(all_genes_res, <span class="at">capped =</span> <span class="cn">FALSE</span>, <span class="at">interactive =</span> <span class="cn">TRUE</span>)</span></code></pre></div>
 <div class="plotly html-widget html-fill-item-overflow-hidden html-fill-item" id="htmlwidget-4e30607ffe6a0017e837" style="width:672px;height:480px;"></div>
-<script type="application/json" data-for="htmlwidget-4e30607ffe6a0017e837">{"x":{"data":[{"x":[151.82512674060791,151.60341295669051],"y":[1.4616356688358887,1.3031552816769507],"text":["CORUM:324 (48) <br> 39S ribosomal subunit, mitochondrial <br> 3.454e-02","CORUM:178 (44) <br> Respiratory chain complex I (holoenzyme), mitochondrial <br> 4.976e-02"],"key":["CORUM:324","CORUM:178"],"type":"scatter","mode":"markers","marker":{"autocolorscale":false,"color":"rgba(102,170,0,1)","opacity":0.80000000000000004,"size":[6.4549562055322021,3.7795275590551185],"symbol":"circle","line":{"width":1.8897637795275593,"color":"rgba(102,170,0,1)"}},"hoveron":"points","set":"SharedDatae56eaee8","name":"CORUM","legendgroup":"CORUM","showlegend":true,"xaxis":"x","yaxis":"y","hoverinfo":"text","_isNestedKey":false,"frame":null},{"x":[39.493374349775443,39.392235025830878,39.463247742643027,39.467551543661941,65.146180323035026,77.721886900312853,54.272627048739189,54.261867546191894,43.986542613525636,39.482614847228149,39.508437653341659,39.478311046209235,43.988694514035096,46.254645750495321,50.474522649544227],"y":[22.223921433718083,21.629212750851625,21.563209047846151,21.563209047846151,21.563209047846151,14.074026933535142,13.927248894903588,11.552733321621465,9.3712367696906771,7.30440359213567,7.30440359213567,6.9516011102894986,6.7860674511752981,6.4993177180034616,3.9502505368596412],"text":["GO:0000387 (1232) <br> spliceosomal snRNP assembly <br> 5.971e-23","GO:0000244 (1206) <br> spliceosomal tri-snRNP complex assembly <br> 2.348e-22","GO:0000353 (1137) <br> formation of quadruple SL/U4/U5/U6 snRNP <br> 2.734e-22","GO:0000365 (1137) <br> mRNA trans splicing, via spliceosome <br> 2.734e-22","GO:0045291 (1137) <br> mRNA trans splicing, SL addition <br> 2.734e-22","GO:0071826 (1626) <br> ribonucleoprotein complex subunit organization <br> 8.433e-15","GO:0022618 (1618) <br> ribonucleoprotein complex assembly <br> 1.182e-14","GO:0022613 (1877) <br> ribonucleoprotein complex biogenesis <br> 2.801e-12","GO:0006396 (3379) <br> RNA processing <br> 4.254e-10","GO:0000377 (1721) <br> RNA splicing, via transesterification reactions with bulged adenosine as nucleophile <br> 4.961e-08","GO:0000398 (1721) <br> mRNA splicing, via spliceosome <br> 4.961e-08","GO:0000375 (1725) <br> RNA splicing, via transesterification reactions <br> 1.118e-07","GO:0006397 (1910) <br> mRNA processing <br> 1.637e-07","GO:0008380 (1861) <br> RNA splicing <br> 3.167e-07","GO:0016071 (2152) <br> mRNA metabolic process <br> 1.121e-04"],"key":["GO:0000387","GO:0000244","GO:0000353","GO:0000365","GO:0045291","GO:0071826","GO:0022618","GO:0022613","GO:0006396","GO:0000377","GO:0000398","GO:0000375","GO:0006397","GO:0008380","GO:0016071"],"type":"scatter","mode":"markers","marker":{"autocolorscale":false,"color":"rgba(255,153,0,1)","opacity":0.80000000000000004,"size":[20.336128300289744,20.283053019007447,20.135556616518862,20.135556616518862,20.135556616518862,21.011707636331717,20.999930792120395,21.351015687628767,22.677165354330711,21.146714889682535,21.146714889682535,21.152212290444897,21.391765770232613,21.330964811375232,21.668199652414721],"symbol":"circle","line":{"width":1.8897637795275593,"color":"rgba(255,153,0,1)"}},"hoveron":"points","set":"SharedDatae56eaee8","name":"GO:BP","legendgroup":"GO:BP","showlegend":true,"xaxis":"x","yaxis":"y","hoverinfo":"text","_isNestedKey":false,"frame":null},{"x":[35.858632062092795,30.428239291385459,34.958947488903867,28.98400879231902,33.118683589199236,34.961099844342115,37.055341685760361],"y":[21.843125815133824,21.585392693924103,21.392349242690326,20.217429711684648,18.999620629082226,18.999620629082226,10.241316199771584],"text":["GO:0120114 (1500) <br> Sm-like protein family complex <br> 1.435e-22","GO:0030532 (1488) <br> small nuclear ribonucleoprotein complex <br> 2.598e-22","GO:0097525 (1479) <br> spliceosomal snRNP complex <br> 4.052e-22","GO:0005688 (1048) <br> U6 snRNP <br> 6.061e-21","GO:0046540 (1172) <br> U4/U6 x U5 tri-snRNP complex <br> 1.001e-19","GO:0097526 (1172) <br> spliceosomal tri-snRNP complex <br> 1.001e-19","GO:1990904 (2794) <br> ribonucleoprotein complex <br> 5.737e-11"],"key":["GO:0120114","GO:0030532","GO:0097525","GO:0005688","GO:0046540","GO:0097526","GO:1990904"],"type":"scatter","mode":"markers","marker":{"autocolorscale":false,"color":"rgba(16,150,24,1)","opacity":0.80000000000000004,"size":[20.818094840866024,20.798693669749241,20.784025162570536,19.929275693686275,20.21162452601067,20.21162452601067,22.258754810083872],"symbol":"circle","line":{"width":1.8897637795275593,"color":"rgba(16,150,24,1)"}},"hoveron":"points","set":"SharedDatae56eaee8","name":"GO:CC","legendgroup":"GO:CC","showlegend":true,"xaxis":"x","yaxis":"y","hoverinfo":"text","_isNestedKey":false,"frame":null},{"x":[10.623120665711108,8.7745405180081288,2.7575089778713027,10.636032750561187],"y":[21.423202785854372,20.281991389735428,2.4751970927994598,1.6491001953947959],"text":["GO:0030621 (1046) <br> U4 snRNA binding <br> 3.774e-22","GO:0017069 (1219) <br> snRNA binding <br> 5.224e-21","GO:0003735 (451) <br> structural constituent of ribosome <br> 3.348e-03","GO:0030627 (199) <br> pre-mRNA 5'-splice site binding <br> 2.243e-02"],"key":["GO:0030621","GO:0017069","GO:0003735","GO:0030627"],"type":"scatter","mode":"markers","marker":{"autocolorscale":false,"color":"rgba(220,57,18,1)","opacity":0.80000000000000004,"size":[19.924409786373481,20.309753468572723,17.616129804147604,14.921614616191111],"symbol":"circle","line":{"width":1.8897637795275593,"color":"rgba(220,57,18,1)"}},"hoveron":"points","set":"SharedDatae56eaee8","name":"GO:MF","legendgroup":"GO:MF","showlegend":true,"xaxis":"x","yaxis":"y","hoverinfo":"text","_isNestedKey":false,"frame":null},{"x":[164.95571258424411,161.29524460874316,165.25052981683885,185.39278745980704],"y":[2.3534862002690979,1.6185802018406146,1.5608898242839673,1.5608898242839673],"text":["HP:0003287 (176) <br> Abnormality of mitochondrial metabolism <br> 4.431e-03","HP:0000868 (93) <br> Decreased fertility in females <br> 2.407e-02","HP:0003487 (255) <br> Babinski sign <br> 2.749e-02","HP:0031828 (255) <br> Abnormal superficial reflex <br> 2.749e-02"],"key":["HP:0003287","HP:0000868","HP:0003487","HP:0031828"],"type":"scatter","mode":"markers","marker":{"autocolorscale":false,"color":"rgba(153,0,153,1)","opacity":0.80000000000000004,"size":[14.458588882585396,11.626011714392385,15.802182072967833,15.802182072967833],"symbol":"circle","line":{"width":1.8897637795275593,"color":"rgba(153,0,153,1)"}},"hoveron":"points","set":"SharedDatae56eaee8","name":"HP","legendgroup":"HP","showlegend":true,"xaxis":"x","yaxis":"y","hoverinfo":"text","_isNestedKey":false,"frame":null},{"x":[101.5763018678488],"y":[6.2434915535067033],"text":"KEGG:01100 (1532) <br> Metabolic pathways <br> 5.708e-07","key":["KEGG:01100"],"type":"scatter","mode":"markers","marker":{"autocolorscale":false,"color":"rgba(221,68,119,1)","opacity":0.80000000000000004,"size":20.868977119829829,"symbol":"circle","line":{"width":1.8897637795275593,"color":"rgba(221,68,119,1)"}},"hoveron":"points","set":"SharedDatae56eaee8","name":"KEGG","legendgroup":"KEGG","showlegend":true,"xaxis":"x","yaxis":"y","hoverinfo":"text","_isSimpleKey":true,"_isNestedKey":false,"frame":null},{"x":[107.43613166518952,106.35980790238473,107.88603499804191,106.74943710452006],"y":[2.8002076208151143,2.0387926483226684,1.6805648837807379,1.5641297301271584],"text":["REAC:R-HSA-1430728 (2072) <br> Metabolism <br> 1.584e-03","REAC:R-HSA-9752946 (356) <br> Expression and translocation of olfactory receptors <br> 9.145e-03","REAC:R-HSA-381753 (363) <br> Olfactory Signaling Pathway <br> 2.087e-02","REAC:R-HSA-1630316 (123) <br> Glycosaminoglycan metabolism <br> 2.728e-02"],"key":["REAC:R-HSA-1430728","REAC:R-HSA-9752946","REAC:R-HSA-381753","REAC:R-HSA-1630316"],"type":"scatter","mode":"markers","marker":{"autocolorscale":false,"color":"rgba(51,102,204,1)","opacity":0.80000000000000004,"size":[21.580880026650693,16.894140577644055,16.955070469811229,12.975566346466158],"symbol":"circle","line":{"width":1.8897637795275593,"color":"rgba(51,102,204,1)"}},"hoveron":"points","set":"SharedDatae56eaee8","name":"REAC","legendgroup":"REAC","showlegend":true,"xaxis":"x","yaxis":"y","hoverinfo":"text","_isNestedKey":false,"frame":null},{"x":[199.07784972238571,198.83654008304563],"y":[1.7961333784795541,1.5850620895639276],"text":["WP:WP111 (103) <br> Electron transport chain: OXPHOS system in mitochondria <br> 1.599e-02","WP:WP702 (182) <br> Metapathway biotransformation Phase I and II <br> 2.600e-02"],"key":["WP:WP111","WP:WP702"],"type":"scatter","mode":"markers","marker":{"autocolorscale":false,"color":"rgba(0,153,198,1)","opacity":0.80000000000000004,"size":[12.144269720799393,14.586935531639444],"symbol":"circle","line":{"width":1.8897637795275593,"color":"rgba(0,153,198,1)"}},"hoveron":"points","set":"SharedDatae56eaee8","name":"WP","legendgroup":"WP","showlegend":true,"xaxis":"x","yaxis":"y","hoverinfo":"text","_isNestedKey":false,"frame":null},{"x":[2,26.235983263598325],"y":[-1,-1],"text":"","type":"scatter","mode":"lines","line":{"width":11.338582677165356,"color":"rgba(220,57,18,1)","dash":"solid"},"hoveron":"points","showlegend":false,"xaxis":"x","yaxis":"y","hoverinfo":"text","frame":null},{"x":[28.387806335923489,37.087627017334128],"y":[-1,-1],"text":"","type":"scatter","mode":"lines","line":{"width":11.338582677165356,"color":"rgba(16,150,24,1)","dash":"solid"},"hoveron":"points","showlegend":false,"xaxis":"x","yaxis":"y","hoverinfo":"text","frame":null},{"x":[39.239450089659293,99.036461446503282],"y":[-1,-1],"text":"","type":"scatter","mode":"lines","line":{"width":11.338582677165356,"color":"rgba(255,153,0,1)","dash":"solid"},"hoveron":"points","showlegend":false,"xaxis":"x","yaxis":"y","hoverinfo":"text","frame":null},{"x":[101.18828451882845,102.39976090854752],"y":[-1,-1],"text":"","type":"scatter","mode":"lines","line":{"width":11.338582677165356,"color":"rgba(221,68,119,1)","dash":"solid"},"hoveron":"points","showlegend":false,"xaxis":"x","yaxis":"y","hoverinfo":"text","frame":null},{"x":[104.55158398087268,110.16999402271368],"y":[-1,-1],"text":"","type":"scatter","mode":"lines","line":{"width":11.338582677165356,"color":"rgba(51,102,204,1)","dash":"solid"},"hoveron":"points","showlegend":false,"xaxis":"x","yaxis":"y","hoverinfo":"text","frame":null},{"x":[112.32181709503885,137.38410041841004],"y":[-1,-1],"text":"","type":"scatter","mode":"lines","line":{"width":11.338582677165356,"color":"rgba(85,116,166,1)","dash":"solid"},"hoveron":"points","showlegend":false,"xaxis":"x","yaxis":"y","hoverinfo":"text","frame":null},{"x":[139.5359234907352,145.25977286312013],"y":[-1,-1],"text":"","type":"scatter","mode":"lines","line":{"width":11.338582677165356,"color":"rgba(34,170,153,1)","dash":"solid"},"hoveron":"points","showlegend":false,"xaxis":"x","yaxis":"y","hoverinfo":"text","frame":null},{"x":[147.41159593544529,149.2600119545726],"y":[-1,-1],"text":"","type":"scatter","mode":"lines","line":{"width":11.338582677165356,"color":"rgba(102,51,204,1)","dash":"solid"},"hoveron":"points","showlegend":false,"xaxis":"x","yaxis":"y","hoverinfo":"text","frame":null},{"x":[151.41183502689779,157.6887029288703],"y":[-1,-1],"text":"","type":"scatter","mode":"lines","line":{"width":11.338582677165356,"color":"rgba(102,170,0,1)","dash":"solid"},"hoveron":"points","showlegend":false,"xaxis":"x","yaxis":"y","hoverinfo":"text","frame":null},{"x":[159.84052600119546,196.15038852361027],"y":[-1,-1],"text":"","type":"scatter","mode":"lines","line":{"width":11.338582677165356,"color":"rgba(153,0,153,1)","dash":"solid"},"hoveron":"points","showlegend":false,"xaxis":"x","yaxis":"y","hoverinfo":"text","frame":null},{"x":[198.30221159593543,200.00215182307232],"y":[-1,-1],"text":"","type":"scatter","mode":"lines","line":{"width":11.338582677165356,"color":"rgba(0,153,198,1)","dash":"solid"},"hoveron":"points","showlegend":false,"xaxis":"x","yaxis":"y","hoverinfo":"text","frame":null}],"layout":{"margin":{"t":29.283520132835207,"r":6.6417600664176026,"b":55.878166138820198,"l":55.193026151930283},"plot_bgcolor":"rgba(255,255,255,1)","paper_bgcolor":"rgba(255,255,255,1)","font":{"color":"rgba(0,0,0,1)","family":"","size":14.611872146118724},"xaxis":{"domain":[0,1],"automargin":true,"type":"linear","autorange":false,"range":[0,210],"tickmode":"array","ticktext":["GO:MF","GO:CC","GO:BP","KEGG","REAC","TF","MIRNA","HPA","CORUM","HP","WP"],"tickvals":[14.117991631799164,32.737716676628807,69.137955768081284,101.79402271368798,107.36078900179319,124.85295875672443,142.39784817692765,148.33580394500893,154.55026897788406,177.99545726240285,199.15218170950388],"categoryorder":"array","categoryarray":["GO:MF","GO:CC","GO:BP","KEGG","REAC","TF","MIRNA","HPA","CORUM","HP","WP"],"nticks":null,"ticks":"","tickcolor":null,"ticklen":3.6529680365296811,"tickwidth":0,"showticklabels":true,"tickfont":{"color":"rgba(77,77,77,1)","family":"","size":10.62681610626816},"tickangle":-45,"showline":true,"linecolor":"rgba(190,190,190,1)","linewidth":0.13283520132835203,"showgrid":false,"gridcolor":null,"gridwidth":0,"zeroline":false,"anchor":"y","title":"","hoverformat":".2f"},"yaxis":{"domain":[0,1],"automargin":true,"type":"linear","autorange":false,"range":[-1,28],"tickmode":"array","ticktext":["0","10","20"],"tickvals":[0,10,20],"categoryorder":"array","categoryarray":["0","10","20"],"nticks":null,"ticks":"outside","tickcolor":"rgba(190,190,190,1)","ticklen":3.6529680365296811,"tickwidth":0.66417600664176002,"showticklabels":true,"tickfont":{"color":"rgba(77,77,77,1)","family":"","size":11.68949771689498},"tickangle":-0,"showline":true,"linecolor":"rgba(190,190,190,1)","linewidth":0.66417600664176002,"showgrid":false,"gridcolor":null,"gridwidth":0,"zeroline":false,"anchor":"x","title":"","hoverformat":".2f"},"annotations":[{"text":"-log10(p-adj)","x":0,"y":0.5,"showarrow":false,"ax":0,"ay":0,"font":{"color":"rgba(0,0,0,1)","family":"","size":13.283520132835205},"xref":"paper","yref":"paper","textangle":-90,"xanchor":"right","yanchor":"center","annotationType":"axis","xshift":-31.54836031548361},{"text":"query_1","x":0.5,"y":1,"showarrow":false,"ax":0,"ay":0,"font":{"color":"rgba(169,169,169,1)","family":"","size":13.283520132835205},"xref":"paper","yref":"paper","textangle":-0,"xanchor":"center","yanchor":"bottom"}],"shapes":[{"type":"rect","fillcolor":null,"line":{"color":null,"width":0,"linetype":[]},"yref":"paper","xref":"paper","x0":0,"x1":1,"y0":0,"y1":1},{"type":"rect","fillcolor":null,"line":{"color":null,"width":0,"linetype":[]},"yref":"paper","xref":"paper","x0":0,"x1":1,"y0":0,"y1":24.973017849730184,"yanchor":1,"ysizemode":"pixel"}],"showlegend":false,"legend":{"bgcolor":"rgba(255,255,255,1)","bordercolor":"transparent","borderwidth":1.8897637795275593,"font":{"color":"rgba(0,0,0,1)","family":"","size":11.68949771689498}},"hovermode":"closest","barmode":"relative","dragmode":"zoom"},"config":{"doubleClick":"reset","modeBarButtonsToAdd":["hoverclosest","hovercompare"],"showSendToCloud":false},"source":"A","attrs":{"d9fb5073aab4":{"x":{},"y":{},"text":{},"colour":{},"size":{},"alpha":{},"type":"scatter"},"d9fb59cc38af":{"x":{},"xend":{},"y":{},"yend":{}},"d9fb6e9d9737":{"x":{},"xend":{},"y":{},"yend":{}},"d9fb2c32d49d":{"x":{},"xend":{},"y":{},"yend":{}},"d9fb3d24a616":{"x":{},"xend":{},"y":{},"yend":{}},"d9fb31140db6":{"x":{},"xend":{},"y":{},"yend":{}},"d9fb1b9040e6":{"x":{},"xend":{},"y":{},"yend":{}},"d9fb1b94ca2d":{"x":{},"xend":{},"y":{},"yend":{}},"d9fb45655e80":{"x":{},"xend":{},"y":{},"yend":{}},"d9fb21f4918":{"x":{},"xend":{},"y":{},"yend":{}},"d9fb53f7c7be":{"x":{},"xend":{},"y":{},"yend":{}},"d9fb305ab603":{"x":{},"xend":{},"y":{},"yend":{}}},"cur_data":"d9fb5073aab4","visdat":{"d9fb5073aab4":["function (y) ","x"],"d9fb59cc38af":["function (y) ","x"],"d9fb6e9d9737":["function (y) ","x"],"d9fb2c32d49d":["function (y) ","x"],"d9fb3d24a616":["function (y) ","x"],"d9fb31140db6":["function (y) ","x"],"d9fb1b9040e6":["function (y) ","x"],"d9fb1b94ca2d":["function (y) ","x"],"d9fb45655e80":["function (y) ","x"],"d9fb21f4918":["function (y) ","x"],"d9fb53f7c7be":["function (y) ","x"],"d9fb305ab603":["function (y) ","x"]},"highlight":{"on":"plotly_click","off":"plotly_doubleclick","persistent":false,"dynamic":false,"color":null,"selectize":false,"defaultValues":null,"opacityDim":0.20000000000000001,"selected":{"opacity":1},"debounce":0,"ctGroups":["SharedDatae56eaee8"]},"shinyEvents":["plotly_hover","plotly_click","plotly_selected","plotly_relayout","plotly_brushed","plotly_brushing","plotly_clickannotation","plotly_doubleclick","plotly_deselect","plotly_afterplot","plotly_sunburstclick"],"base_url":"https://plot.ly"},"evals":[],"jsHooks":[]}</script>
+<script type="application/json" data-for="htmlwidget-4e30607ffe6a0017e837">{"x":{"data":[{"x":[151.82512674060791,151.60341295669051],"y":[1.4616356688358887,1.3031552816769507],"text":["CORUM:324 (48) <br> 39S ribosomal subunit, mitochondrial <br> 3.454e-02","CORUM:178 (44) <br> Respiratory chain complex I (holoenzyme), mitochondrial <br> 4.976e-02"],"key":["CORUM:324","CORUM:178"],"type":"scatter","mode":"markers","marker":{"autocolorscale":false,"color":"rgba(102,170,0,1)","opacity":0.80000000000000004,"size":[6.4549562055322021,3.7795275590551185],"symbol":"circle","line":{"width":1.8897637795275593,"color":"rgba(102,170,0,1)"}},"hoveron":"points","set":"SharedDatae56eaee8","name":"CORUM","legendgroup":"CORUM","showlegend":true,"xaxis":"x","yaxis":"y","hoverinfo":"text","_isNestedKey":false,"frame":null},{"x":[39.493374349775443,39.392235025830878,39.463247742643027,39.467551543661941,65.146180323035026,77.721886900312853,54.272627048739189,54.261867546191894,43.986542613525636,39.482614847228149,39.508437653341659,39.478311046209235,43.988694514035096,46.254645750495321,50.474522649544227],"y":[22.223921433718083,21.629212750851625,21.563209047846151,21.563209047846151,21.563209047846151,14.074026933535142,13.927248894903588,11.552733321621465,9.3712367696906771,7.30440359213567,7.30440359213567,6.9516011102894986,6.7860674511752981,6.4993177180034616,3.9502505368596412],"text":["GO:0000387 (1232) <br> spliceosomal snRNP assembly <br> 5.971e-23","GO:0000244 (1206) <br> spliceosomal tri-snRNP complex assembly <br> 2.348e-22","GO:0000353 (1137) <br> formation of quadruple SL/U4/U5/U6 snRNP <br> 2.734e-22","GO:0000365 (1137) <br> mRNA trans splicing, via spliceosome <br> 2.734e-22","GO:0045291 (1137) <br> mRNA trans splicing, SL addition <br> 2.734e-22","GO:0071826 (1626) <br> ribonucleoprotein complex subunit organization <br> 8.433e-15","GO:0022618 (1618) <br> ribonucleoprotein complex assembly <br> 1.182e-14","GO:0022613 (1877) <br> ribonucleoprotein complex biogenesis <br> 2.801e-12","GO:0006396 (3379) <br> RNA processing <br> 4.254e-10","GO:0000377 (1721) <br> RNA splicing, via transesterification reactions with bulged adenosine as nucleophile <br> 4.961e-08","GO:0000398 (1721) <br> mRNA splicing, via spliceosome <br> 4.961e-08","GO:0000375 (1725) <br> RNA splicing, via transesterification reactions <br> 1.118e-07","GO:0006397 (1910) <br> mRNA processing <br> 1.637e-07","GO:0008380 (1861) <br> RNA splicing <br> 3.167e-07","GO:0016071 (2152) <br> mRNA metabolic process <br> 1.121e-04"],"key":["GO:0000387","GO:0000244","GO:0000353","GO:0000365","GO:0045291","GO:0071826","GO:0022618","GO:0022613","GO:0006396","GO:0000377","GO:0000398","GO:0000375","GO:0006397","GO:0008380","GO:0016071"],"type":"scatter","mode":"markers","marker":{"autocolorscale":false,"color":"rgba(255,153,0,1)","opacity":0.80000000000000004,"size":[20.336128300289744,20.283053019007447,20.135556616518862,20.135556616518862,20.135556616518862,21.011707636331717,20.999930792120395,21.351015687628767,22.677165354330711,21.146714889682535,21.146714889682535,21.152212290444897,21.391765770232613,21.330964811375232,21.668199652414721],"symbol":"circle","line":{"width":1.8897637795275593,"color":"rgba(255,153,0,1)"}},"hoveron":"points","set":"SharedDatae56eaee8","name":"GO:BP","legendgroup":"GO:BP","showlegend":true,"xaxis":"x","yaxis":"y","hoverinfo":"text","_isNestedKey":false,"frame":null},{"x":[35.858632062092795,30.428239291385459,34.958947488903867,28.98400879231902,33.118683589199236,34.961099844342115,37.055341685760361],"y":[21.843125815133824,21.585392693924103,21.392349242690326,20.217429711684648,18.999620629082226,18.999620629082226,10.241316199771584],"text":["GO:0120114 (1500) <br> Sm-like protein family complex <br> 1.435e-22","GO:0030532 (1488) <br> small nuclear ribonucleoprotein complex <br> 2.598e-22","GO:0097525 (1479) <br> spliceosomal snRNP complex <br> 4.052e-22","GO:0005688 (1048) <br> U6 snRNP <br> 6.061e-21","GO:0046540 (1172) <br> U4/U6 x U5 tri-snRNP complex <br> 1.001e-19","GO:0097526 (1172) <br> spliceosomal tri-snRNP complex <br> 1.001e-19","GO:1990904 (2794) <br> ribonucleoprotein complex <br> 5.737e-11"],"key":["GO:0120114","GO:0030532","GO:0097525","GO:0005688","GO:0046540","GO:0097526","GO:1990904"],"type":"scatter","mode":"markers","marker":{"autocolorscale":false,"color":"rgba(16,150,24,1)","opacity":0.80000000000000004,"size":[20.818094840866024,20.798693669749241,20.784025162570536,19.929275693686275,20.21162452601067,20.21162452601067,22.258754810083872],"symbol":"circle","line":{"width":1.8897637795275593,"color":"rgba(16,150,24,1)"}},"hoveron":"points","set":"SharedDatae56eaee8","name":"GO:CC","legendgroup":"GO:CC","showlegend":true,"xaxis":"x","yaxis":"y","hoverinfo":"text","_isNestedKey":false,"frame":null},{"x":[10.623120665711108,8.7745405180081288,2.7575089778713027,10.636032750561187],"y":[21.423202785854372,20.281991389735428,2.4751970927994598,1.6491001953947959],"text":["GO:0030621 (1046) <br> U4 snRNA binding <br> 3.774e-22","GO:0017069 (1219) <br> snRNA binding <br> 5.224e-21","GO:0003735 (451) <br> structural constituent of ribosome <br> 3.348e-03","GO:0030627 (199) <br> pre-mRNA 5'-splice site binding <br> 2.243e-02"],"key":["GO:0030621","GO:0017069","GO:0003735","GO:0030627"],"type":"scatter","mode":"markers","marker":{"autocolorscale":false,"color":"rgba(220,57,18,1)","opacity":0.80000000000000004,"size":[19.924409786373481,20.309753468572723,17.616129804147604,14.921614616191111],"symbol":"circle","line":{"width":1.8897637795275593,"color":"rgba(220,57,18,1)"}},"hoveron":"points","set":"SharedDatae56eaee8","name":"GO:MF","legendgroup":"GO:MF","showlegend":true,"xaxis":"x","yaxis":"y","hoverinfo":"text","_isNestedKey":false,"frame":null},{"x":[164.95571258424411,161.29524460874316,165.25052981683885,185.39278745980704],"y":[2.3534862002690979,1.6185802018406146,1.5608898242839673,1.5608898242839673],"text":["HP:0003287 (176) <br> Abnormality of mitochondrial metabolism <br> 4.431e-03","HP:0000868 (93) <br> Decreased fertility in females <br> 2.407e-02","HP:0003487 (255) <br> Babinski sign <br> 2.749e-02","HP:0031828 (255) <br> Abnormal superficial reflex <br> 2.749e-02"],"key":["HP:0003287","HP:0000868","HP:0003487","HP:0031828"],"type":"scatter","mode":"markers","marker":{"autocolorscale":false,"color":"rgba(153,0,153,1)","opacity":0.80000000000000004,"size":[14.458588882585396,11.626011714392385,15.802182072967833,15.802182072967833],"symbol":"circle","line":{"width":1.8897637795275593,"color":"rgba(153,0,153,1)"}},"hoveron":"points","set":"SharedDatae56eaee8","name":"HP","legendgroup":"HP","showlegend":true,"xaxis":"x","yaxis":"y","hoverinfo":"text","_isNestedKey":false,"frame":null},{"x":[101.5763018678488],"y":[6.2434915535067033],"text":"KEGG:01100 (1532) <br> Metabolic pathways <br> 5.708e-07","key":["KEGG:01100"],"type":"scatter","mode":"markers","marker":{"autocolorscale":false,"color":"rgba(221,68,119,1)","opacity":0.80000000000000004,"size":20.868977119829829,"symbol":"circle","line":{"width":1.8897637795275593,"color":"rgba(221,68,119,1)"}},"hoveron":"points","set":"SharedDatae56eaee8","name":"KEGG","legendgroup":"KEGG","showlegend":true,"xaxis":"x","yaxis":"y","hoverinfo":"text","_isSimpleKey":true,"_isNestedKey":false,"frame":null},{"x":[107.43613166518952,106.35980790238473,107.88603499804191,106.74943710452006],"y":[2.8002076208151143,2.0387926483226684,1.6805648837807379,1.5641297301271584],"text":["REAC:R-HSA-1430728 (2072) <br> Metabolism <br> 1.584e-03","REAC:R-HSA-9752946 (356) <br> Expression and translocation of olfactory receptors <br> 9.145e-03","REAC:R-HSA-381753 (363) <br> Olfactory Signaling Pathway <br> 2.087e-02","REAC:R-HSA-1630316 (123) <br> Glycosaminoglycan metabolism <br> 2.728e-02"],"key":["REAC:R-HSA-1430728","REAC:R-HSA-9752946","REAC:R-HSA-381753","REAC:R-HSA-1630316"],"type":"scatter","mode":"markers","marker":{"autocolorscale":false,"color":"rgba(51,102,204,1)","opacity":0.80000000000000004,"size":[21.580880026650693,16.894140577644055,16.955070469811229,12.975566346466158],"symbol":"circle","line":{"width":1.8897637795275593,"color":"rgba(51,102,204,1)"}},"hoveron":"points","set":"SharedDatae56eaee8","name":"REAC","legendgroup":"REAC","showlegend":true,"xaxis":"x","yaxis":"y","hoverinfo":"text","_isNestedKey":false,"frame":null},{"x":[199.07784972238571,198.83654008304563],"y":[1.7961333784795541,1.5850620895639276],"text":["WP:WP111 (103) <br> Electron transport chain: OXPHOS system in mitochondria <br> 1.599e-02","WP:WP702 (182) <br> Metapathway biotransformation Phase I and II <br> 2.600e-02"],"key":["WP:WP111","WP:WP702"],"type":"scatter","mode":"markers","marker":{"autocolorscale":false,"color":"rgba(0,153,198,1)","opacity":0.80000000000000004,"size":[12.144269720799393,14.586935531639444],"symbol":"circle","line":{"width":1.8897637795275593,"color":"rgba(0,153,198,1)"}},"hoveron":"points","set":"SharedDatae56eaee8","name":"WP","legendgroup":"WP","showlegend":true,"xaxis":"x","yaxis":"y","hoverinfo":"text","_isNestedKey":false,"frame":null},{"x":[2,26.235983263598325],"y":[-1,-1],"text":"","type":"scatter","mode":"lines","line":{"width":11.338582677165356,"color":"rgba(220,57,18,1)","dash":"solid"},"hoveron":"points","showlegend":false,"xaxis":"x","yaxis":"y","hoverinfo":"text","frame":null},{"x":[28.387806335923489,37.087627017334128],"y":[-1,-1],"text":"","type":"scatter","mode":"lines","line":{"width":11.338582677165356,"color":"rgba(16,150,24,1)","dash":"solid"},"hoveron":"points","showlegend":false,"xaxis":"x","yaxis":"y","hoverinfo":"text","frame":null},{"x":[39.239450089659293,99.036461446503282],"y":[-1,-1],"text":"","type":"scatter","mode":"lines","line":{"width":11.338582677165356,"color":"rgba(255,153,0,1)","dash":"solid"},"hoveron":"points","showlegend":false,"xaxis":"x","yaxis":"y","hoverinfo":"text","frame":null},{"x":[101.18828451882845,102.39976090854752],"y":[-1,-1],"text":"","type":"scatter","mode":"lines","line":{"width":11.338582677165356,"color":"rgba(221,68,119,1)","dash":"solid"},"hoveron":"points","showlegend":false,"xaxis":"x","yaxis":"y","hoverinfo":"text","frame":null},{"x":[104.55158398087268,110.16999402271368],"y":[-1,-1],"text":"","type":"scatter","mode":"lines","line":{"width":11.338582677165356,"color":"rgba(51,102,204,1)","dash":"solid"},"hoveron":"points","showlegend":false,"xaxis":"x","yaxis":"y","hoverinfo":"text","frame":null},{"x":[112.32181709503885,137.38410041841004],"y":[-1,-1],"text":"","type":"scatter","mode":"lines","line":{"width":11.338582677165356,"color":"rgba(85,116,166,1)","dash":"solid"},"hoveron":"points","showlegend":false,"xaxis":"x","yaxis":"y","hoverinfo":"text","frame":null},{"x":[139.5359234907352,145.25977286312013],"y":[-1,-1],"text":"","type":"scatter","mode":"lines","line":{"width":11.338582677165356,"color":"rgba(34,170,153,1)","dash":"solid"},"hoveron":"points","showlegend":false,"xaxis":"x","yaxis":"y","hoverinfo":"text","frame":null},{"x":[147.41159593544529,149.2600119545726],"y":[-1,-1],"text":"","type":"scatter","mode":"lines","line":{"width":11.338582677165356,"color":"rgba(102,51,204,1)","dash":"solid"},"hoveron":"points","showlegend":false,"xaxis":"x","yaxis":"y","hoverinfo":"text","frame":null},{"x":[151.41183502689779,157.6887029288703],"y":[-1,-1],"text":"","type":"scatter","mode":"lines","line":{"width":11.338582677165356,"color":"rgba(102,170,0,1)","dash":"solid"},"hoveron":"points","showlegend":false,"xaxis":"x","yaxis":"y","hoverinfo":"text","frame":null},{"x":[159.84052600119546,196.15038852361027],"y":[-1,-1],"text":"","type":"scatter","mode":"lines","line":{"width":11.338582677165356,"color":"rgba(153,0,153,1)","dash":"solid"},"hoveron":"points","showlegend":false,"xaxis":"x","yaxis":"y","hoverinfo":"text","frame":null},{"x":[198.30221159593543,200.00215182307232],"y":[-1,-1],"text":"","type":"scatter","mode":"lines","line":{"width":11.338582677165356,"color":"rgba(0,153,198,1)","dash":"solid"},"hoveron":"points","showlegend":false,"xaxis":"x","yaxis":"y","hoverinfo":"text","frame":null}],"layout":{"margin":{"t":29.283520132835207,"r":6.6417600664176026,"b":55.878166138820198,"l":55.193026151930283},"plot_bgcolor":"rgba(255,255,255,1)","paper_bgcolor":"rgba(255,255,255,1)","font":{"color":"rgba(0,0,0,1)","family":"","size":14.611872146118724},"xaxis":{"domain":[0,1],"automargin":true,"type":"linear","autorange":false,"range":[0,210],"tickmode":"array","ticktext":["GO:MF","GO:CC","GO:BP","KEGG","REAC","TF","MIRNA","HPA","CORUM","HP","WP"],"tickvals":[14.117991631799164,32.737716676628807,69.137955768081284,101.79402271368798,107.36078900179319,124.85295875672443,142.39784817692765,148.33580394500893,154.55026897788406,177.99545726240285,199.15218170950388],"categoryorder":"array","categoryarray":["GO:MF","GO:CC","GO:BP","KEGG","REAC","TF","MIRNA","HPA","CORUM","HP","WP"],"nticks":null,"ticks":"","tickcolor":null,"ticklen":3.6529680365296811,"tickwidth":0,"showticklabels":true,"tickfont":{"color":"rgba(77,77,77,1)","family":"","size":10.62681610626816},"tickangle":-45,"showline":true,"linecolor":"rgba(190,190,190,1)","linewidth":0.13283520132835203,"showgrid":false,"gridcolor":null,"gridwidth":0,"zeroline":false,"anchor":"y","title":"","hoverformat":".2f"},"yaxis":{"domain":[0,1],"automargin":true,"type":"linear","autorange":false,"range":[-1,28],"tickmode":"array","ticktext":["0","10","20"],"tickvals":[0,10,20],"categoryorder":"array","categoryarray":["0","10","20"],"nticks":null,"ticks":"outside","tickcolor":"rgba(190,190,190,1)","ticklen":3.6529680365296811,"tickwidth":0.66417600664176002,"showticklabels":true,"tickfont":{"color":"rgba(77,77,77,1)","family":"","size":11.68949771689498},"tickangle":-0,"showline":true,"linecolor":"rgba(190,190,190,1)","linewidth":0.66417600664176002,"showgrid":false,"gridcolor":null,"gridwidth":0,"zeroline":false,"anchor":"x","title":"","hoverformat":".2f"},"annotations":[{"text":"-log10(p-adj)","x":0,"y":0.5,"showarrow":false,"ax":0,"ay":0,"font":{"color":"rgba(0,0,0,1)","family":"","size":13.283520132835205},"xref":"paper","yref":"paper","textangle":-90,"xanchor":"right","yanchor":"center","annotationType":"axis","xshift":-31.54836031548361},{"text":"query_1","x":0.5,"y":1,"showarrow":false,"ax":0,"ay":0,"font":{"color":"rgba(169,169,169,1)","family":"","size":13.283520132835205},"xref":"paper","yref":"paper","textangle":-0,"xanchor":"center","yanchor":"bottom"}],"shapes":[{"type":"rect","fillcolor":null,"line":{"color":null,"width":0,"linetype":[]},"yref":"paper","xref":"paper","x0":0,"x1":1,"y0":0,"y1":1},{"type":"rect","fillcolor":null,"line":{"color":null,"width":0,"linetype":[]},"yref":"paper","xref":"paper","x0":0,"x1":1,"y0":0,"y1":24.973017849730184,"yanchor":1,"ysizemode":"pixel"}],"showlegend":false,"legend":{"bgcolor":"rgba(255,255,255,1)","bordercolor":"transparent","borderwidth":1.8897637795275593,"font":{"color":"rgba(0,0,0,1)","family":"","size":11.68949771689498}},"hovermode":"closest","barmode":"relative","dragmode":"zoom"},"config":{"doubleClick":"reset","modeBarButtonsToAdd":["hoverclosest","hovercompare"],"showSendToCloud":false},"source":"A","attrs":{"180846c43e0b":{"x":{},"y":{},"text":{},"colour":{},"size":{},"alpha":{},"type":"scatter"},"18087dc56878":{"x":{},"xend":{},"y":{},"yend":{}},"18082b4ddeca":{"x":{},"xend":{},"y":{},"yend":{}},"180855db5fc":{"x":{},"xend":{},"y":{},"yend":{}},"18084b56b624":{"x":{},"xend":{},"y":{},"yend":{}},"180829d01c20":{"x":{},"xend":{},"y":{},"yend":{}},"18081de68e52":{"x":{},"xend":{},"y":{},"yend":{}},"1808b89b8d4":{"x":{},"xend":{},"y":{},"yend":{}},"18087ec56c36":{"x":{},"xend":{},"y":{},"yend":{}},"180853438e3f":{"x":{},"xend":{},"y":{},"yend":{}},"1808782ff4cd":{"x":{},"xend":{},"y":{},"yend":{}},"18081470fc60":{"x":{},"xend":{},"y":{},"yend":{}}},"cur_data":"180846c43e0b","visdat":{"180846c43e0b":["function (y) ","x"],"18087dc56878":["function (y) ","x"],"18082b4ddeca":["function (y) ","x"],"180855db5fc":["function (y) ","x"],"18084b56b624":["function (y) ","x"],"180829d01c20":["function (y) ","x"],"18081de68e52":["function (y) ","x"],"1808b89b8d4":["function (y) ","x"],"18087ec56c36":["function (y) ","x"],"180853438e3f":["function (y) ","x"],"1808782ff4cd":["function (y) ","x"],"18081470fc60":["function (y) ","x"]},"highlight":{"on":"plotly_click","off":"plotly_doubleclick","persistent":false,"dynamic":false,"color":null,"selectize":false,"defaultValues":null,"opacityDim":0.20000000000000001,"selected":{"opacity":1},"debounce":0,"ctGroups":["SharedDatae56eaee8"]},"shinyEvents":["plotly_hover","plotly_click","plotly_selected","plotly_relayout","plotly_brushed","plotly_brushing","plotly_clickannotation","plotly_doubleclick","plotly_deselect","plotly_afterplot","plotly_sunburstclick"],"base_url":"https://plot.ly"},"evals":[],"jsHooks":[]}</script>
+</div>
+<div id="genes-of-interest" class="section level2">
+<h2>Genes of Interest</h2>
+<div class="sourceCode" id="cb25"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb25-1"><a href="#cb25-1" tabindex="-1"></a>genes_of_interest <span class="ot">&lt;-</span> <span class="fu">c</span>(<span class="st">&quot;ACAD9/CFAP92&quot;</span>, <span class="st">&quot;ACADM&quot;</span>, <span class="st">&quot;ADORA2A&quot;</span>, <span class="st">&quot;ADRA1D&quot;</span>, <span class="st">&quot;ANKZF1&quot;</span>, <span class="st">&quot;AVPR1B&quot;</span>, <span class="st">&quot;CARMIL2&quot;</span>, <span class="st">&quot;CCDC178&quot;</span>, <span class="st">&quot;CENPF&quot;</span>, <span class="st">&quot;COQ2&quot;</span>, <span class="st">&quot;CR2&quot;</span>, <span class="st">&quot;DCTPP1&quot;</span>, <span class="st">&quot;DNASE1L3&quot;</span>, <span class="st">&quot;DPEP1&quot;</span>, <span class="st">&quot;EN03&quot;</span>, <span class="st">&quot;FCRL3&quot;</span>, <span class="st">&quot;FASTKD1&quot;</span>, <span class="st">&quot;GCKR&quot;</span>, <span class="st">&quot;GIMAP2&quot;</span>, <span class="st">&quot;HAGHL&quot;</span>, <span class="st">&quot;HSD11B1&quot;</span>, <span class="st">&quot;IRF2BP2&quot;</span>, <span class="st">&quot;KCNJ18&quot;</span>, <span class="st">&quot;LRCOL1&quot;</span>, <span class="st">&quot;LRBA, MAB21L2&quot;</span>, <span class="st">&quot;MFN1&quot;</span>, <span class="st">&quot;MRPS18B&quot;</span>, <span class="st">&quot;NLRP12&quot;</span>, <span class="st">&quot;P2RX7&quot;</span>, <span class="st">&quot;PGP&quot;</span>, <span class="st">&quot;PIEZO1&quot;</span>, <span class="st">&quot;PLCG2&quot;</span>, <span class="st">&quot;RERGL&quot;</span>, <span class="st">&quot;RPS6KC1&quot;</span>, <span class="st">&quot;SCN4A&quot;</span>, <span class="st">&quot;SIAE&quot;</span>, <span class="st">&quot;SLC11A2&quot;</span>, <span class="st">&quot;SLC12A3&quot;</span>, <span class="st">&quot;SLC4A1&quot;</span>, <span class="st">&quot;SLC6A12&quot;</span>, <span class="st">&quot;SLC9A9&quot;</span>, <span class="st">&quot;TDO2&quot;</span>, <span class="st">&quot;THEMIS&quot;</span>, <span class="st">&quot;TF&quot;</span>, <span class="st">&quot;TRAFD1&quot;</span>, <span class="st">&quot;UBASH3B&quot;</span>, <span class="st">&quot;WASHC5&quot;</span>)</span>
+<span id="cb25-2"><a href="#cb25-2" tabindex="-1"></a></span>
+<span id="cb25-3"><a href="#cb25-3" tabindex="-1"></a>genes_interest_mart <span class="ot">&lt;-</span> <span class="fu">retrieve_gene_info</span>(<span class="at">values =</span> genes_of_interest, <span class="at">filters =</span> <span class="st">&quot;hgnc_symbol&quot;</span>)</span>
+<span id="cb25-4"><a href="#cb25-4" tabindex="-1"></a></span>
+<span id="cb25-5"><a href="#cb25-5" tabindex="-1"></a>filtered_by_interest <span class="ot">&lt;-</span> <span class="fu">filter</span>(res_aff_vs_unaff_df_genename, Ensembl_ID <span class="sc">%in%</span> genes_interest_mart<span class="sc">$</span>ensembl_gene_id_version)</span>
+<span id="cb25-6"><a href="#cb25-6" tabindex="-1"></a></span>
+<span id="cb25-7"><a href="#cb25-7" tabindex="-1"></a>filtered_by_interest</span></code></pre></div>
+<pre><code>   gene_name         Ensembl_ID     baseMean log2FoldChange      lfcSE
+1       SIAE ENSG00000110013.13 2.466639e+02     0.59408200 0.22599932
+2     SLC9A9 ENSG00000181804.15 6.706541e+02    -0.55536081 0.24074420
+3    MRPS18B ENSG00000204568.12 5.667532e+02    -0.31161333 0.14891684
+4     SLC4A1 ENSG00000004939.16 5.296179e+04     0.90172281 0.56492353
+5     DCTPP1 ENSG00000179958.10 2.499668e+02    -0.21356292 0.13908593
+6      SCN4A ENSG00000007314.12 1.847233e+01     0.81871097 0.56661040
+7    RPS6KC1 ENSG00000136643.12 8.229869e+02    -0.17255913 0.12415004
+8     PIEZO1 ENSG00000103335.22 7.042958e+03    -0.18624466 0.13610317
+9         TF ENSG00000091513.16 4.136235e+01     1.00864485 0.79068018
+10   IRF2BP2 ENSG00000168264.11 5.613682e+03    -0.12180823 0.10830348
+11  DNASE1L3 ENSG00000163687.14 2.668997e+01     0.63701556 0.60275359
+12      COQ2 ENSG00000173085.15 3.108302e+02     0.16249033 0.15633871
+13     HAGHL ENSG00000103253.19 1.498627e+02    -0.22565536 0.23901399
+14   ADORA2A ENSG00000128271.22 1.283026e+03    -0.10698243 0.11661451
+15    ANKZF1 ENSG00000163516.14 2.089193e+03    -0.09892576 0.10833298
+16    GIMAP2 ENSG00000106560.11 1.683437e+03    -0.11941041 0.16565308
+17     ACADM ENSG00000117054.15 1.035077e+03     0.09260737 0.14470412
+18   HSD11B1 ENSG00000117594.10 4.069608e+00     0.56116575 0.98367616
+19       PGP  ENSG00000184207.9 6.671283e+02    -0.04890482 0.09161347
+20     P2RX7 ENSG00000089041.17 1.019081e+03     0.09843146 0.19686960
+21   SLC12A3 ENSG00000070915.10 3.199615e+01    -0.28589500 0.59193847
+22   FASTKD1 ENSG00000138399.18 3.874435e+02     0.08135263 0.17507444
+23    TRAFD1 ENSG00000135148.12 2.902964e+03     0.07679341 0.18963348
+24     FCRL3 ENSG00000160856.21 1.711002e+03     0.13880061 0.35540614
+25    THEMIS ENSG00000172673.12 1.674831e+03    -0.06364415 0.16796859
+26   SLC11A2 ENSG00000110911.17 9.435833e+02     0.04955194 0.13329182
+27   CARMIL2 ENSG00000159753.15 1.756139e+03    -0.05190117 0.19826345
+28   SLC6A12 ENSG00000111181.13 1.512612e+02    -0.07875297 0.34108001
+29   UBASH3B ENSG00000154127.10 1.728941e+03    -0.03073140 0.17865576
+30    WASHC5 ENSG00000164961.16 1.394729e+03    -0.01778942 0.18565470
+31      MFN1 ENSG00000171109.19 1.262655e+03     0.00887765 0.12420906
+32      GCKR  ENSG00000084734.9 4.139054e-01     0.83560399 2.78469874
+          stat      pvalue      padj
+1   2.62868933 0.008571463 0.4327995
+2  -2.30685020 0.021063172 0.5659292
+3  -2.09253244 0.036390913 0.6195764
+4   1.59618561 0.110447359 0.7261136
+5  -1.53547470 0.124667268 0.7371881
+6   1.44492753 0.148478244 0.7615943
+7  -1.38992411 0.164551923 0.7714993
+8  -1.36840799 0.171184403 0.7739906
+9   1.27566730 0.202073154 0.7940612
+10 -1.12469359 0.260718900 0.8269407
+11  1.05684242 0.290583512 0.8382219
+12  1.03934799 0.298642922 0.8427938
+13 -0.94410945 0.345113720 0.8653454
+14 -0.91740234 0.358931849 0.8706468
+15 -0.91316382 0.361156387 0.8714518
+16 -0.72084631 0.471004079 0.9046486
+17  0.63997744 0.522187269 0.9169181
+18  0.57047815 0.568353441 0.9280564
+19 -0.53381695 0.593468184 0.9338074
+20  0.49998305 0.617087012 0.9384532
+21 -0.48298094 0.629109270 0.9413566
+22  0.46467450 0.642164575 0.9427307
+23  0.40495703 0.685509096 0.9527258
+24  0.39054085 0.696136657 0.9552468
+25 -0.37890509 0.704758348 0.9564953
+26  0.37175526 0.710075075 0.9578674
+27 -0.26177880 0.793491988 0.9716801
+28 -0.23089294 0.817397976 0.9750350
+29 -0.17201459 0.863426060 0.9809246
+30 -0.09581991 0.923663606 0.9908813
+31  0.07147345 0.943020953 0.9923648
+32  0.30006980 0.764123917        NA</code></pre>
 <br>
 <p>
 <button type="button" class="btn btn-default btn-workflowr btn-workflowr-sessioninfo" data-toggle="collapse" data-target="#workflowr-sessioninfo" style="display: block;">
@@ -1605,7 +1440,7 @@ Session information
 </button>
 </p>
 <div id="workflowr-sessioninfo" class="collapse">
-<div class="sourceCode" id="cb31"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb31-1"><a href="#cb31-1" tabindex="-1"></a><span class="fu">sessionInfo</span>()</span></code></pre></div>
+<div class="sourceCode" id="cb27"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb27-1"><a href="#cb27-1" tabindex="-1"></a><span class="fu">sessionInfo</span>()</span></code></pre></div>
 <pre><code>R version 4.1.1 (2021-08-10)
 Platform: x86_64-apple-darwin17.0 (64-bit)
 Running under: macOS Big Sur 10.16
@@ -1622,56 +1457,59 @@ attached base packages:
 [8] base     
 
 other attached packages:
- [1] plotly_4.10.2               biomaRt_2.50.3             
- [3] gprofiler2_0.2.2            limma_3.50.3               
- [5] genefilter_1.76.0           pheatmap_1.0.12            
- [7] RColorBrewer_1.1-3          DESeq2_1.34.0              
- [9] SummarizedExperiment_1.24.0 Biobase_2.54.0             
-[11] MatrixGenerics_1.6.0        matrixStats_1.0.0          
-[13] GenomicRanges_1.46.1        GenomeInfoDb_1.30.1        
-[15] IRanges_2.28.0              S4Vectors_0.32.4           
-[17] BiocGenerics_0.40.0         lubridate_1.9.2            
-[19] forcats_1.0.0               stringr_1.5.0              
-[21] dplyr_1.1.2                 purrr_1.0.1                
-[23] readr_2.1.4                 tidyr_1.3.0                
-[25] tibble_3.2.1                ggplot2_3.4.2.9000         
-[27] tidyverse_2.0.0             workflowr_1.7.0            
+ [1] ggpubr_0.6.0                plotly_4.10.2              
+ [3] biomaRt_2.50.3              gprofiler2_0.2.2           
+ [5] limma_3.50.3                genefilter_1.76.0          
+ [7] pheatmap_1.0.12             RColorBrewer_1.1-3         
+ [9] DESeq2_1.34.0               SummarizedExperiment_1.24.0
+[11] Biobase_2.54.0              MatrixGenerics_1.6.0       
+[13] matrixStats_1.0.0           GenomicRanges_1.46.1       
+[15] GenomeInfoDb_1.30.1         IRanges_2.28.0             
+[17] S4Vectors_0.32.4            BiocGenerics_0.40.0        
+[19] lubridate_1.9.2             forcats_1.0.0              
+[21] stringr_1.5.0               dplyr_1.1.2                
+[23] purrr_1.0.1                 readr_2.1.4                
+[25] tidyr_1.3.0                 tibble_3.2.1               
+[27] ggplot2_3.4.2.9000          tidyverse_2.0.0            
+[29] workflowr_1.7.0            
 
 loaded via a namespace (and not attached):
-  [1] colorspace_2.1-0       ellipsis_0.3.2         rprojroot_2.0.3       
-  [4] XVector_0.34.0         fs_1.6.2               rstudioapi_0.14       
-  [7] farver_2.1.1           bit64_4.0.5            AnnotationDbi_1.56.2  
- [10] fansi_1.0.4            xml2_1.3.4             splines_4.1.1         
- [13] cachem_1.0.8           geneplotter_1.72.0     knitr_1.43            
- [16] jsonlite_1.8.5         annotate_1.72.0        dbplyr_2.3.2          
- [19] png_0.1-8              shiny_1.7.4            compiler_4.1.1        
- [22] httr_1.4.6             Matrix_1.5-4.1         fastmap_1.1.1         
- [25] lazyeval_0.2.2         cli_3.6.1              later_1.3.1           
- [28] htmltools_0.5.5        prettyunits_1.1.1      tools_4.1.1           
- [31] gtable_0.3.3           glue_1.6.2             GenomeInfoDbData_1.2.7
- [34] rappdirs_0.3.3         Rcpp_1.0.10            jquerylib_0.1.4       
- [37] vctrs_0.6.3            Biostrings_2.62.0      crosstalk_1.2.0       
- [40] xfun_0.39              ps_1.7.5               mime_0.12             
- [43] timechange_0.2.0       lifecycle_1.0.3        XML_3.99-0.14         
- [46] getPass_0.2-2          zlibbioc_1.40.0        scales_1.2.1          
- [49] vroom_1.6.3            hms_1.1.3              promises_1.2.0.1      
- [52] parallel_4.1.1         yaml_2.3.7             curl_5.0.1            
- [55] memoise_2.0.1          sass_0.4.6             stringi_1.7.12        
- [58] RSQLite_2.3.1          highr_0.10             filelock_1.0.2        
- [61] BiocParallel_1.28.3    rlang_1.1.1            pkgconfig_2.0.3       
- [64] bitops_1.0-7           evaluate_0.21          lattice_0.21-8        
- [67] labeling_0.4.2         htmlwidgets_1.6.2      bit_4.0.5             
- [70] processx_3.8.1         tidyselect_1.2.0       magrittr_2.0.3        
- [73] R6_2.5.1               generics_0.1.3         DelayedArray_0.20.0   
- [76] DBI_1.1.3              pillar_1.9.0           whisker_0.4.1         
- [79] withr_2.5.0            survival_3.5-5         KEGGREST_1.34.0       
- [82] RCurl_1.98-1.12        crayon_1.5.2           utf8_1.2.3            
- [85] BiocFileCache_2.2.1    tzdb_0.4.0             rmarkdown_2.22        
- [88] progress_1.2.2         locfit_1.5-9.8         grid_4.1.1            
- [91] data.table_1.14.8      blob_1.2.4             callr_3.7.3           
- [94] git2r_0.32.0           digest_0.6.32          xtable_1.8-4          
- [97] httpuv_1.6.11          munsell_0.5.0          viridisLite_0.4.2     
-[100] bslib_0.5.0           </code></pre>
+  [1] colorspace_2.1-0       ggsignif_0.6.4         ellipsis_0.3.2        
+  [4] rprojroot_2.0.3        XVector_0.34.0         fs_1.6.2              
+  [7] rstudioapi_0.14        farver_2.1.1           ggrepel_0.9.3         
+ [10] bit64_4.0.5            AnnotationDbi_1.56.2   fansi_1.0.4           
+ [13] xml2_1.3.4             splines_4.1.1          cachem_1.0.8          
+ [16] geneplotter_1.72.0     knitr_1.43             jsonlite_1.8.5        
+ [19] broom_1.0.5            annotate_1.72.0        dbplyr_2.3.2          
+ [22] png_0.1-8              shiny_1.7.4            compiler_4.1.1        
+ [25] httr_1.4.6             backports_1.4.1        Matrix_1.5-4.1        
+ [28] fastmap_1.1.1          lazyeval_0.2.2         cli_3.6.1             
+ [31] later_1.3.1            htmltools_0.5.5        prettyunits_1.1.1     
+ [34] tools_4.1.1            gtable_0.3.3           glue_1.6.2            
+ [37] GenomeInfoDbData_1.2.7 rappdirs_0.3.3         Rcpp_1.0.10           
+ [40] carData_3.0-5          jquerylib_0.1.4        vctrs_0.6.3           
+ [43] Biostrings_2.62.0      crosstalk_1.2.0        xfun_0.39             
+ [46] ps_1.7.5               mime_0.12              timechange_0.2.0      
+ [49] lifecycle_1.0.3        rstatix_0.7.2          XML_3.99-0.14         
+ [52] getPass_0.2-2          zlibbioc_1.40.0        scales_1.2.1          
+ [55] vroom_1.6.3            hms_1.1.3              promises_1.2.0.1      
+ [58] parallel_4.1.1         yaml_2.3.7             curl_5.0.1            
+ [61] memoise_2.0.1          sass_0.4.6             stringi_1.7.12        
+ [64] RSQLite_2.3.1          highr_0.10             filelock_1.0.2        
+ [67] BiocParallel_1.28.3    rlang_1.1.1            pkgconfig_2.0.3       
+ [70] bitops_1.0-7           evaluate_0.21          lattice_0.21-8        
+ [73] labeling_0.4.2         htmlwidgets_1.6.2      bit_4.0.5             
+ [76] processx_3.8.1         tidyselect_1.2.0       magrittr_2.0.3        
+ [79] R6_2.5.1               generics_0.1.3         DelayedArray_0.20.0   
+ [82] DBI_1.1.3              pillar_1.9.0           whisker_0.4.1         
+ [85] withr_2.5.0            abind_1.4-5            survival_3.5-5        
+ [88] KEGGREST_1.34.0        RCurl_1.98-1.12        car_3.1-2             
+ [91] crayon_1.5.2           utf8_1.2.3             BiocFileCache_2.2.1   
+ [94] tzdb_0.4.0             rmarkdown_2.22         progress_1.2.2        
+ [97] locfit_1.5-9.8         grid_4.1.1             data.table_1.14.8     
+[100] blob_1.2.4             callr_3.7.3            git2r_0.32.0          
+[103] digest_0.6.32          xtable_1.8-4           httpuv_1.6.11         
+[106] munsell_0.5.0          viridisLite_0.4.2      bslib_0.5.0           </code></pre>
 </div>
 </div>
 </div>
