@@ -230,7 +230,7 @@ all_genes_res <- gost(query = genes_biomart$ensembl_gene_id, organism = "hsapien
 gostplot(all_genes_res, capped = FALSE, interactive = TRUE)
 ```
 
-```{r, gost-table}
+```{r, gost-table, out.height="800px"}
 publish_gosttable(all_genes_res, use_colors = TRUE, show_columns = c("source", "term_name", "term_size", "intersection_size"), filename = NULL)
 ```
 
