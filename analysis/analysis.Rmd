@@ -224,22 +224,24 @@ ggmaplot(res_aff_vs_unaff_df_genename, main = "Affected vs Unaffected",
 
 ## Enrichment analysis
 
-```{r}
+```{r, gostplot}
 all_genes_res <- gost(query = genes_biomart$ensembl_gene_id, organism = "hsapiens", significant = TRUE)
 
 gostplot(all_genes_res, capped = FALSE, interactive = TRUE)
 ```
 
+```{r, gost-table}
+publish_gosttable(all_genes_res, use_colors = TRUE, show_columns = c("source", "term_name", "term_size", "intersection_size"), filename = NULL)
+```
 
 ## Genes of Interest
 
-```{r}
+```{r, genes-of-interest}
 genes_of_interest <- c("ACAD9/CFAP92", "ACADM", "ADORA2A", "ADRA1D", "ANKZF1", "AVPR1B", "CARMIL2", "CCDC178", "CENPF", "COQ2", "CR2", "DCTPP1", "DNASE1L3", "DPEP1", "EN03", "FCRL3", "FASTKD1", "GCKR", "GIMAP2", "HAGHL", "HSD11B1", "IRF2BP2", "KCNJ18", "LRCOL1", "LRBA, MAB21L2", "MFN1", "MRPS18B", "NLRP12", "P2RX7", "PGP", "PIEZO1", "PLCG2", "RERGL", "RPS6KC1", "SCN4A", "SIAE", "SLC11A2", "SLC12A3", "SLC4A1", "SLC6A12", "SLC9A9", "TDO2", "THEMIS", "TF", "TRAFD1", "UBASH3B", "WASHC5")
 
 genes_interest_mart <- retrieve_gene_info(values = genes_of_interest, filters = "hgnc_symbol")
 
 filtered_by_interest <- filter(res_aff_vs_unaff_df_genename, Ensembl_ID %in% genes_interest_mart$ensembl_gene_id_version)
 
-filtered_by_interest
-
+ggtexttable(filtered_by_interest, rows = NULL, theme = ttheme("light"))
 ```
