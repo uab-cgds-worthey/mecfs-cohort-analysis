@@ -43,6 +43,7 @@ library(gprofiler2) # Available via CRAN
 library(biomaRt) # Available via Bioconductor
 library(plotly) # Available via CRAN
 library(ggpubr)
+library(rmarkdown)
 ```
 
 ```{r, include=FALSE}
@@ -230,7 +231,7 @@ all_genes_res <- gost(query = genes_biomart$ensembl_gene_id, organism = "hsapien
 gostplot(all_genes_res, capped = FALSE, interactive = TRUE)
 ```
 
-```{r, gost-table, out.height="800px"}
+```{r, gost-table, out.width="400px"}
 publish_gosttable(all_genes_res, use_colors = TRUE, show_columns = c("source", "term_name", "term_size", "intersection_size"), filename = NULL)
 ```
 
@@ -243,5 +244,5 @@ genes_interest_mart <- retrieve_gene_info(values = genes_of_interest, filters = 
 
 filtered_by_interest <- filter(res_aff_vs_unaff_df_genename, Ensembl_ID %in% genes_interest_mart$ensembl_gene_id_version)
 
-ggtexttable(filtered_by_interest, rows = NULL, theme = ttheme("light"))
+paged_table(filtered_by_interest, options = list(rows.print = 15))
 ```
