@@ -237,7 +237,7 @@ publish_gosttable(all_genes_res, use_colors = TRUE, show_columns = c("source", "
 
 ## Genes of Interest
 
-```{r, genes-of-interest}
+```{r, genes-of-interest-table}
 genes_of_interest <- c("ACAD9/CFAP92", "ACADM", "ADORA2A", "ADRA1D", "ANKZF1", "AVPR1B", "CARMIL2", "CCDC178", "CENPF", "COQ2", "CR2", "DCTPP1", "DNASE1L3", "DPEP1", "EN03", "FCRL3", "FASTKD1", "GCKR", "GIMAP2", "HAGHL", "HSD11B1", "IRF2BP2", "KCNJ18", "LRCOL1", "LRBA, MAB21L2", "MFN1", "MRPS18B", "NLRP12", "P2RX7", "PGP", "PIEZO1", "PLCG2", "RERGL", "RPS6KC1", "SCN4A", "SIAE", "SLC11A2", "SLC12A3", "SLC4A1", "SLC6A12", "SLC9A9", "TDO2", "THEMIS", "TF", "TRAFD1", "UBASH3B", "WASHC5")
 
 genes_interest_mart <- retrieve_gene_info(values = genes_of_interest, filters = "hgnc_symbol")
