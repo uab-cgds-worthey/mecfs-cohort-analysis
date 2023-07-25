@@ -631,15 +631,15 @@ project makes it easier to run your code on other machines.</p>
 <div class="panel panel-default">
 <div class="panel-heading">
 <p class="panel-title">
-<a data-toggle="collapse" data-parent="#workflowr-checks" href="#strongRepositoryversionstrongahrefhttpsgithubcomuabcgdswortheymecfsdgeanalysistree4dac31cc2f559d88931143690fcdbdf25fbc71a8targetblank4dac31ca">
+<a data-toggle="collapse" data-parent="#workflowr-checks" href="#strongRepositoryversionstrongahrefhttpsgithubcomuabcgdswortheymecfsdgeanalysistree5252856f5e668e0c4c422f7cdb660ca44fcd1cf8targetblank5252856a">
 <span class="glyphicon glyphicon-ok text-success"
 aria-hidden="true"></span> <strong>Repository version:</strong>
-<a href="https://github.com/uab-cgds-worthey/mecfs-dge-analysis/tree/4dac31cc2f559d88931143690fcdbdf25fbc71a8" target="_blank">4dac31c</a>
+<a href="https://github.com/uab-cgds-worthey/mecfs-dge-analysis/tree/5252856f5e668e0c4c422f7cdb660ca44fcd1cf8" target="_blank">5252856</a>
 </a>
 </p>
 </div>
 <div
-id="strongRepositoryversionstrongahrefhttpsgithubcomuabcgdswortheymecfsdgeanalysistree4dac31cc2f559d88931143690fcdbdf25fbc71a8targetblank4dac31ca"
+id="strongRepositoryversionstrongahrefhttpsgithubcomuabcgdswortheymecfsdgeanalysistree5252856f5e668e0c4c422f7cdb660ca44fcd1cf8targetblank5252856a"
 class="panel-collapse collapse">
 <div class="panel-body">
 <p>
@@ -649,7 +649,7 @@ reproducibility.
 </p>
 <p>
 The results in this page were generated with repository version
-<a href="https://github.com/uab-cgds-worthey/mecfs-dge-analysis/tree/4dac31cc2f559d88931143690fcdbdf25fbc71a8" target="_blank">4dac31c</a>.
+<a href="https://github.com/uab-cgds-worthey/mecfs-dge-analysis/tree/5252856f5e668e0c4c422f7cdb660ca44fcd1cf8" target="_blank">5252856</a>.
 See the <em>Past versions</em> tab to see a history of the changes made
 to the R Markdown and HTML files.
 </p>
@@ -717,6 +717,23 @@ Message
 </tr>
 </thead>
 <tbody>
+<tr>
+<td>
+html
+</td>
+<td>
+<a href="https://rawcdn.githack.com/uab-cgds-worthey/mecfs-dge-analysis/5252856f5e668e0c4c422f7cdb660ca44fcd1cf8/docs/initial-analysis.html" target="_blank">5252856</a>
+</td>
+<td>
+sdhutchins
+</td>
+<td>
+2023-07-24
+</td>
+<td>
+Build site.
+</td>
+</tr>
 <tr>
 <td>
 Rmd
@@ -872,6 +889,43 @@ class="section level4">
 <span id="cb15-6"><a href="#cb15-6" tabindex="-1"></a></span>
 <span id="cb15-7"><a href="#cb15-7" tabindex="-1"></a><span class="fu">pheatmap</span>(sampleDistMatrix, <span class="at">clustering_distance_rows=</span>sampleDists, <span class="at">clustering_distance_cols=</span>sampleDists, <span class="at">col=</span>colors)</span></code></pre></div>
 <p><img src="figure/initial-analysis.Rmd/unnamed-chunk-2-1.png" width="672" style="display: block; margin: auto;" /></p>
+<p>
+<button type="button" class="btn btn-default btn-xs btn-workflowr btn-workflowr-fig" data-toggle="collapse" data-target="#fig-unnamed-chunk-2-1">
+Past versions of unnamed-chunk-2-1.png
+</button>
+</p>
+<div id="fig-unnamed-chunk-2-1" class="collapse">
+<div class="table-responsive">
+<table class="table table-condensed table-hover">
+<thead>
+<tr>
+<th>
+Version
+</th>
+<th>
+Author
+</th>
+<th>
+Date
+</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>
+<a href="https://github.com/uab-cgds-worthey/mecfs-dge-analysis/blob/5252856f5e668e0c4c422f7cdb660ca44fcd1cf8/docs/figure/initial-analysis.Rmd/unnamed-chunk-2-1.png" target="_blank">5252856</a>
+</td>
+<td>
+sdhutchins
+</td>
+<td>
+2023-07-24
+</td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
 </div>
 <div id="principal-components-analysis" class="section level4">
 <h4>Principal Components Analysis</h4>
@@ -881,9 +935,83 @@ class="section level4">
 <span id="cb16-4"><a href="#cb16-4" tabindex="-1"></a><span class="fu">ggplot</span>(pcaData, <span class="fu">aes</span>(PC1, PC2, <span class="at">shape=</span><span class="fu">factor</span>(Batch), <span class="at">fill=</span><span class="fu">factor</span>(Affected),  <span class="at">color=</span><span class="fu">factor</span>(Family)))  <span class="sc">+</span> </span>
 <span id="cb16-5"><a href="#cb16-5" tabindex="-1"></a>  <span class="fu">geom_point</span>(<span class="at">size=</span><span class="dv">5</span>) <span class="sc">+</span> <span class="fu">xlab</span>(<span class="fu">paste0</span>(<span class="st">&quot;PC1: &quot;</span>,percentVar[<span class="dv">1</span>],<span class="st">&quot;% variance&quot;</span>)) <span class="sc">+</span> <span class="fu">ylab</span>(<span class="fu">paste0</span>(<span class="st">&quot;PC2: &quot;</span>,percentVar[<span class="dv">2</span>],<span class="st">&quot;% variance&quot;</span>)) <span class="sc">+</span> <span class="fu">coord_fixed</span>()</span></code></pre></div>
 <p><img src="figure/initial-analysis.Rmd/unnamed-chunk-3-1.png" width="672" style="display: block; margin: auto;" /></p>
+<p>
+<button type="button" class="btn btn-default btn-xs btn-workflowr btn-workflowr-fig" data-toggle="collapse" data-target="#fig-unnamed-chunk-3-1">
+Past versions of unnamed-chunk-3-1.png
+</button>
+</p>
+<div id="fig-unnamed-chunk-3-1" class="collapse">
+<div class="table-responsive">
+<table class="table table-condensed table-hover">
+<thead>
+<tr>
+<th>
+Version
+</th>
+<th>
+Author
+</th>
+<th>
+Date
+</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>
+<a href="https://github.com/uab-cgds-worthey/mecfs-dge-analysis/blob/5252856f5e668e0c4c422f7cdb660ca44fcd1cf8/docs/figure/initial-analysis.Rmd/unnamed-chunk-3-1.png" target="_blank">5252856</a>
+</td>
+<td>
+sdhutchins
+</td>
+<td>
+2023-07-24
+</td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
 <div class="sourceCode" id="cb17"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb17-1"><a href="#cb17-1" tabindex="-1"></a><span class="fu">ggplot</span>(pcaData, <span class="fu">aes</span>(PC1, PC2, <span class="at">shape=</span><span class="fu">factor</span>(Batch), <span class="at">color=</span><span class="fu">factor</span>(Affected)))  <span class="sc">+</span> </span>
 <span id="cb17-2"><a href="#cb17-2" tabindex="-1"></a>  <span class="fu">geom_point</span>(<span class="at">size=</span><span class="dv">5</span>) <span class="sc">+</span> <span class="fu">xlab</span>(<span class="fu">paste0</span>(<span class="st">&quot;PC1: &quot;</span>,percentVar[<span class="dv">1</span>],<span class="st">&quot;% variance&quot;</span>)) <span class="sc">+</span> <span class="fu">ylab</span>(<span class="fu">paste0</span>(<span class="st">&quot;PC2: &quot;</span>,percentVar[<span class="dv">2</span>],<span class="st">&quot;% variance&quot;</span>)) <span class="sc">+</span> <span class="fu">coord_fixed</span>()</span></code></pre></div>
 <p><img src="figure/initial-analysis.Rmd/unnamed-chunk-3-2.png" width="672" style="display: block; margin: auto;" /></p>
+<p>
+<button type="button" class="btn btn-default btn-xs btn-workflowr btn-workflowr-fig" data-toggle="collapse" data-target="#fig-unnamed-chunk-3-2">
+Past versions of unnamed-chunk-3-2.png
+</button>
+</p>
+<div id="fig-unnamed-chunk-3-2" class="collapse">
+<div class="table-responsive">
+<table class="table table-condensed table-hover">
+<thead>
+<tr>
+<th>
+Version
+</th>
+<th>
+Author
+</th>
+<th>
+Date
+</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>
+<a href="https://github.com/uab-cgds-worthey/mecfs-dge-analysis/blob/5252856f5e668e0c4c422f7cdb660ca44fcd1cf8/docs/figure/initial-analysis.Rmd/unnamed-chunk-3-2.png" target="_blank">5252856</a>
+</td>
+<td>
+sdhutchins
+</td>
+<td>
+2023-07-24
+</td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
 </div>
 <div id="heatmap-of-top-50-top-100-genes" class="section level4">
 <h4>Heatmap of top 50 &amp; top 100 genes</h4>
@@ -895,6 +1023,43 @@ samples</p>
 <span id="cb18-4"><a href="#cb18-4" tabindex="-1"></a>df <span class="ot">=</span> <span class="fu">as.data.frame</span>(<span class="fu">colData</span>(vsd)[,<span class="fu">c</span>(<span class="st">&quot;Batch&quot;</span>, <span class="st">&quot;Affected&quot;</span>)])</span>
 <span id="cb18-5"><a href="#cb18-5" tabindex="-1"></a><span class="fu">pheatmap</span>(mat, <span class="at">annotation_col=</span>df, <span class="at">fontsize =</span> <span class="dv">5</span>)</span></code></pre></div>
 <p><img src="figure/initial-analysis.Rmd/top50-heatmap-1.png" width="800px" height="570px" style="display: block; margin: auto;" /></p>
+<p>
+<button type="button" class="btn btn-default btn-xs btn-workflowr btn-workflowr-fig" data-toggle="collapse" data-target="#fig-top50-heatmap-1">
+Past versions of top50-heatmap-1.png
+</button>
+</p>
+<div id="fig-top50-heatmap-1" class="collapse">
+<div class="table-responsive">
+<table class="table table-condensed table-hover">
+<thead>
+<tr>
+<th>
+Version
+</th>
+<th>
+Author
+</th>
+<th>
+Date
+</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>
+<a href="https://github.com/uab-cgds-worthey/mecfs-dge-analysis/blob/5252856f5e668e0c4c422f7cdb660ca44fcd1cf8/docs/figure/initial-analysis.Rmd/top50-heatmap-1.png" target="_blank">5252856</a>
+</td>
+<td>
+sdhutchins
+</td>
+<td>
+2023-07-24
+</td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
 <p>This is a heatmap of the top 100 genes with the highest variance
 across samples</p>
 <div class="sourceCode" id="cb19"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb19-1"><a href="#cb19-1" tabindex="-1"></a>topVarGenes <span class="ot">=</span> <span class="fu">head</span>(<span class="fu">order</span>(<span class="sc">-</span><span class="fu">rowVars</span>(<span class="fu">assay</span>(vsd_limma))),<span class="dv">100</span>)</span>
@@ -903,6 +1068,43 @@ across samples</p>
 <span id="cb19-4"><a href="#cb19-4" tabindex="-1"></a>df <span class="ot">=</span> <span class="fu">as.data.frame</span>(<span class="fu">colData</span>(vsd_limma)[,<span class="fu">c</span>(<span class="st">&quot;Batch&quot;</span>, <span class="st">&quot;Family&quot;</span>, <span class="st">&quot;Affected&quot;</span>)])</span>
 <span id="cb19-5"><a href="#cb19-5" tabindex="-1"></a><span class="fu">pheatmap</span>(mat, <span class="at">annotation_col=</span>df, <span class="at">fontsize =</span> <span class="dv">6</span>)</span></code></pre></div>
 <p><img src="figure/initial-analysis.Rmd/top100-heatmap-1.png" width="1200px" style="display: block; margin: auto;" /></p>
+<p>
+<button type="button" class="btn btn-default btn-xs btn-workflowr btn-workflowr-fig" data-toggle="collapse" data-target="#fig-top100-heatmap-1">
+Past versions of top100-heatmap-1.png
+</button>
+</p>
+<div id="fig-top100-heatmap-1" class="collapse">
+<div class="table-responsive">
+<table class="table table-condensed table-hover">
+<thead>
+<tr>
+<th>
+Version
+</th>
+<th>
+Author
+</th>
+<th>
+Date
+</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>
+<a href="https://github.com/uab-cgds-worthey/mecfs-dge-analysis/blob/5252856f5e668e0c4c422f7cdb660ca44fcd1cf8/docs/figure/initial-analysis.Rmd/top100-heatmap-1.png" target="_blank">5252856</a>
+</td>
+<td>
+sdhutchins
+</td>
+<td>
+2023-07-24
+</td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
 </div>
 <div id="comparisoncontrast-of-affected_yes_vs_no"
 class="section level4">
@@ -934,6 +1136,43 @@ low counts [2]     : 6, 0.02%
 <span id="cb23-9"><a href="#cb23-9" tabindex="-1"></a>df <span class="ot">=</span> <span class="fu">as.data.frame</span>(<span class="fu">colData</span>(vsd_limma)[,<span class="fu">c</span>(<span class="st">&quot;Batch&quot;</span>, <span class="st">&quot;Family&quot;</span>, <span class="st">&quot;Affected&quot;</span>)])</span>
 <span id="cb23-10"><a href="#cb23-10" tabindex="-1"></a><span class="fu">pheatmap</span>(topgenes_aff_vs_unaff_05, <span class="at">annotation_col=</span>df, <span class="at">fontsize =</span> <span class="dv">5</span>)</span></code></pre></div>
 <p><img src="figure/initial-analysis.Rmd/top%2050%20genes-1.png" width="800px" height="570px" style="display: block; margin: auto;" /></p>
+<p>
+<button type="button" class="btn btn-default btn-xs btn-workflowr btn-workflowr-fig" data-toggle="collapse" data-target="#fig-no-spaces-top-50-genes-1">
+Past versions of "top 50 genes-1.png"
+</button>
+</p>
+<div id="fig-no-spaces-top-50-genes-1" class="collapse">
+<div class="table-responsive">
+<table class="table table-condensed table-hover">
+<thead>
+<tr>
+<th>
+Version
+</th>
+<th>
+Author
+</th>
+<th>
+Date
+</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>
+<a href="https://github.com/uab-cgds-worthey/mecfs-dge-analysis/blob/5252856f5e668e0c4c422f7cdb660ca44fcd1cf8/docs/figure/initial-analysis.Rmd/top 50 genes-1.png" target="_blank">5252856</a>
+</td>
+<td>
+sdhutchins
+</td>
+<td>
+2023-07-24
+</td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
 <div class="sourceCode" id="cb24"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb24-1"><a href="#cb24-1" tabindex="-1"></a>res_aff_vs_unaff_df_genename <span class="ot">=</span> res_aff_vs_unaff_df</span>
 <span id="cb24-2"><a href="#cb24-2" tabindex="-1"></a>res_aff_vs_unaff_df_genename<span class="sc">$</span>Ensembl_ID <span class="ot">=</span> <span class="fu">row.names</span>(res_aff_vs_unaff_df)</span>
 <span id="cb24-3"><a href="#cb24-3" tabindex="-1"></a>res_aff_vs_unaff_df_genename <span class="ot">=</span> <span class="fu">merge</span>(<span class="at">x=</span>res_aff_vs_unaff_df_genename, <span class="at">y=</span>gene_names, <span class="at">by.x =</span><span class="st">&quot;Ensembl_ID&quot;</span>, <span class="at">by.y=</span><span class="st">&quot;Ensembl_ID&quot;</span>, <span class="at">all.x=</span>T)</span>
