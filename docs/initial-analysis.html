@@ -16,7 +16,7 @@
 <script src="site_libs/header-attrs-2.22/header-attrs.js"></script>
 <script src="site_libs/jquery-3.6.0/jquery-3.6.0.min.js"></script>
 <meta name="viewport" content="width=device-width, initial-scale=1" />
-<link href="site_libs/bootstrap-3.3.5/css/sandstone.min.css" rel="stylesheet" />
+<link href="site_libs/bootstrap-3.3.5/css/journal.min.css" rel="stylesheet" />
 <script src="site_libs/bootstrap-3.3.5/js/bootstrap.min.js"></script>
 <script src="site_libs/bootstrap-3.3.5/shim/html5shiv.min.js"></script>
 <script src="site_libs/bootstrap-3.3.5/shim/respond.min.js"></script>
@@ -34,6 +34,8 @@
 <script src="site_libs/tocify-1.9.1/jquery.tocify.js"></script>
 <script src="site_libs/navigation-1.1/tabsets.js"></script>
 <script src="site_libs/navigation-1.1/codefolding.js"></script>
+<link href="site_libs/highlightjs-9.12.0/textmate.css" rel="stylesheet" />
+<script src="site_libs/highlightjs-9.12.0/highlight.js"></script>
 <link href="site_libs/font-awesome-6.4.0/css/all.min.css" rel="stylesheet" />
 <link href="site_libs/font-awesome-6.4.0/css/v4-shims.min.css" rel="stylesheet" />
 
@@ -56,119 +58,18 @@ div.section {
   ul.task-list{list-style: none;}
     </style>
 
-
-
-<style type="text/css">
-  code {
-    white-space: pre;
+<style type="text/css">code{white-space: pre;}</style>
+<script type="text/javascript">
+if (window.hljs) {
+  hljs.configure({languages: []});
+  hljs.initHighlightingOnLoad();
+  if (document.readyState && document.readyState === "complete") {
+    window.setTimeout(function() { hljs.initHighlighting(); }, 0);
   }
-  .sourceCode {
-    overflow: visible;
-  }
-</style>
-<style type="text/css" data-origin="pandoc">
-pre > code.sourceCode { white-space: pre; position: relative; }
-pre > code.sourceCode > span { display: inline-block; line-height: 1.25; }
-pre > code.sourceCode > span:empty { height: 1.2em; }
-.sourceCode { overflow: visible; }
-code.sourceCode > span { color: inherit; text-decoration: inherit; }
-div.sourceCode { margin: 1em 0; }
-pre.sourceCode { margin: 0; }
-@media screen {
-div.sourceCode { overflow: auto; }
 }
-@media print {
-pre > code.sourceCode { white-space: pre-wrap; }
-pre > code.sourceCode > span { text-indent: -5em; padding-left: 5em; }
-}
-pre.numberSource code
-  { counter-reset: source-line 0; }
-pre.numberSource code > span
-  { position: relative; left: -4em; counter-increment: source-line; }
-pre.numberSource code > span > a:first-child::before
-  { content: counter(source-line);
-    position: relative; left: -1em; text-align: right; vertical-align: baseline;
-    border: none; display: inline-block;
-    -webkit-touch-callout: none; -webkit-user-select: none;
-    -khtml-user-select: none; -moz-user-select: none;
-    -ms-user-select: none; user-select: none;
-    padding: 0 4px; width: 4em;
-    color: #aaaaaa;
-  }
-pre.numberSource { margin-left: 3em; border-left: 1px solid #aaaaaa;  padding-left: 4px; }
-div.sourceCode
-  {   }
-@media screen {
-pre > code.sourceCode > span > a:first-child::before { text-decoration: underline; }
-}
-code span.al { color: #ff0000; font-weight: bold; } /* Alert */
-code span.an { color: #60a0b0; font-weight: bold; font-style: italic; } /* Annotation */
-code span.at { color: #7d9029; } /* Attribute */
-code span.bn { color: #40a070; } /* BaseN */
-code span.bu { color: #008000; } /* BuiltIn */
-code span.cf { color: #007020; font-weight: bold; } /* ControlFlow */
-code span.ch { color: #4070a0; } /* Char */
-code span.cn { color: #880000; } /* Constant */
-code span.co { color: #60a0b0; font-style: italic; } /* Comment */
-code span.cv { color: #60a0b0; font-weight: bold; font-style: italic; } /* CommentVar */
-code span.do { color: #ba2121; font-style: italic; } /* Documentation */
-code span.dt { color: #902000; } /* DataType */
-code span.dv { color: #40a070; } /* DecVal */
-code span.er { color: #ff0000; font-weight: bold; } /* Error */
-code span.ex { } /* Extension */
-code span.fl { color: #40a070; } /* Float */
-code span.fu { color: #06287e; } /* Function */
-code span.im { color: #008000; font-weight: bold; } /* Import */
-code span.in { color: #60a0b0; font-weight: bold; font-style: italic; } /* Information */
-code span.kw { color: #007020; font-weight: bold; } /* Keyword */
-code span.op { color: #666666; } /* Operator */
-code span.ot { color: #007020; } /* Other */
-code span.pp { color: #bc7a00; } /* Preprocessor */
-code span.sc { color: #4070a0; } /* SpecialChar */
-code span.ss { color: #bb6688; } /* SpecialString */
-code span.st { color: #4070a0; } /* String */
-code span.va { color: #19177c; } /* Variable */
-code span.vs { color: #4070a0; } /* VerbatimString */
-code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warning */
-
-.sourceCode .row {
-  width: 100%;
-}
-.sourceCode {
-  overflow-x: auto;
-}
-.code-folding-btn {
-  margin-right: -30px;
-}
-</style>
-<script>
-// apply pandoc div.sourceCode style to pre.sourceCode instead
-(function() {
-  var sheets = document.styleSheets;
-  for (var i = 0; i < sheets.length; i++) {
-    if (sheets[i].ownerNode.dataset["origin"] !== "pandoc") continue;
-    try { var rules = sheets[i].cssRules; } catch (e) { continue; }
-    var j = 0;
-    while (j < rules.length) {
-      var rule = rules[j];
-      // check if there is a div.sourceCode rule
-      if (rule.type !== rule.STYLE_RULE || rule.selectorText !== "div.sourceCode") {
-        j++;
-        continue;
-      }
-      var style = rule.style.cssText;
-      // check if color or background-color is set
-      if (rule.style.color === '' && rule.style.backgroundColor === '') {
-        j++;
-        continue;
-      }
-      // replace div.sourceCode by a pre.sourceCode rule
-      sheets[i].deleteRule(j);
-      sheets[i].insertRule('pre.sourceCode{' + style + '}', j);
-    }
-  }
-})();
 </script>
+
+
 
 
 
@@ -631,15 +532,15 @@ project makes it easier to run your code on other machines.</p>
 <div class="panel panel-default">
 <div class="panel-heading">
 <p class="panel-title">
-<a data-toggle="collapse" data-parent="#workflowr-checks" href="#strongRepositoryversionstrongahrefhttpsgithubcomuabcgdswortheymecfsdgeanalysistree5252856f5e668e0c4c422f7cdb660ca44fcd1cf8targetblank5252856a">
+<a data-toggle="collapse" data-parent="#workflowr-checks" href="#strongRepositoryversionstrongahrefhttpsgithubcomuabcgdswortheymecfsdgeanalysistree4415e05b61d76b413ca40411669827fac258b242targetblank4415e05a">
 <span class="glyphicon glyphicon-ok text-success"
 aria-hidden="true"></span> <strong>Repository version:</strong>
-<a href="https://github.com/uab-cgds-worthey/mecfs-dge-analysis/tree/5252856f5e668e0c4c422f7cdb660ca44fcd1cf8" target="_blank">5252856</a>
+<a href="https://github.com/uab-cgds-worthey/mecfs-dge-analysis/tree/4415e05b61d76b413ca40411669827fac258b242" target="_blank">4415e05</a>
 </a>
 </p>
 </div>
 <div
-id="strongRepositoryversionstrongahrefhttpsgithubcomuabcgdswortheymecfsdgeanalysistree5252856f5e668e0c4c422f7cdb660ca44fcd1cf8targetblank5252856a"
+id="strongRepositoryversionstrongahrefhttpsgithubcomuabcgdswortheymecfsdgeanalysistree4415e05b61d76b413ca40411669827fac258b242targetblank4415e05a"
 class="panel-collapse collapse">
 <div class="panel-body">
 <p>
@@ -649,7 +550,7 @@ reproducibility.
 </p>
 <p>
 The results in this page were generated with repository version
-<a href="https://github.com/uab-cgds-worthey/mecfs-dge-analysis/tree/5252856f5e668e0c4c422f7cdb660ca44fcd1cf8" target="_blank">5252856</a>.
+<a href="https://github.com/uab-cgds-worthey/mecfs-dge-analysis/tree/4415e05b61d76b413ca40411669827fac258b242" target="_blank">4415e05</a>.
 See the <em>Past versions</em> tab to see a history of the changes made
 to the R Markdown and HTML files.
 </p>
@@ -671,7 +572,11 @@ Ignored files:
     Ignored:    output/batch-correction-limma/
 
 Unstaged changes:
-    Modified:   analysis/_site.yml
+    Modified:   output/counts_vst.csv
+    Modified:   output/counts_vst_limma.csv
+    Modified:   output/res_aff_vs_unaff.csv
+    Modified:   output/res_aff_vs_unaff_df_genename_05.csv
+    Modified:   output/res_aff_vs_unaff_genename.csv
 
 </code></pre>
 <p>
@@ -722,6 +627,23 @@ Message
 html
 </td>
 <td>
+<a href="https://rawcdn.githack.com/uab-cgds-worthey/mecfs-dge-analysis/e555cb26bda7b6c531332c710b551b03374a88e2/docs/initial-analysis.html" target="_blank">e555cb2</a>
+</td>
+<td>
+sdhutchins
+</td>
+<td>
+2023-07-24
+</td>
+<td>
+Build site.
+</td>
+</tr>
+<tr>
+<td>
+html
+</td>
+<td>
 <a href="https://rawcdn.githack.com/uab-cgds-worthey/mecfs-dge-analysis/5252856f5e668e0c4c422f7cdb660ca44fcd1cf8/docs/initial-analysis.html" target="_blank">5252856</a>
 </td>
 <td>
@@ -758,54 +680,54 @@ Add initial analysis.
 </div>
 </div>
 </div>
-<div class="sourceCode" id="cb1"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb1-1"><a href="#cb1-1" tabindex="-1"></a><span class="fu">library</span>(tidyverse) <span class="co"># Available via CRAN</span></span>
-<span id="cb1-2"><a href="#cb1-2" tabindex="-1"></a><span class="fu">library</span>(DESeq2) <span class="co"># Available via Bioconductor</span></span>
-<span id="cb1-3"><a href="#cb1-3" tabindex="-1"></a><span class="fu">library</span>(RColorBrewer) <span class="co"># Available via CRAN</span></span>
-<span id="cb1-4"><a href="#cb1-4" tabindex="-1"></a><span class="fu">library</span>(pheatmap) <span class="co"># Available via CRAN</span></span>
-<span id="cb1-5"><a href="#cb1-5" tabindex="-1"></a><span class="fu">library</span>(genefilter) <span class="co"># Available via Bioconductor</span></span>
-<span id="cb1-6"><a href="#cb1-6" tabindex="-1"></a><span class="fu">library</span>(limma) <span class="co"># Available via Bioconductor</span></span></code></pre></div>
+<pre class="r"><code>library(tidyverse) # Available via CRAN
+library(DESeq2) # Available via Bioconductor
+library(RColorBrewer) # Available via CRAN
+library(pheatmap) # Available via CRAN
+library(genefilter) # Available via Bioconductor
+library(limma) # Available via Bioconductor</code></pre>
 <div id="data-import" class="section level2">
 <h2>Data Import</h2>
 <p>We will be importing counts data from the star-salmon pipeline and
 our metadata for the project which is hosted on Box. This code block
 also ensures data is properly ordered by sample id.</p>
-<div class="sourceCode" id="cb2"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb2-1"><a href="#cb2-1" tabindex="-1"></a>counts <span class="ot">&lt;-</span> <span class="fu">read_tsv</span>(<span class="st">&quot;data/star-salmon/salmon.merged.gene_counts_length_scaled.tsv&quot;</span>)</span>
-<span id="cb2-2"><a href="#cb2-2" tabindex="-1"></a><span class="co"># Use first column (gene_id) for row names</span></span>
-<span id="cb2-3"><a href="#cb2-3" tabindex="-1"></a>counts <span class="ot">=</span> <span class="fu">data.frame</span>(counts, <span class="at">row.names =</span> <span class="dv">1</span>)</span>
-<span id="cb2-4"><a href="#cb2-4" tabindex="-1"></a>counts<span class="sc">$</span>Ensembl_ID <span class="ot">=</span> <span class="fu">row.names</span>(counts)</span>
-<span id="cb2-5"><a href="#cb2-5" tabindex="-1"></a>drop <span class="ot">=</span> <span class="fu">c</span>(<span class="st">&quot;Ensembl_ID&quot;</span>,<span class="st">&quot;gene_name&quot;</span>)</span>
-<span id="cb2-6"><a href="#cb2-6" tabindex="-1"></a>gene_names <span class="ot">=</span> counts[,drop]    </span>
-<span id="cb2-7"><a href="#cb2-7" tabindex="-1"></a>counts <span class="ot">=</span> counts[ , <span class="sc">!</span>(<span class="fu">names</span>(counts) <span class="sc">%in%</span> drop)]     <span class="co"># remove both columns</span></span>
-<span id="cb2-8"><a href="#cb2-8" tabindex="-1"></a></span>
-<span id="cb2-9"><a href="#cb2-9" tabindex="-1"></a><span class="co"># Import metadata</span></span>
-<span id="cb2-10"><a href="#cb2-10" tabindex="-1"></a>sample_metadata <span class="ot">&lt;-</span> <span class="fu">read_csv</span>(<span class="st">&quot;data/MECFS_RNAseq_metadata_2023_06_23.csv&quot;</span>)</span>
-<span id="cb2-11"><a href="#cb2-11" tabindex="-1"></a><span class="fu">row.names</span>(sample_metadata) <span class="ot">&lt;-</span> sample_metadata<span class="sc">$</span>RNA_Samples_id</span>
-<span id="cb2-12"><a href="#cb2-12" tabindex="-1"></a><span class="co"># Order sample_metadata</span></span>
-<span id="cb2-13"><a href="#cb2-13" tabindex="-1"></a>sample_metadata <span class="ot">&lt;-</span> <span class="fu">arrange</span>(sample_metadata, RNA_Samples_id)</span>
-<span id="cb2-14"><a href="#cb2-14" tabindex="-1"></a></span>
-<span id="cb2-15"><a href="#cb2-15" tabindex="-1"></a><span class="co"># Check that data is ordered properly</span></span>
-<span id="cb2-16"><a href="#cb2-16" tabindex="-1"></a><span class="fu">all</span>(<span class="fu">rownames</span>(sample_metadata) <span class="sc">%in%</span> <span class="fu">colnames</span>(counts))                   </span></code></pre></div>
+<pre class="r"><code>counts &lt;- read_tsv(&quot;data/star-salmon/salmon.merged.gene_counts_length_scaled.tsv&quot;)
+# Use first column (gene_id) for row names
+counts = data.frame(counts, row.names = 1)
+counts$Ensembl_ID = row.names(counts)
+drop = c(&quot;Ensembl_ID&quot;,&quot;gene_name&quot;)
+gene_names = counts[,drop]    
+counts = counts[ , !(names(counts) %in% drop)]     # remove both columns
+
+# Import metadata
+sample_metadata &lt;- read_csv(&quot;data/MECFS_RNAseq_metadata_2023_06_23.csv&quot;)
+row.names(sample_metadata) &lt;- sample_metadata$RNA_Samples_id
+# Order sample_metadata
+sample_metadata &lt;- arrange(sample_metadata, RNA_Samples_id)
+
+# Check that data is ordered properly
+all(rownames(sample_metadata) %in% colnames(counts))                   </code></pre>
 <pre><code>[1] TRUE</code></pre>
-<div class="sourceCode" id="cb4"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb4-1"><a href="#cb4-1" tabindex="-1"></a><span class="fu">all</span>(<span class="fu">rownames</span>(sample_metadata) <span class="sc">==</span> <span class="fu">colnames</span>(counts))   </span></code></pre></div>
+<pre class="r"><code>all(rownames(sample_metadata) == colnames(counts))   </code></pre>
 <pre><code>[1] TRUE</code></pre>
 </div>
 <div id="deseq2-analysis" class="section level2">
 <h2>DESeq2 Analysis</h2>
-<div class="sourceCode" id="cb6"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb6-1"><a href="#cb6-1" tabindex="-1"></a>sample_metadata<span class="sc">$</span>Family <span class="ot">=</span> <span class="fu">factor</span>(sample_metadata<span class="sc">$</span>Family)  </span>
-<span id="cb6-2"><a href="#cb6-2" tabindex="-1"></a>sample_metadata<span class="sc">$</span>Affected <span class="ot">=</span> <span class="fu">factor</span>(sample_metadata<span class="sc">$</span>Affected) </span>
-<span id="cb6-3"><a href="#cb6-3" tabindex="-1"></a>sample_metadata<span class="sc">$</span>Batch <span class="ot">=</span> <span class="fu">factor</span>(sample_metadata<span class="sc">$</span>Batch)</span>
-<span id="cb6-4"><a href="#cb6-4" tabindex="-1"></a>sample_metadata<span class="sc">$</span>Gender <span class="ot">=</span> <span class="fu">factor</span>(sample_metadata<span class="sc">$</span>Gender)</span>
-<span id="cb6-5"><a href="#cb6-5" tabindex="-1"></a></span>
-<span id="cb6-6"><a href="#cb6-6" tabindex="-1"></a><span class="co"># Account for Family later but batch is accounted for</span></span>
-<span id="cb6-7"><a href="#cb6-7" tabindex="-1"></a>dds <span class="ot">&lt;-</span> <span class="fu">DESeqDataSetFromMatrix</span>(<span class="at">countData =</span> <span class="fu">round</span>(counts), <span class="at">colData =</span> sample_metadata, <span class="at">design =</span> <span class="sc">~</span> Batch <span class="sc">+</span> Affected)</span>
-<span id="cb6-8"><a href="#cb6-8" tabindex="-1"></a></span>
-<span id="cb6-9"><a href="#cb6-9" tabindex="-1"></a><span class="co"># Pre-filtering: Keep only rows that have atleast 10 reads total</span></span>
-<span id="cb6-10"><a href="#cb6-10" tabindex="-1"></a>keep <span class="ot">=</span> <span class="fu">rowSums</span>(<span class="fu">counts</span>(dds)) <span class="sc">&gt;=</span> <span class="dv">10</span> </span>
-<span id="cb6-11"><a href="#cb6-11" tabindex="-1"></a>dds <span class="ot">=</span> dds[keep,]</span>
-<span id="cb6-12"><a href="#cb6-12" tabindex="-1"></a></span>
-<span id="cb6-13"><a href="#cb6-13" tabindex="-1"></a><span class="co"># Run DESeq function</span></span>
-<span id="cb6-14"><a href="#cb6-14" tabindex="-1"></a>dds <span class="ot">=</span> <span class="fu">DESeq</span>(dds)</span>
-<span id="cb6-15"><a href="#cb6-15" tabindex="-1"></a><span class="fu">head</span>(<span class="fu">counts</span>(dds, <span class="at">normalized=</span><span class="cn">TRUE</span>))</span></code></pre></div>
+<pre class="r"><code>sample_metadata$Family = factor(sample_metadata$Family)  
+sample_metadata$Affected = factor(sample_metadata$Affected) 
+sample_metadata$Batch = factor(sample_metadata$Batch)
+sample_metadata$Gender = factor(sample_metadata$Gender)
+
+# Account for Family later but batch is accounted for
+dds &lt;- DESeqDataSetFromMatrix(countData = round(counts), colData = sample_metadata, design = ~ Batch + Affected)
+
+# Pre-filtering: Keep only rows that have atleast 10 reads total
+keep = rowSums(counts(dds)) &gt;= 10 
+dds = dds[keep,]
+
+# Run DESeq function
+dds = DESeq(dds)
+head(counts(dds, normalized=TRUE))</code></pre>
 <pre><code>                       LW001974    LW001975     LW001976     LW001977
 ENSG00000000003.15     6.283344     2.05296     7.223942     4.264822
 ENSG00000000419.14   921.557182  1043.92997   850.017210   859.361676
@@ -855,39 +777,39 @@ ENSG00000000457.14 1143.76299   987.54098  1041.780892
 ENSG00000000460.17  339.71860   350.21010   205.093330
 ENSG00000000938.13 8890.39630 10409.73770 12261.318282
 ENSG00000000971.17  247.90276   133.90386   209.754542</code></pre>
-<div class="sourceCode" id="cb8"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb8-1"><a href="#cb8-1" tabindex="-1"></a><span class="fu">resultsNames</span>(dds)</span></code></pre></div>
+<pre class="r"><code>resultsNames(dds)</code></pre>
 <pre><code>[1] &quot;Intercept&quot;          &quot;Batch_B2_vs_B1&quot;     &quot;Batch_B3_vs_B1&quot;    
 [4] &quot;Affected_Yes_vs_No&quot;</code></pre>
-<div class="sourceCode" id="cb10"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb10-1"><a href="#cb10-1" tabindex="-1"></a><span class="co"># Normalize gene counts for differences in seq. depth/global differences</span></span>
-<span id="cb10-2"><a href="#cb10-2" tabindex="-1"></a>counts_norm <span class="ot">=</span> <span class="fu">counts</span>(dds, <span class="at">normalized=</span><span class="cn">TRUE</span>)</span></code></pre></div>
+<pre class="r"><code># Normalize gene counts for differences in seq. depth/global differences
+counts_norm = counts(dds, normalized=TRUE)</code></pre>
 <div id="data-transformation-and-visualization" class="section level3">
 <h3>Data transformation and visualization</h3>
 <p>Perform count data transformation by variance stabilizing
 transformation (vst) on normalized counts.</p>
-<div class="sourceCode" id="cb11"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb11-1"><a href="#cb11-1" tabindex="-1"></a>vsd <span class="ot">=</span> <span class="fu">vst</span>(dds, <span class="at">blind=</span><span class="cn">FALSE</span>) </span></code></pre></div>
+<pre class="r"><code>vsd = vst(dds, blind=FALSE) </code></pre>
 <div id="batch-correction-transformation-and-plotting"
 class="section level4">
 <h4>Batch correction, transformation and plotting</h4>
-<div class="sourceCode" id="cb12"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb12-1"><a href="#cb12-1" tabindex="-1"></a>counts_vst <span class="ot">=</span> <span class="fu">assay</span>(vsd)</span>
-<span id="cb12-2"><a href="#cb12-2" tabindex="-1"></a><span class="fu">write.csv</span>(counts_vst, <span class="at">file=</span><span class="st">&quot;output/counts_vst.csv&quot;</span>)</span>
-<span id="cb12-3"><a href="#cb12-3" tabindex="-1"></a>mm <span class="ot">=</span> <span class="fu">model.matrix</span>(<span class="sc">~</span> Family <span class="sc">+</span> Affected, <span class="fu">colData</span>(vsd))</span>
-<span id="cb12-4"><a href="#cb12-4" tabindex="-1"></a></span>
-<span id="cb12-5"><a href="#cb12-5" tabindex="-1"></a>counts_vst_limma <span class="ot">=</span> limma<span class="sc">::</span><span class="fu">removeBatchEffect</span>(counts_vst, <span class="at">batch=</span>vsd<span class="sc">$</span>Batch, <span class="at">design=</span>mm)</span></code></pre></div>
+<pre class="r"><code>counts_vst = assay(vsd)
+write.csv(counts_vst, file=&quot;output/counts_vst.csv&quot;)
+mm = model.matrix(~ Family + Affected, colData(vsd))
+
+counts_vst_limma = limma::removeBatchEffect(counts_vst, batch=vsd$Batch, design=mm)</code></pre>
 <pre><code>Coefficients not estimable: batch2 </code></pre>
-<div class="sourceCode" id="cb14"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb14-1"><a href="#cb14-1" tabindex="-1"></a><span class="fu">write.csv</span>(counts_vst_limma, <span class="at">file=</span><span class="st">&quot;output/counts_vst_limma.csv&quot;</span>)</span>
-<span id="cb14-2"><a href="#cb14-2" tabindex="-1"></a></span>
-<span id="cb14-3"><a href="#cb14-3" tabindex="-1"></a>vsd_limma <span class="ot">=</span> vsd</span>
-<span id="cb14-4"><a href="#cb14-4" tabindex="-1"></a><span class="fu">assay</span>(vsd_limma) <span class="ot">=</span> counts_vst_limma</span></code></pre></div>
+<pre class="r"><code>write.csv(counts_vst_limma, file=&quot;output/counts_vst_limma.csv&quot;)
+
+vsd_limma = vsd
+assay(vsd_limma) = counts_vst_limma</code></pre>
 </div>
 <div id="sample-distances-heatmap" class="section level4">
 <h4>Sample distances heatmap</h4>
-<div class="sourceCode" id="cb15"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb15-1"><a href="#cb15-1" tabindex="-1"></a>sampleDists <span class="ot">=</span> <span class="fu">dist</span>(<span class="fu">t</span>(<span class="fu">assay</span>(vsd_limma)))</span>
-<span id="cb15-2"><a href="#cb15-2" tabindex="-1"></a>sampleDistMatrix <span class="ot">=</span> <span class="fu">as.matrix</span>(sampleDists) </span>
-<span id="cb15-3"><a href="#cb15-3" tabindex="-1"></a><span class="fu">rownames</span>(sampleDistMatrix) <span class="ot">=</span> <span class="fu">paste</span>(vsd_limma<span class="sc">$</span>Batch, vsd_limma<span class="sc">$</span>Family, <span class="at">sep=</span><span class="st">&quot; | &quot;</span>) </span>
-<span id="cb15-4"><a href="#cb15-4" tabindex="-1"></a><span class="fu">colnames</span>(sampleDistMatrix) <span class="ot">=</span> <span class="fu">paste</span>(vsd_limma<span class="sc">$</span>RNA_Samples_id, vsd_limma<span class="sc">$</span>Family, <span class="at">sep=</span><span class="st">&quot; | &quot;</span>) </span>
-<span id="cb15-5"><a href="#cb15-5" tabindex="-1"></a>colors <span class="ot">=</span> <span class="fu">colorRampPalette</span>(<span class="fu">rev</span>(<span class="fu">brewer.pal</span>(<span class="dv">9</span>, <span class="st">&quot;Blues&quot;</span>)))(<span class="dv">255</span>) </span>
-<span id="cb15-6"><a href="#cb15-6" tabindex="-1"></a></span>
-<span id="cb15-7"><a href="#cb15-7" tabindex="-1"></a><span class="fu">pheatmap</span>(sampleDistMatrix, <span class="at">clustering_distance_rows=</span>sampleDists, <span class="at">clustering_distance_cols=</span>sampleDists, <span class="at">col=</span>colors)</span></code></pre></div>
+<pre class="r"><code>sampleDists = dist(t(assay(vsd_limma)))
+sampleDistMatrix = as.matrix(sampleDists) 
+rownames(sampleDistMatrix) = paste(vsd_limma$Batch, vsd_limma$Family, sep=&quot; | &quot;) 
+colnames(sampleDistMatrix) = paste(vsd_limma$RNA_Samples_id, vsd_limma$Family, sep=&quot; | &quot;) 
+colors = colorRampPalette(rev(brewer.pal(9, &quot;Blues&quot;)))(255) 
+
+pheatmap(sampleDistMatrix, clustering_distance_rows=sampleDists, clustering_distance_cols=sampleDists, col=colors)</code></pre>
 <p><img src="figure/initial-analysis.Rmd/unnamed-chunk-2-1.png" width="672" style="display: block; margin: auto;" /></p>
 <p>
 <button type="button" class="btn btn-default btn-xs btn-workflowr btn-workflowr-fig" data-toggle="collapse" data-target="#fig-unnamed-chunk-2-1">
@@ -929,11 +851,11 @@ sdhutchins
 </div>
 <div id="principal-components-analysis" class="section level4">
 <h4>Principal Components Analysis</h4>
-<div class="sourceCode" id="cb16"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb16-1"><a href="#cb16-1" tabindex="-1"></a>pcaData <span class="ot">=</span> <span class="fu">plotPCA</span>(vsd, <span class="at">intgroup=</span><span class="fu">c</span>(<span class="st">&quot;Batch&quot;</span>, <span class="st">&quot;Family&quot;</span>, <span class="st">&quot;Affected&quot;</span>), <span class="at">returnData=</span><span class="cn">TRUE</span>) </span>
-<span id="cb16-2"><a href="#cb16-2" tabindex="-1"></a>percentVar <span class="ot">=</span> <span class="fu">round</span>(<span class="dv">100</span> <span class="sc">*</span> <span class="fu">attr</span>(pcaData, <span class="st">&quot;percentVar&quot;</span>)) </span>
-<span id="cb16-3"><a href="#cb16-3" tabindex="-1"></a></span>
-<span id="cb16-4"><a href="#cb16-4" tabindex="-1"></a><span class="fu">ggplot</span>(pcaData, <span class="fu">aes</span>(PC1, PC2, <span class="at">shape=</span><span class="fu">factor</span>(Batch), <span class="at">fill=</span><span class="fu">factor</span>(Affected),  <span class="at">color=</span><span class="fu">factor</span>(Family)))  <span class="sc">+</span> </span>
-<span id="cb16-5"><a href="#cb16-5" tabindex="-1"></a>  <span class="fu">geom_point</span>(<span class="at">size=</span><span class="dv">5</span>) <span class="sc">+</span> <span class="fu">xlab</span>(<span class="fu">paste0</span>(<span class="st">&quot;PC1: &quot;</span>,percentVar[<span class="dv">1</span>],<span class="st">&quot;% variance&quot;</span>)) <span class="sc">+</span> <span class="fu">ylab</span>(<span class="fu">paste0</span>(<span class="st">&quot;PC2: &quot;</span>,percentVar[<span class="dv">2</span>],<span class="st">&quot;% variance&quot;</span>)) <span class="sc">+</span> <span class="fu">coord_fixed</span>()</span></code></pre></div>
+<pre class="r"><code>pcaData = plotPCA(vsd, intgroup=c(&quot;Batch&quot;, &quot;Family&quot;, &quot;Affected&quot;), returnData=TRUE) 
+percentVar = round(100 * attr(pcaData, &quot;percentVar&quot;)) 
+
+ggplot(pcaData, aes(PC1, PC2, shape=factor(Batch), fill=factor(Affected),  color=factor(Family)))  + 
+  geom_point(size=5) + xlab(paste0(&quot;PC1: &quot;,percentVar[1],&quot;% variance&quot;)) + ylab(paste0(&quot;PC2: &quot;,percentVar[2],&quot;% variance&quot;)) + coord_fixed()</code></pre>
 <p><img src="figure/initial-analysis.Rmd/unnamed-chunk-3-1.png" width="672" style="display: block; margin: auto;" /></p>
 <p>
 <button type="button" class="btn btn-default btn-xs btn-workflowr btn-workflowr-fig" data-toggle="collapse" data-target="#fig-unnamed-chunk-3-1">
@@ -972,8 +894,8 @@ sdhutchins
 </table>
 </div>
 </div>
-<div class="sourceCode" id="cb17"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb17-1"><a href="#cb17-1" tabindex="-1"></a><span class="fu">ggplot</span>(pcaData, <span class="fu">aes</span>(PC1, PC2, <span class="at">shape=</span><span class="fu">factor</span>(Batch), <span class="at">color=</span><span class="fu">factor</span>(Affected)))  <span class="sc">+</span> </span>
-<span id="cb17-2"><a href="#cb17-2" tabindex="-1"></a>  <span class="fu">geom_point</span>(<span class="at">size=</span><span class="dv">5</span>) <span class="sc">+</span> <span class="fu">xlab</span>(<span class="fu">paste0</span>(<span class="st">&quot;PC1: &quot;</span>,percentVar[<span class="dv">1</span>],<span class="st">&quot;% variance&quot;</span>)) <span class="sc">+</span> <span class="fu">ylab</span>(<span class="fu">paste0</span>(<span class="st">&quot;PC2: &quot;</span>,percentVar[<span class="dv">2</span>],<span class="st">&quot;% variance&quot;</span>)) <span class="sc">+</span> <span class="fu">coord_fixed</span>()</span></code></pre></div>
+<pre class="r"><code>ggplot(pcaData, aes(PC1, PC2, shape=factor(Batch), color=factor(Affected)))  + 
+  geom_point(size=5) + xlab(paste0(&quot;PC1: &quot;,percentVar[1],&quot;% variance&quot;)) + ylab(paste0(&quot;PC2: &quot;,percentVar[2],&quot;% variance&quot;)) + coord_fixed()</code></pre>
 <p><img src="figure/initial-analysis.Rmd/unnamed-chunk-3-2.png" width="672" style="display: block; margin: auto;" /></p>
 <p>
 <button type="button" class="btn btn-default btn-xs btn-workflowr btn-workflowr-fig" data-toggle="collapse" data-target="#fig-unnamed-chunk-3-2">
@@ -1017,11 +939,11 @@ sdhutchins
 <h4>Heatmap of top 50 &amp; top 100 genes</h4>
 <p>This is a heatmap for 50 genes with the highest variance across
 samples</p>
-<div class="sourceCode" id="cb18"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb18-1"><a href="#cb18-1" tabindex="-1"></a>topVarGenes <span class="ot">=</span> <span class="fu">head</span>(<span class="fu">order</span>(<span class="sc">-</span><span class="fu">rowVars</span>(<span class="fu">assay</span>(vsd))),<span class="dv">50</span>)</span>
-<span id="cb18-2"><a href="#cb18-2" tabindex="-1"></a>mat <span class="ot">=</span> <span class="fu">assay</span>(vsd_limma)[ topVarGenes, ]</span>
-<span id="cb18-3"><a href="#cb18-3" tabindex="-1"></a>mat <span class="ot">=</span> mat <span class="sc">-</span> <span class="fu">rowMeans</span>(mat)</span>
-<span id="cb18-4"><a href="#cb18-4" tabindex="-1"></a>df <span class="ot">=</span> <span class="fu">as.data.frame</span>(<span class="fu">colData</span>(vsd)[,<span class="fu">c</span>(<span class="st">&quot;Batch&quot;</span>, <span class="st">&quot;Affected&quot;</span>)])</span>
-<span id="cb18-5"><a href="#cb18-5" tabindex="-1"></a><span class="fu">pheatmap</span>(mat, <span class="at">annotation_col=</span>df, <span class="at">fontsize =</span> <span class="dv">5</span>)</span></code></pre></div>
+<pre class="r"><code>topVarGenes = head(order(-rowVars(assay(vsd))),50)
+mat = assay(vsd_limma)[ topVarGenes, ]
+mat = mat - rowMeans(mat)
+df = as.data.frame(colData(vsd)[,c(&quot;Batch&quot;, &quot;Affected&quot;)])
+pheatmap(mat, annotation_col=df, fontsize = 5)</code></pre>
 <p><img src="figure/initial-analysis.Rmd/top50-heatmap-1.png" width="800px" height="570px" style="display: block; margin: auto;" /></p>
 <p>
 <button type="button" class="btn btn-default btn-xs btn-workflowr btn-workflowr-fig" data-toggle="collapse" data-target="#fig-top50-heatmap-1">
@@ -1062,11 +984,11 @@ sdhutchins
 </div>
 <p>This is a heatmap of the top 100 genes with the highest variance
 across samples</p>
-<div class="sourceCode" id="cb19"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb19-1"><a href="#cb19-1" tabindex="-1"></a>topVarGenes <span class="ot">=</span> <span class="fu">head</span>(<span class="fu">order</span>(<span class="sc">-</span><span class="fu">rowVars</span>(<span class="fu">assay</span>(vsd_limma))),<span class="dv">100</span>)</span>
-<span id="cb19-2"><a href="#cb19-2" tabindex="-1"></a>mat <span class="ot">=</span> <span class="fu">assay</span>(vsd_limma)[ topVarGenes, ]</span>
-<span id="cb19-3"><a href="#cb19-3" tabindex="-1"></a>mat <span class="ot">=</span> mat <span class="sc">-</span> <span class="fu">rowMeans</span>(mat)</span>
-<span id="cb19-4"><a href="#cb19-4" tabindex="-1"></a>df <span class="ot">=</span> <span class="fu">as.data.frame</span>(<span class="fu">colData</span>(vsd_limma)[,<span class="fu">c</span>(<span class="st">&quot;Batch&quot;</span>, <span class="st">&quot;Family&quot;</span>, <span class="st">&quot;Affected&quot;</span>)])</span>
-<span id="cb19-5"><a href="#cb19-5" tabindex="-1"></a><span class="fu">pheatmap</span>(mat, <span class="at">annotation_col=</span>df, <span class="at">fontsize =</span> <span class="dv">6</span>)</span></code></pre></div>
+<pre class="r"><code>topVarGenes = head(order(-rowVars(assay(vsd_limma))),100)
+mat = assay(vsd_limma)[ topVarGenes, ]
+mat = mat - rowMeans(mat)
+df = as.data.frame(colData(vsd_limma)[,c(&quot;Batch&quot;, &quot;Family&quot;, &quot;Affected&quot;)])
+pheatmap(mat, annotation_col=df, fontsize = 6)</code></pre>
 <p><img src="figure/initial-analysis.Rmd/top100-heatmap-1.png" width="1200px" style="display: block; margin: auto;" /></p>
 <p>
 <button type="button" class="btn btn-default btn-xs btn-workflowr btn-workflowr-fig" data-toggle="collapse" data-target="#fig-top100-heatmap-1">
@@ -1109,9 +1031,9 @@ sdhutchins
 <div id="comparisoncontrast-of-affected_yes_vs_no"
 class="section level4">
 <h4>Comparison/Contrast of Affected_Yes_vs_No</h4>
-<div class="sourceCode" id="cb20"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb20-1"><a href="#cb20-1" tabindex="-1"></a>res_aff_vs_unaff <span class="ot">=</span> <span class="fu">results</span>(dds, <span class="at">contrast=</span><span class="fu">c</span>(<span class="st">&quot;Affected&quot;</span>, <span class="st">&quot;Yes&quot;</span>, <span class="st">&quot;No&quot;</span>))</span>
-<span id="cb20-2"><a href="#cb20-2" tabindex="-1"></a>res_aff_vs_unaff<span class="ot">=</span> res_aff_vs_unaff[<span class="fu">order</span>(res_aff_vs_unaff<span class="sc">$</span>padj),]</span>
-<span id="cb20-3"><a href="#cb20-3" tabindex="-1"></a><span class="fu">summary</span>(res_aff_vs_unaff)</span></code></pre></div>
+<pre class="r"><code>res_aff_vs_unaff = results(dds, contrast=c(&quot;Affected&quot;, &quot;Yes&quot;, &quot;No&quot;))
+res_aff_vs_unaff= res_aff_vs_unaff[order(res_aff_vs_unaff$padj),]
+summary(res_aff_vs_unaff)</code></pre>
 <pre><code>
 out of 29624 with nonzero total read count
 adjusted p-value &lt; 0.1
@@ -1122,19 +1044,19 @@ low counts [2]     : 6, 0.02%
 (mean count &lt; 0)
 [1] see &#39;cooksCutoff&#39; argument of ?results
 [2] see &#39;independentFiltering&#39; argument of ?results</code></pre>
-<div class="sourceCode" id="cb22"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb22-1"><a href="#cb22-1" tabindex="-1"></a><span class="fu">write.csv</span>(res_aff_vs_unaff, <span class="at">file=</span><span class="st">&quot;output/res_aff_vs_unaff.csv&quot;</span>)      </span>
-<span id="cb22-2"><a href="#cb22-2" tabindex="-1"></a>res_aff_vs_unaff_df <span class="ot">=</span> <span class="fu">as.data.frame</span>(res_aff_vs_unaff)</span>
-<span id="cb22-3"><a href="#cb22-3" tabindex="-1"></a>res_aff_vs_unaff_05 <span class="ot">=</span> <span class="fu">subset</span>(res_aff_vs_unaff_df, padj <span class="sc">&lt;</span> <span class="fl">0.05</span>)                             </span></code></pre></div>
-<div class="sourceCode" id="cb23"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb23-1"><a href="#cb23-1" tabindex="-1"></a>topgenes_byensemblid <span class="ot">=</span> <span class="fu">head</span>(<span class="fu">rownames</span>(res_aff_vs_unaff_05),<span class="dv">50</span>)</span>
-<span id="cb23-2"><a href="#cb23-2" tabindex="-1"></a>topgenes_aff_vs_unaff_05 <span class="ot">=</span> <span class="fu">assay</span>(vsd_limma)[topgenes_byensemblid,] </span>
-<span id="cb23-3"><a href="#cb23-3" tabindex="-1"></a>topgenes_aff_vs_unaff_05 <span class="ot">=</span> topgenes_aff_vs_unaff_05 <span class="sc">-</span> <span class="fu">rowMeans</span>(topgenes_aff_vs_unaff_05)</span>
-<span id="cb23-4"><a href="#cb23-4" tabindex="-1"></a></span>
-<span id="cb23-5"><a href="#cb23-5" tabindex="-1"></a><span class="co"># Convert ensemblids</span></span>
-<span id="cb23-6"><a href="#cb23-6" tabindex="-1"></a>ensemblids <span class="ot">&lt;-</span> topgenes_byensemblid</span>
-<span id="cb23-7"><a href="#cb23-7" tabindex="-1"></a><span class="fu">rownames</span>(topgenes_aff_vs_unaff_05) <span class="ot">&lt;-</span> gene_names<span class="sc">$</span>gene_name[<span class="fu">match</span>(ensemblids, gene_names<span class="sc">$</span>Ensembl_ID)]</span>
-<span id="cb23-8"><a href="#cb23-8" tabindex="-1"></a></span>
-<span id="cb23-9"><a href="#cb23-9" tabindex="-1"></a>df <span class="ot">=</span> <span class="fu">as.data.frame</span>(<span class="fu">colData</span>(vsd_limma)[,<span class="fu">c</span>(<span class="st">&quot;Batch&quot;</span>, <span class="st">&quot;Family&quot;</span>, <span class="st">&quot;Affected&quot;</span>)])</span>
-<span id="cb23-10"><a href="#cb23-10" tabindex="-1"></a><span class="fu">pheatmap</span>(topgenes_aff_vs_unaff_05, <span class="at">annotation_col=</span>df, <span class="at">fontsize =</span> <span class="dv">5</span>)</span></code></pre></div>
+<pre class="r"><code>write.csv(res_aff_vs_unaff, file=&quot;output/res_aff_vs_unaff.csv&quot;)      
+res_aff_vs_unaff_df = as.data.frame(res_aff_vs_unaff)
+res_aff_vs_unaff_05 = subset(res_aff_vs_unaff_df, padj &lt; 0.05)                             </code></pre>
+<pre class="r"><code>topgenes_byensemblid = head(rownames(res_aff_vs_unaff_05),50)
+topgenes_aff_vs_unaff_05 = assay(vsd_limma)[topgenes_byensemblid,] 
+topgenes_aff_vs_unaff_05 = topgenes_aff_vs_unaff_05 - rowMeans(topgenes_aff_vs_unaff_05)
+
+# Convert ensemblids
+ensemblids &lt;- topgenes_byensemblid
+rownames(topgenes_aff_vs_unaff_05) &lt;- gene_names$gene_name[match(ensemblids, gene_names$Ensembl_ID)]
+
+df = as.data.frame(colData(vsd_limma)[,c(&quot;Batch&quot;, &quot;Family&quot;, &quot;Affected&quot;)])
+pheatmap(topgenes_aff_vs_unaff_05, annotation_col=df, fontsize = 5)</code></pre>
 <p><img src="figure/initial-analysis.Rmd/top%2050%20genes-1.png" width="800px" height="570px" style="display: block; margin: auto;" /></p>
 <p>
 <button type="button" class="btn btn-default btn-xs btn-workflowr btn-workflowr-fig" data-toggle="collapse" data-target="#fig-no-spaces-top-50-genes-1">
@@ -1173,15 +1095,15 @@ sdhutchins
 </table>
 </div>
 </div>
-<div class="sourceCode" id="cb24"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb24-1"><a href="#cb24-1" tabindex="-1"></a>res_aff_vs_unaff_df_genename <span class="ot">=</span> res_aff_vs_unaff_df</span>
-<span id="cb24-2"><a href="#cb24-2" tabindex="-1"></a>res_aff_vs_unaff_df_genename<span class="sc">$</span>Ensembl_ID <span class="ot">=</span> <span class="fu">row.names</span>(res_aff_vs_unaff_df)</span>
-<span id="cb24-3"><a href="#cb24-3" tabindex="-1"></a>res_aff_vs_unaff_df_genename <span class="ot">=</span> <span class="fu">merge</span>(<span class="at">x=</span>res_aff_vs_unaff_df_genename, <span class="at">y=</span>gene_names, <span class="at">by.x =</span><span class="st">&quot;Ensembl_ID&quot;</span>, <span class="at">by.y=</span><span class="st">&quot;Ensembl_ID&quot;</span>, <span class="at">all.x=</span>T)</span>
-<span id="cb24-4"><a href="#cb24-4" tabindex="-1"></a>res_aff_vs_unaff_df_genename <span class="ot">=</span> res_aff_vs_unaff_df_genename[,<span class="fu">c</span>(<span class="fu">dim</span>(res_aff_vs_unaff_df_genename)[<span class="dv">2</span>],<span class="dv">1</span><span class="sc">:</span><span class="fu">dim</span>(res_aff_vs_unaff_df_genename)[<span class="dv">2</span>]<span class="sc">-</span><span class="dv">1</span>)]</span>
-<span id="cb24-5"><a href="#cb24-5" tabindex="-1"></a>res_aff_vs_unaff_df_genename <span class="ot">=</span> res_aff_vs_unaff_df_genename[<span class="fu">order</span>(res_aff_vs_unaff_df_genename[,<span class="st">&quot;padj&quot;</span>]),]</span>
-<span id="cb24-6"><a href="#cb24-6" tabindex="-1"></a><span class="fu">write.csv</span>(res_aff_vs_unaff_df_genename,<span class="at">file=</span><span class="st">&quot;output/res_aff_vs_unaff_genename.csv&quot;</span> )</span></code></pre></div>
-<div class="sourceCode" id="cb25"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb25-1"><a href="#cb25-1" tabindex="-1"></a>res_aff_vs_unaff_df_genename_05<span class="ot">=</span> <span class="fu">subset</span>(res_aff_vs_unaff_df_genename, padj <span class="sc">&lt;</span> <span class="fl">0.05</span>)                   </span>
-<span id="cb25-2"><a href="#cb25-2" tabindex="-1"></a>res_aff_vs_unaff_df_genename_05 <span class="ot">=</span> res_aff_vs_unaff_df_genename_05[<span class="fu">order</span>(res_aff_vs_unaff_df_genename_05<span class="sc">$</span>padj),]</span>
-<span id="cb25-3"><a href="#cb25-3" tabindex="-1"></a><span class="fu">write.csv</span>(res_aff_vs_unaff_df_genename_05, <span class="at">file=</span><span class="st">&quot;output/res_aff_vs_unaff_df_genename_05.csv&quot;</span>)</span></code></pre></div>
+<pre class="r"><code>res_aff_vs_unaff_df_genename = res_aff_vs_unaff_df
+res_aff_vs_unaff_df_genename$Ensembl_ID = row.names(res_aff_vs_unaff_df)
+res_aff_vs_unaff_df_genename = merge(x=res_aff_vs_unaff_df_genename, y=gene_names, by.x =&quot;Ensembl_ID&quot;, by.y=&quot;Ensembl_ID&quot;, all.x=T)
+res_aff_vs_unaff_df_genename = res_aff_vs_unaff_df_genename[,c(dim(res_aff_vs_unaff_df_genename)[2],1:dim(res_aff_vs_unaff_df_genename)[2]-1)]
+res_aff_vs_unaff_df_genename = res_aff_vs_unaff_df_genename[order(res_aff_vs_unaff_df_genename[,&quot;padj&quot;]),]
+write.csv(res_aff_vs_unaff_df_genename,file=&quot;output/res_aff_vs_unaff_genename.csv&quot; )</code></pre>
+<pre class="r"><code>res_aff_vs_unaff_df_genename_05= subset(res_aff_vs_unaff_df_genename, padj &lt; 0.05)                   
+res_aff_vs_unaff_df_genename_05 = res_aff_vs_unaff_df_genename_05[order(res_aff_vs_unaff_df_genename_05$padj),]
+write.csv(res_aff_vs_unaff_df_genename_05, file=&quot;output/res_aff_vs_unaff_df_genename_05.csv&quot;)</code></pre>
 <br>
 <p>
 <button type="button" class="btn btn-default btn-workflowr btn-workflowr-sessioninfo" data-toggle="collapse" data-target="#workflowr-sessioninfo" style="display: block;">
@@ -1190,7 +1112,7 @@ Session information
 </button>
 </p>
 <div id="workflowr-sessioninfo" class="collapse">
-<div class="sourceCode" id="cb26"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb26-1"><a href="#cb26-1" tabindex="-1"></a><span class="fu">sessionInfo</span>()</span></code></pre></div>
+<pre class="r"><code>sessionInfo()</code></pre>
 <pre><code>R version 4.1.1 (2021-08-10)
 Platform: x86_64-apple-darwin17.0 (64-bit)
 Running under: macOS Big Sur 10.16
