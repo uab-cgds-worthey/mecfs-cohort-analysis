@@ -9,6 +9,8 @@ navbar:
     href: background.html
   - text: Analysis
     href: analysis.html
+  - text: Initial Analysis
+    href: initial-analysis.html
   right:
   - icon: fa-github
     href: https://github.com/uab-cgds-worthey/mecfs-dge-analysis
@@ -16,5 +18,5 @@ output:
   workflowr::wflow_html:
     toc: yes
     toc_float: yes
-    theme: sandstone
-    highlight: pygments
+    theme: journal
+    highlight: textmate
