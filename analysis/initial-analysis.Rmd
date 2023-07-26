@@ -145,7 +145,7 @@ pheatmap(mat, annotation_col=df, fontsize = 6)
 #### Comparison/Contrast of Affected_Yes_vs_No 
 ```{r}
 res_aff_vs_unaff = results(dds, contrast=c("Affected", "Yes", "No"))
-res_aff_vs_unaff= res_aff_vs_unaff[order(res_aff_vs_unaff$padj),]
+res_aff_vs_unaff = res_aff_vs_unaff[order(res_aff_vs_unaff$padj),]
 summary(res_aff_vs_unaff)
 write.csv(res_aff_vs_unaff, file="output/res_aff_vs_unaff.csv")      
 res_aff_vs_unaff_df = as.data.frame(res_aff_vs_unaff)
@@ -159,6 +159,7 @@ topgenes_aff_vs_unaff_05 = topgenes_aff_vs_unaff_05 - rowMeans(topgenes_aff_vs_u
 
 # Convert ensemblids
 ensemblids <- topgenes_byensemblid
+ensemblids
 rownames(topgenes_aff_vs_unaff_05) <- gene_names$gene_name[match(ensemblids, gene_names$Ensembl_ID)]
 
 df = as.data.frame(colData(vsd_limma)[,c("Batch", "Family", "Affected")])
