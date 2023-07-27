@@ -8,5 +8,8 @@ editor_options:
   chunk_output_type: console
 ---
 
-This site hosts differential gene expression analysis peformed by CGDS on ME/CFS Patients.
+This site hosts differential gene expression analysis performed by CGDS on ME/CFS Patients.
+
+1. [View the project's background](background.html)
+2. [Differential Gene Expression (DGE) Analysis](analysis.html)
 

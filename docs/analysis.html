@@ -410,7 +410,7 @@ class="glyphicon glyphicon-ok text-success" aria-hidden="true"></span>
 <div class="tab-content">
 <div id="summary" class="tab-pane fade in active">
 <p>
-<strong>Last updated:</strong> 2023-07-25
+<strong>Last updated:</strong> 2023-07-27
 </p>
 <p>
 <strong>Checks:</strong> <span
@@ -541,15 +541,15 @@ project makes it easier to run your code on other machines.</p>
 <div class="panel panel-default">
 <div class="panel-heading">
 <p class="panel-title">
-<a data-toggle="collapse" data-parent="#workflowr-checks" href="#strongRepositoryversionstrongahrefhttpsgithubcomuabcgdswortheymecfsdgeanalysistreed685548f7b75e71b12b5fe7b5ff791dddf86b10etargetblankd685548a">
+<a data-toggle="collapse" data-parent="#workflowr-checks" href="#strongRepositoryversionstrongahrefhttpsgithubcomuabcgdswortheymecfsdgeanalysistreea3635c99af4510e4caba43ff8c9cca2ae0cac19btargetblanka3635c9a">
 <span class="glyphicon glyphicon-ok text-success"
 aria-hidden="true"></span> <strong>Repository version:</strong>
-<a href="https://github.com/uab-cgds-worthey/mecfs-dge-analysis/tree/d685548f7b75e71b12b5fe7b5ff791dddf86b10e" target="_blank">d685548</a>
+<a href="https://github.com/uab-cgds-worthey/mecfs-dge-analysis/tree/a3635c99af4510e4caba43ff8c9cca2ae0cac19b" target="_blank">a3635c9</a>
 </a>
 </p>
 </div>
 <div
-id="strongRepositoryversionstrongahrefhttpsgithubcomuabcgdswortheymecfsdgeanalysistreed685548f7b75e71b12b5fe7b5ff791dddf86b10etargetblankd685548a"
+id="strongRepositoryversionstrongahrefhttpsgithubcomuabcgdswortheymecfsdgeanalysistreea3635c99af4510e4caba43ff8c9cca2ae0cac19btargetblanka3635c9a"
 class="panel-collapse collapse">
 <div class="panel-body">
 <p>
@@ -559,7 +559,7 @@ reproducibility.
 </p>
 <p>
 The results in this page were generated with repository version
-<a href="https://github.com/uab-cgds-worthey/mecfs-dge-analysis/tree/d685548f7b75e71b12b5fe7b5ff791dddf86b10e" target="_blank">d685548</a>.
+<a href="https://github.com/uab-cgds-worthey/mecfs-dge-analysis/tree/a3635c99af4510e4caba43ff8c9cca2ae0cac19b" target="_blank">a3635c9</a>.
 See the <em>Past versions</em> tab to see a history of the changes made
 to the R Markdown and HTML files.
 </p>
@@ -581,6 +581,7 @@ Ignored files:
     Ignored:    output/batch-correction-limma/
 
 Unstaged changes:
+    Modified:   README.md
     Modified:   code/helpers.R
     Modified:   data/MECFS_RNAseq_metadata_2023_06_23.csv
 
@@ -628,6 +629,23 @@ Message
 </tr>
 </thead>
 <tbody>
+<tr>
+<td>
+html
+</td>
+<td>
+<a href="https://rawcdn.githack.com/uab-cgds-worthey/mecfs-dge-analysis/a3635c99af4510e4caba43ff8c9cca2ae0cac19b/docs/analysis.html" target="_blank">a3635c9</a>
+</td>
+<td>
+sdhutchins
+</td>
+<td>
+2023-07-25
+</td>
+<td>
+Build site.
+</td>
+</tr>
 <tr>
 <td>
 Rmd
@@ -1214,6 +1232,17 @@ Date
 <tbody>
 <tr>
 <td>
+<a href="https://github.com/uab-cgds-worthey/mecfs-dge-analysis/blob/a3635c99af4510e4caba43ff8c9cca2ae0cac19b/docs/figure/analysis.Rmd/sample-dist-heatmap-1.png" target="_blank">a3635c9</a>
+</td>
+<td>
+sdhutchins
+</td>
+<td>
+2023-07-25
+</td>
+</tr>
+<tr>
+<td>
 <a href="https://github.com/uab-cgds-worthey/mecfs-dge-analysis/blob/ad9ce58ce4495d2e8eebbe4b2e323cf124094cf2/docs/figure/analysis.Rmd/sample-dist-heatmap-1.png" target="_blank">ad9ce58</a>
 </td>
 <td>
@@ -1273,6 +1302,17 @@ Date
 <tbody>
 <tr>
 <td>
+<a href="https://github.com/uab-cgds-worthey/mecfs-dge-analysis/blob/a3635c99af4510e4caba43ff8c9cca2ae0cac19b/docs/figure/analysis.Rmd/principal-components-analysis-1.png" target="_blank">a3635c9</a>
+</td>
+<td>
+sdhutchins
+</td>
+<td>
+2023-07-25
+</td>
+</tr>
+<tr>
+<td>
 <a href="https://github.com/uab-cgds-worthey/mecfs-dge-analysis/blob/ad9ce58ce4495d2e8eebbe4b2e323cf124094cf2/docs/figure/analysis.Rmd/principal-components-analysis-1.png" target="_blank">ad9ce58</a>
 </td>
 <td>
@@ -1300,6 +1340,43 @@ sdhutchins
 <pre class="r"><code>ggplot(pcaData, aes(PC1, PC2, shape=factor(Batch), color=factor(Affected)))  + 
   geom_point(size=5) + xlab(paste0(&quot;PC1: &quot;,percentVar[1],&quot;% variance&quot;)) + ylab(paste0(&quot;PC2: &quot;,percentVar[2],&quot;% variance&quot;)) + coord_fixed()</code></pre>
 <p><img src="figure/analysis.Rmd/principal-components-analysis-2.png" width="672" style="display: block; margin: auto;" /></p>
+<p>
+<button type="button" class="btn btn-default btn-xs btn-workflowr btn-workflowr-fig" data-toggle="collapse" data-target="#fig-principal-components-analysis-2">
+Past versions of principal-components-analysis-2.png
+</button>
+</p>
+<div id="fig-principal-components-analysis-2" class="collapse">
+<div class="table-responsive">
+<table class="table table-condensed table-hover">
+<thead>
+<tr>
+<th>
+Version
+</th>
+<th>
+Author
+</th>
+<th>
+Date
+</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>
+<a href="https://github.com/uab-cgds-worthey/mecfs-dge-analysis/blob/a3635c99af4510e4caba43ff8c9cca2ae0cac19b/docs/figure/analysis.Rmd/principal-components-analysis-2.png" target="_blank">a3635c9</a>
+</td>
+<td>
+sdhutchins
+</td>
+<td>
+2023-07-25
+</td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
 </div>
 <div id="heatmap-of-all-genes-top-50-top-100-genes"
 class="section level3">
@@ -1311,6 +1388,43 @@ mat = mat - rowMeans(mat)
 df = as.data.frame(colData(vsd)[,c(&quot;Batch&quot;, &quot;Affected&quot;, &quot;Disease Type&quot;)])
 pheatmap(mat, annotation_col=df, fontsize = 5)</code></pre>
 <p><img src="figure/analysis.Rmd/all-heatmap-1.png" width="800px" height="570px" style="display: block; margin: auto;" /></p>
+<p>
+<button type="button" class="btn btn-default btn-xs btn-workflowr btn-workflowr-fig" data-toggle="collapse" data-target="#fig-all-heatmap-1">
+Past versions of all-heatmap-1.png
+</button>
+</p>
+<div id="fig-all-heatmap-1" class="collapse">
+<div class="table-responsive">
+<table class="table table-condensed table-hover">
+<thead>
+<tr>
+<th>
+Version
+</th>
+<th>
+Author
+</th>
+<th>
+Date
+</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>
+<a href="https://github.com/uab-cgds-worthey/mecfs-dge-analysis/blob/a3635c99af4510e4caba43ff8c9cca2ae0cac19b/docs/figure/analysis.Rmd/all-heatmap-1.png" target="_blank">a3635c9</a>
+</td>
+<td>
+sdhutchins
+</td>
+<td>
+2023-07-25
+</td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
 <p>This is a heatmap for 50 genes with the highest variance across
 samples.</p>
 <pre class="r"><code>topVarGenes = head(order(-rowVars(assay(vsd_limma))),50)
@@ -1341,6 +1455,17 @@ Date
 </tr>
 </thead>
 <tbody>
+<tr>
+<td>
+<a href="https://github.com/uab-cgds-worthey/mecfs-dge-analysis/blob/a3635c99af4510e4caba43ff8c9cca2ae0cac19b/docs/figure/analysis.Rmd/top50-heatmap-1.png" target="_blank">a3635c9</a>
+</td>
+<td>
+sdhutchins
+</td>
+<td>
+2023-07-25
+</td>
+</tr>
 <tr>
 <td>
 <a href="https://github.com/uab-cgds-worthey/mecfs-dge-analysis/blob/ad9ce58ce4495d2e8eebbe4b2e323cf124094cf2/docs/figure/analysis.Rmd/top50-heatmap-1.png" target="_blank">ad9ce58</a>
@@ -1397,6 +1522,17 @@ Date
 </tr>
 </thead>
 <tbody>
+<tr>
+<td>
+<a href="https://github.com/uab-cgds-worthey/mecfs-dge-analysis/blob/a3635c99af4510e4caba43ff8c9cca2ae0cac19b/docs/figure/analysis.Rmd/top100-heatmap-1.png" target="_blank">a3635c9</a>
+</td>
+<td>
+sdhutchins
+</td>
+<td>
+2023-07-25
+</td>
+</tr>
 <tr>
 <td>
 <a href="https://github.com/uab-cgds-worthey/mecfs-dge-analysis/blob/ad9ce58ce4495d2e8eebbe4b2e323cf124094cf2/docs/figure/analysis.Rmd/top100-heatmap-1.png" target="_blank">ad9ce58</a>
@@ -1494,6 +1630,17 @@ Date
 <tbody>
 <tr>
 <td>
+<a href="https://github.com/uab-cgds-worthey/mecfs-dge-analysis/blob/a3635c99af4510e4caba43ff8c9cca2ae0cac19b/docs/figure/analysis.Rmd/top 50 genes-1.png" target="_blank">a3635c9</a>
+</td>
+<td>
+sdhutchins
+</td>
+<td>
+2023-07-25
+</td>
+</tr>
+<tr>
+<td>
 <a href="https://github.com/uab-cgds-worthey/mecfs-dge-analysis/blob/ad9ce58ce4495d2e8eebbe4b2e323cf124094cf2/docs/figure/analysis.Rmd/top 50 genes-1.png" target="_blank">ad9ce58</a>
 </td>
 <td>
@@ -1561,6 +1708,17 @@ Date
 <tbody>
 <tr>
 <td>
+<a href="https://github.com/uab-cgds-worthey/mecfs-dge-analysis/blob/a3635c99af4510e4caba43ff8c9cca2ae0cac19b/docs/figure/analysis.Rmd/maplot-1.png" target="_blank">a3635c9</a>
+</td>
+<td>
+sdhutchins
+</td>
+<td>
+2023-07-25
+</td>
+</tr>
+<tr>
+<td>
 <a href="https://github.com/uab-cgds-worthey/mecfs-dge-analysis/blob/ad9ce58ce4495d2e8eebbe4b2e323cf124094cf2/docs/figure/analysis.Rmd/maplot-1.png" target="_blank">ad9ce58</a>
 </td>
 <td>
@@ -1582,7 +1740,7 @@ sdhutchins
 
 gostplot(all_genes_res, capped = FALSE, interactive = TRUE)</code></pre>
 <div class="plotly html-widget html-fill-item-overflow-hidden html-fill-item" id="htmlwidget-d12915f7b9274e30607f" style="width:672px;height:480px;"></div>
-<script type="application/json" data-for="htmlwidget-d12915f7b9274e30607f">{"x":{"data":[{"x":[151.82512674060791,151.60341295669051,152.52901419052046],"y":[2.0238916302274292,1.8174262328821491,1.3024093684435445],"text":["CORUM:324 (48) <br> 39S ribosomal subunit, mitochondrial <br> 9.465e-03","CORUM:178 (44) <br> Respiratory chain complex I (holoenzyme), mitochondrial <br> 1.523e-02","CORUM:929 (34) <br> CEN complex <br> 4.984e-02"],"key":["CORUM:324","CORUM:178","CORUM:929"],"type":"scatter","mode":"markers","marker":{"autocolorscale":false,"color":"rgba(102,170,0,1)","opacity":0.80000000000000004,"size":[8.9416090489350069,8.2430909388255813,3.7795275590551185],"symbol":"circle","line":{"width":1.8897637795275593,"color":"rgba(102,170,0,1)"}},"hoveron":"points","set":"SharedDatae56eaee8","name":"CORUM","legendgroup":"CORUM","showlegend":true,"xaxis":"x","yaxis":"y","hoverinfo":"text","_isNestedKey":false,"frame":null},{"x":[39.392235025830878,39.467551543661941,39.463247742643027,65.146180323035026,39.493374349775443,77.721886900312853,54.272627048739189,54.261867546191894,43.986542613525636,39.482614847228149,39.508437653341659,39.478311046209235,46.254645750495321,43.988694514035096,50.474522649544227,75.406441952135083,39.506285752832198,63.910989430605618],"y":[32.421560664171061,31.845932491604511,31.845932491604511,31.845932491604511,31.748488502575459,22.436201940000345,22.222891533494384,19.964008288872581,17.97067503271575,15.191194095722246,15.191194095722246,14.775257370166347,13.028605080692449,11.09414205961076,7.4719735163632084,2.4592766727523734,2.4501382848685145,2.0836763544097914],"text":["GO:0000244 (1206) <br> spliceosomal tri-snRNP complex assembly <br> 3.788e-33","GO:0000365 (1137) <br> mRNA trans splicing, via spliceosome <br> 1.426e-32","GO:0000353 (1137) <br> formation of quadruple SL/U4/U5/U6 snRNP <br> 1.426e-32","GO:0045291 (1137) <br> mRNA trans splicing, SL addition <br> 1.426e-32","GO:0000387 (1232) <br> spliceosomal snRNP assembly <br> 1.784e-32","GO:0071826 (1626) <br> ribonucleoprotein complex subunit organization <br> 3.663e-23","GO:0022618 (1618) <br> ribonucleoprotein complex assembly <br> 5.986e-23","GO:0022613 (1877) <br> ribonucleoprotein complex biogenesis <br> 1.086e-20","GO:0006396 (3379) <br> RNA processing <br> 1.070e-18","GO:0000377 (1721) <br> RNA splicing, via transesterification reactions with bulged adenosine as nucleophile <br> 6.439e-16","GO:0000398 (1721) <br> mRNA splicing, via spliceosome <br> 6.439e-16","GO:0000375 (1725) <br> RNA splicing, via transesterification reactions <br> 1.678e-15","GO:0008380 (1861) <br> RNA splicing <br> 9.363e-14","GO:0006397 (1910) <br> mRNA processing <br> 8.051e-12","GO:0016071 (2152) <br> mRNA metabolic process <br> 3.373e-08","GO:0065003 (3270) <br> protein-containing complex assembly <br> 3.473e-03","GO:0000395 (204) <br> mRNA 5'-splice site recognition <br> 3.547e-03","GO:0043933 (3456) <br> protein-containing complex organization <br> 8.248e-03"],"key":["GO:0000244","GO:0000365","GO:0000353","GO:0045291","GO:0000387","GO:0071826","GO:0022618","GO:0022613","GO:0006396","GO:0000377","GO:0000398","GO:0000375","GO:0008380","GO:0006397","GO:0016071","GO:0065003","GO:0000395","GO:0043933"],"type":"scatter","mode":"markers","marker":{"autocolorscale":false,"color":"rgba(255,153,0,1)","opacity":0.80000000000000004,"size":[20.385755183088438,20.248108255352225,20.248108255352225,20.248108255352225,20.43530808642932,21.067015507799969,21.05598874268459,21.384924684227101,22.631041579756186,21.193459666815421,21.193459666815421,21.198609762691959,21.366127149813259,21.423131801307083,21.682462658412994,22.563717490084006,15.546252076782668,22.677165354330711],"symbol":"circle","line":{"width":1.8897637795275593,"color":"rgba(255,153,0,1)"}},"hoveron":"points","set":"SharedDatae56eaee8","name":"GO:BP","legendgroup":"GO:BP","showlegend":true,"xaxis":"x","yaxis":"y","hoverinfo":"text","_isNestedKey":false,"frame":null},{"x":[30.428239291385459,34.958947488903867,35.858632062092795,28.98400879231902,33.118683589199236,34.961099844342115,37.055341685760361,29.222920245964886,30.146280728974574],"y":[34.332560824513003,34.051611996614099,33.579098045647264,29.776314007647006,29.292981828873611,29.292981828873611,19.203745189904158,3.3684188137293831,2.1647584465109273],"text":["GO:0030532 (1488) <br> small nuclear ribonucleoprotein complex <br> 4.650e-35","GO:0097525 (1479) <br> spliceosomal snRNP complex <br> 8.879e-35","GO:0120114 (1500) <br> Sm-like protein family complex <br> 2.636e-34","GO:0005688 (1048) <br> U6 snRNP <br> 1.674e-30","GO:0046540 (1172) <br> U4/U6 x U5 tri-snRNP complex <br> 5.094e-30","GO:0097526 (1172) <br> spliceosomal tri-snRNP complex <br> 5.094e-30","GO:1990904 (2794) <br> ribonucleoprotein complex <br> 6.255e-20","GO:0005840 (519) <br> ribosome <br> 4.281e-04","GO:0019814 (169) <br> immunoglobulin complex <br> 6.843e-03"],"key":["GO:0030532","GO:0097525","GO:0120114","GO:0005688","GO:0046540","GO:0097526","GO:1990904","GO:0005840","GO:0019814"],"type":"scatter","mode":"markers","marker":{"autocolorscale":false,"color":"rgba(16,150,24,1)","opacity":0.80000000000000004,"size":[20.867647209958118,20.853924562766032,20.885798586979359,20.05575571800728,20.319085282355143,20.319085282355143,22.237301805432381,18.292029116246532,14.911071001458158],"symbol":"circle","line":{"width":1.8897637795275593,"color":"rgba(16,150,24,1)"}},"hoveron":"points","set":"SharedDatae56eaee8","name":"GO:CC","legendgroup":"GO:CC","showlegend":true,"xaxis":"x","yaxis":"y","hoverinfo":"text","_isNestedKey":false,"frame":null},{"x":[10.623120665711108,8.7745405180081288,2.7575089778713027,2.7424448788795437,10.636032750561187],"y":[31.468491956131221,30.238939549166346,5.7236973942812721,4.1160210877118484,3.3419774128385575],"text":["GO:0030621 (1046) <br> U4 snRNA binding <br> 3.400e-32","GO:0017069 (1219) <br> snRNA binding <br> 5.768e-31","GO:0003735 (451) <br> structural constituent of ribosome <br> 1.889e-06","GO:0003723 (3113) <br> RNA binding <br> 7.656e-05","GO:0030627 (199) <br> pre-mRNA 5'-splice site binding <br> 4.550e-04"],"key":["GO:0030621","GO:0017069","GO:0003735","GO:0003723","GO:0030627"],"type":"scatter","mode":"markers","marker":{"autocolorscale":false,"color":"rgba(220,57,18,1)","opacity":0.80000000000000004,"size":[20.051220568027119,20.410682206224259,17.913198568491161,22.462238508478212,15.46448571130697],"symbol":"circle","line":{"width":1.8897637795275593,"color":"rgba(220,57,18,1)"}},"hoveron":"points","set":"SharedDatae56eaee8","name":"GO:MF","legendgroup":"GO:MF","showlegend":true,"xaxis":"x","yaxis":"y","hoverinfo":"text","_isNestedKey":false,"frame":null},{"x":[164.95571258424411],"y":[2.555849174998746],"text":"HP:0003287 (176) <br> Abnormality of mitochondrial metabolism <br> 2.781e-03","key":["HP:0003287"],"type":"scatter","mode":"markers","marker":{"autocolorscale":false,"color":"rgba(153,0,153,1)","opacity":0.80000000000000004,"size":15.051059504953191,"symbol":"circle","line":{"width":1.8897637795275593,"color":"rgba(153,0,153,1)"}},"hoveron":"points","set":"SharedDatae56eaee8","name":"HP","legendgroup":"HP","showlegend":true,"xaxis":"x","yaxis":"y","hoverinfo":"text","_isSimpleKey":true,"_isNestedKey":false,"frame":null},{"x":[101.5763018678488],"y":[4.0748510861140925],"text":"KEGG:01100 (1532) <br> Metabolic pathways <br> 8.417e-05","key":["KEGG:01100"],"type":"scatter","mode":"markers","marker":{"autocolorscale":false,"color":"rgba(221,68,119,1)","opacity":0.80000000000000004,"size":20.93340978012673,"symbol":"circle","line":{"width":1.8897637795275593,"color":"rgba(221,68,119,1)"}},"hoveron":"points","set":"SharedDatae56eaee8","name":"KEGG","legendgroup":"KEGG","showlegend":true,"xaxis":"x","yaxis":"y","hoverinfo":"text","_isSimpleKey":true,"_isNestedKey":false,"frame":null},{"x":[107.43613166518952],"y":[1.781448856167055],"text":"REAC:R-HSA-1430728 (2072) <br> Metabolism <br> 1.654e-02","key":["REAC:R-HSA-1430728"],"type":"scatter","mode":"markers","marker":{"autocolorscale":false,"color":"rgba(51,102,204,1)","opacity":0.80000000000000004,"size":21.600518066729293,"symbol":"circle","line":{"width":1.8897637795275593,"color":"rgba(51,102,204,1)"}},"hoveron":"points","set":"SharedDatae56eaee8","name":"REAC","legendgroup":"REAC","showlegend":true,"xaxis":"x","yaxis":"y","hoverinfo":"text","_isSimpleKey":true,"_isNestedKey":false,"frame":null},{"x":[199.07784972238571,199.82547869426975],"y":[1.7399371029010355,1.3141317409919822],"text":["WP:WP111 (103) <br> Electron transport chain: OXPHOS system in mitochondria <br> 1.820e-02","WP:WP4803 (183) <br> Ciliopathies <br> 4.851e-02"],"key":["WP:WP111","WP:WP4803"],"type":"scatter","mode":"markers","marker":{"autocolorscale":false,"color":"rgba(0,153,198,1)","opacity":0.80000000000000004,"size":[13.034130954508731,15.183968437715892],"symbol":"circle","line":{"width":1.8897637795275593,"color":"rgba(0,153,198,1)"}},"hoveron":"points","set":"SharedDatae56eaee8","name":"WP","legendgroup":"WP","showlegend":true,"xaxis":"x","yaxis":"y","hoverinfo":"text","_isNestedKey":false,"frame":null},{"x":[2,26.235983263598325],"y":[-1,-1],"text":"","type":"scatter","mode":"lines","line":{"width":11.338582677165356,"color":"rgba(220,57,18,1)","dash":"solid"},"hoveron":"points","showlegend":false,"xaxis":"x","yaxis":"y","hoverinfo":"text","frame":null},{"x":[28.387806335923489,37.087627017334128],"y":[-1,-1],"text":"","type":"scatter","mode":"lines","line":{"width":11.338582677165356,"color":"rgba(16,150,24,1)","dash":"solid"},"hoveron":"points","showlegend":false,"xaxis":"x","yaxis":"y","hoverinfo":"text","frame":null},{"x":[39.239450089659293,99.036461446503282],"y":[-1,-1],"text":"","type":"scatter","mode":"lines","line":{"width":11.338582677165356,"color":"rgba(255,153,0,1)","dash":"solid"},"hoveron":"points","showlegend":false,"xaxis":"x","yaxis":"y","hoverinfo":"text","frame":null},{"x":[101.18828451882845,102.39976090854752],"y":[-1,-1],"text":"","type":"scatter","mode":"lines","line":{"width":11.338582677165356,"color":"rgba(221,68,119,1)","dash":"solid"},"hoveron":"points","showlegend":false,"xaxis":"x","yaxis":"y","hoverinfo":"text","frame":null},{"x":[104.55158398087268,110.16999402271368],"y":[-1,-1],"text":"","type":"scatter","mode":"lines","line":{"width":11.338582677165356,"color":"rgba(51,102,204,1)","dash":"solid"},"hoveron":"points","showlegend":false,"xaxis":"x","yaxis":"y","hoverinfo":"text","frame":null},{"x":[112.32181709503885,137.38410041841004],"y":[-1,-1],"text":"","type":"scatter","mode":"lines","line":{"width":11.338582677165356,"color":"rgba(85,116,166,1)","dash":"solid"},"hoveron":"points","showlegend":false,"xaxis":"x","yaxis":"y","hoverinfo":"text","frame":null},{"x":[139.5359234907352,145.25977286312013],"y":[-1,-1],"text":"","type":"scatter","mode":"lines","line":{"width":11.338582677165356,"color":"rgba(34,170,153,1)","dash":"solid"},"hoveron":"points","showlegend":false,"xaxis":"x","yaxis":"y","hoverinfo":"text","frame":null},{"x":[147.41159593544529,149.2600119545726],"y":[-1,-1],"text":"","type":"scatter","mode":"lines","line":{"width":11.338582677165356,"color":"rgba(102,51,204,1)","dash":"solid"},"hoveron":"points","showlegend":false,"xaxis":"x","yaxis":"y","hoverinfo":"text","frame":null},{"x":[151.41183502689779,157.6887029288703],"y":[-1,-1],"text":"","type":"scatter","mode":"lines","line":{"width":11.338582677165356,"color":"rgba(102,170,0,1)","dash":"solid"},"hoveron":"points","showlegend":false,"xaxis":"x","yaxis":"y","hoverinfo":"text","frame":null},{"x":[159.84052600119546,196.15038852361027],"y":[-1,-1],"text":"","type":"scatter","mode":"lines","line":{"width":11.338582677165356,"color":"rgba(153,0,153,1)","dash":"solid"},"hoveron":"points","showlegend":false,"xaxis":"x","yaxis":"y","hoverinfo":"text","frame":null},{"x":[198.30221159593543,200.00215182307232],"y":[-1,-1],"text":"","type":"scatter","mode":"lines","line":{"width":11.338582677165356,"color":"rgba(0,153,198,1)","dash":"solid"},"hoveron":"points","showlegend":false,"xaxis":"x","yaxis":"y","hoverinfo":"text","frame":null}],"layout":{"margin":{"t":29.283520132835207,"r":6.6417600664176026,"b":55.878166138820198,"l":55.193026151930283},"plot_bgcolor":"rgba(255,255,255,1)","paper_bgcolor":"rgba(255,255,255,1)","font":{"color":"rgba(0,0,0,1)","family":"","size":14.611872146118724},"xaxis":{"domain":[0,1],"automargin":true,"type":"linear","autorange":false,"range":[0,210],"tickmode":"array","ticktext":["GO:MF","GO:CC","GO:BP","KEGG","REAC","TF","MIRNA","HPA","CORUM","HP","WP"],"tickvals":[14.117991631799164,32.737716676628807,69.137955768081284,101.79402271368798,107.36078900179319,124.85295875672443,142.39784817692765,148.33580394500893,154.55026897788406,177.99545726240285,199.15218170950388],"categoryorder":"array","categoryarray":["GO:MF","GO:CC","GO:BP","KEGG","REAC","TF","MIRNA","HPA","CORUM","HP","WP"],"nticks":null,"ticks":"","tickcolor":null,"ticklen":3.6529680365296811,"tickwidth":0,"showticklabels":true,"tickfont":{"color":"rgba(77,77,77,1)","family":"","size":10.62681610626816},"tickangle":-45,"showline":true,"linecolor":"rgba(190,190,190,1)","linewidth":0.13283520132835203,"showgrid":false,"gridcolor":null,"gridwidth":0,"zeroline":false,"anchor":"y","title":"","hoverformat":".2f"},"yaxis":{"domain":[0,1],"automargin":true,"type":"linear","autorange":false,"range":[-1,40],"tickmode":"array","ticktext":["0","10","20","30","40"],"tickvals":[0,10,20,30,40],"categoryorder":"array","categoryarray":["0","10","20","30","40"],"nticks":null,"ticks":"outside","tickcolor":"rgba(190,190,190,1)","ticklen":3.6529680365296811,"tickwidth":0.66417600664176002,"showticklabels":true,"tickfont":{"color":"rgba(77,77,77,1)","family":"","size":11.68949771689498},"tickangle":-0,"showline":true,"linecolor":"rgba(190,190,190,1)","linewidth":0.66417600664176002,"showgrid":false,"gridcolor":null,"gridwidth":0,"zeroline":false,"anchor":"x","title":"","hoverformat":".2f"},"annotations":[{"text":"-log10(p-adj)","x":0,"y":0.5,"showarrow":false,"ax":0,"ay":0,"font":{"color":"rgba(0,0,0,1)","family":"","size":13.283520132835205},"xref":"paper","yref":"paper","textangle":-90,"xanchor":"right","yanchor":"center","annotationType":"axis","xshift":-31.54836031548361},{"text":"query_1","x":0.5,"y":1,"showarrow":false,"ax":0,"ay":0,"font":{"color":"rgba(169,169,169,1)","family":"","size":13.283520132835205},"xref":"paper","yref":"paper","textangle":-0,"xanchor":"center","yanchor":"bottom"}],"shapes":[{"type":"rect","fillcolor":null,"line":{"color":null,"width":0,"linetype":[]},"yref":"paper","xref":"paper","x0":0,"x1":1,"y0":0,"y1":1},{"type":"rect","fillcolor":null,"line":{"color":null,"width":0,"linetype":[]},"yref":"paper","xref":"paper","x0":0,"x1":1,"y0":0,"y1":24.973017849730184,"yanchor":1,"ysizemode":"pixel"}],"showlegend":false,"legend":{"bgcolor":"rgba(255,255,255,1)","bordercolor":"transparent","borderwidth":1.8897637795275593,"font":{"color":"rgba(0,0,0,1)","family":"","size":11.68949771689498}},"hovermode":"closest","barmode":"relative","dragmode":"zoom"},"config":{"doubleClick":"reset","modeBarButtonsToAdd":["hoverclosest","hovercompare"],"showSendToCloud":false},"source":"A","attrs":{"109e87a90c822":{"x":{},"y":{},"text":{},"colour":{},"size":{},"alpha":{},"type":"scatter"},"109e837436f0b":{"x":{},"xend":{},"y":{},"yend":{}},"109e82c2f5785":{"x":{},"xend":{},"y":{},"yend":{}},"109e8581af36c":{"x":{},"xend":{},"y":{},"yend":{}},"109e8516364a4":{"x":{},"xend":{},"y":{},"yend":{}},"109e8546474ba":{"x":{},"xend":{},"y":{},"yend":{}},"109e8f2b8a9f":{"x":{},"xend":{},"y":{},"yend":{}},"109e87399d480":{"x":{},"xend":{},"y":{},"yend":{}},"109e8784e5aca":{"x":{},"xend":{},"y":{},"yend":{}},"109e8602ac17a":{"x":{},"xend":{},"y":{},"yend":{}},"109e8170461e9":{"x":{},"xend":{},"y":{},"yend":{}},"109e820b813cd":{"x":{},"xend":{},"y":{},"yend":{}}},"cur_data":"109e87a90c822","visdat":{"109e87a90c822":["function (y) ","x"],"109e837436f0b":["function (y) ","x"],"109e82c2f5785":["function (y) ","x"],"109e8581af36c":["function (y) ","x"],"109e8516364a4":["function (y) ","x"],"109e8546474ba":["function (y) ","x"],"109e8f2b8a9f":["function (y) ","x"],"109e87399d480":["function (y) ","x"],"109e8784e5aca":["function (y) ","x"],"109e8602ac17a":["function (y) ","x"],"109e8170461e9":["function (y) ","x"],"109e820b813cd":["function (y) ","x"]},"highlight":{"on":"plotly_click","off":"plotly_doubleclick","persistent":false,"dynamic":false,"color":null,"selectize":false,"defaultValues":null,"opacityDim":0.20000000000000001,"selected":{"opacity":1},"debounce":0,"ctGroups":["SharedDatae56eaee8"]},"shinyEvents":["plotly_hover","plotly_click","plotly_selected","plotly_relayout","plotly_brushed","plotly_brushing","plotly_clickannotation","plotly_doubleclick","plotly_deselect","plotly_afterplot","plotly_sunburstclick"],"base_url":"https://plot.ly"},"evals":[],"jsHooks":[]}</script>
+<script type="application/json" data-for="htmlwidget-d12915f7b9274e30607f">{"x":{"data":[{"x":[151.82512674060791,151.60341295669051,152.52901419052046],"y":[2.0238916302274292,1.8174262328821491,1.3024093684435445],"text":["CORUM:324 (48) <br> 39S ribosomal subunit, mitochondrial <br> 9.465e-03","CORUM:178 (44) <br> Respiratory chain complex I (holoenzyme), mitochondrial <br> 1.523e-02","CORUM:929 (34) <br> CEN complex <br> 4.984e-02"],"key":["CORUM:324","CORUM:178","CORUM:929"],"type":"scatter","mode":"markers","marker":{"autocolorscale":false,"color":"rgba(102,170,0,1)","opacity":0.80000000000000004,"size":[8.9416090489350069,8.2430909388255813,3.7795275590551185],"symbol":"circle","line":{"width":1.8897637795275593,"color":"rgba(102,170,0,1)"}},"hoveron":"points","set":"SharedDatae56eaee8","name":"CORUM","legendgroup":"CORUM","showlegend":true,"xaxis":"x","yaxis":"y","hoverinfo":"text","_isNestedKey":false,"frame":null},{"x":[39.392235025830878,39.467551543661941,39.463247742643027,65.146180323035026,39.493374349775443,77.721886900312853,54.272627048739189,54.261867546191894,43.986542613525636,39.482614847228149,39.508437653341659,39.478311046209235,46.254645750495321,43.988694514035096,50.474522649544227,75.406441952135083,39.506285752832198,63.910989430605618],"y":[32.421560664171061,31.845932491604511,31.845932491604511,31.845932491604511,31.748488502575459,22.436201940000345,22.222891533494384,19.964008288872581,17.97067503271575,15.191194095722246,15.191194095722246,14.775257370166347,13.028605080692449,11.09414205961076,7.4719735163632084,2.4592766727523734,2.4501382848685145,2.0836763544097914],"text":["GO:0000244 (1206) <br> spliceosomal tri-snRNP complex assembly <br> 3.788e-33","GO:0000365 (1137) <br> mRNA trans splicing, via spliceosome <br> 1.426e-32","GO:0000353 (1137) <br> formation of quadruple SL/U4/U5/U6 snRNP <br> 1.426e-32","GO:0045291 (1137) <br> mRNA trans splicing, SL addition <br> 1.426e-32","GO:0000387 (1232) <br> spliceosomal snRNP assembly <br> 1.784e-32","GO:0071826 (1626) <br> ribonucleoprotein complex subunit organization <br> 3.663e-23","GO:0022618 (1618) <br> ribonucleoprotein complex assembly <br> 5.986e-23","GO:0022613 (1877) <br> ribonucleoprotein complex biogenesis <br> 1.086e-20","GO:0006396 (3379) <br> RNA processing <br> 1.070e-18","GO:0000377 (1721) <br> RNA splicing, via transesterification reactions with bulged adenosine as nucleophile <br> 6.439e-16","GO:0000398 (1721) <br> mRNA splicing, via spliceosome <br> 6.439e-16","GO:0000375 (1725) <br> RNA splicing, via transesterification reactions <br> 1.678e-15","GO:0008380 (1861) <br> RNA splicing <br> 9.363e-14","GO:0006397 (1910) <br> mRNA processing <br> 8.051e-12","GO:0016071 (2152) <br> mRNA metabolic process <br> 3.373e-08","GO:0065003 (3270) <br> protein-containing complex assembly <br> 3.473e-03","GO:0000395 (204) <br> mRNA 5'-splice site recognition <br> 3.547e-03","GO:0043933 (3456) <br> protein-containing complex organization <br> 8.248e-03"],"key":["GO:0000244","GO:0000365","GO:0000353","GO:0045291","GO:0000387","GO:0071826","GO:0022618","GO:0022613","GO:0006396","GO:0000377","GO:0000398","GO:0000375","GO:0008380","GO:0006397","GO:0016071","GO:0065003","GO:0000395","GO:0043933"],"type":"scatter","mode":"markers","marker":{"autocolorscale":false,"color":"rgba(255,153,0,1)","opacity":0.80000000000000004,"size":[20.385755183088438,20.248108255352225,20.248108255352225,20.248108255352225,20.43530808642932,21.067015507799969,21.05598874268459,21.384924684227101,22.631041579756186,21.193459666815421,21.193459666815421,21.198609762691959,21.366127149813259,21.423131801307083,21.682462658412994,22.563717490084006,15.546252076782668,22.677165354330711],"symbol":"circle","line":{"width":1.8897637795275593,"color":"rgba(255,153,0,1)"}},"hoveron":"points","set":"SharedDatae56eaee8","name":"GO:BP","legendgroup":"GO:BP","showlegend":true,"xaxis":"x","yaxis":"y","hoverinfo":"text","_isNestedKey":false,"frame":null},{"x":[30.428239291385459,34.958947488903867,35.858632062092795,28.98400879231902,33.118683589199236,34.961099844342115,37.055341685760361,29.222920245964886,30.146280728974574],"y":[34.332560824513003,34.051611996614099,33.579098045647264,29.776314007647006,29.292981828873611,29.292981828873611,19.203745189904158,3.3684188137293831,2.1647584465109273],"text":["GO:0030532 (1488) <br> small nuclear ribonucleoprotein complex <br> 4.650e-35","GO:0097525 (1479) <br> spliceosomal snRNP complex <br> 8.879e-35","GO:0120114 (1500) <br> Sm-like protein family complex <br> 2.636e-34","GO:0005688 (1048) <br> U6 snRNP <br> 1.674e-30","GO:0046540 (1172) <br> U4/U6 x U5 tri-snRNP complex <br> 5.094e-30","GO:0097526 (1172) <br> spliceosomal tri-snRNP complex <br> 5.094e-30","GO:1990904 (2794) <br> ribonucleoprotein complex <br> 6.255e-20","GO:0005840 (519) <br> ribosome <br> 4.281e-04","GO:0019814 (169) <br> immunoglobulin complex <br> 6.843e-03"],"key":["GO:0030532","GO:0097525","GO:0120114","GO:0005688","GO:0046540","GO:0097526","GO:1990904","GO:0005840","GO:0019814"],"type":"scatter","mode":"markers","marker":{"autocolorscale":false,"color":"rgba(16,150,24,1)","opacity":0.80000000000000004,"size":[20.867647209958118,20.853924562766032,20.885798586979359,20.05575571800728,20.319085282355143,20.319085282355143,22.237301805432381,18.292029116246532,14.911071001458158],"symbol":"circle","line":{"width":1.8897637795275593,"color":"rgba(16,150,24,1)"}},"hoveron":"points","set":"SharedDatae56eaee8","name":"GO:CC","legendgroup":"GO:CC","showlegend":true,"xaxis":"x","yaxis":"y","hoverinfo":"text","_isNestedKey":false,"frame":null},{"x":[10.623120665711108,8.7745405180081288,2.7575089778713027,2.7424448788795437,10.636032750561187],"y":[31.468491956131221,30.238939549166346,5.7236973942812721,4.1160210877118484,3.3419774128385575],"text":["GO:0030621 (1046) <br> U4 snRNA binding <br> 3.400e-32","GO:0017069 (1219) <br> snRNA binding <br> 5.768e-31","GO:0003735 (451) <br> structural constituent of ribosome <br> 1.889e-06","GO:0003723 (3113) <br> RNA binding <br> 7.656e-05","GO:0030627 (199) <br> pre-mRNA 5'-splice site binding <br> 4.550e-04"],"key":["GO:0030621","GO:0017069","GO:0003735","GO:0003723","GO:0030627"],"type":"scatter","mode":"markers","marker":{"autocolorscale":false,"color":"rgba(220,57,18,1)","opacity":0.80000000000000004,"size":[20.051220568027119,20.410682206224259,17.913198568491161,22.462238508478212,15.46448571130697],"symbol":"circle","line":{"width":1.8897637795275593,"color":"rgba(220,57,18,1)"}},"hoveron":"points","set":"SharedDatae56eaee8","name":"GO:MF","legendgroup":"GO:MF","showlegend":true,"xaxis":"x","yaxis":"y","hoverinfo":"text","_isNestedKey":false,"frame":null},{"x":[164.95571258424411],"y":[2.555849174998746],"text":"HP:0003287 (176) <br> Abnormality of mitochondrial metabolism <br> 2.781e-03","key":["HP:0003287"],"type":"scatter","mode":"markers","marker":{"autocolorscale":false,"color":"rgba(153,0,153,1)","opacity":0.80000000000000004,"size":15.051059504953191,"symbol":"circle","line":{"width":1.8897637795275593,"color":"rgba(153,0,153,1)"}},"hoveron":"points","set":"SharedDatae56eaee8","name":"HP","legendgroup":"HP","showlegend":true,"xaxis":"x","yaxis":"y","hoverinfo":"text","_isSimpleKey":true,"_isNestedKey":false,"frame":null},{"x":[101.5763018678488],"y":[4.0748510861140925],"text":"KEGG:01100 (1532) <br> Metabolic pathways <br> 8.417e-05","key":["KEGG:01100"],"type":"scatter","mode":"markers","marker":{"autocolorscale":false,"color":"rgba(221,68,119,1)","opacity":0.80000000000000004,"size":20.93340978012673,"symbol":"circle","line":{"width":1.8897637795275593,"color":"rgba(221,68,119,1)"}},"hoveron":"points","set":"SharedDatae56eaee8","name":"KEGG","legendgroup":"KEGG","showlegend":true,"xaxis":"x","yaxis":"y","hoverinfo":"text","_isSimpleKey":true,"_isNestedKey":false,"frame":null},{"x":[107.43613166518952],"y":[1.781448856167055],"text":"REAC:R-HSA-1430728 (2072) <br> Metabolism <br> 1.654e-02","key":["REAC:R-HSA-1430728"],"type":"scatter","mode":"markers","marker":{"autocolorscale":false,"color":"rgba(51,102,204,1)","opacity":0.80000000000000004,"size":21.600518066729293,"symbol":"circle","line":{"width":1.8897637795275593,"color":"rgba(51,102,204,1)"}},"hoveron":"points","set":"SharedDatae56eaee8","name":"REAC","legendgroup":"REAC","showlegend":true,"xaxis":"x","yaxis":"y","hoverinfo":"text","_isSimpleKey":true,"_isNestedKey":false,"frame":null},{"x":[199.07784972238571,199.82547869426975],"y":[1.7399371029010355,1.3141317409919822],"text":["WP:WP111 (103) <br> Electron transport chain: OXPHOS system in mitochondria <br> 1.820e-02","WP:WP4803 (183) <br> Ciliopathies <br> 4.851e-02"],"key":["WP:WP111","WP:WP4803"],"type":"scatter","mode":"markers","marker":{"autocolorscale":false,"color":"rgba(0,153,198,1)","opacity":0.80000000000000004,"size":[13.034130954508731,15.183968437715892],"symbol":"circle","line":{"width":1.8897637795275593,"color":"rgba(0,153,198,1)"}},"hoveron":"points","set":"SharedDatae56eaee8","name":"WP","legendgroup":"WP","showlegend":true,"xaxis":"x","yaxis":"y","hoverinfo":"text","_isNestedKey":false,"frame":null},{"x":[2,26.235983263598325],"y":[-1,-1],"text":"","type":"scatter","mode":"lines","line":{"width":11.338582677165356,"color":"rgba(220,57,18,1)","dash":"solid"},"hoveron":"points","showlegend":false,"xaxis":"x","yaxis":"y","hoverinfo":"text","frame":null},{"x":[28.387806335923489,37.087627017334128],"y":[-1,-1],"text":"","type":"scatter","mode":"lines","line":{"width":11.338582677165356,"color":"rgba(16,150,24,1)","dash":"solid"},"hoveron":"points","showlegend":false,"xaxis":"x","yaxis":"y","hoverinfo":"text","frame":null},{"x":[39.239450089659293,99.036461446503282],"y":[-1,-1],"text":"","type":"scatter","mode":"lines","line":{"width":11.338582677165356,"color":"rgba(255,153,0,1)","dash":"solid"},"hoveron":"points","showlegend":false,"xaxis":"x","yaxis":"y","hoverinfo":"text","frame":null},{"x":[101.18828451882845,102.39976090854752],"y":[-1,-1],"text":"","type":"scatter","mode":"lines","line":{"width":11.338582677165356,"color":"rgba(221,68,119,1)","dash":"solid"},"hoveron":"points","showlegend":false,"xaxis":"x","yaxis":"y","hoverinfo":"text","frame":null},{"x":[104.55158398087268,110.16999402271368],"y":[-1,-1],"text":"","type":"scatter","mode":"lines","line":{"width":11.338582677165356,"color":"rgba(51,102,204,1)","dash":"solid"},"hoveron":"points","showlegend":false,"xaxis":"x","yaxis":"y","hoverinfo":"text","frame":null},{"x":[112.32181709503885,137.38410041841004],"y":[-1,-1],"text":"","type":"scatter","mode":"lines","line":{"width":11.338582677165356,"color":"rgba(85,116,166,1)","dash":"solid"},"hoveron":"points","showlegend":false,"xaxis":"x","yaxis":"y","hoverinfo":"text","frame":null},{"x":[139.5359234907352,145.25977286312013],"y":[-1,-1],"text":"","type":"scatter","mode":"lines","line":{"width":11.338582677165356,"color":"rgba(34,170,153,1)","dash":"solid"},"hoveron":"points","showlegend":false,"xaxis":"x","yaxis":"y","hoverinfo":"text","frame":null},{"x":[147.41159593544529,149.2600119545726],"y":[-1,-1],"text":"","type":"scatter","mode":"lines","line":{"width":11.338582677165356,"color":"rgba(102,51,204,1)","dash":"solid"},"hoveron":"points","showlegend":false,"xaxis":"x","yaxis":"y","hoverinfo":"text","frame":null},{"x":[151.41183502689779,157.6887029288703],"y":[-1,-1],"text":"","type":"scatter","mode":"lines","line":{"width":11.338582677165356,"color":"rgba(102,170,0,1)","dash":"solid"},"hoveron":"points","showlegend":false,"xaxis":"x","yaxis":"y","hoverinfo":"text","frame":null},{"x":[159.84052600119546,196.15038852361027],"y":[-1,-1],"text":"","type":"scatter","mode":"lines","line":{"width":11.338582677165356,"color":"rgba(153,0,153,1)","dash":"solid"},"hoveron":"points","showlegend":false,"xaxis":"x","yaxis":"y","hoverinfo":"text","frame":null},{"x":[198.30221159593543,200.00215182307232],"y":[-1,-1],"text":"","type":"scatter","mode":"lines","line":{"width":11.338582677165356,"color":"rgba(0,153,198,1)","dash":"solid"},"hoveron":"points","showlegend":false,"xaxis":"x","yaxis":"y","hoverinfo":"text","frame":null}],"layout":{"margin":{"t":29.283520132835207,"r":6.6417600664176026,"b":55.878166138820198,"l":55.193026151930283},"plot_bgcolor":"rgba(255,255,255,1)","paper_bgcolor":"rgba(255,255,255,1)","font":{"color":"rgba(0,0,0,1)","family":"","size":14.611872146118724},"xaxis":{"domain":[0,1],"automargin":true,"type":"linear","autorange":false,"range":[0,210],"tickmode":"array","ticktext":["GO:MF","GO:CC","GO:BP","KEGG","REAC","TF","MIRNA","HPA","CORUM","HP","WP"],"tickvals":[14.117991631799164,32.737716676628807,69.137955768081284,101.79402271368798,107.36078900179319,124.85295875672443,142.39784817692765,148.33580394500893,154.55026897788406,177.99545726240285,199.15218170950388],"categoryorder":"array","categoryarray":["GO:MF","GO:CC","GO:BP","KEGG","REAC","TF","MIRNA","HPA","CORUM","HP","WP"],"nticks":null,"ticks":"","tickcolor":null,"ticklen":3.6529680365296811,"tickwidth":0,"showticklabels":true,"tickfont":{"color":"rgba(77,77,77,1)","family":"","size":10.62681610626816},"tickangle":-45,"showline":true,"linecolor":"rgba(190,190,190,1)","linewidth":0.13283520132835203,"showgrid":false,"gridcolor":null,"gridwidth":0,"zeroline":false,"anchor":"y","title":"","hoverformat":".2f"},"yaxis":{"domain":[0,1],"automargin":true,"type":"linear","autorange":false,"range":[-1,40],"tickmode":"array","ticktext":["0","10","20","30","40"],"tickvals":[0,10,20,30,40],"categoryorder":"array","categoryarray":["0","10","20","30","40"],"nticks":null,"ticks":"outside","tickcolor":"rgba(190,190,190,1)","ticklen":3.6529680365296811,"tickwidth":0.66417600664176002,"showticklabels":true,"tickfont":{"color":"rgba(77,77,77,1)","family":"","size":11.68949771689498},"tickangle":-0,"showline":true,"linecolor":"rgba(190,190,190,1)","linewidth":0.66417600664176002,"showgrid":false,"gridcolor":null,"gridwidth":0,"zeroline":false,"anchor":"x","title":"","hoverformat":".2f"},"annotations":[{"text":"-log10(p-adj)","x":0,"y":0.5,"showarrow":false,"ax":0,"ay":0,"font":{"color":"rgba(0,0,0,1)","family":"","size":13.283520132835205},"xref":"paper","yref":"paper","textangle":-90,"xanchor":"right","yanchor":"center","annotationType":"axis","xshift":-31.54836031548361},{"text":"query_1","x":0.5,"y":1,"showarrow":false,"ax":0,"ay":0,"font":{"color":"rgba(169,169,169,1)","family":"","size":13.283520132835205},"xref":"paper","yref":"paper","textangle":-0,"xanchor":"center","yanchor":"bottom"}],"shapes":[{"type":"rect","fillcolor":null,"line":{"color":null,"width":0,"linetype":[]},"yref":"paper","xref":"paper","x0":0,"x1":1,"y0":0,"y1":1},{"type":"rect","fillcolor":null,"line":{"color":null,"width":0,"linetype":[]},"yref":"paper","xref":"paper","x0":0,"x1":1,"y0":0,"y1":24.973017849730184,"yanchor":1,"ysizemode":"pixel"}],"showlegend":false,"legend":{"bgcolor":"rgba(255,255,255,1)","bordercolor":"transparent","borderwidth":1.8897637795275593,"font":{"color":"rgba(0,0,0,1)","family":"","size":11.68949771689498}},"hovermode":"closest","barmode":"relative","dragmode":"zoom"},"config":{"doubleClick":"reset","modeBarButtonsToAdd":["hoverclosest","hovercompare"],"showSendToCloud":false},"source":"A","attrs":{"17d7b746f49f9":{"x":{},"y":{},"text":{},"colour":{},"size":{},"alpha":{},"type":"scatter"},"17d7b3661b627":{"x":{},"xend":{},"y":{},"yend":{}},"17d7b48fdd655":{"x":{},"xend":{},"y":{},"yend":{}},"17d7b11028be3":{"x":{},"xend":{},"y":{},"yend":{}},"17d7b3e2decce":{"x":{},"xend":{},"y":{},"yend":{}},"17d7b3915e846":{"x":{},"xend":{},"y":{},"yend":{}},"17d7b4d4468f1":{"x":{},"xend":{},"y":{},"yend":{}},"17d7b4645cdd8":{"x":{},"xend":{},"y":{},"yend":{}},"17d7b10cd43f3":{"x":{},"xend":{},"y":{},"yend":{}},"17d7b14280f23":{"x":{},"xend":{},"y":{},"yend":{}},"17d7b51f9cd2b":{"x":{},"xend":{},"y":{},"yend":{}},"17d7b670cec18":{"x":{},"xend":{},"y":{},"yend":{}}},"cur_data":"17d7b746f49f9","visdat":{"17d7b746f49f9":["function (y) ","x"],"17d7b3661b627":["function (y) ","x"],"17d7b48fdd655":["function (y) ","x"],"17d7b11028be3":["function (y) ","x"],"17d7b3e2decce":["function (y) ","x"],"17d7b3915e846":["function (y) ","x"],"17d7b4d4468f1":["function (y) ","x"],"17d7b4645cdd8":["function (y) ","x"],"17d7b10cd43f3":["function (y) ","x"],"17d7b14280f23":["function (y) ","x"],"17d7b51f9cd2b":["function (y) ","x"],"17d7b670cec18":["function (y) ","x"]},"highlight":{"on":"plotly_click","off":"plotly_doubleclick","persistent":false,"dynamic":false,"color":null,"selectize":false,"defaultValues":null,"opacityDim":0.20000000000000001,"selected":{"opacity":1},"debounce":0,"ctGroups":["SharedDatae56eaee8"]},"shinyEvents":["plotly_hover","plotly_click","plotly_selected","plotly_relayout","plotly_brushed","plotly_brushing","plotly_clickannotation","plotly_doubleclick","plotly_deselect","plotly_afterplot","plotly_sunburstclick"],"base_url":"https://plot.ly"},"evals":[],"jsHooks":[]}</script>
 <pre class="r"><code>publish_gosttable(all_genes_res, use_colors = TRUE, show_columns = c(&quot;source&quot;, &quot;term_name&quot;, &quot;term_size&quot;, &quot;intersection_size&quot;), filename = NULL)</code></pre>
 <p><img src="figure/analysis.Rmd/gost-table-1.png" width="400px" style="display: block; margin: auto;" /></p>
 <p>

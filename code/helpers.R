@@ -15,8 +15,7 @@ check_order <- function(sample_metadata, counts) {
       return(FALSE)
     }
   }
-
-  return("Data matches and is ordered by sample id.")
+  return(sample_metadata)
 }
 
 
