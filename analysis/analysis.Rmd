@@ -278,7 +278,10 @@ gostplot(all_genes_res, capped = FALSE, interactive = TRUE)
 
 Below is a table of expression of the genes identified during our WGS analysis. 
 
-8 of the genes were not included using DESeq2's count filtering methods.
+8 of the genes were not included using DESeq2's count filtering method:
+
+"DPEP1", "RERGL", "TDO2", "CCDC178", "ADRA1D", "AVPR1B", "LRCOL1", "KCNJ18"
+
 ```{r, genes-of-interest-table}
 # Subset gene_info using genes of interest
 subset_gene_info <- gene_info[gene_info$gene_name %in% genes_of_interest, ]
@@ -296,10 +299,9 @@ rownames(filtered_counts) <- subset_gene_info$gene_name[matching_indices]
 
 missing_genes <- setdiff(subset_gene_info$Ensembl_ID, filtered_by_interest$Ensembl_ID)
 
-missing_indices <- match(missing_genes, subset_gene_info$Ensembl_ID)
+corresponding_gene_names <- subset_gene_info$gene_name[subset_gene_info$Ensembl_ID %in% missing_genes]
 
-# Retrieve corresponding gene_name values
-corresponding_gene_names <- subset_gene_info$gene_name[missing_indices]
+missing_gene_counts <- counts[row.names(counts) %in% missing_genes, ]
 
 paged_table(filtered_by_interest, options = list(rows.print = 15))
 
@@ -309,7 +311,7 @@ paged_table(filtered_counts, options = list(rows.print = 15))
 
 Below is a heatmap highlighting the expression of our genes of interest across batch, disease type, and affected status.
 
-```{r, heatmap-genes-interest}
+```{r, heatmap-genes-interest, out.width = "1200px"}
 mat2 = assay(vsd_limma)[filtered_by_interest$Ensembl_ID, ]
 rownames(mat2) <- gene_info$gene_name[match(filtered_by_interest$Ensembl_ID, gene_info$Ensembl_ID)]
 df = as.data.frame(colData(vsd)[,c("Batch", "Affected", "Disease Type")])
