@@ -9,8 +9,6 @@ navbar:
     href: background.html
   - text: Analysis
     href: analysis.html
-  - text: Initial Analysis
-    href: initial-analysis.html
   right:
   - icon: fa-github
     href: https://github.com/uab-cgds-worthey/mecfs-dge-analysis

@@ -59,6 +59,11 @@ for the project which is hosted on Box. This also ensures data is properly order
 ```{r, import data}
 counts <- read_tsv("data/star-salmon/salmon.merged.gene_counts_length_scaled.tsv")
 
+# Import variants of interest
+vars_of_interest <- read_csv("data/RNAseq Variants of Interest List_V2.csv")
+genes_of_interest <- unique(vars_of_interest$Gene)
+genes_of_interest <- genes_of_interest[!is.na(genes_of_interest)]
+
 # Use first column (gene_id) for row names
 counts = data.frame(counts, row.names = 1)
 counts$Ensembl_ID = row.names(counts)
@@ -156,6 +161,7 @@ ggplot(pcaData, aes(PC1, PC2, shape=factor(Batch), color=factor(Affected)))  +
 
 
 This is a heatmap for all genes across samples.
+
 ```{r, all-heatmap, out.height="570px", out.width ="800px"}
 all_genes = order(-rowVars(assay(vsd_limma)))
 mat = assay(vsd_limma)[all_genes, ]
@@ -165,7 +171,8 @@ pheatmap(mat, annotation_col=df, fontsize = 5)
 ```
 
 
-This is a heatmap for 50 genes with the highest variance across samples. 
+This is a heatmap for 50 genes with the highest variance across samples.
+
 ```{r, top50-heatmap, out.height="570px", out.width ="800px"}
 topVarGenes = head(order(-rowVars(assay(vsd_limma))),50)
 mat = assay(vsd_limma)[ topVarGenes, ]
@@ -212,6 +219,7 @@ pheatmap(topgenes_aff_vs_unaff_05, annotation_col=df, fontsize = 5)
 
 
 ```{r, all-genes}
+gb_df <- genes_biomart[, c(1, ncol(genes_biomart))]
 res_aff_vs_unaff_df_genename = res_aff_vs_unaff_df
 res_aff_vs_unaff_df_genename$Ensembl_ID = row.names(res_aff_vs_unaff_df)
 res_aff_vs_unaff_df_genename = merge(x=res_aff_vs_unaff_df_genename, y=gene_info, by.x ="Ensembl_ID", by.y="Ensembl_ID", all.x=T)
@@ -226,16 +234,35 @@ res_aff_vs_unaff_df_genename_05 = res_aff_vs_unaff_df_genename_05[order(res_aff_
 write.csv(res_aff_vs_unaff_df_genename_05, file="output/res_aff_vs_unaff_df_genename_05.csv")
 ```
 
+Below is a table of information about the top genes.
+
+```{r, padj-gene-info}
+library(mygene)
+
+genes <- res_aff_vs_unaff_df_genename_05$gene_name
+data <- queryMany(genes, scopes="symbol", fields=c("entrezgene", "symbol", "name", "summary", species="human"))
+
+paged_table(as.data.frame(data), options = list(rows.print = 15))
+```
+
 ```{r, maplot}
 # Select specific genes to show
 # set top = 0, then specify genes using label.select argument
-ggmaplot(res_aff_vs_unaff_df_genename, main = "Affected vs Unaffected",
+maplot <- ggmaplot(res_aff_vs_unaff_df_genename, main = "Affected vs Unaffected MA Plot",
          fdr = .05, fc = 2, size = 0.4,
          genenames = as.vector(res_aff_vs_unaff_df_genename$gene_name),
          ggtheme = ggplot2::theme_minimal(),
          legend = "top", top = 19, font.label = c("bold", 8), label.rectangle = TRUE,
          font.legend = "bold", font.main = "bold"
 )
+
+maplot
+
+significant_data <- subset(maplot$data, grepl("Up|Down", sig))
+significant_data$sig <- ifelse(grepl("Up", significant_data$sig), "Up", 
+                          ifelse(grepl("Down", significant_data$sig), "Down", significant_data$sig))
+
+paged_table(significant_data, options = list(rows.print = 20))
 ```
 
 
@@ -247,18 +274,44 @@ all_genes_res <- gost(query = genes_biomart$ensembl_gene_id, organism = "hsapien
 gostplot(all_genes_res, capped = FALSE, interactive = TRUE)
 ```
 
-```{r, gost-table, out.width="400px"}
-publish_gosttable(all_genes_res, use_colors = TRUE, show_columns = c("source", "term_name", "term_size", "intersection_size"), filename = NULL)
-```
+## Expression of Candidate Genes
 
-## Genes of Interest
+Below is a table of expression of the genes identified during our WGS analysis. 
 
+8 of the genes were not included using DESeq2's count filtering methods.
 ```{r, genes-of-interest-table}
-genes_of_interest <- c("ACAD9/CFAP92", "ACADM", "ADORA2A", "ADRA1D", "ANKZF1", "AVPR1B", "CARMIL2", "CCDC178", "CENPF", "COQ2", "CR2", "DCTPP1", "DNASE1L3", "DPEP1", "EN03", "FCRL3", "FASTKD1", "GCKR", "GIMAP2", "HAGHL", "HSD11B1", "IRF2BP2", "KCNJ18", "LRCOL1", "LRBA, MAB21L2", "MFN1", "MRPS18B", "NLRP12", "P2RX7", "PGP", "PIEZO1", "PLCG2", "RERGL", "RPS6KC1", "SCN4A", "SIAE", "SLC11A2", "SLC12A3", "SLC4A1", "SLC6A12", "SLC9A9", "TDO2", "THEMIS", "TF", "TRAFD1", "UBASH3B", "WASHC5")
+# Subset gene_info using genes of interest
+subset_gene_info <- gene_info[gene_info$gene_name %in% genes_of_interest, ]
 
-genes_interest_mart <- retrieve_gene_info(values = genes_of_interest, filters = "hgnc_symbol")
+filtered_by_interest <- filter(res_aff_vs_unaff_df_genename, Ensembl_ID %in% subset_gene_info$Ensembl_ID)
 
-filtered_by_interest <- filter(res_aff_vs_unaff_df_genename, Ensembl_ID %in% genes_interest_mart$ensembl_gene_id_version)
+# Filtering the dataframe by row names
+filtered_counts <- counts[row.names(counts) %in% subset_gene_info$Ensembl_ID, ]
+
+# Match and update row names
+matching_indices <- match(rownames(filtered_counts), subset_gene_info$Ensembl_ID)
+
+# Update row names based on matching_column values from metadata
+rownames(filtered_counts) <- subset_gene_info$gene_name[matching_indices]
+
+missing_genes <- setdiff(subset_gene_info$Ensembl_ID, filtered_by_interest$Ensembl_ID)
+
+missing_indices <- match(missing_genes, subset_gene_info$Ensembl_ID)
+
+# Retrieve corresponding gene_name values
+corresponding_gene_names <- subset_gene_info$gene_name[missing_indices]
 
 paged_table(filtered_by_interest, options = list(rows.print = 15))
+
+paged_table(filtered_counts, options = list(rows.print = 15))
+```
+
+
+Below is a heatmap highlighting the expression of our genes of interest across batch, disease type, and affected status.
+
+```{r, heatmap-genes-interest}
+mat2 = assay(vsd_limma)[filtered_by_interest$Ensembl_ID, ]
+rownames(mat2) <- gene_info$gene_name[match(filtered_by_interest$Ensembl_ID, gene_info$Ensembl_ID)]
+df = as.data.frame(colData(vsd)[,c("Batch", "Affected", "Disease Type")])
+pheatmap(mat2, annotation_col=df, fontsize = 5)
 ```
