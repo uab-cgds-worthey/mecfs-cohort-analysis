@@ -283,7 +283,7 @@ res <- gost(query = significant_data$name, organism = "hsapiens", significant = 
 gostplot(res, capped = FALSE, interactive = TRUE)
 ```
 
-```{r, gosttable, out.width = "50%"}
+```{r, gosttable, out.height = "50%"}
 publish_gosttable(res,
   use_colors = TRUE,
   show_columns = c("source", "term_name", "term_size", "intersection_size"),
