@@ -16,4 +16,3 @@ file_copy(path(analysis_dir, "star_salmon", counts_file), path("data", "star-sal
 
 # Create subdirectories in workflowr output folder
 dir_create(path = "output/batch-correction-limma/plot-counts", recurse = TRUE)
-
