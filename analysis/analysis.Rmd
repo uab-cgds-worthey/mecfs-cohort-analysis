@@ -131,33 +131,33 @@ assay(vsd_limma) <- counts_vst_limma
 ### Sample distances heatmap
 
 ```{r, sample-dist-heatmap}
-sampleDists <- dist(t(assay(vsd)))
-sampleDistMatrix <- as.matrix(sampleDists)
-rownames(sampleDistMatrix) <- paste(vsd_limma$Batch, vsd_limma$Family, sep = " | ")
-colnames(sampleDistMatrix) <- paste(vsd_limma$RNA_Samples_id, vsd_limma$Family, sep = " | ")
+sample_dists <- dist(t(assay(vsd)))
+sample_dist_matrix <- as.matrix(sample_dists)
+rownames(sample_dist_matrix) <- paste(vsd_limma$Batch, vsd_limma$Family, sep = " | ")
+colnames(sample_dist_matrix) <- paste(vsd_limma$RNA_Samples_id, vsd_limma$Family, sep = " | ")
 colors <- colorRampPalette(rev(brewer.pal(9, "Blues")))(255)
 
-pheatmap(sampleDistMatrix, clustering_distance_rows = sampleDists, clustering_distance_cols = sampleDists, col = colors)
+pheatmap(sample_dist_matrix, clustering_distance_rows = sampleDists, clustering_distance_cols = sampleDists, col = colors)
 ```
 
 
 ### Principal Components Analysis
 
 ```{r, principal-components-analysis}
-pcaData <- plotPCA(vsd, intgroup = c("Batch", "Family", "Affected"), returnData = TRUE)
-percentVar <- round(100 * attr(pcaData, "percentVar"))
+pca_data <- plotPCA(vsd, intgroup = c("Batch", "Family", "Affected"), returnData = TRUE)
+percent_var <- round(100 * attr(pca_data, "percentVar"))
 
-ggplot(pcaData, aes(PC1, PC2, shape = factor(Batch), fill = factor(Affected), color = factor(Family))) +
+ggplot(pca_data, aes(PC1, PC2, shape = factor(Batch), fill = factor(Affected), color = factor(Family))) +
   geom_point(size = 5) +
   geom_text(aes(label = name),
-    data = subset(pcaData, PC2 < -20),
+    data = subset(pca_data, PC2 < -20),
     vjust = -1, hjust = 0.5, size = 3
   ) +
-  xlab(paste0("PC1: ", percentVar[1], "% variance")) +
-  ylab(paste0("PC2: ", percentVar[2], "% variance")) +
+  xlab(paste0("PC1: ", percent_var[1], "% variance")) +
+  ylab(paste0("PC2: ", percent_var[2], "% variance")) +
   coord_fixed()
 
-ggplot(pcaData, aes(PC1, PC2, shape = factor(Batch), color = factor(Affected))) +
+ggplot(pca_data, aes(PC1, PC2, shape = factor(Batch), color = factor(Affected))) +
   geom_point(size = 5) +
   xlab(paste0("PC1: ", percentVar[1], "% variance")) +
   ylab(paste0("PC2: ", percentVar[2], "% variance")) +
@@ -181,8 +181,8 @@ pheatmap(mat, annotation_col = df, fontsize = 5)
 This is a heatmap for 50 genes with the highest variance across samples.
 
 ```{r, top50-heatmap, out.height="570px", out.width ="800px"}
-topVarGenes <- head(order(-rowVars(assay(vsd_limma))), 50)
-mat <- assay(vsd_limma)[topVarGenes, ]
+top_var_genes <- head(order(-rowVars(assay(vsd_limma))), 50)
+mat <- assay(vsd_limma)[top_var_genes, ]
 mat <- mat - rowMeans(mat)
 df <- as.data.frame(colData(vsd)[, c("Batch", "Affected", "Disease Type")])
 pheatmap(mat, annotation_col = df, fontsize = 5)
@@ -190,11 +190,11 @@ pheatmap(mat, annotation_col = df, fontsize = 5)
 
 This is a heatmap of the top 100 genes with the highest variance across samples. 
 ```{r, top100-heatmap, out.width = "1200px"}
-topVarGenes <- head(order(-rowVars(assay(vsd_limma))), 100)
-mat <- assay(vsd_limma)[topVarGenes, ]
-mat <- mat - rowMeans(mat)
-df <- as.data.frame(colData(vsd)[, c("Batch", "Family", "Affected")])
-pheatmap(mat, annotation_col = df, fontsize = 6)
+top_var_genes_100 <- head(order(-rowVars(assay(vsd_limma))), 100)
+mat_100 <- assay(vsd_limma)[top_var_genes_100, ]
+mat_100 <- mat_100 - rowMeans(mat_100)
+df_100 <- as.data.frame(colData(vsd)[, c("Batch", "Family", "Affected")])
+pheatmap(mat_100, annotation_col = df_100, fontsize = 6)
 ```
 
 ### Comparison/Contrast of Affected_Yes_vs_No 
@@ -229,7 +229,7 @@ pheatmap(topgenes_aff_vs_unaff_05, annotation_col = df, fontsize = 5)
 gb_df <- genes_biomart[, c(1, ncol(genes_biomart))]
 res_aff_vs_unaff_df_genename <- res_aff_vs_unaff_df
 res_aff_vs_unaff_df_genename$Ensembl_ID <- row.names(res_aff_vs_unaff_df)
-res_aff_vs_unaff_df_genename <- merge(x = res_aff_vs_unaff_df_genename, y = gene_info, by.x = "Ensembl_ID", by.y = "Ensembl_ID", all.x = T)
+res_aff_vs_unaff_df_genename <- merge(x = res_aff_vs_unaff_df_genename, y = gene_info, by.x = "Ensembl_ID", by.y = "Ensembl_ID", all.x = TRUE)
 res_aff_vs_unaff_df_genename <- res_aff_vs_unaff_df_genename[, c(dim(res_aff_vs_unaff_df_genename)[2], 1:dim(res_aff_vs_unaff_df_genename)[2] - 1)]
 res_aff_vs_unaff_df_genename <- res_aff_vs_unaff_df_genename[order(res_aff_vs_unaff_df_genename[, "padj"]), ]
 write.csv(res_aff_vs_unaff_df_genename, file = "output/res_aff_vs_unaff_genename.csv")

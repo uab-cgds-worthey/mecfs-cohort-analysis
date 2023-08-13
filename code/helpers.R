@@ -1,11 +1,11 @@
 library(biomaRt)
 
-check_order <- function(sample_metadata, counts) {
+check_order <- function(sample_metadata, counts, arrange_by = "RNA_Samples_id") {
   # Check if data is ordered properly
   if (!all(rownames(sample_metadata) %in% colnames(counts)) ||
     !all(rownames(sample_metadata) == colnames(counts))) {
     # Order sample_metadata
-    sample_metadata <- arrange(sample_metadata, RNA_Samples_id)
+    sample_metadata <- arrange(sample_metadata, arrange_by)
 
     # Check again after ordering
     if (!all(rownames(sample_metadata) %in% colnames(counts)) ||
