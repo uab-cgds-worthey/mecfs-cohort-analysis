@@ -8,7 +8,13 @@ navbar:
   - text: Background
     href: background.html
   - text: Analysis
-    href: analysis.html
+    menu:
+    - text: By Condition
+      href: condition-analysis.html
+    - text: By Tier
+      href: tier-analysis.html
+    - text: By Batch
+      href: batch-analysis.html
   right:
   - icon: fa-github
     href: https://github.com/uab-cgds-worthey/mecfs-dge-analysis

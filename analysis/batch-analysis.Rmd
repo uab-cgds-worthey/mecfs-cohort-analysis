@@ -1,0 +1,135 @@
+---
+title: "Differential Gene Expression (DGE) Analysis by Batch"
+output:
+  workflowr::wflow_html:
+    toc: true
+    toc_depth: 3
+    toc_float: true
+    code_folding: hide
+editor_options:
+  chunk_output_type: console
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE, warning = FALSE, message = FALSE)
+```
+
+# Differential Gene Expression Analysis by Batch
+
+All libraries from the prior analysis should be loaded.
+
+```{r, load libraries}
+library(tidyverse) # Available via CRAN
+library(DESeq2) # Available via Bioconductor
+library(RColorBrewer) # Available via CRAN
+library(pheatmap) # Available via CRAN
+library(genefilter) # Available via Bioconductor
+library(limma) # Available via Bioconductor
+library(gprofiler2) # Available via CRAN
+library(biomaRt) # Available via Bioconductor
+library(plotly) # Available via CRAN
+library(ggpubr) # Available via CRAN
+library(rmarkdown) # Available via CRAN
+```
+
+```{r, include=FALSE}
+source("code/helpers.R", local = knitr::knit_global())
+# or sys.source("your-script.R", envir = knitr::knit_global())
+```
+
+## Data Import
+
+We will be importing counts data from the star-salmon pipeline and our metadata 
+for the project which is hosted on Box. This also ensures data is properly ordered by sample id.
+
+```{r, import data}
+counts <- read_tsv("data/star-salmon/salmon.merged.gene_counts_length_scaled.tsv")
+
+# Import variants of interest
+vars_of_interest <- read_csv("data/RNAseq Variants of Interest List_V2.csv")
+genes_of_interest <- unique(vars_of_interest$Gene)
+genes_of_interest <- genes_of_interest[!is.na(genes_of_interest)]
+
+# Use first column (gene_id) for row names
+counts <- data.frame(counts, row.names = 1)
+counts$Ensembl_ID <- row.names(counts)
+drop <- c("Ensembl_ID", "gene_name")
+gene_info <- counts[, drop]
+counts <- counts[, !(names(counts) %in% drop)] # remove both columns
+
+# Import metadata
+sample_metadata <- read_csv("data/MECFS_RNAseq_metadata_2023_08_17.csv")
+row.names(sample_metadata) <- sample_metadata$RNA_Samples_id
+
+# Check that data is ordered properly
+sample_metadata <- check_order(sample_metadata = sample_metadata, counts = counts)
+
+genes_biomart <- retrieve_gene_info(values = gene_info$Ensembl_ID, filters = "ensembl_gene_id_version")
+```
+
+## DESeq2 Analysis
+
+```{r, start analysis}
+sample_metadata$Family <- factor(sample_metadata$Family)
+sample_metadata$Affected <- factor(sample_metadata$Affected)
+sample_metadata$Batch <- factor(sample_metadata$Batch)
+sample_metadata$Gender <- factor(sample_metadata$Gender)
+sample_metadata$Tier <- factor(sample_metadata$Tier)
+sample_metadata$Sex <- factor(sample_metadata$Sex)
+
+# Account for Family later but batch is accounted for
+# Account for another factor seems to be an issue.
+dds_batch <- DESeqDataSetFromMatrix(countData = round(counts), colData = sample_metadata, design = ~ Batch)
+
+# Pre-filtering: Keep only rows that have at least 10 reads total
+keep <- rowSums(counts(dds_batch)) >= 10
+dds_batch <- dds_batch[keep, ]
+
+# Run DESeq function
+dds_batch <- DESeq(dds_batch)
+head(counts(dds_batch, normalized = TRUE))
+resultsNames(dds_batch)
+
+# Normalize gene counts for differences in seq. depth/global differences
+counts_norm_dds_batch <- counts(dds_batch, normalized = TRUE)
+```
+
+### Data transformation and visualization
+
+Perform count data transformation by variance stabilizing transformation (vst) on normalized counts.
+
+```{r, vsd}
+vsd_batch <- vst(dds_batch, blind = FALSE)
+```
+
+### Batch correction with limma
+
+```{r, limma}
+counts_vsd_batch <- assay(vsd_batch)
+write.csv(counts_vsd_batch, file = "output/counts_vst2.csv")
+mm <- model.matrix(~Batch, colData(vsd_batch))
+
+counts_vsd_batch_limma <- limma::removeBatchEffect(counts_vsd_batch, batch = vsd_batch$Batch, design = mm)
+
+write.csv(counts_vsd_batch_limma, file = "output/counts_vst_limma.csv")
+
+vsd_batch_limma <- vsd_batch
+assay(vsd_batch_limma) <- counts_vsd_batch_limma
+```
+
+### Comparison/Contrast of Batches
+
+```{r}
+res_batch <- results(dds_batch, contrast = c("Batch", "A", "B"))
+res_batch <- res_batch[order(res_batch$padj), ]
+summary(res_batch)
+write.csv(res_batch, file = "output/res_batch.csv")
+res_batch_df <- as.data.frame(res_batch)
+res_batch_df_05 <- subset(res_batch_df, padj < 0.05)
+```
+
+### Save data
+
+```{r, save-data}
+save.image(file = "output/batch-analysis.RData")
+```
