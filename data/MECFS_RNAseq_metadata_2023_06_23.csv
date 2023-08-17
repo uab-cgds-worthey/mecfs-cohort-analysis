@@ -1,4 +1,4 @@
-﻿RNA_Samples_id,DNA_Samples id,Family,Gender,Relation,Affected,Study_id,Study_group,Vantage_id_DNA,Vantage_id_RNA,Seq,Batch,Replicate,RIN,RIN Analysis Error,Disease Type,Disease Gene
+﻿RNA_Samples_id,DNA_Samples id,Family,Gender,Relation,Affected,Study_id,Study_group,Vantage_id_DNA,Vantage_id_RNA,Seq,Batch,Replicate,RIN,RIN Analysis Error,Disease Group,Disease Gene
 LW001995,LW000504,8,F,Proband,Yes,DDHA-032,MECFS,8288-EW-9,8289-EW-09,50M,B2,,,,Cryohydrocytosis,SLC4A1
 LW001982,LW000491,9,F,Proband,Yes,DDHA-034,MECFS,8288-EW-2,8289-EW-02,50M,B2,,,,Gitelman Syndrome,
 LW001996,LW000505,9,F,Proband,Yes,DDHA-035,MECFS,8288-EW-10,8289-EW-10,50M,B2,,,,Gitelman Syndrome,
