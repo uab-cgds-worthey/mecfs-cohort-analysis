@@ -42,3 +42,11 @@ retrieve_gene_info <- function(values, filters) {
 
   return(gene_info)
 }
+
+
+process_and_save_results <- function(data_df, output_file) {
+  sorted_data <- data_df[order(data_df$padj), ]
+  write.csv(sorted_data, file = output_file)
+  sorted_data_df <- as.data.frame(sorted_data)
+  return(sorted_data_df)
+}
