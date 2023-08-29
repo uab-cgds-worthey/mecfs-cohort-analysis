@@ -88,6 +88,8 @@ sample_metadata$Family <- factor(sample_metadata$Family)
 sample_metadata$Affected <- factor(sample_metadata$Affected)
 sample_metadata$Batch <- factor(sample_metadata$Batch)
 sample_metadata$Sex <- factor(sample_metadata$Sex)
+sample_metadata$Ancestry <- factor(sample_metadata$Ancestry)
+sample_metadata$Disease <- factor(sample_metadata$Disease)
 
 # Account for Family later but batch is accounted for
 # Account for another factor seems to be an issue.
@@ -166,7 +168,7 @@ pheatmap(sample_dist_matrix, clustering_distance_rows = sample_dists, clustering
 Our below PCA shows that there does not seem to be a batch-related effect occurring after using limma. However, we can see that our 3 male samples are grouping. Given this knowledge, removing them from downstream analyses is the best option.
 
 ```{r, principal-components-analysis-all}
-pca_data <- plotPCA(vsd_limma, intgroup = c("Batch", "Sex", "Affected"), returnData = TRUE)
+pca_data <- plotPCA(vsd_limma, intgroup = c("Batch", "Affected", "Sex"), returnData = TRUE)
 percent_var <- round(100 * attr(pca_data, "percentVar"))
 
 ggplot(pca_data, aes(PC1, PC2)) +
@@ -200,6 +202,24 @@ ggplot(pca_data_female, aes(PC1, PC2)) +
   coord_fixed()
 ```
 
+```{r, principal-components-analysis-ancestry}
+pca_data <- plotPCA(vsd_limma_female, intgroup = c("Batch", "Affected", "Ancestry"), returnData = TRUE)
+percent_var <- round(100 * attr(pca_data, "percentVar"))
+
+ggplot(pca_data, aes(PC1, PC2)) +
+  geom_point(aes(colour = Affected, fill = Ancestry, shape = Batch), size = 4) +
+    scale_shape_manual(values = c(21, 22, 23) )+
+  scale_fill_manual(values = c("greenyellow","khaki1"))+
+  scale_color_manual(values=c("blue","red"))+
+  geom_text(aes(label = name),
+    data = subset(pca_data, Ancestry == "Black" ),
+    vjust = -1, hjust = 0.5, size = 2.5
+  ) +
+  xlab(paste0("PC1: ", percent_var[1], "% variance")) +
+  ylab(paste0("PC2: ", percent_var[2], "% variance")) +
+  coord_fixed()
+```
+
 ### Heatmap of all genes, top 50  & top 100 genes
 
 
@@ -207,19 +227,35 @@ This is a heatmap for all genes across samples.
 
 ```{r, all-heatmap, out.height="570px", out.width ="800px"}
 # Specify annotation colors by columns
+# Use RColorBrewer::brewer.pal(n=10, name="Set1")
+disease_colors <- c(
+  "Cryohydrocytosis" = "#8DD3C7",
+  "Gitelman Syndrome" = "#FFFFB3",
+  "Gitelman Syndrome & Thyrotoxic Periodic Paralysis" = "#BEBADA",
+  "Glycogen Storage Disease" = "#FB8072",
+  "Immunodeficiency/Autoinflammatory Diseases" = "#80B1D3",
+  "Immunodeficiency/Autoinflammatory Diseases & Mitochondrial Disorder" = "#FDB462",
+  "Mitochondrial Disorder" = "#B3DE69",
+  "N/A" = "#FCCDE5",
+  "Neurological/Neuromuscular Disorders" = "#D9D9D9",
+  "Stromme syndrome" = "#BC80BD",
+  "Thyrotoxic Periodic Paralysis" = "#CCEBC5",
+  "Unknown" = "#FFED6F"
+)
+
+
 # Specify colors
 ann_colors = list(
-    Batch = c("white", "firebrick"),
-    Affected = c(Yes = "red", No = "navy"),
-    Disease.Group = c(Path1 = "#7570B3", Path2 = "#E7298A", Path3 = "#66A61E",
-                      )
+    Batch = c(B1 = "purple", B2 = "firebrick", B3 ="yellow"),
+    Affected = c(Yes = "green", No = "navy"),
+    Disease = disease_colors
 )
 
 all_genes <- order(-rowVars(assay(vsd_limma_female)))
 mat <- assay(vsd_limma)[all_genes, ]
 mat <- mat - rowMeans(mat)
 df <- as.data.frame(colData(vsd)[, c("Batch", "Affected", "Disease.Group")])
-pheatmap(mat, annotation_col = df, annotation_colors = ann_colors, fontsize = 5)
+#pheatmap(mat, annotation_col = df, annotation_colors = ann_colors, fontsize = 5)
 ```
 
 
@@ -229,8 +265,20 @@ This is a heatmap for 50 genes with the highest variance across samples.
 top_var_genes <- head(order(-rowVars(assay(vsd_limma_female))), 50)
 mat <- assay(vsd_limma_female)[top_var_genes, ]
 mat <- mat - rowMeans(mat)
-df <- as.data.frame(colData(vsd_limma_female)[, c("Batch", "Affected", "Disease.Group")])
-pheatmap(mat, annotation_col = df, fontsize = 5)
+df <- as.data.frame(colData(vsd_limma_female)[, c("Batch", "Affected", "Disease")])
+
+ensembl_to_gene <- setNames(gene_info$gene_name, gene_info$Ensembl_ID)
+
+# Get the current row names of the matrix 'mat'
+current_ensembl_ids <- rownames(mat)
+
+# Find the corresponding gene names for the Ensembl IDs
+new_row_names <- ensembl_to_gene[current_ensembl_ids]
+
+# Set the new row names for the matrix 'mat'
+rownames(mat) <- new_row_names
+
+pheatmap(mat, annotation_col = df, annotation_colors = ann_colors, fontsize = 5)
 ```
 
 This is a heatmap of the top 100 genes with the highest variance across samples. 
@@ -238,8 +286,20 @@ This is a heatmap of the top 100 genes with the highest variance across samples.
 top_var_genes_100 <- head(order(-rowVars(assay(vsd_limma_female))), 100)
 mat_100 <- assay(vsd_limma_female)[top_var_genes_100, ]
 mat_100 <- mat_100 - rowMeans(mat_100)
-df_100 <- as.data.frame(colData(vsd_limma_female)[, c("Batch", "Affected", "Disease.Group")])
-pheatmap(mat_100, annotation_col = df_100, fontsize = 6)
+df_100 <- as.data.frame(colData(vsd_limma_female)[, c("Batch", "Affected", "Disease")])
+
+ensembl_to_gene <- setNames(gene_info$gene_name, gene_info$Ensembl_ID)
+
+# Get the current row names of the matrix 'mat'
+current_ensembl_ids <- rownames(mat_100)
+
+# Find the corresponding gene names for the Ensembl IDs
+new_row_names <- ensembl_to_gene[current_ensembl_ids]
+
+# Set the new row names for the matrix 'mat'
+rownames(mat_100) <- new_row_names
+
+pheatmap(mat_100, annotation_col = df_100, annotation_colors = ann_colors, fontsize = 6)
 ```
 
 ### Comparison/Contrast of Affected_Yes_vs_No 
@@ -251,26 +311,39 @@ res_aff_vs_unaff_df <- process_and_save_results(res_aff_vs_unaff,
 res_aff_vs_unaff_df_05 <- subset(res_aff_vs_unaff_df, padj < 0.05)
 
 summary(res_aff_vs_unaff)
+
+res_aff_vs_unaff_m <- results(dds, contrast = c("Affected", "Yes", "No"))
+res_aff_vs_unaff_df_m <- process_and_save_results(res_aff_vs_unaff_m, 
+                                                "output/res_aff_vs_unaff_m.csv")
+res_aff_vs_unaff_df_05_m <- subset(res_aff_vs_unaff_df_m, padj < 0.05)
+
+summary(res_aff_vs_unaff_m)
 ```
 
 ```{r, top 50 genes, out.height="570px", out.width ="800px"}
 topgenes_byensemblid <- head(rownames(res_aff_vs_unaff_df), 50)
-topgenes_aff_vs_unaff_05 <- assay(vsd_limma)[topgenes_byensemblid, ]
+topgenes_aff_vs_unaff_05 <- assay(vsd_limma_female)[topgenes_byensemblid, ]
 topgenes_aff_vs_unaff_05 <- topgenes_aff_vs_unaff_05 - rowMeans(topgenes_aff_vs_unaff_05)
 
-# Convert ensemblids
-ensemblids <- topgenes_byensemblid
-ensemblids
-rownames(topgenes_aff_vs_unaff_05) <- gene_info$gene_name[match(ensemblids, gene_info$Ensembl_ID)]
+ensembl_to_gene <- setNames(gene_info$gene_name, gene_info$Ensembl_ID)
+
+# Get the current row names of the matrix 'mat'
+current_ensembl_ids <- rownames(topgenes_aff_vs_unaff_05)
+
+# Find the corresponding gene names for the Ensembl IDs
+new_row_names <- ensembl_to_gene[current_ensembl_ids]
+
+# Set the new row names for the matrix 'mat'
+rownames(topgenes_aff_vs_unaff_05) <- new_row_names
 
 topgenes_aff_vs_unaff_05 <- topgenes_aff_vs_unaff_05[order(row.names(topgenes_aff_vs_unaff_05)), ]
 
-df <- as.data.frame(colData(vsd_limma)[, c("Batch", "Affected", "Disease.Group")])
-pheatmap(topgenes_aff_vs_unaff_05, annotation_col = df, fontsize = 5)
+df <- as.data.frame(colData(vsd_limma_female)[, c("Batch", "Affected", "Disease")])
+pheatmap(topgenes_aff_vs_unaff_05, annotation_col = df, annotation_colors = ann_colors, fontsize = 5)
 ```
 
 
-```{r, all-genes}
+```{r, all-genes-female-only}
 gb_df <- genes_biomart[, c(1, ncol(genes_biomart))]
 res_aff_vs_unaff_df_genename <- res_aff_vs_unaff_df
 res_aff_vs_unaff_df_genename$Ensembl_ID <- row.names(res_aff_vs_unaff_df)
@@ -292,31 +365,36 @@ Below is a table of information about the top genes.
 library(mygene)
 
 genes <- res_aff_vs_unaff_df_genename_05$gene_name
-data <- queryMany(genes, scopes = "symbol", fields = c("entrezgene", "symbol", "name", "summary", species = "human"))
+my_gene_data <- queryMany(genes, scopes = "symbol", fields = c("symbol", "name", "summary", species = "human"))
 
-paged_table(as.data.frame(data), options = list(rows.print = 15))
+paged_table(my_gene_data, options = list(rows.print = 15))
 ```
 
 ```{r, maplot}
+filtered_gene_names <- res_aff_vs_unaff_df_genename$gene_name[!grepl("^ENS", res_aff_vs_unaff_df_genename$gene_name)]
 # Select specific genes to show
 # set top = 0, then specify genes using label.select argument
 maplot <- ggmaplot(res_aff_vs_unaff_df,
   main = "Affected vs Unaffected MA Plot",
-  fdr = .05, fc = 2, size = 0.4,
+  fdr = .1, fc = 1, size = 0.4, # Same used for others.
   genenames = as.vector(res_aff_vs_unaff_df_genename$gene_name),
   ggtheme = ggplot2::theme_minimal(),
-  legend = "top", top = 30, font.label = c("bold", 5), label.rectangle = TRUE,
+  legend = "top", top = 20,
+  label.select = c("KCNQ5"),
+  font.label = c("bold", 5), label.rectangle = TRUE,
   font.legend = "bold", font.main = "bold"
 )
 
 maplot
 
 significant_data <- subset(maplot$data, grepl("Up|Down", sig))
-significant_data$sig <- ifelse(grepl("Up", significant_data$sig), "Up",
+significant_data <- ifelse(grepl("Up", significant_data$sig), "Up",
   ifelse(grepl("Down", significant_data$sig), "Down", significant_data$sig)
 )
 
-paged_table(significant_data, options = list(rows.print = 20))
+paged_table(as.data.frame(significant_data), options = list(rows.print = 20))
+# Save significant genes
+write.csv(significant_data, file = "output/res_aff_vs_unaff_significant_females_only.csv", row.names = FALSE)
 ```
 
 ## Expression of Candidate Genes
@@ -357,7 +435,7 @@ paged_table(filtered_counts, options = list(rows.print = 15))
 Below is a heatmap highlighting the expression of our genes of interest across batch, disease group, and affected status.
 
 ```{r, heatmap-genes-interest, out.width = "1200px"}
-mat2 <- assay(vsd_limma)[filtered_by_interest$Ensembl_ID, ]
+mat2 <- assay(vsd_limma_female)[filtered_by_interest$Ensembl_ID, ]
 rownames(mat2) <- gene_info$gene_name[match(filtered_by_interest$Ensembl_ID, gene_info$Ensembl_ID)]
 df <- as.data.frame(colData(vsd)[, c("Batch", "Affected", "Disease.Group")])
 pheatmap(mat2, annotation_col = df, fontsize = 5)
@@ -366,7 +444,7 @@ pheatmap(mat2, annotation_col = df, fontsize = 5)
 ## Enrichment analysis
 
 ```{r, gostplot}
-res <- gost(query = significant_data$name, organism = "hsapiens", significant = FALSE)
+res <- gost(query = significant_data$name, organism = "hsapiens", significant = FALSE) # should significant be true or false?
 
 gostplot(res, capped = FALSE, interactive = TRUE)
 ```
