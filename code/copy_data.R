@@ -2,7 +2,7 @@
 # and creates necessary data folders within this workflowr project.
 # We will use the salmon.merged.gene_counts_length_scaled.tsv
 
-library("fs")
+library(fs)
 analysis_dir <- "/data/project/worthey_lab/projects/MECFS_Ramsey/analysis/project_level_analysis/bulk_rnaseq"
 
 counts_file <- "salmon.merged.gene_counts_length_scaled.tsv"
