@@ -10,3 +10,5 @@ analysis/*html
 analysis/*_cache
 analysis/site_libs
 output/*.RData
+omnipathr-log/
+output/batch-correction-limma/
