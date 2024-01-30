@@ -394,7 +394,7 @@ Analysis</h1>
 <p>
 <button type="button" class="btn btn-default btn-workflowr btn-workflowr-report" data-toggle="collapse" data-target="#workflowr-report">
 <span class="glyphicon glyphicon-list" aria-hidden="true"></span>
-workflowr <span class="glyphicon glyphicon-exclamation-sign text-danger"
+workflowr <span class="glyphicon glyphicon-ok text-success"
 aria-hidden="true"></span>
 </button>
 </p>
@@ -405,8 +405,8 @@ aria-hidden="true"></span>
 </li>
 <li>
 <a data-toggle="tab" href="#checks"> Checks <span
-class="glyphicon glyphicon-exclamation-sign text-danger"
-aria-hidden="true"></span> </a>
+class="glyphicon glyphicon-ok text-success" aria-hidden="true"></span>
+</a>
 </li>
 <li>
 <a data-toggle="tab" href="#versions">Past versions</a>
@@ -415,13 +415,13 @@ aria-hidden="true"></span> </a>
 <div class="tab-content">
 <div id="summary" class="tab-pane fade in active">
 <p>
-<strong>Last updated:</strong> 2024-01-27
+<strong>Last updated:</strong> 2024-01-29
 </p>
 <p>
 <strong>Checks:</strong> <span
-class="glyphicon glyphicon-ok text-success" aria-hidden="true"></span> 6
+class="glyphicon glyphicon-ok text-success" aria-hidden="true"></span> 7
 <span class="glyphicon glyphicon-exclamation-sign text-danger"
-aria-hidden="true"></span> 1
+aria-hidden="true"></span> 0
 </p>
 <p>
 <strong>Knit directory:</strong> <code>mecfs-dge-analysis/</code> <span
@@ -444,21 +444,18 @@ versions</em> tab lists the development history.
 <div class="panel panel-default">
 <div class="panel-heading">
 <p class="panel-title">
-<a data-toggle="collapse" data-parent="#workflowr-checks" href="#strongRMarkdownfilestronguncommittedchanges">
-<span class="glyphicon glyphicon-exclamation-sign text-danger"
-aria-hidden="true"></span> <strong>R Markdown file:</strong> uncommitted
-changes </a>
+<a data-toggle="collapse" data-parent="#workflowr-checks" href="#strongRMarkdownfilestronguptodate">
+<span class="glyphicon glyphicon-ok text-success"
+aria-hidden="true"></span> <strong>R Markdown file:</strong> up-to-date
+</a>
 </p>
 </div>
-<div id="strongRMarkdownfilestronguncommittedchanges"
+<div id="strongRMarkdownfilestronguptodate"
 class="panel-collapse collapse">
 <div class="panel-body">
-<p>The R Markdown file has unstaged changes. To know which version of
-the R Markdown file created these results, you’ll want to first commit
-it to the Git repo. If you’re still working on the analysis, you can
-ignore this warning. When you’re finished, you can run
-<code>wflow_publish</code> to commit the R Markdown file and build the
-HTML.</p>
+<p>Great! Since the R Markdown file has been committed to the Git
+repository, you know the exact version of the code that produced these
+results.</p>
 </div>
 </div>
 </div>
@@ -549,15 +546,15 @@ project makes it easier to run your code on other machines.</p>
 <div class="panel panel-default">
 <div class="panel-heading">
 <p class="panel-title">
-<a data-toggle="collapse" data-parent="#workflowr-checks" href="#strongRepositoryversionstrongahrefhttpsgithubcomuabcgdswortheymecfsdgeanalysistreeb9e10381c56b7493d45ecf100d6c1e85dd35e0c5targetblankb9e1038a">
+<a data-toggle="collapse" data-parent="#workflowr-checks" href="#strongRepositoryversionstrongahrefhttpsgithubcomuabcgdswortheymecfsdgeanalysistree369e73b0e267d78a8ddfc4124d5cd9bcecaeb8ectargetblank369e73ba">
 <span class="glyphicon glyphicon-ok text-success"
 aria-hidden="true"></span> <strong>Repository version:</strong>
-<a href="https://github.com/uab-cgds-worthey/mecfs-dge-analysis/tree/b9e10381c56b7493d45ecf100d6c1e85dd35e0c5" target="_blank">b9e1038</a>
+<a href="https://github.com/uab-cgds-worthey/mecfs-dge-analysis/tree/369e73b0e267d78a8ddfc4124d5cd9bcecaeb8ec" target="_blank">369e73b</a>
 </a>
 </p>
 </div>
 <div
-id="strongRepositoryversionstrongahrefhttpsgithubcomuabcgdswortheymecfsdgeanalysistreeb9e10381c56b7493d45ecf100d6c1e85dd35e0c5targetblankb9e1038a"
+id="strongRepositoryversionstrongahrefhttpsgithubcomuabcgdswortheymecfsdgeanalysistree369e73b0e267d78a8ddfc4124d5cd9bcecaeb8ectargetblank369e73ba"
 class="panel-collapse collapse">
 <div class="panel-body">
 <p>
@@ -567,7 +564,7 @@ reproducibility.
 </p>
 <p>
 The results in this page were generated with repository version
-<a href="https://github.com/uab-cgds-worthey/mecfs-dge-analysis/tree/b9e10381c56b7493d45ecf100d6c1e85dd35e0c5" target="_blank">b9e1038</a>.
+<a href="https://github.com/uab-cgds-worthey/mecfs-dge-analysis/tree/369e73b0e267d78a8ddfc4124d5cd9bcecaeb8ec" target="_blank">369e73b</a>.
 See the <em>Past versions</em> tab to see a history of the changes made
 to the R Markdown and HTML files.
 </p>
@@ -585,39 +582,11 @@ Ignored files:
     Ignored:    .DS_Store
     Ignored:    .Rhistory
     Ignored:    .Rproj.user/
+    Ignored:    analysis/.DS_Store
+    Ignored:    omnipathr-log/
     Ignored:    output/.DS_Store
     Ignored:    output/batch-correction-limma/
     Ignored:    output/condition-analysis.RData
-
-Untracked files:
-    Untracked:  analysis/complex-upset.Rmd
-    Untracked:  analysis/decoupler.Rmd
-    Untracked:  data/MECFS_RNAseq_metadata_2024_01_19.csv
-    Untracked:  omnipathr-log/
-    Untracked:  output/bysample_upset.png
-    Untracked:  output/counts_vst_female.csv
-    Untracked:  output/counts_vst_limma_female.csv
-    Untracked:  output/gene_interest_upset.png
-    Untracked:  output/res_aff_vs_unaff_df_genename_padj1.csv
-    Untracked:  output/res_aff_vs_unaff_df_m_genename.csv
-    Untracked:  output/res_aff_vs_unaff_df_m_genename_05.csv
-    Untracked:  output/res_aff_vs_unaff_m.csv
-    Untracked:  output/res_aff_vs_unaff_significant_all_samples.csv
-    Untracked:  output/res_aff_vs_unaff_significant_females_only.csv
-    Untracked:  trainee_updates_september.Rmd
-    Untracked:  trainee_updates_september.pptx
-
-Unstaged changes:
-    Modified:   analysis/condition-analysis.Rmd
-    Modified:   code/helpers.R
-    Modified:   data/MECFS_RNAseq_metadata_2023_08_18.csv
-    Modified:   data/RNAseq Variants of Interest List_V2.csv
-    Modified:   data/RNAseq Variants of Interest List_V2.xlsx
-    Modified:   output/counts_vst.csv
-    Modified:   output/counts_vst_limma.csv
-    Modified:   output/res_aff_vs_unaff.csv
-    Modified:   output/res_aff_vs_unaff_df_genename_05.csv
-    Modified:   output/res_aff_vs_unaff_genename.csv
 
 </code></pre>
 <p>
@@ -663,6 +632,40 @@ Message
 </tr>
 </thead>
 <tbody>
+<tr>
+<td>
+Rmd
+</td>
+<td>
+<a href="https://github.com/uab-cgds-worthey/mecfs-dge-analysis/blob/369e73b0e267d78a8ddfc4124d5cd9bcecaeb8ec/analysis/condition-analysis.Rmd" target="_blank">369e73b</a>
+</td>
+<td>
+sdhutchins
+</td>
+<td>
+2024-01-29
+</td>
+<td>
+Updates to metadata and scripts.
+</td>
+</tr>
+<tr>
+<td>
+html
+</td>
+<td>
+<a href="https://rawcdn.githack.com/uab-cgds-worthey/mecfs-dge-analysis/369e73b0e267d78a8ddfc4124d5cd9bcecaeb8ec/docs/condition-analysis.html" target="_blank">369e73b</a>
+</td>
+<td>
+sdhutchins
+</td>
+<td>
+2024-01-29
+</td>
+<td>
+Updates to metadata and scripts.
+</td>
+</tr>
 <tr>
 <td>
 html
@@ -932,6 +935,17 @@ Date
 <tbody>
 <tr>
 <td>
+<a href="https://github.com/uab-cgds-worthey/mecfs-dge-analysis/blob/369e73b0e267d78a8ddfc4124d5cd9bcecaeb8ec/docs/figure/condition-analysis.Rmd/sample-dist-heatmap-1.png" target="_blank">369e73b</a>
+</td>
+<td>
+sdhutchins
+</td>
+<td>
+2024-01-29
+</td>
+</tr>
+<tr>
+<td>
 <a href="https://github.com/uab-cgds-worthey/mecfs-dge-analysis/blob/05f55021fba95b95fe55b566cf65f894df83adb1/docs/figure/condition-analysis.Rmd/sample-dist-heatmap-1.png" target="_blank">05f5502</a>
 </td>
 <td>
@@ -953,6 +967,43 @@ colors &lt;- colorRampPalette(rev(brewer.pal(9, &quot;Blues&quot;)))(255)
 
 pheatmap(sample_dist_matrix_all, clustering_distance_rows = sample_dists_all, clustering_distance_cols = sample_dists_all, col = colors)</code></pre>
 <p><img src="figure/condition-analysis.Rmd/sample-dist-heatmap-all-1.png" width="672" style="display: block; margin: auto;" /></p>
+<p>
+<button type="button" class="btn btn-default btn-xs btn-workflowr btn-workflowr-fig" data-toggle="collapse" data-target="#fig-sample-dist-heatmap-all-1">
+Past versions of sample-dist-heatmap-all-1.png
+</button>
+</p>
+<div id="fig-sample-dist-heatmap-all-1" class="collapse">
+<div class="table-responsive">
+<table class="table table-condensed table-hover">
+<thead>
+<tr>
+<th>
+Version
+</th>
+<th>
+Author
+</th>
+<th>
+Date
+</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>
+<a href="https://github.com/uab-cgds-worthey/mecfs-dge-analysis/blob/369e73b0e267d78a8ddfc4124d5cd9bcecaeb8ec/docs/figure/condition-analysis.Rmd/sample-dist-heatmap-all-1.png" target="_blank">369e73b</a>
+</td>
+<td>
+sdhutchins
+</td>
+<td>
+2024-01-29
+</td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
 </div>
 <div id="principal-components-analysis" class="section level3">
 <h3>Principal Components Analysis</h3>
@@ -976,6 +1027,43 @@ ggplot(pca_data_all, aes(PC1, PC2)) +
   ylab(paste0(&quot;PC2: &quot;, percent_var_all[2], &quot;% variance&quot;)) +
   coord_fixed()</code></pre>
 <p><img src="figure/condition-analysis.Rmd/principal-components-analysis-all-1.png" width="672" style="display: block; margin: auto;" /></p>
+<p>
+<button type="button" class="btn btn-default btn-xs btn-workflowr btn-workflowr-fig" data-toggle="collapse" data-target="#fig-principal-components-analysis-all-1">
+Past versions of principal-components-analysis-all-1.png
+</button>
+</p>
+<div id="fig-principal-components-analysis-all-1" class="collapse">
+<div class="table-responsive">
+<table class="table table-condensed table-hover">
+<thead>
+<tr>
+<th>
+Version
+</th>
+<th>
+Author
+</th>
+<th>
+Date
+</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>
+<a href="https://github.com/uab-cgds-worthey/mecfs-dge-analysis/blob/369e73b0e267d78a8ddfc4124d5cd9bcecaeb8ec/docs/figure/condition-analysis.Rmd/principal-components-analysis-all-1.png" target="_blank">369e73b</a>
+</td>
+<td>
+sdhutchins
+</td>
+<td>
+2024-01-29
+</td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
 <p>Below is PCA with only female samples.</p>
 <pre class="r"><code>pca_data_female &lt;- plotPCA(vsd_limma_female, intgroup = c(&quot;Batch&quot;, &quot;Affected&quot;), returnData = TRUE)
 percent_var_female &lt;- round(100 * attr(pca_data_female, &quot;percentVar&quot;))
@@ -991,6 +1079,43 @@ ggplot(pca_data_female, aes(PC1, PC2)) +
   ylab(paste0(&quot;PC2: &quot;, percent_var_female[2], &quot;% variance&quot;)) +
   coord_fixed()</code></pre>
 <p><img src="figure/condition-analysis.Rmd/principal-components-analysis-female-1.png" width="672" style="display: block; margin: auto;" /></p>
+<p>
+<button type="button" class="btn btn-default btn-xs btn-workflowr btn-workflowr-fig" data-toggle="collapse" data-target="#fig-principal-components-analysis-female-1">
+Past versions of principal-components-analysis-female-1.png
+</button>
+</p>
+<div id="fig-principal-components-analysis-female-1" class="collapse">
+<div class="table-responsive">
+<table class="table table-condensed table-hover">
+<thead>
+<tr>
+<th>
+Version
+</th>
+<th>
+Author
+</th>
+<th>
+Date
+</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>
+<a href="https://github.com/uab-cgds-worthey/mecfs-dge-analysis/blob/369e73b0e267d78a8ddfc4124d5cd9bcecaeb8ec/docs/figure/condition-analysis.Rmd/principal-components-analysis-female-1.png" target="_blank">369e73b</a>
+</td>
+<td>
+sdhutchins
+</td>
+<td>
+2024-01-29
+</td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
 <pre class="r"><code>pca_data_anc &lt;- plotPCA(vsd_limma_female, intgroup = c(&quot;Batch&quot;, &quot;Affected&quot;, &quot;Ancestry&quot;), returnData = TRUE)
 percent_var_anc &lt;- round(100 * attr(pca_data_anc, &quot;percentVar&quot;))
 
@@ -1007,6 +1132,43 @@ ggplot(pca_data_anc, aes(PC1, PC2)) +
   ylab(paste0(&quot;PC2: &quot;, percent_var_anc[2], &quot;% variance&quot;)) +
   coord_fixed()</code></pre>
 <p><img src="figure/condition-analysis.Rmd/principal-components-analysis-ancestry-1.png" width="672" style="display: block; margin: auto;" /></p>
+<p>
+<button type="button" class="btn btn-default btn-xs btn-workflowr btn-workflowr-fig" data-toggle="collapse" data-target="#fig-principal-components-analysis-ancestry-1">
+Past versions of principal-components-analysis-ancestry-1.png
+</button>
+</p>
+<div id="fig-principal-components-analysis-ancestry-1" class="collapse">
+<div class="table-responsive">
+<table class="table table-condensed table-hover">
+<thead>
+<tr>
+<th>
+Version
+</th>
+<th>
+Author
+</th>
+<th>
+Date
+</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>
+<a href="https://github.com/uab-cgds-worthey/mecfs-dge-analysis/blob/369e73b0e267d78a8ddfc4124d5cd9bcecaeb8ec/docs/figure/condition-analysis.Rmd/principal-components-analysis-ancestry-1.png" target="_blank">369e73b</a>
+</td>
+<td>
+sdhutchins
+</td>
+<td>
+2024-01-29
+</td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
 </div>
 <div id="heatmap-of-all-genes-top-50-top-100-genes"
 class="section level3">
@@ -1104,6 +1266,17 @@ Date
 <tbody>
 <tr>
 <td>
+<a href="https://github.com/uab-cgds-worthey/mecfs-dge-analysis/blob/369e73b0e267d78a8ddfc4124d5cd9bcecaeb8ec/docs/figure/condition-analysis.Rmd/top50-heatmap-1.png" target="_blank">369e73b</a>
+</td>
+<td>
+sdhutchins
+</td>
+<td>
+2024-01-29
+</td>
+</tr>
+<tr>
+<td>
 <a href="https://github.com/uab-cgds-worthey/mecfs-dge-analysis/blob/05f55021fba95b95fe55b566cf65f894df83adb1/docs/figure/condition-analysis.Rmd/top50-heatmap-1.png" target="_blank">05f5502</a>
 </td>
 <td>
@@ -1138,8 +1311,82 @@ rownames(mat_all) &lt;- new_row_names_all
 
 pheatmap(mat_all, annotation_col = df_all, annotation_colors = ann_colors, fontsize = 5)</code></pre>
 <p><img src="figure/condition-analysis.Rmd/top50-heatmap-all-1.png" width="800px" height="570px" style="display: block; margin: auto;" /></p>
+<p>
+<button type="button" class="btn btn-default btn-xs btn-workflowr btn-workflowr-fig" data-toggle="collapse" data-target="#fig-top50-heatmap-all-1">
+Past versions of top50-heatmap-all-1.png
+</button>
+</p>
+<div id="fig-top50-heatmap-all-1" class="collapse">
+<div class="table-responsive">
+<table class="table table-condensed table-hover">
+<thead>
+<tr>
+<th>
+Version
+</th>
+<th>
+Author
+</th>
+<th>
+Date
+</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>
+<a href="https://github.com/uab-cgds-worthey/mecfs-dge-analysis/blob/369e73b0e267d78a8ddfc4124d5cd9bcecaeb8ec/docs/figure/condition-analysis.Rmd/top50-heatmap-all-1.png" target="_blank">369e73b</a>
+</td>
+<td>
+sdhutchins
+</td>
+<td>
+2024-01-29
+</td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
 <pre class="r"><code>pheatmap(mat_all, annotation_col = df_affcat, annotation_colors = ann_colors2, fontsize = 5)</code></pre>
 <p><img src="figure/condition-analysis.Rmd/top50-heatmap-all-2.png" width="800px" height="570px" style="display: block; margin: auto;" /></p>
+<p>
+<button type="button" class="btn btn-default btn-xs btn-workflowr btn-workflowr-fig" data-toggle="collapse" data-target="#fig-top50-heatmap-all-2">
+Past versions of top50-heatmap-all-2.png
+</button>
+</p>
+<div id="fig-top50-heatmap-all-2" class="collapse">
+<div class="table-responsive">
+<table class="table table-condensed table-hover">
+<thead>
+<tr>
+<th>
+Version
+</th>
+<th>
+Author
+</th>
+<th>
+Date
+</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>
+<a href="https://github.com/uab-cgds-worthey/mecfs-dge-analysis/blob/369e73b0e267d78a8ddfc4124d5cd9bcecaeb8ec/docs/figure/condition-analysis.Rmd/top50-heatmap-all-2.png" target="_blank">369e73b</a>
+</td>
+<td>
+sdhutchins
+</td>
+<td>
+2024-01-29
+</td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
 <p>This is a heatmap of the top 100 genes with the highest variance
 across only female samples.</p>
 <pre class="r"><code>top_var_genes_100 &lt;- head(order(-rowVars(assay(vsd_limma_female))), 100)
@@ -1184,6 +1431,17 @@ Date
 <tbody>
 <tr>
 <td>
+<a href="https://github.com/uab-cgds-worthey/mecfs-dge-analysis/blob/369e73b0e267d78a8ddfc4124d5cd9bcecaeb8ec/docs/figure/condition-analysis.Rmd/top100-heatmap-1.png" target="_blank">369e73b</a>
+</td>
+<td>
+sdhutchins
+</td>
+<td>
+2024-01-29
+</td>
+</tr>
+<tr>
+<td>
 <a href="https://github.com/uab-cgds-worthey/mecfs-dge-analysis/blob/05f55021fba95b95fe55b566cf65f894df83adb1/docs/figure/condition-analysis.Rmd/top100-heatmap-1.png" target="_blank">05f5502</a>
 </td>
 <td>
@@ -1217,6 +1475,43 @@ rownames(mat_100_all) &lt;- new_row_names_100_all
 
 pheatmap(mat_100_all, annotation_col = df_100_all, annotation_colors = ann_colors2, fontsize = 6)</code></pre>
 <p><img src="figure/condition-analysis.Rmd/top100-heatmap-all-1.png" width="1200px" style="display: block; margin: auto;" /></p>
+<p>
+<button type="button" class="btn btn-default btn-xs btn-workflowr btn-workflowr-fig" data-toggle="collapse" data-target="#fig-top100-heatmap-all-1">
+Past versions of top100-heatmap-all-1.png
+</button>
+</p>
+<div id="fig-top100-heatmap-all-1" class="collapse">
+<div class="table-responsive">
+<table class="table table-condensed table-hover">
+<thead>
+<tr>
+<th>
+Version
+</th>
+<th>
+Author
+</th>
+<th>
+Date
+</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>
+<a href="https://github.com/uab-cgds-worthey/mecfs-dge-analysis/blob/369e73b0e267d78a8ddfc4124d5cd9bcecaeb8ec/docs/figure/condition-analysis.Rmd/top100-heatmap-all-1.png" target="_blank">369e73b</a>
+</td>
+<td>
+sdhutchins
+</td>
+<td>
+2024-01-29
+</td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
 </div>
 <div id="comparisoncontrast-of-affected_yes_vs_no"
 class="section level3">
@@ -1276,6 +1571,43 @@ topgenes_aff_vs_unaff_05 &lt;- topgenes_aff_vs_unaff_05[order(row.names(topgenes
 df &lt;- colData(vsd_limma_female) %&gt;% as.data.frame() %&gt;% dplyr::select(Category)
 pheatmap(topgenes_aff_vs_unaff_05, annotation_col = df, annotation_colors = ann_colors2, fontsize = 3)</code></pre>
 <p><img src="figure/condition-analysis.Rmd/top-100-genes-deseq-female-1.png" width="800px" height="570px" style="display: block; margin: auto;" /></p>
+<p>
+<button type="button" class="btn btn-default btn-xs btn-workflowr btn-workflowr-fig" data-toggle="collapse" data-target="#fig-top-100-genes-deseq-female-1">
+Past versions of top-100-genes-deseq-female-1.png
+</button>
+</p>
+<div id="fig-top-100-genes-deseq-female-1" class="collapse">
+<div class="table-responsive">
+<table class="table table-condensed table-hover">
+<thead>
+<tr>
+<th>
+Version
+</th>
+<th>
+Author
+</th>
+<th>
+Date
+</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>
+<a href="https://github.com/uab-cgds-worthey/mecfs-dge-analysis/blob/369e73b0e267d78a8ddfc4124d5cd9bcecaeb8ec/docs/figure/condition-analysis.Rmd/top-100-genes-deseq-female-1.png" target="_blank">369e73b</a>
+</td>
+<td>
+sdhutchins
+</td>
+<td>
+2024-01-29
+</td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
 <pre class="r"><code>topgenes_byensemblid_m &lt;- head(rownames(res_aff_vs_unaff_df_m), 100)
 topgenes_aff_vs_unaff_05_m &lt;- assay(vsd_limma)[topgenes_byensemblid_m, ]
 topgenes_aff_vs_unaff_05_m &lt;- topgenes_aff_vs_unaff_05_m - rowMeans(topgenes_aff_vs_unaff_05_m)
@@ -1296,6 +1628,43 @@ topgenes_aff_vs_unaff_05_m &lt;- topgenes_aff_vs_unaff_05_m[order(row.names(topg
 df_m &lt;- as.data.frame(colData(vsd_limma)[, c(&quot;Affected&quot;, &quot;Category&quot;)])
 pheatmap(topgenes_aff_vs_unaff_05_m, annotation_col = df_m, annotation_colors = ann_colors2, fontsize = 3)</code></pre>
 <p><img src="figure/condition-analysis.Rmd/top-100-genes-deseq-all-1.png" width="800px" height="570px" style="display: block; margin: auto;" /></p>
+<p>
+<button type="button" class="btn btn-default btn-xs btn-workflowr btn-workflowr-fig" data-toggle="collapse" data-target="#fig-top-100-genes-deseq-all-1">
+Past versions of top-100-genes-deseq-all-1.png
+</button>
+</p>
+<div id="fig-top-100-genes-deseq-all-1" class="collapse">
+<div class="table-responsive">
+<table class="table table-condensed table-hover">
+<thead>
+<tr>
+<th>
+Version
+</th>
+<th>
+Author
+</th>
+<th>
+Date
+</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>
+<a href="https://github.com/uab-cgds-worthey/mecfs-dge-analysis/blob/369e73b0e267d78a8ddfc4124d5cd9bcecaeb8ec/docs/figure/condition-analysis.Rmd/top-100-genes-deseq-all-1.png" target="_blank">369e73b</a>
+</td>
+<td>
+sdhutchins
+</td>
+<td>
+2024-01-29
+</td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
 <pre class="r"><code>topgenes_byensemblid_m &lt;- head(rownames(res_aff_vs_unaff_df_m), 50)
 topgenes_aff_vs_unaff_05_m &lt;- assay(vsd_limma)[topgenes_byensemblid_m, ]
 topgenes_aff_vs_unaff_05_m &lt;- topgenes_aff_vs_unaff_05_m - rowMeans(topgenes_aff_vs_unaff_05_m)
@@ -1316,6 +1685,43 @@ topgenes_aff_vs_unaff_05_m &lt;- topgenes_aff_vs_unaff_05_m[order(row.names(topg
 df_m &lt;- df &lt;- colData(vsd_limma) %&gt;% as.data.frame() %&gt;% dplyr::select(Affected, Family, Category)
 pheatmap(topgenes_aff_vs_unaff_05_m, annotation_col = df_m, annotation_colors = ann_colors2, fontsize = 5)</code></pre>
 <p><img src="figure/condition-analysis.Rmd/top-50-genes-deseq-all-1.png" width="800px" height="570px" style="display: block; margin: auto;" /></p>
+<p>
+<button type="button" class="btn btn-default btn-xs btn-workflowr btn-workflowr-fig" data-toggle="collapse" data-target="#fig-top-50-genes-deseq-all-1">
+Past versions of top-50-genes-deseq-all-1.png
+</button>
+</p>
+<div id="fig-top-50-genes-deseq-all-1" class="collapse">
+<div class="table-responsive">
+<table class="table table-condensed table-hover">
+<thead>
+<tr>
+<th>
+Version
+</th>
+<th>
+Author
+</th>
+<th>
+Date
+</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>
+<a href="https://github.com/uab-cgds-worthey/mecfs-dge-analysis/blob/369e73b0e267d78a8ddfc4124d5cd9bcecaeb8ec/docs/figure/condition-analysis.Rmd/top-50-genes-deseq-all-1.png" target="_blank">369e73b</a>
+</td>
+<td>
+sdhutchins
+</td>
+<td>
+2024-01-29
+</td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
 <pre class="r"><code>topgenes_byensemblid_m &lt;- head(rownames(res_aff_vs_unaff_df_m), 200)
 topgenes_aff_vs_unaff_05_m &lt;- assay(vsd_limma)[topgenes_byensemblid_m, ]
 topgenes_aff_vs_unaff_05_m &lt;- topgenes_aff_vs_unaff_05_m - rowMeans(topgenes_aff_vs_unaff_05_m)
@@ -1336,6 +1742,43 @@ topgenes_aff_vs_unaff_05_m &lt;- topgenes_aff_vs_unaff_05_m[order(row.names(topg
 df_m &lt;- as.data.frame(colData(vsd_limma)[, c(&quot;Affected&quot;, &quot;Category&quot;)])
 pheatmap(topgenes_aff_vs_unaff_05_m, annotation_col = df_m, annotation_colors = ann_colors2, fontsize = 1.5)</code></pre>
 <p><img src="figure/condition-analysis.Rmd/top-200-genes-deseq-all-1.png" width="800px" height="570px" style="display: block; margin: auto;" /></p>
+<p>
+<button type="button" class="btn btn-default btn-xs btn-workflowr btn-workflowr-fig" data-toggle="collapse" data-target="#fig-top-200-genes-deseq-all-1">
+Past versions of top-200-genes-deseq-all-1.png
+</button>
+</p>
+<div id="fig-top-200-genes-deseq-all-1" class="collapse">
+<div class="table-responsive">
+<table class="table table-condensed table-hover">
+<thead>
+<tr>
+<th>
+Version
+</th>
+<th>
+Author
+</th>
+<th>
+Date
+</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>
+<a href="https://github.com/uab-cgds-worthey/mecfs-dge-analysis/blob/369e73b0e267d78a8ddfc4124d5cd9bcecaeb8ec/docs/figure/condition-analysis.Rmd/top-200-genes-deseq-all-1.png" target="_blank">369e73b</a>
+</td>
+<td>
+sdhutchins
+</td>
+<td>
+2024-01-29
+</td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
 <pre class="r"><code>topgenes_byensemblid_m &lt;- head(rownames(res_aff_vs_unaff_df_m), 150)
 topgenes_aff_vs_unaff_05_m &lt;- assay(vsd_limma)[topgenes_byensemblid_m, ]
 topgenes_aff_vs_unaff_05_m &lt;- topgenes_aff_vs_unaff_05_m - rowMeans(topgenes_aff_vs_unaff_05_m)
@@ -1354,8 +1797,45 @@ rownames(topgenes_aff_vs_unaff_05_m) &lt;- new_row_names_m
 #topgenes_aff_vs_unaff_05_m &lt;- topgenes_aff_vs_unaff_05_m[order(row.names(topgenes_aff_vs_unaff_05_m)), ]
 
 df_m &lt;- as.data.frame(colData(vsd_limma)[, c(&quot;Affected&quot;, &quot;Category&quot;)])
-pheatmap(topgenes_aff_vs_unaff_05_m, annotation_col = df_m, annotation_colors = ann_colors2, fontsize = 1.5)</code></pre>
+pheatmap(topgenes_aff_vs_unaff_05_m, annotation_col = df_m, annotation_colors = ann_colors2, fontsize = 3.75)</code></pre>
 <p><img src="figure/condition-analysis.Rmd/top-150-genes-deseq-all-1.png" width="800px" height="570px" style="display: block; margin: auto;" /></p>
+<p>
+<button type="button" class="btn btn-default btn-xs btn-workflowr btn-workflowr-fig" data-toggle="collapse" data-target="#fig-top-150-genes-deseq-all-1">
+Past versions of top-150-genes-deseq-all-1.png
+</button>
+</p>
+<div id="fig-top-150-genes-deseq-all-1" class="collapse">
+<div class="table-responsive">
+<table class="table table-condensed table-hover">
+<thead>
+<tr>
+<th>
+Version
+</th>
+<th>
+Author
+</th>
+<th>
+Date
+</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>
+<a href="https://github.com/uab-cgds-worthey/mecfs-dge-analysis/blob/369e73b0e267d78a8ddfc4124d5cd9bcecaeb8ec/docs/figure/condition-analysis.Rmd/top-150-genes-deseq-all-1.png" target="_blank">369e73b</a>
+</td>
+<td>
+sdhutchins
+</td>
+<td>
+2024-01-29
+</td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
 <pre class="r"><code>gb_df &lt;- genes_biomart[, c(1, ncol(genes_biomart))]
 res_aff_vs_unaff_df_genename &lt;- res_aff_vs_unaff_df
 res_aff_vs_unaff_df_genename$Ensembl_ID &lt;- row.names(res_aff_vs_unaff_df)
@@ -1401,7 +1881,7 @@ maplot &lt;- ggmaplot(res_aff_vs_unaff_df_m,
 )
 
 maplot</code></pre>
-<p><img src="figure/condition-analysis.Rmd/maplot-female-1.png" width="672" style="display: block; margin: auto;" /></p>
+<p><img src="figure/condition-analysis.Rmd/maplot-all-samples-1.png" width="672" style="display: block; margin: auto;" /></p>
 <pre class="r"><code>significant_data &lt;- subset(maplot$data, grepl(&quot;Up|Down&quot;, sig))
 
 paged_table(as.data.frame(significant_data), options = list(rows.print = 20))</code></pre>
@@ -1461,11 +1941,85 @@ rownames(mat2) &lt;- gene_info$gene_name[match(filtered_by_interest$Ensembl_ID, 
 df &lt;- as.data.frame(colData(vsd_limma_female)[, c(&quot;Affected&quot;, &quot;Category&quot;)])
 pheatmap(mat2, annotation_col = df, annotation_colors = ann_colors2, fontsize = 4)</code></pre>
 <p><img src="figure/condition-analysis.Rmd/heatmap-genes-interest-female-1.png" width="1200px" style="display: block; margin: auto;" /></p>
+<p>
+<button type="button" class="btn btn-default btn-xs btn-workflowr btn-workflowr-fig" data-toggle="collapse" data-target="#fig-heatmap-genes-interest-female-1">
+Past versions of heatmap-genes-interest-female-1.png
+</button>
+</p>
+<div id="fig-heatmap-genes-interest-female-1" class="collapse">
+<div class="table-responsive">
+<table class="table table-condensed table-hover">
+<thead>
+<tr>
+<th>
+Version
+</th>
+<th>
+Author
+</th>
+<th>
+Date
+</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>
+<a href="https://github.com/uab-cgds-worthey/mecfs-dge-analysis/blob/369e73b0e267d78a8ddfc4124d5cd9bcecaeb8ec/docs/figure/condition-analysis.Rmd/heatmap-genes-interest-female-1.png" target="_blank">369e73b</a>
+</td>
+<td>
+sdhutchins
+</td>
+<td>
+2024-01-29
+</td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
 <pre class="r"><code>mat2 &lt;- assay(vsd_limma)[filtered_by_interest$Ensembl_ID, ]
 rownames(mat2) &lt;- gene_info$gene_name[match(filtered_by_interest$Ensembl_ID, gene_info$Ensembl_ID)]
 df_m &lt;- as.data.frame(colData(vsd)[, c(&quot;Affected&quot;, &quot;Category&quot;)])
 pheatmap(mat2, annotation_col = df_m, annotation_colors = ann_colors2, fontsize = 4)</code></pre>
 <p><img src="figure/condition-analysis.Rmd/heatmap-genes-interest-all-1.png" width="1200px" style="display: block; margin: auto;" /></p>
+<p>
+<button type="button" class="btn btn-default btn-xs btn-workflowr btn-workflowr-fig" data-toggle="collapse" data-target="#fig-heatmap-genes-interest-all-1">
+Past versions of heatmap-genes-interest-all-1.png
+</button>
+</p>
+<div id="fig-heatmap-genes-interest-all-1" class="collapse">
+<div class="table-responsive">
+<table class="table table-condensed table-hover">
+<thead>
+<tr>
+<th>
+Version
+</th>
+<th>
+Author
+</th>
+<th>
+Date
+</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>
+<a href="https://github.com/uab-cgds-worthey/mecfs-dge-analysis/blob/369e73b0e267d78a8ddfc4124d5cd9bcecaeb8ec/docs/figure/condition-analysis.Rmd/heatmap-genes-interest-all-1.png" target="_blank">369e73b</a>
+</td>
+<td>
+sdhutchins
+</td>
+<td>
+2024-01-29
+</td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
 </div>
 <div id="enrichment-analysis" class="section level2">
 <h2>Enrichment analysis</h2>
@@ -1548,12 +2102,16 @@ pheatmap(mat2, annotation_col = df_m, annotation_colors = ann_colors2, fontsize 
 # barplot(edo, showCategory=20) </code></pre>
 <pre class="r"><code># upsetplot(ego_mf)</code></pre>
 <pre class="r"><code># For loop for plot counts
-# for (ensembl_id in filtered_by_interest$Ensembl_ID) {
-#     d &lt;- plotCounts(dds_female, gene=ensembl_id, intgroup=&quot;Affected&quot;, returnData=TRUE)
-#     gene_name &lt;- filtered_by_interest$gene_name[filtered_by_interest$Ensembl_ID == ensembl_id]
-#     ggplot_box &lt;- ggboxplot(d, x=&quot;Affected&quot;, y=&quot;count&quot;, add = &quot;jitter&quot;, color = &quot;Affected&quot;, palette = c(&quot;navy&quot;, &quot;red&quot;), title = gene_name) + geom_text_repel(aes(label = rownames(d)))
-#     print(ggplot_box) # Ensure each plot is printed during the loop
-# }</code></pre>
+for (ensembl_id in filtered_by_interest$Ensembl_ID) {
+    d &lt;- plotCounts(dds, gene=ensembl_id, intgroup=&quot;Affected&quot;, returnData=TRUE)
+    gene_name &lt;- filtered_by_interest$gene_name[filtered_by_interest$Ensembl_ID == ensembl_id]
+    ggplot_box &lt;- ggboxplot(d, x=&quot;Affected&quot;, y=&quot;count&quot;, add = &quot;jitter&quot;, color = &quot;Affected&quot;, palette = c(&quot;navy&quot;, &quot;red&quot;), title = gene_name) + geom_text_repel(aes(label = rownames(d)))
+    print(ggplot_box) # Ensure each plot is printed during the loop
+    ggsave(filename = paste0(gene_name, &quot;-plot-counts.png&quot;), 
+           path = &quot;output/batch-correction-limma/plot-counts&quot;,
+           plot = ggplot_box, dpi = 450)
+}</code></pre>
+<p><img src="figure/condition-analysis.Rmd/generate-plot-counts-genes-interest-1.png" width="672" style="display: block; margin: auto;" /><img src="figure/condition-analysis.Rmd/generate-plot-counts-genes-interest-2.png" width="672" style="display: block; margin: auto;" /><img src="figure/condition-analysis.Rmd/generate-plot-counts-genes-interest-3.png" width="672" style="display: block; margin: auto;" /><img src="figure/condition-analysis.Rmd/generate-plot-counts-genes-interest-4.png" width="672" style="display: block; margin: auto;" /><img src="figure/condition-analysis.Rmd/generate-plot-counts-genes-interest-5.png" width="672" style="display: block; margin: auto;" /><img src="figure/condition-analysis.Rmd/generate-plot-counts-genes-interest-6.png" width="672" style="display: block; margin: auto;" /><img src="figure/condition-analysis.Rmd/generate-plot-counts-genes-interest-7.png" width="672" style="display: block; margin: auto;" /><img src="figure/condition-analysis.Rmd/generate-plot-counts-genes-interest-8.png" width="672" style="display: block; margin: auto;" /><img src="figure/condition-analysis.Rmd/generate-plot-counts-genes-interest-9.png" width="672" style="display: block; margin: auto;" /><img src="figure/condition-analysis.Rmd/generate-plot-counts-genes-interest-10.png" width="672" style="display: block; margin: auto;" /><img src="figure/condition-analysis.Rmd/generate-plot-counts-genes-interest-11.png" width="672" style="display: block; margin: auto;" /><img src="figure/condition-analysis.Rmd/generate-plot-counts-genes-interest-12.png" width="672" style="display: block; margin: auto;" /><img src="figure/condition-analysis.Rmd/generate-plot-counts-genes-interest-13.png" width="672" style="display: block; margin: auto;" /><img src="figure/condition-analysis.Rmd/generate-plot-counts-genes-interest-14.png" width="672" style="display: block; margin: auto;" /><img src="figure/condition-analysis.Rmd/generate-plot-counts-genes-interest-15.png" width="672" style="display: block; margin: auto;" /><img src="figure/condition-analysis.Rmd/generate-plot-counts-genes-interest-16.png" width="672" style="display: block; margin: auto;" /><img src="figure/condition-analysis.Rmd/generate-plot-counts-genes-interest-17.png" width="672" style="display: block; margin: auto;" /><img src="figure/condition-analysis.Rmd/generate-plot-counts-genes-interest-18.png" width="672" style="display: block; margin: auto;" /><img src="figure/condition-analysis.Rmd/generate-plot-counts-genes-interest-19.png" width="672" style="display: block; margin: auto;" /><img src="figure/condition-analysis.Rmd/generate-plot-counts-genes-interest-20.png" width="672" style="display: block; margin: auto;" /><img src="figure/condition-analysis.Rmd/generate-plot-counts-genes-interest-21.png" width="672" style="display: block; margin: auto;" /><img src="figure/condition-analysis.Rmd/generate-plot-counts-genes-interest-22.png" width="672" style="display: block; margin: auto;" /><img src="figure/condition-analysis.Rmd/generate-plot-counts-genes-interest-23.png" width="672" style="display: block; margin: auto;" /><img src="figure/condition-analysis.Rmd/generate-plot-counts-genes-interest-24.png" width="672" style="display: block; margin: auto;" /><img src="figure/condition-analysis.Rmd/generate-plot-counts-genes-interest-25.png" width="672" style="display: block; margin: auto;" /><img src="figure/condition-analysis.Rmd/generate-plot-counts-genes-interest-26.png" width="672" style="display: block; margin: auto;" /><img src="figure/condition-analysis.Rmd/generate-plot-counts-genes-interest-27.png" width="672" style="display: block; margin: auto;" /><img src="figure/condition-analysis.Rmd/generate-plot-counts-genes-interest-28.png" width="672" style="display: block; margin: auto;" /><img src="figure/condition-analysis.Rmd/generate-plot-counts-genes-interest-29.png" width="672" style="display: block; margin: auto;" /><img src="figure/condition-analysis.Rmd/generate-plot-counts-genes-interest-30.png" width="672" style="display: block; margin: auto;" /><img src="figure/condition-analysis.Rmd/generate-plot-counts-genes-interest-31.png" width="672" style="display: block; margin: auto;" /><img src="figure/condition-analysis.Rmd/generate-plot-counts-genes-interest-32.png" width="672" style="display: block; margin: auto;" /><img src="figure/condition-analysis.Rmd/generate-plot-counts-genes-interest-33.png" width="672" style="display: block; margin: auto;" /><img src="figure/condition-analysis.Rmd/generate-plot-counts-genes-interest-34.png" width="672" style="display: block; margin: auto;" /><img src="figure/condition-analysis.Rmd/generate-plot-counts-genes-interest-35.png" width="672" style="display: block; margin: auto;" /><img src="figure/condition-analysis.Rmd/generate-plot-counts-genes-interest-36.png" width="672" style="display: block; margin: auto;" /><img src="figure/condition-analysis.Rmd/generate-plot-counts-genes-interest-37.png" width="672" style="display: block; margin: auto;" /><img src="figure/condition-analysis.Rmd/generate-plot-counts-genes-interest-38.png" width="672" style="display: block; margin: auto;" /><img src="figure/condition-analysis.Rmd/generate-plot-counts-genes-interest-39.png" width="672" style="display: block; margin: auto;" /><img src="figure/condition-analysis.Rmd/generate-plot-counts-genes-interest-40.png" width="672" style="display: block; margin: auto;" /><img src="figure/condition-analysis.Rmd/generate-plot-counts-genes-interest-41.png" width="672" style="display: block; margin: auto;" /><img src="figure/condition-analysis.Rmd/generate-plot-counts-genes-interest-42.png" width="672" style="display: block; margin: auto;" /><img src="figure/condition-analysis.Rmd/generate-plot-counts-genes-interest-43.png" width="672" style="display: block; margin: auto;" /></p>
 <div id="save-data" class="section level3">
 <h3>Save data</h3>
 <pre class="r"><code>save.image(file = &quot;output/condition-analysis.RData&quot;)</code></pre>
@@ -1604,59 +2162,62 @@ other attached packages:
 [33] purrr_1.0.2                 readr_2.1.4                
 [35] tidyr_1.3.0                 tibble_3.2.1               
 [37] ggplot2_3.4.4               tidyverse_2.0.0            
+[39] workflowr_1.7.1            
 
 loaded via a namespace (and not attached):
   [1] fs_1.6.3                 bitops_1.0-7             enrichplot_1.20.3       
   [4] HDO.db_0.99.1            httr_1.4.7               tools_4.3.2             
   [7] backports_1.4.1          utf8_1.2.4               R6_2.5.1                
  [10] lazyeval_0.2.2           withr_2.5.2              prettyunits_1.2.0       
- [13] gridExtra_2.3            cli_3.6.2                scatterpie_0.2.1        
- [16] labeling_0.4.3           sass_0.4.8               Rsamtools_2.16.0        
- [19] yulab.utils_0.1.1        gson_0.1.0               foreign_0.8-86          
- [22] rstudioapi_0.15.0        RSQLite_2.3.4            generics_0.1.3          
- [25] gridGraphics_0.5-1       BiocIO_1.10.0            vroom_1.6.5             
- [28] car_3.1-2                GO.db_3.17.0             Matrix_1.6-4            
- [31] fansi_1.0.6              abind_1.4-5              lifecycle_1.0.4         
- [34] whisker_0.4.1            yaml_2.3.8               carData_3.0-5           
- [37] qvalue_2.32.0            BiocFileCache_2.11.1     grid_4.3.2              
- [40] blob_1.2.4               promises_1.2.1           crayon_1.5.2            
- [43] lattice_0.22-5           cowplot_1.1.2            annotate_1.78.0         
- [46] KEGGREST_1.40.1          pillar_1.9.0             knitr_1.45              
- [49] fgsea_1.26.0             rjson_0.2.21             codetools_0.2-19        
- [52] fastmatch_1.1-4          glue_1.6.2               downloader_0.4          
- [55] ggfun_0.1.3              data.table_1.14.10       vctrs_0.6.5             
- [58] png_0.1-8                treeio_1.24.3            gtable_0.3.4            
- [61] gsubfn_0.7               cachem_1.0.8             xfun_0.41               
- [64] S4Arrays_1.0.6           tidygraph_1.3.0          survival_3.5-7          
- [67] nlme_3.1-164             ggtree_3.8.2             bit64_4.0.5             
- [70] progress_1.2.3           filelock_1.0.3           rprojroot_2.0.4         
- [73] bslib_0.6.1              rpart_4.1.23             colorspace_2.1-0        
- [76] DBI_1.1.3                Hmisc_5.1-1              nnet_7.3-19             
- [79] tidyselect_1.2.0         bit_4.0.5                compiler_4.3.2          
- [82] curl_5.2.0               chron_2.3-61             git2r_0.33.0            
- [85] htmlTable_2.4.2          xml2_1.3.6               DelayedArray_0.26.7     
- [88] shadowtext_0.1.2         rtracklayer_1.60.1       checkmate_2.3.1         
- [91] scales_1.3.0             rappdirs_0.3.3           digest_0.6.33           
- [94] XVector_0.40.0           htmltools_0.5.7          pkgconfig_2.0.3         
- [97] base64enc_0.1-3          highr_0.10               dbplyr_2.4.0            
-[100] fastmap_1.1.1            rlang_1.1.2              htmlwidgets_1.6.4       
-[103] farver_2.1.1             jquerylib_0.1.4          jsonlite_1.8.8          
-[106] BiocParallel_1.34.2      GOSemSim_2.26.1          RCurl_1.98-1.13         
-[109] magrittr_2.0.3           Formula_1.2-5            GenomeInfoDbData_1.2.10 
-[112] ggplotify_0.1.2          patchwork_1.1.3          munsell_0.5.0           
-[115] Rcpp_1.0.11              ape_5.7-1                viridis_0.6.4           
-[118] proto_1.0.0              sqldf_0.4-11             stringi_1.8.3           
-[121] ggraph_2.1.0             zlibbioc_1.46.0          MASS_7.3-60             
-[124] plyr_1.8.9               parallel_4.3.2           Biostrings_2.68.1       
-[127] graphlayouts_1.0.2       splines_4.3.2            hms_1.1.3               
-[130] locfit_1.5-9.8           igraph_1.6.0             ggsignif_0.6.4          
-[133] reshape2_1.4.4           XML_3.99-0.16            evaluate_0.23           
-[136] tzdb_0.4.0               tweenr_2.0.2             httpuv_1.6.13           
-[139] polyclip_1.10-6          ggforce_0.4.1            broom_1.0.5             
-[142] xtable_1.8-4             restfulr_0.0.15          tidytree_0.4.6          
-[145] rstatix_0.7.2            later_1.3.2              viridisLite_0.4.2       
-[148] aplot_0.2.2              memoise_2.0.1            GenomicAlignments_1.36.0
-[151] cluster_2.1.6            workflowr_1.7.1          timechange_0.2.0        </code></pre>
+ [13] gridExtra_2.3            textshaping_0.3.7        cli_3.6.2               
+ [16] scatterpie_0.2.1         labeling_0.4.3           sass_0.4.8              
+ [19] systemfonts_1.0.5        Rsamtools_2.16.0         yulab.utils_0.1.1       
+ [22] gson_0.1.0               foreign_0.8-86           rstudioapi_0.15.0       
+ [25] RSQLite_2.3.4            generics_0.1.3           gridGraphics_0.5-1      
+ [28] BiocIO_1.10.0            vroom_1.6.5              car_3.1-2               
+ [31] GO.db_3.17.0             Matrix_1.6-4             fansi_1.0.6             
+ [34] abind_1.4-5              lifecycle_1.0.4          whisker_0.4.1           
+ [37] yaml_2.3.8               carData_3.0-5            qvalue_2.32.0           
+ [40] BiocFileCache_2.11.1     grid_4.3.2               blob_1.2.4              
+ [43] promises_1.2.1           crayon_1.5.2             lattice_0.22-5          
+ [46] cowplot_1.1.2            annotate_1.78.0          KEGGREST_1.40.1         
+ [49] pillar_1.9.0             knitr_1.45               fgsea_1.26.0            
+ [52] rjson_0.2.21             codetools_0.2-19         fastmatch_1.1-4         
+ [55] glue_1.6.2               getPass_0.2-4            downloader_0.4          
+ [58] ggfun_0.1.3              data.table_1.14.10       vctrs_0.6.5             
+ [61] png_0.1-8                treeio_1.24.3            gtable_0.3.4            
+ [64] gsubfn_0.7               cachem_1.0.8             xfun_0.41               
+ [67] S4Arrays_1.0.6           tidygraph_1.3.0          survival_3.5-7          
+ [70] nlme_3.1-164             ggtree_3.8.2             bit64_4.0.5             
+ [73] progress_1.2.3           filelock_1.0.3           rprojroot_2.0.4         
+ [76] bslib_0.6.1              rpart_4.1.23             colorspace_2.1-0        
+ [79] DBI_1.1.3                Hmisc_5.1-1              nnet_7.3-19             
+ [82] tidyselect_1.2.0         processx_3.8.3           chron_2.3-61            
+ [85] bit_4.0.5                compiler_4.3.2           curl_5.2.0              
+ [88] git2r_0.33.0             htmlTable_2.4.2          xml2_1.3.6              
+ [91] DelayedArray_0.26.7      shadowtext_0.1.2         rtracklayer_1.60.1      
+ [94] checkmate_2.3.1          scales_1.3.0             callr_3.7.3             
+ [97] rappdirs_0.3.3           digest_0.6.33            XVector_0.40.0          
+[100] htmltools_0.5.7          pkgconfig_2.0.3          base64enc_0.1-3         
+[103] highr_0.10               dbplyr_2.4.0             fastmap_1.1.1           
+[106] rlang_1.1.2              htmlwidgets_1.6.4        farver_2.1.1            
+[109] jquerylib_0.1.4          jsonlite_1.8.8           BiocParallel_1.34.2     
+[112] GOSemSim_2.26.1          RCurl_1.98-1.13          magrittr_2.0.3          
+[115] Formula_1.2-5            GenomeInfoDbData_1.2.10  ggplotify_0.1.2         
+[118] patchwork_1.1.3          munsell_0.5.0            Rcpp_1.0.11             
+[121] proto_1.0.0              ape_5.7-1                viridis_0.6.4           
+[124] sqldf_0.4-11             stringi_1.8.3            ggraph_2.1.0            
+[127] zlibbioc_1.46.0          MASS_7.3-60              plyr_1.8.9              
+[130] parallel_4.3.2           Biostrings_2.68.1        graphlayouts_1.0.2      
+[133] splines_4.3.2            hms_1.1.3                locfit_1.5-9.8          
+[136] ps_1.7.5                 igraph_1.6.0             ggsignif_0.6.4          
+[139] reshape2_1.4.4           XML_3.99-0.16            evaluate_0.23           
+[142] tzdb_0.4.0               tweenr_2.0.2             httpuv_1.6.13           
+[145] polyclip_1.10-6          ggforce_0.4.1            broom_1.0.5             
+[148] xtable_1.8-4             restfulr_0.0.15          tidytree_0.4.6          
+[151] rstatix_0.7.2            later_1.3.2              ragg_1.2.7              
+[154] viridisLite_0.4.2        aplot_0.2.2              memoise_2.0.1           
+[157] GenomicAlignments_1.36.0 cluster_2.1.6            timechange_0.2.0        </code></pre>
 </div>
 </div>
 </div>
