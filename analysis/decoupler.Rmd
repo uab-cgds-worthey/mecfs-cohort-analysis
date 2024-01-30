@@ -1,0 +1,97 @@
+---
+title: "Pathway activity inference in bulk RNA-seq"
+output:
+  workflowr::wflow_html:
+    toc: true
+    toc_depth: 3
+    toc_float: true
+    code_folding: hide
+editor_options:
+  chunk_output_type: console
+---
+
+```{r, setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE, warning = FALSE, message = FALSE)
+```
+
+```{r, load-libs}
+## We load the required packages
+library(decoupleR)
+library(dplyr)
+library(tibble)
+library(tidyr)
+library(ggplot2)
+library(pheatmap)
+library(ggrepel)
+```
+
+```{r, load-data}
+load("output/condition-analysis.RData")
+```
+
+```{r, data-wrangling}
+counts <- as.data.frame(counts_vst_limma) %>% dplyr::mutate_if(~ any(is.na(.x)), ~ if_else(is.na(.x),0,.x)) %>% as.matrix()
+counts <- counts_vst_limma
+
+gene_names <- setNames(gene_info$gene_name, gene_info$Ensembl_ID)
+
+# Now match the row names of counts with names from the gene_names vector
+# This will replace the Ensembl IDs with gene names where there's a match
+# and NA where there's no match
+new_row_names <- gene_names[row.names(counts)]
+
+# You may want to handle NAs if there are any unmatched Ensembl IDs
+# For example, you could replace NAs with the original Ensembl ID
+new_row_names[is.na(new_row_names)] <- row.names(counts)[is.na(new_row_names)]
+
+# Set the new row names in the counts data frame
+row.names(counts) <- new_row_names
+
+# Ensure your column names in 'data' are characters, just in case
+colnames(counts) <- as.character(colnames(counts))
+
+# Ensure your RNA_Samples_id in 'metadata' is also a character vector
+sample_metadata$RNA_Samples_id <- as.character(sample_metadata$RNA_Samples_id)
+
+# Create a new vector with the concatenated information from 'metadata'
+new_colnames <- sapply(colnames(counts), function(id) {
+    # Find the row in 'metadata' that matches the current sample ID
+    row <- sample_metadata[sample_metadata$RNA_Samples_id == id, ]
+    # Concatenate the desired columns, if row is found
+    if (nrow(row) == 1) {
+        paste(row$RNA_Samples_id, row$Affected, row$Family, sep = " | ")
+    } else {
+        # If no matching row is found, return the original sample ID or NA
+        id  # or return NA_character_
+    }
+})
+
+# Replace column names in 'data' with the new ones from 'metadata'
+colnames(counts) <- new_colnames
+
+net <- get_progeny(organism = 'human', top = 500)
+
+sample_acts <- run_mlm(mat=counts, net=net, .source='source', .target='target',
+                  .mor='weight', minsize = 100)
+```
+
+```{r, plot-pathway-actitivy-inference}
+sample_acts_mat <- sample_acts %>%
+    pivot_wider(id_cols = 'condition', names_from = 'source',
+                values_from = 'score') %>%
+    column_to_rownames('condition') %>%
+    as.matrix()
+
+# Scale per feature
+sample_acts_mat <- scale(sample_acts_mat)
+
+# Choose color palette
+palette_length = 100
+my_color = colorRampPalette(c("navy", "white","firebrick"))(palette_length)
+
+my_breaks <- c(seq(-3, 0, length.out=ceiling(palette_length/2) + 1),
+               seq(0.05, 3, length.out=floor(palette_length/2)))
+
+# Plot
+pheatmap(sample_acts_mat, border_color = NA, color=my_color, breaks = my_breaks) 
+```

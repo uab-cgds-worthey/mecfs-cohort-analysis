@@ -1,30 +1,30 @@
 RNA_Samples_id,DNA_Samples.id,Family,Sex,Relation,Affected,Study_id,Study_group,Vantage_id_DNA,Vantage_id_RNA,Seq,Batch,Replicate,RIN,RIN.Analysis.Error,Ancestry,Disease,Tier,Disease.Group
-LW001978,LW000126,12,F,Proband,Yes,DDHA-012R,MECFS,N/A,8921-EW-0001,50M,B3,NA,8.1,,Black,Glycogen Storage Disease,1,Miscellaneous
 LW001974,LW000483,1,F,Proband,Yes,DDHA-014,MECFS,7547-EW-1,7548-EW-01,50M,B1,NA,8.707908924,,White,Unknown,2,Unknown
 LW001975,LW000484,1,F,Mother,No,DDHA-015,MECFS,7547-EW-2,7548-EW-02,50M,B1,NA,9.841389374,,White,N/A,N/A,N/A
-LW001993,LW000502,2,F,Proband,Yes,DDHA-016,MECFS,7547-EW-10,7548-EW-10,50M,B1,NA,9.432363826,,White,Immunodeficiency/Autoinflammatory Diseases & Mitochondrial Disorder ,1,Immunodeficiency/Autoinflammatory Diseases 
-LW001998,LW000507,2,F,Mother,No,DDHA-017,MECFS,7547-EW-11,7548-EW-11,50M,B1,NA,10,,White,N/A,N/A,N/A
 LW001976,LW000485,3,F,Proband,Yes,DDHA-018,MECFS,7547-EW-3,7548-EW-03,50M,B1,NA,9.634566225,,White,Immunodeficiency/Autoinflammatory Diseases ,1,Immunodeficiency/Autoinflammatory Diseases 
 LW001977,LW000486,3,F,Mother,No,DDHA-019,MECFS,7547-EW-4,7548-EW-04,50M,B1,NA,9.771113135,,White,N/A,N/A,N/A
-LW001989,LW000498,4,F,Proband,Yes,DDHA-022,MECFS,7547-EW-9,7548-EW-09,50M,B1,NA,10,,White,Unknown,2,Unknown
-LW001983,LW000492,4,F,Mother,No,DDHA-023,MECFS,7547-EW-6,7548-EW-06,50M,B1,NA,9.408044477,,White,N/A,N/A,N/A
-LW001980,LW000489,5,F,Proband,Yes,DDHA-024,MECFS,7547-EW-5,7548-EW-05,50M,B1,NA,10,,White,Unknown,3,Unknown
-LW001999,LW000508,5,F,Mother,No,DDHA-025,MECFS,7547-EW-12,7548-EW-12,50M,B1,NA,10,,White,N/A,N/A,N/A
-LW001988,LW000497,6,F,Proband,Yes,DDHA-026,MECFS,7547-EW-8,7548-EW-08,50M,B1,NA,9.622614458,,White,Immunodeficiency/Autoinflammatory Diseases ,1,Immunodeficiency/Autoinflammatory Diseases 
-LW001985,LW000494,6,M,Father,No,DDHA-027,MECFS,7547-EW-7,7548-EW-07,50M,B1,NA,10,,White,N/A,N/A,N/A
-LW001987,LW000496,6,F,Proband/Mother,Yes,DDHA-030,MECFS,8288-EW-5,8289-EW-05,50M,B2,NA,NA,,White,Immunodeficiency/Autoinflammatory Diseases ,1,Immunodeficiency/Autoinflammatory Diseases 
-LW001986,LW000495,7,F,Proband,Yes,DDHA-031,MECFS,8288-EW-4,8289-EW-04,50M,B2,NA,8.5,Concentration > 500.00 ng/ul. Quality score is suspect.,White,Immunodeficiency/Autoinflammatory Diseases ,2,Immunodeficiency/Autoinflammatory Diseases 
-LW001995,LW000504,8,F,Proband,Yes,DDHA-032,MECFS,8288-EW-9,8289-EW-09,50M,B2,NA,NA,,Black,Cryohydrocytosis,2,Miscellaneous
-LW001990,LW000499,5,F,Proband,Yes,DDHA-033,MECFS,8288-EW-6,8289-EW-06,50M,B2,NA,NA,,White,Unknown,2,Unknown
-LW001982,LW000491,9,F,Proband,Yes,DDHA-034,MECFS,8288-EW-2,8289-EW-02,50M,B2,NA,NA,,White,Gitelman Syndrome & Thyrotoxic Periodic Paralysis,1,Miscellaneous
-LW001996,LW000505,9,F,Proband,Yes,DDHA-035,MECFS,8288-EW-10,8289-EW-10,50M,B2,NA,NA,,White,Gitelman Syndrome,1,Miscellaneous
-LW001994,LW000503,10,M,Proband,Yes,DDHA-036,MECFS,8288-EW-8,8289-EW-08,50M,B2,NA,NA,,White,Mitochondrial Disorder,1,Mitochondrial Disorder
-LW001981,LW000490,10,F,Proband/Mother,Yes,DDHA-037,MECFS,8288-EW-1,8289-EW-01,50M,B2,NA,7.935681683,,White,Mitochondrial Disorder,1,Mitochondrial Disorder
-LW001991,LW000500,11,F,Proband,Yes,DDHA-038,MECFS,8288-EW-7,8289-EW-07,50M,B2,NA,8.871244513,,White,Immunodeficiency/Autoinflammatory Diseases ,1,Immunodeficiency/Autoinflammatory Diseases 
-LW001984,LW000493,11,M,Father,No,DDHA-039,MECFS,8288-EW-3,8289-EW-03,50M,B2,NA,NA,,White,N/A,N/A,N/A
-LW001997,LW000506,13,F,Proband/Mother,Yes,DDHA-040,MECFS,8920-EW-0004,8921-EW-0003,50M,B3,NA,8,,White,Stromme syndrome,2,Miscellaneous
+LW001978,LW000126,12,F,Proband,Yes,DDHA-012R,MECFS,N/A,8921-EW-0001,50M,B3,NA,8.1,,Black,Glycogen Storage Disease,1,Miscellaneous
 LW001979,LW000488,13,F,Proband,Yes,DDHA-041,MECFS,8920-EW-0005,8921-EW-0002,50M,B3,NA,8,,White,Stromme syndrome,2,Miscellaneous
-LW002000,LW000509,13,F,Proband,Yes,DDHA-042,MECFS,8920-EW-0003,8921-EW-0004,50M,B3,NA,8.4,,White,Stromme syndrome,2,Miscellaneous
-LW002080,LW002079,14,F,Proband,Yes,DDHA-043,MECFS,8920-EW-0001,8921-EW-0006,50M,B3,NA,8.5,,Black,Neurological/Neuromuscular Disorders,2,Neurological/Neuromuscular Disorders
-LW002001,LW000510,15,F,Proband,Yes,DDHA-044,MECFS,8920-EW-0002,8921-EW-0005,50M,B3,NA,8.9,,White,Neurological/Neuromuscular Disorders,2,Neurological/Neuromuscular Disorders
+LW001980,LW000489,5,F,Proband,Yes,DDHA-024,MECFS,7547-EW-5,7548-EW-05,50M,B1,NA,10,,White,Unknown,3,Unknown
+LW001981,LW000490,10,F,Proband/Mother,Yes,DDHA-037,MECFS,8288-EW-1,8289-EW-01,50M,B2,NA,7.935681683,,White,Mitochondrial Disorder,1,Mitochondrial Disorder
+LW001982,LW000491,9,F,Proband,Yes,DDHA-034,MECFS,8288-EW-2,8289-EW-02,50M,B2,NA,NA,,White,Gitelman Syndrome & Thyrotoxic Periodic Paralysis,1,Miscellaneous
+LW001983,LW000492,4,F,Mother,No,DDHA-023,MECFS,7547-EW-6,7548-EW-06,50M,B1,NA,9.408044477,,White,N/A,N/A,N/A
+LW001984,LW000493,11,M,Father,No,DDHA-039,MECFS,8288-EW-3,8289-EW-03,50M,B2,NA,NA,,White,N/A,N/A,N/A
+LW001985,LW000494,6,M,Father,No,DDHA-027,MECFS,7547-EW-7,7548-EW-07,50M,B1,NA,10,,White,N/A,N/A,N/A
+LW001986,LW000495,7,F,Proband,Yes,DDHA-031,MECFS,8288-EW-4,8289-EW-04,50M,B2,NA,8.5,Concentration > 500.00 ng/ul. Quality score is suspect.,White,Immunodeficiency/Autoinflammatory Diseases ,2,Immunodeficiency/Autoinflammatory Diseases 
+LW001987,LW000496,6,F,Proband/Mother,Yes,DDHA-030,MECFS,8288-EW-5,8289-EW-05,50M,B2,NA,NA,,White,Immunodeficiency/Autoinflammatory Diseases ,1,Immunodeficiency/Autoinflammatory Diseases 
+LW001988,LW000497,6,F,Proband,Yes,DDHA-026,MECFS,7547-EW-8,7548-EW-08,50M,B1,NA,9.622614458,,White,Immunodeficiency/Autoinflammatory Diseases ,1,Immunodeficiency/Autoinflammatory Diseases 
+LW001989,LW000498,4,F,Proband,Yes,DDHA-022,MECFS,7547-EW-9,7548-EW-09,50M,B1,NA,10,,White,Unknown,2,Unknown
+LW001990,LW000499,5,F,Proband,Yes,DDHA-033,MECFS,8288-EW-6,8289-EW-06,50M,B2,NA,NA,,White,Unknown,2,Unknown
+LW001991,LW000500,11,F,Proband,Yes,DDHA-038,MECFS,8288-EW-7,8289-EW-07,50M,B2,NA,8.871244513,,White,Immunodeficiency/Autoinflammatory Diseases ,1,Immunodeficiency/Autoinflammatory Diseases 
 LW001992,LW000501,16,F,Proband,Yes,DDHA-045,MECFS,8920-EW-0006,8921-EW-0007,50M,B3,NA,7.6,,White,Thyrotoxic Periodic Paralysis,1,Miscellaneous
+LW001993,LW000502,2,F,Proband,Yes,DDHA-016,MECFS,7547-EW-10,7548-EW-10,50M,B1,NA,9.432363826,,White,Immunodeficiency/Autoinflammatory Diseases & Mitochondrial Disorder ,1,Immunodeficiency/Autoinflammatory Diseases 
+LW001994,LW000503,10,M,Proband,Yes,DDHA-036,MECFS,8288-EW-8,8289-EW-08,50M,B2,NA,NA,,White,Mitochondrial Disorder,1,Mitochondrial Disorder
+LW001995,LW000504,8,F,Proband,Yes,DDHA-032,MECFS,8288-EW-9,8289-EW-09,50M,B2,NA,NA,,Black,Cryohydrocytosis,2,Miscellaneous
+LW001996,LW000505,9,F,Proband,Yes,DDHA-035,MECFS,8288-EW-10,8289-EW-10,50M,B2,NA,NA,,White,Gitelman Syndrome,1,Miscellaneous
+LW001997,LW000506,13,F,Proband/Mother,Yes,DDHA-040,MECFS,8920-EW-0004,8921-EW-0003,50M,B3,NA,8,,White,Stromme syndrome,2,Miscellaneous
+LW001998,LW000507,2,F,Mother,No,DDHA-017,MECFS,7547-EW-11,7548-EW-11,50M,B1,NA,10,,White,N/A,N/A,N/A
+LW001999,LW000508,5,F,Mother,No,DDHA-025,MECFS,7547-EW-12,7548-EW-12,50M,B1,NA,10,,White,N/A,N/A,N/A
+LW002000,LW000509,13,F,Proband,Yes,DDHA-042,MECFS,8920-EW-0003,8921-EW-0004,50M,B3,NA,8.4,,White,Stromme syndrome,2,Miscellaneous
+LW002001,LW000510,15,F,Proband,Yes,DDHA-044,MECFS,8920-EW-0002,8921-EW-0005,50M,B3,NA,8.9,,White,Neurological/Neuromuscular Disorders,2,Neurological/Neuromuscular Disorders
+LW002080,LW002079,14,F,Proband,Yes,DDHA-043,MECFS,8920-EW-0001,8921-EW-0006,50M,B3,NA,8.5,,Black,Neurological/Neuromuscular Disorders,2,Neurological/Neuromuscular Disorders
