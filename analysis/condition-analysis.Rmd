@@ -225,6 +225,23 @@ ggplot(pca_data_female, aes(PC1, PC2)) +
   coord_fixed()
 ```
 
+```{r, principal-components-analysis-category}
+pca_data_all <- plotPCA(vsd_limma, intgroup = c("Category"), returnData = TRUE)
+percent_var_all <- round(100 * attr(pca_data_all, "percentVar"))
+
+ggplot(pca_data_all, aes(PC1, PC2)) +
+  geom_point(aes(colour = Category), size = 4) +
+  scale_colour_manual(values = c("#B3DE69","#FFFFB3","#BEBADA","#FB8072","#80B1D3",
+                               "#FCCDE5","#D9D9D9","#FDB462","#8DD3C7","#000000"))+
+  geom_text(aes(label = name),
+    data = subset(pca_data_all, PC2 < -10 | PC1 < -20 | PC1 > 40 ),
+    vjust = -1, hjust = 0.5, size = 2.5
+  ) +
+  xlab(paste0("PC1: ", percent_var_all[1], "% variance")) +
+  ylab(paste0("PC2: ", percent_var_all[2], "% variance")) +
+  coord_fixed()
+```
+
 ```{r, principal-components-analysis-ancestry}
 pca_data_anc <- plotPCA(vsd_limma_female, intgroup = c("Batch", "Affected", "Ancestry"), returnData = TRUE)
 percent_var_anc <- round(100 * attr(pca_data_anc, "percentVar"))
@@ -232,7 +249,8 @@ percent_var_anc <- round(100 * attr(pca_data_anc, "percentVar"))
 ggplot(pca_data_anc, aes(PC1, PC2)) +
   geom_point(aes(colour = Affected, fill = Ancestry, shape = Batch), size = 4) +
     scale_shape_manual(values = c(21, 22, 23) )+
-  scale_fill_manual(values = c("greenyellow","khaki1"))+
+  scale_fill_manual(values = c("#B3DE69","#FFFFB3","#BEBADA","#FB8072","#80B1D3",
+                               "#FCCDE5","#D9D9D9","#FDB462","#8DD3C7","#000000"))+
   scale_color_manual(values=c("blue","red"))+
   geom_text(aes(label = name),
     data = subset(pca_data_anc, Ancestry == "Black" ),
@@ -376,7 +394,7 @@ This is a heatmap of the top 100 genes with the highest variance across all samp
 top_var_genes_100_all <- head(order(-rowVars(assay(vsd_limma))), 100)
 mat_100_all <- assay(vsd_limma)[top_var_genes_100_all, ]
 mat_100_all <- mat_100_all - rowMeans(mat_100_all)
-df_100_all <- as.data.frame(colData(vsd_limma)[, c("Batch", "Affected", "Category")])
+df_100_all <- as.data.frame(colData(vsd_limma)[, c("Affected", "Category")])
 
 ensembl_to_gene <- setNames(gene_info$gene_name, gene_info$Ensembl_ID)
 
@@ -475,10 +493,31 @@ rownames(topgenes_aff_vs_unaff_05_m) <- new_row_names_m
 
 topgenes_aff_vs_unaff_05_m <- topgenes_aff_vs_unaff_05_m[order(row.names(topgenes_aff_vs_unaff_05_m)), ]
 
-df_m <- df <- colData(vsd_limma) %>% as.data.frame() %>% dplyr::select(Affected, Family, Category)
+df_m <- df <- colData(vsd_limma) %>% as.data.frame() %>% dplyr::select(Affected, Category)
 pheatmap(topgenes_aff_vs_unaff_05_m, annotation_col = df_m, annotation_colors = ann_colors2, fontsize = 5)
 ```
 
+```{r, top-75-genes-deseq-all, out.height="570px", out.width ="800px"}
+topgenes_byensemblid_m <- head(rownames(res_aff_vs_unaff_df_m), 75)
+topgenes_aff_vs_unaff_05_m <- assay(vsd_limma)[topgenes_byensemblid_m, ]
+topgenes_aff_vs_unaff_05_m <- topgenes_aff_vs_unaff_05_m - rowMeans(topgenes_aff_vs_unaff_05_m)
+
+ensembl_to_gene_m <- setNames(gene_info$gene_name, gene_info$Ensembl_ID)
+
+# Get the current row names of the matrix 'mat'
+current_ensembl_ids_m <- rownames(topgenes_aff_vs_unaff_05_m)
+
+# Find the corresponding gene names for the Ensembl IDs
+new_row_names_m <- ensembl_to_gene_m[current_ensembl_ids_m]
+
+# Set the new row names for the matrix 'mat'
+rownames(topgenes_aff_vs_unaff_05_m) <- new_row_names_m
+
+topgenes_aff_vs_unaff_05_m <- topgenes_aff_vs_unaff_05_m[order(row.names(topgenes_aff_vs_unaff_05_m)), ]
+
+df_m <- as.data.frame(colData(vsd_limma)[, c("Affected", "Category")])
+pheatmap(topgenes_aff_vs_unaff_05_m, annotation_col = df_m, annotation_colors = ann_colors2, fontsize = 1.5)
+```
 
 ```{r, top-200-genes-deseq-all, out.height="570px", out.width ="800px"}
 topgenes_byensemblid_m <- head(rownames(res_aff_vs_unaff_df_m), 200)
@@ -637,10 +676,10 @@ pheatmap(mat2, annotation_col = df, annotation_colors = ann_colors2, fontsize = 
 ```
 
 ```{r, heatmap-genes-interest-all, out.width = "1200px"}
-mat2 <- assay(vsd_limma)[filtered_by_interest$Ensembl_ID, ]
-rownames(mat2) <- gene_info$gene_name[match(filtered_by_interest$Ensembl_ID, gene_info$Ensembl_ID)]
-df_m <- as.data.frame(colData(vsd)[, c("Affected", "Category")])
-pheatmap(mat2, annotation_col = df_m, annotation_colors = ann_colors2, fontsize = 4)
+mat3 <- assay(vsd_limma)[filtered_by_interest$Ensembl_ID, ]
+rownames(mat3) <- gene_info$gene_name[match(filtered_by_interest$Ensembl_ID, gene_info$Ensembl_ID)]
+df_m <- as.data.frame(colData(vsd_limma)[, c("Affected", "Category")])
+pheatmap(mat3, annotation_col = df_m, annotation_colors = ann_colors2, fontsize = 4)
 ```
 
 ## Enrichment analysis
@@ -657,75 +696,75 @@ pheatmap(mat2, annotation_col = df_m, annotation_colors = ann_colors2, fontsize 
 # #gostplot(res, capped = FALSE, interactive = TRUE)
 # # Get entrez id
 # 
-# # Your existing code for obtaining geneList with Ensembl IDs
-# rownames(res_aff_vs_unaff_df) <- gsub("\\..*", "", rownames(res_aff_vs_unaff_df))
-# geneList <- res_aff_vs_unaff_df$log2FoldChange
-# names(geneList) <- rownames(res_aff_vs_unaff_df)
-# 
-# # Initialize BioMart
-# ensembl <- useMart("ensembl", dataset = "hsapiens_gene_ensembl")
-# 
-# # Convert all Ensembl IDs in geneList to Entrez IDs
-# attributes <- c('ensembl_gene_id', 'entrezgene_id')
-# filters <- 'ensembl_gene_id'
-# results <- getBM(attributes = attributes, filters = filters, values = names(geneList), mart = ensembl)
-# 
-# # Remove rows with NA or empty Entrez IDs
-# results <- results[!is.na(results$entrezgene_id) & results$entrezgene_id != "",]
-# 
-# # Create a new geneList with Entrez IDs
-# geneList_entrez <- geneList[results$ensembl_gene_id]
-# names(geneList_entrez) <- results$entrezgene_id
-# 
-# # Filter genes with abs(log2FoldChange) > 2
-# gene_entrez <- names(geneList_entrez)[abs(geneList_entrez) > 2]
-# # Run enrichGO with Entrez IDs
-# ego_cc <- enrichGO(gene       = gene_entrez,
-#                 universe      = names(geneList_entrez),
-#                 OrgDb         = org.Hs.eg.db,
-#                 ont           = "CC",
-#                 pAdjustMethod = "BH",
-#                 pvalueCutoff  = 0.01,
-#                 qvalueCutoff  = 0.05,
-#                 readable      = TRUE)
-# 
-# # Plot results
-# barplot(ego_cc, showCategory=10) + ggthemes::theme_clean()
-# 
-# 
-# ego_bp <- enrichGO(gene       = gene_entrez,
-#                 universe      = names(geneList_entrez),
-#                 OrgDb         = org.Hs.eg.db,
-#                 ont           = "BP",
-#                 pAdjustMethod = "BH",
-#                 pvalueCutoff  = 0.01,
-#                 qvalueCutoff  = 0.05,
-#                 readable      = TRUE)
-# 
-# # Plot results
-# barplot(ego_bp, showCategory=10) + ggthemes::theme_clean()
-# 
-# 
-# ego_mf <- enrichGO(gene       = gene_entrez,
-#                 universe      = names(geneList_entrez),
-#                 OrgDb         = org.Hs.eg.db,
-#                 ont           = "MF",
-#                 pAdjustMethod = "BH",
-#                 pvalueCutoff  = 0.01,
-#                 qvalueCutoff  = 0.05,
-#                 readable      = TRUE)
-# 
-# # Plot results
-# barplot(ego_mf, showCategory=10) + ggthemes::theme_clean()
-# ```
-# 
-# ```{r, enrichplot}
+# Your existing code for obtaining geneList with Ensembl IDs
+rownames(res_aff_vs_unaff_df) <- gsub("\\..*", "", rownames(res_aff_vs_unaff_df))
+geneList <- res_aff_vs_unaff_df$log2FoldChange
+names(geneList) <- rownames(res_aff_vs_unaff_df)
+
+# Initialize BioMart
+ensembl <- useMart("ensembl", dataset = "hsapiens_gene_ensembl")
+
+# Convert all Ensembl IDs in geneList to Entrez IDs
+attributes <- c('ensembl_gene_id', 'entrezgene_id')
+filters <- 'ensembl_gene_id'
+results <- getBM(attributes = attributes, filters = filters, values = names(geneList), mart = ensembl)
+
+# Remove rows with NA or empty Entrez IDs
+results <- results[!is.na(results$entrezgene_id) & results$entrezgene_id != "",]
+
+# Create a new geneList with Entrez IDs
+geneList_entrez <- geneList[results$ensembl_gene_id]
+names(geneList_entrez) <- results$entrezgene_id
+
+# Filter genes with abs(log2FoldChange) > 2
+gene_entrez <- names(geneList_entrez)[abs(geneList_entrez) > 2]
+# Run enrichGO with Entrez IDs
+ego_cc <- enrichGO(gene       = gene_entrez,
+                universe      = names(geneList_entrez),
+                OrgDb         = org.Hs.eg.db,
+                ont           = "CC",
+                pAdjustMethod = "BH",
+                pvalueCutoff  = 0.01,
+                qvalueCutoff  = 0.05,
+                readable      = TRUE)
+
+# Plot results
+barplot(ego_cc, showCategory=10) + ggthemes::theme_clean()
+
+
+ego_bp <- enrichGO(gene       = gene_entrez,
+                universe      = names(geneList_entrez),
+                OrgDb         = org.Hs.eg.db,
+                ont           = "BP",
+                pAdjustMethod = "BH",
+                pvalueCutoff  = 0.01,
+                qvalueCutoff  = 0.05,
+                readable      = TRUE)
+
+# Plot results
+barplot(ego_bp, showCategory=10) + ggthemes::theme_clean()
+
+
+ego_mf <- enrichGO(gene       = gene_entrez,
+                universe      = names(geneList_entrez),
+                OrgDb         = org.Hs.eg.db,
+                ont           = "MF",
+                pAdjustMethod = "BH",
+                pvalueCutoff  = 0.01,
+                qvalueCutoff  = 0.05,
+                readable      = TRUE)
+
+# Plot results
+barplot(ego_mf, showCategory=10) + ggthemes::theme_clean()
+```
+
+```{r, enrichplot}
 # top_genes_df <- res_aff_vs_unaff_df[order(-abs(res_aff_vs_unaff_df$log2FoldChange)), ]
 # top_20_genes <- rownames(top_genes_df)[1:20]
 # 
 # # Enriched via DisGeNet
 # edo <- enrichDGN(gene_entrez)
-# barplot(edo, showCategory=20) 
+# barplot(edo, showCategory=20)
 ```
 
 
