@@ -78,7 +78,7 @@ gene_info <- counts[, drop]
 counts <- counts[, !(names(counts) %in% drop)] # remove both columns
 
 # Import metadata
-sample_metadata <- read_csv("data/MECFS_RNAseq_metadata_2024_01_19.csv")
+sample_metadata <- read_csv("data/MECFS_RNAseq_metadata_2024_03_05.csv")
 row.names(sample_metadata) <- sample_metadata$ID
 
 # Assuming counts is your counts dataframe and sample_metadata is your metadata dataframe
