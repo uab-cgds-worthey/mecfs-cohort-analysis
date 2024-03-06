@@ -66,8 +66,8 @@ for the project which is hosted on Box. This also ensures data is properly order
 counts <- read_tsv("data/star-salmon/salmon.merged.gene_counts_length_scaled.tsv")
 
 # Import variants of interest
-vars_of_interest <- read_csv("data/RNAseq Variants of Interest List_V2.csv")
-genes_of_interest <- unique(vars_of_interest$Gene)
+genes_of_interest <- read_csv("data/Patient_Genes_2024_03_05.csv")
+genes_of_interest <- unique(genes_of_interest$Genes)
 genes_of_interest <- genes_of_interest[!is.na(genes_of_interest)]
 
 # Use first column (gene_id) for row names
