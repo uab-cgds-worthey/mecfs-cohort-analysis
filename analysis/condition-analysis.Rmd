@@ -266,13 +266,16 @@ disease_colors <- c(
 )
 
 category_colors <- c(
-  "Metabolism" = "#B3DE69",
-  "Immune" = "#FFFFB3",
-  "Channelopathies" = "#BEBADA",
-  "Misc:Mitochondria" = "#FB8072",
-  "Misc:Myosin family" = "#80B1D3",
-  "Misc:Ciliopathy" = "#FCCDE5",
-  "None" = "#FDB462"
+  "Autoimmune disorder" = "#B3DE69",
+  "Immunodeficiency" = "#FFFFB3",
+  "Channelopathy" = "#BEBADA",
+  "Inflammatory disorder" = "#FB8072",
+  "Metabolic disorder" = "#80B1D3",
+  "Mitochondrial disorder" = "#FCCDE5",
+  "Neurologic disorder" = "#D9D9D9",
+  "Myasthenic disorder" = "#FDB462",
+  "Neuropathy" = "#8DD3C7",
+  "None" = "#000000"
 )
 
 
