@@ -100,11 +100,13 @@ sample_metadata$Batch <- factor(sample_metadata$Batch)
 sample_metadata$Sex <- factor(sample_metadata$Sex)
 sample_metadata$Ancestry <- factor(sample_metadata$Ancestry)
 #sample_metadata$Disease <- factor(sample_metadata$Disease)
-sample_metadata$Category <- factor(sample_metadata$Category)
+sample_metadata$SubCategory <- factor(sample_metadata$SubCategory)
+sample_metadata$CombinedCategory <- factor(sample_metadata$CombinedCategory)
 
 # Account for Family later but batch is accounted for
 # Accounting for another factor seems to be an issue.
-dds <- DESeqDataSetFromMatrix(countData = round(counts), colData = sample_metadata, design = ~ Batch + Affected)
+dds <- DESeqDataSetFromMatrix(countData = round(counts), colData = sample_metadata, 
+                              design = ~ Batch + Affected)
 
 # Pre-filtering: Keep only rows that have at least 10 reads total
 keep <- rowSums(counts(dds)) >= 10
@@ -207,32 +209,47 @@ ggplot(pca_data_all, aes(PC1, PC2)) +
   coord_fixed()
 ```
 
-Below is PCA with only female samples.
+```{r, principal-components-analysis-combocategory-all}
+pca_data_all <- plotPCA(vsd_limma, intgroup = c("Affected", "Sex", "CombinedCategory"), returnData = TRUE)
+percent_var_all <- round(100 * attr(pca_data_all, "percentVar"))
 
-```{r, principal-components-analysis-female}
-pca_data_female <- plotPCA(vsd_limma_female, intgroup = c("Batch", "Affected"), returnData = TRUE)
-percent_var_female <- round(100 * attr(pca_data_female, "percentVar"))
-
-ggplot(pca_data_female, aes(PC1, PC2)) +
-  geom_point(aes(shape = Batch, colour = Affected), size = 4) +
-   scale_color_manual(values=c("blue","red")) +
+ggplot(pca_data_all, aes(PC1, PC2)) +
+  geom_point(aes(colour = CombinedCategory, fill = Sex, shape = Affected), size = 4) +
+    scale_shape_manual(values = c(21, 22, 23) )+
+  scale_fill_manual(values = c("white","gray"))+
   geom_text(aes(label = name),
-    data = subset(pca_data_female, PC2 < -15 | PC1 > 25 | PC1 < -40 ),
+    data = subset(pca_data_all, PC2 < -18 | PC1 < -30 ),
     vjust = -1, hjust = 0.5, size = 2.5
   ) +
-  xlab(paste0("PC1: ", percent_var_female[1], "% variance")) +
-  ylab(paste0("PC2: ", percent_var_female[2], "% variance")) +
+  xlab(paste0("PC1: ", percent_var_all[1], "% variance")) +
+  ylab(paste0("PC2: ", percent_var_all[2], "% variance")) +
+  coord_fixed()
+```
+
+```{r, principal-components-analysis-all-affected}
+pca_data<- plotPCA(vsd_limma, intgroup = c("Sex", "Affected"), returnData = TRUE)
+percent_var<- round(100 * attr(pca_data, "percentVar"))
+
+ggplot(pca_data, aes(PC1, PC2)) +
+  geom_point(aes(shape = Sex, colour = Affected), size = 4) +
+   scale_color_manual(values=c("blue","red")) +
+  geom_text(aes(label = name),
+    data = subset(pca_data, PC2 < -15 | PC1 > 25 | PC1 < -40 ),
+    vjust = -1, hjust = 0.5, size = 2.5
+  ) +
+  xlab(paste0("PC1: ", percent_var[1], "% variance")) +
+  ylab(paste0("PC2: ", percent_var[2], "% variance")) +
   coord_fixed()
 ```
 
 ```{r, principal-components-analysis-category}
-pca_data_all <- plotPCA(vsd_limma, intgroup = c("Category"), returnData = TRUE)
+pca_data_all <- plotPCA(vsd_limma, intgroup = c("CombinedCategory"), returnData = TRUE)
 percent_var_all <- round(100 * attr(pca_data_all, "percentVar"))
 
 ggplot(pca_data_all, aes(PC1, PC2)) +
-  geom_point(aes(colour = Category), size = 4) +
+  geom_point(aes(colour = CombinedCategory), size = 4) +
   scale_colour_manual(values = c("#B3DE69","#FFFFB3","#BEBADA","#FB8072","#80B1D3",
-                               "#FCCDE5","#D9D9D9","#FDB462","#8DD3C7","#000000"))+
+                               "#FCCDE5","#8DD3C7","#000000"))+
   geom_text(aes(label = name),
     data = subset(pca_data_all, PC2 < -10 | PC1 < -20 | PC1 > 40 ),
     vjust = -1, hjust = 0.5, size = 2.5
@@ -293,7 +310,18 @@ category_colors <- c(
   "Neurologic disorder" = "#D9D9D9",
   "Myasthenic disorder" = "#FDB462",
   "Neuropathy" = "#8DD3C7",
-  "None" = "#000000"
+  "None" = "#001111"
+)
+
+combined_category_colors <- c(
+  "Transporter-Metabolism" = "#E41A1C",  # Dark green
+  "Metabolism" = "#377EB8",              # Dark orange
+  "Metabolism-Immune" = "#4DAF4A",       # Light purple
+  "Immune-Transporter" = "#984EA3",      # Magenta
+  "Transporter" = "#FF7F00",             # Light green
+  "Cytoskeletal" = "#FFFF33",            # Mustard yellow
+  "Transporter-Immune-Metabolism" = "#F781BF",  # Brown
+  "NA" = "#000000"                       # Dark grey
 )
 
 
@@ -302,14 +330,17 @@ ann_colors = list(
     Batch = c(B1 = "purple", B2 = "firebrick", B3 ="yellow"),
     Affected = c(Yes = "green", No = "navy"),
     Disease = disease_colors,
-    Category = category_colors
+    SubCategory = category_colors,
+    CombinedCategory = combined_category_colors
 )
 
 ann_colors2 = list(
     Batch = c(B1 = "purple", B2 = "firebrick", B3 ="yellow"),
     Affected = c(Yes = "green", No = "navy"),
-    Category = category_colors,
-    Disease = disease_colors
+    SubCategory = category_colors,
+    Disease = disease_colors,
+    CombinedCategory = combined_category_colors
+
 )
 
 all_genes <- order(-rowVars(assay(vsd_limma_female)))
@@ -349,8 +380,8 @@ This is a heatmap of the top 50 genes with the highest variance across all sampl
 top_var_genes_all <- head(order(-rowVars(assay(vsd_limma))), 50)
 mat_all <- assay(vsd_limma)[top_var_genes_all, ]
 mat_all <- mat_all - rowMeans(mat_all)
-df_all <- as.data.frame(colData(vsd_limma)[, c("Batch", "Affected", "Category")])
-df_affcat <- as.data.frame(colData(vsd_limma)[, c("Affected", "Category")])
+df_all <- as.data.frame(colData(vsd_limma)[, c("Batch", "Affected", "SubCategory")])
+df_affcat <- as.data.frame(colData(vsd_limma)[, c("Affected", "CombinedCategory")])
 
 ensembl_to_gene <- setNames(gene_info$gene_name, gene_info$Ensembl_ID)
 
@@ -373,7 +404,7 @@ This is a heatmap of the top 100 genes with the highest variance across only fem
 top_var_genes_100 <- head(order(-rowVars(assay(vsd_limma_female))), 100)
 mat_100 <- assay(vsd_limma_female)[top_var_genes_100, ]
 mat_100 <- mat_100 - rowMeans(mat_100)
-df_100 <- as.data.frame(colData(vsd_limma_female)[, c("Batch", "Affected", "Category")])
+df_100 <- as.data.frame(colData(vsd_limma_female)[, c("Batch", "Affected", "SubCategory")])
 
 ensembl_to_gene <- setNames(gene_info$gene_name, gene_info$Ensembl_ID)
 
@@ -394,7 +425,7 @@ This is a heatmap of the top 100 genes with the highest variance across all samp
 top_var_genes_100_all <- head(order(-rowVars(assay(vsd_limma))), 100)
 mat_100_all <- assay(vsd_limma)[top_var_genes_100_all, ]
 mat_100_all <- mat_100_all - rowMeans(mat_100_all)
-df_100_all <- as.data.frame(colData(vsd_limma)[, c("Affected", "Category")])
+df_100_all <- as.data.frame(colData(vsd_limma)[, c("Affected", "SubCategory")])
 
 ensembl_to_gene <- setNames(gene_info$gene_name, gene_info$Ensembl_ID)
 
@@ -432,25 +463,47 @@ summary(res_aff_vs_unaff_m)
 ```
 
 ```{r, top-100-genes-deseq-female, out.height="570px", out.width ="800px"}
-topgenes_byensemblid <- head(rownames(res_aff_vs_unaff_df), 100)
-topgenes_aff_vs_unaff_05 <- assay(vsd_limma_female)[topgenes_byensemblid, ]
-topgenes_aff_vs_unaff_05 <- topgenes_aff_vs_unaff_05 - rowMeans(topgenes_aff_vs_unaff_05)
+# topgenes_byensemblid <- head(rownames(res_aff_vs_unaff_df), 100)
+# topgenes_aff_vs_unaff_05 <- assay(vsd_limma_female)[topgenes_byensemblid, ]
+# topgenes_aff_vs_unaff_05 <- topgenes_aff_vs_unaff_05 - rowMeans(topgenes_aff_vs_unaff_05)
+# 
+# ensembl_to_gene <- setNames(gene_info$gene_name, gene_info$Ensembl_ID)
+# 
+# # Get the current row names of the matrix 'mat'
+# current_ensembl_ids <- rownames(topgenes_aff_vs_unaff_05)
+# 
+# # Find the corresponding gene names for the Ensembl IDs
+# new_row_names <- ensembl_to_gene[current_ensembl_ids]
+# 
+# # Set the new row names for the matrix 'mat'
+# rownames(topgenes_aff_vs_unaff_05) <- new_row_names
+# 
+# topgenes_aff_vs_unaff_05 <- topgenes_aff_vs_unaff_05[order(row.names(topgenes_aff_vs_unaff_05)), ]
+# 
+# df <- colData(vsd_limma_female) %>% as.data.frame() %>% dplyr::select(CombinedCategory)
+# pheatmap(topgenes_aff_vs_unaff_05, annotation_col = df, annotation_colors = ann_colors2, fontsize = 3)
+```
 
-ensembl_to_gene <- setNames(gene_info$gene_name, gene_info$Ensembl_ID)
+```{r, top-100-genes-deseq-all-with-sub, out.height="570px", out.width ="800px"}
+topgenes_byensemblid_m <- head(rownames(res_aff_vs_unaff_df_m), 100)
+topgenes_aff_vs_unaff_05_m <- assay(vsd_limma)[topgenes_byensemblid_m, ]
+topgenes_aff_vs_unaff_05_m <- topgenes_aff_vs_unaff_05_m - rowMeans(topgenes_aff_vs_unaff_05_m)
+
+ensembl_to_gene_m <- setNames(gene_info$gene_name, gene_info$Ensembl_ID)
 
 # Get the current row names of the matrix 'mat'
-current_ensembl_ids <- rownames(topgenes_aff_vs_unaff_05)
+current_ensembl_ids_m <- rownames(topgenes_aff_vs_unaff_05_m)
 
 # Find the corresponding gene names for the Ensembl IDs
-new_row_names <- ensembl_to_gene[current_ensembl_ids]
+new_row_names_m <- ensembl_to_gene_m[current_ensembl_ids_m]
 
 # Set the new row names for the matrix 'mat'
-rownames(topgenes_aff_vs_unaff_05) <- new_row_names
+rownames(topgenes_aff_vs_unaff_05_m) <- new_row_names_m
 
-topgenes_aff_vs_unaff_05 <- topgenes_aff_vs_unaff_05[order(row.names(topgenes_aff_vs_unaff_05)), ]
+topgenes_aff_vs_unaff_05_m <- topgenes_aff_vs_unaff_05_m[order(row.names(topgenes_aff_vs_unaff_05_m)), ]
 
-df <- colData(vsd_limma_female) %>% as.data.frame() %>% dplyr::select(Category)
-pheatmap(topgenes_aff_vs_unaff_05, annotation_col = df, annotation_colors = ann_colors2, fontsize = 3)
+df_m <- as.data.frame(colData(vsd_limma)[, c("Affected", "SubCategory", "CombinedCategory")])
+pheatmap(topgenes_aff_vs_unaff_05_m, annotation_col = df_m, annotation_colors = ann_colors2, fontsize = 3.5)
 ```
 
 ```{r, top-100-genes-deseq-all, out.height="570px", out.width ="800px"}
@@ -471,9 +524,10 @@ rownames(topgenes_aff_vs_unaff_05_m) <- new_row_names_m
 
 topgenes_aff_vs_unaff_05_m <- topgenes_aff_vs_unaff_05_m[order(row.names(topgenes_aff_vs_unaff_05_m)), ]
 
-df_m <- as.data.frame(colData(vsd_limma)[, c("Affected", "Category")])
-pheatmap(topgenes_aff_vs_unaff_05_m, annotation_col = df_m, annotation_colors = ann_colors2, fontsize = 3)
+df_m <- as.data.frame(colData(vsd_limma)[, c("Affected", "SubCategory", "CombinedCategory")])
+pheatmap(topgenes_aff_vs_unaff_05_m, annotation_col = df_m, annotation_colors = ann_colors2, fontsize = 3.5)
 ```
+
 
 ```{r, top-50-genes-deseq-all, out.height="570px", out.width ="800px"}
 topgenes_byensemblid_m <- head(rownames(res_aff_vs_unaff_df_m), 50)
@@ -493,9 +547,32 @@ rownames(topgenes_aff_vs_unaff_05_m) <- new_row_names_m
 
 topgenes_aff_vs_unaff_05_m <- topgenes_aff_vs_unaff_05_m[order(row.names(topgenes_aff_vs_unaff_05_m)), ]
 
-df_m <- df <- colData(vsd_limma) %>% as.data.frame() %>% dplyr::select(Affected, Category)
+df_m <- df <- colData(vsd_limma) %>% as.data.frame() %>% dplyr::select(CombinedCategory)
 pheatmap(topgenes_aff_vs_unaff_05_m, annotation_col = df_m, annotation_colors = ann_colors2, fontsize = 5)
 ```
+
+```{r, top-50-genes-deseq-all-with-sub, out.height="570px", out.width ="800px"}
+topgenes_byensemblid_m <- head(rownames(res_aff_vs_unaff_df_m), 50)
+topgenes_aff_vs_unaff_05_m <- assay(vsd_limma)[topgenes_byensemblid_m, ]
+topgenes_aff_vs_unaff_05_m <- topgenes_aff_vs_unaff_05_m - rowMeans(topgenes_aff_vs_unaff_05_m)
+
+ensembl_to_gene_m <- setNames(gene_info$gene_name, gene_info$Ensembl_ID)
+
+# Get the current row names of the matrix 'mat'
+current_ensembl_ids_m <- rownames(topgenes_aff_vs_unaff_05_m)
+
+# Find the corresponding gene names for the Ensembl IDs
+new_row_names_m <- ensembl_to_gene_m[current_ensembl_ids_m]
+
+# Set the new row names for the matrix 'mat'
+rownames(topgenes_aff_vs_unaff_05_m) <- new_row_names_m
+
+topgenes_aff_vs_unaff_05_m <- topgenes_aff_vs_unaff_05_m[order(row.names(topgenes_aff_vs_unaff_05_m)), ]
+
+df_m <- df <- colData(vsd_limma) %>% as.data.frame() %>% dplyr::select(Affected, SubCategory, CombinedCategory)
+pheatmap(topgenes_aff_vs_unaff_05_m, annotation_col = df_m, annotation_colors = ann_colors2, fontsize = 5)
+```
+
 
 ```{r, top-75-genes-deseq-all, out.height="570px", out.width ="800px"}
 topgenes_byensemblid_m <- head(rownames(res_aff_vs_unaff_df_m), 75)
@@ -515,8 +592,30 @@ rownames(topgenes_aff_vs_unaff_05_m) <- new_row_names_m
 
 topgenes_aff_vs_unaff_05_m <- topgenes_aff_vs_unaff_05_m[order(row.names(topgenes_aff_vs_unaff_05_m)), ]
 
-df_m <- as.data.frame(colData(vsd_limma)[, c("Affected", "Category")])
-pheatmap(topgenes_aff_vs_unaff_05_m, annotation_col = df_m, annotation_colors = ann_colors2, fontsize = 1.5)
+df_m <- as.data.frame(colData(vsd_limma)[, c("Affected", "CombinedCategory")])
+pheatmap(topgenes_aff_vs_unaff_05_m, annotation_col = df_m, annotation_colors = ann_colors2, fontsize = 5)
+```
+
+```{r, top-75-genes-deseq-all-with-sub, out.height="570px", out.width ="800px"}
+topgenes_byensemblid_m <- head(rownames(res_aff_vs_unaff_df_m), 75)
+topgenes_aff_vs_unaff_05_m <- assay(vsd_limma)[topgenes_byensemblid_m, ]
+topgenes_aff_vs_unaff_05_m <- topgenes_aff_vs_unaff_05_m - rowMeans(topgenes_aff_vs_unaff_05_m)
+
+ensembl_to_gene_m <- setNames(gene_info$gene_name, gene_info$Ensembl_ID)
+
+# Get the current row names of the matrix 'mat'
+current_ensembl_ids_m <- rownames(topgenes_aff_vs_unaff_05_m)
+
+# Find the corresponding gene names for the Ensembl IDs
+new_row_names_m <- ensembl_to_gene_m[current_ensembl_ids_m]
+
+# Set the new row names for the matrix 'mat'
+rownames(topgenes_aff_vs_unaff_05_m) <- new_row_names_m
+
+topgenes_aff_vs_unaff_05_m <- topgenes_aff_vs_unaff_05_m[order(row.names(topgenes_aff_vs_unaff_05_m)), ]
+
+df_m <- as.data.frame(colData(vsd_limma)[, c("Affected", "SubCategory", "CombinedCategory")])
+pheatmap(topgenes_aff_vs_unaff_05_m, annotation_col = df_m, annotation_colors = ann_colors2, fontsize = 5)
 ```
 
 ```{r, top-200-genes-deseq-all, out.height="570px", out.width ="800px"}
@@ -537,7 +636,29 @@ rownames(topgenes_aff_vs_unaff_05_m) <- new_row_names_m
 
 topgenes_aff_vs_unaff_05_m <- topgenes_aff_vs_unaff_05_m[order(row.names(topgenes_aff_vs_unaff_05_m)), ]
 
-df_m <- as.data.frame(colData(vsd_limma)[, c("Affected", "Category")])
+df_m <- as.data.frame(colData(vsd_limma)[, c("Affected", "SubCategory")])
+pheatmap(topgenes_aff_vs_unaff_05_m, annotation_col = df_m, annotation_colors = ann_colors2, fontsize = 1.5)
+```
+
+```{r, top-200-genes-deseq-all-with-sub, out.height="570px", out.width ="800px"}
+topgenes_byensemblid_m <- head(rownames(res_aff_vs_unaff_df_m), 200)
+topgenes_aff_vs_unaff_05_m <- assay(vsd_limma)[topgenes_byensemblid_m, ]
+topgenes_aff_vs_unaff_05_m <- topgenes_aff_vs_unaff_05_m - rowMeans(topgenes_aff_vs_unaff_05_m)
+
+ensembl_to_gene_m <- setNames(gene_info$gene_name, gene_info$Ensembl_ID)
+
+# Get the current row names of the matrix 'mat'
+current_ensembl_ids_m <- rownames(topgenes_aff_vs_unaff_05_m)
+
+# Find the corresponding gene names for the Ensembl IDs
+new_row_names_m <- ensembl_to_gene_m[current_ensembl_ids_m]
+
+# Set the new row names for the matrix 'mat'
+rownames(topgenes_aff_vs_unaff_05_m) <- new_row_names_m
+
+topgenes_aff_vs_unaff_05_m <- topgenes_aff_vs_unaff_05_m[order(row.names(topgenes_aff_vs_unaff_05_m)), ]
+
+df_m <- as.data.frame(colData(vsd_limma)[, c("Affected", "SubCategory", "CombinedCategory")])
 pheatmap(topgenes_aff_vs_unaff_05_m, annotation_col = df_m, annotation_colors = ann_colors2, fontsize = 1.5)
 ```
 
@@ -559,10 +680,31 @@ rownames(topgenes_aff_vs_unaff_05_m) <- new_row_names_m
 
 #topgenes_aff_vs_unaff_05_m <- topgenes_aff_vs_unaff_05_m[order(row.names(topgenes_aff_vs_unaff_05_m)), ]
 
-df_m <- as.data.frame(colData(vsd_limma)[, c("Affected", "Category")])
+df_m <- as.data.frame(colData(vsd_limma)[, c("Affected", "CombinedCategory")])
 pheatmap(topgenes_aff_vs_unaff_05_m, annotation_col = df_m, annotation_colors = ann_colors2, fontsize = 3.75)
 ```
 
+```{r, top-150-genes-deseq-all-with-sub, out.height="570px", out.width ="800px"}
+topgenes_byensemblid_m <- head(rownames(res_aff_vs_unaff_df_m), 150)
+topgenes_aff_vs_unaff_05_m <- assay(vsd_limma)[topgenes_byensemblid_m, ]
+topgenes_aff_vs_unaff_05_m <- topgenes_aff_vs_unaff_05_m - rowMeans(topgenes_aff_vs_unaff_05_m)
+
+ensembl_to_gene_m <- setNames(gene_info$gene_name, gene_info$Ensembl_ID)
+
+# Get the current row names of the matrix 'mat'
+current_ensembl_ids_m <- rownames(topgenes_aff_vs_unaff_05_m)
+
+# Find the corresponding gene names for the Ensembl IDs
+new_row_names_m <- ensembl_to_gene_m[current_ensembl_ids_m]
+
+# Set the new row names for the matrix 'mat'
+rownames(topgenes_aff_vs_unaff_05_m) <- new_row_names_m
+
+#topgenes_aff_vs_unaff_05_m <- topgenes_aff_vs_unaff_05_m[order(row.names(topgenes_aff_vs_unaff_05_m)), ]
+
+df_m <- as.data.frame(colData(vsd_limma)[, c("Affected", "SubCategory", "CombinedCategory")])
+pheatmap(topgenes_aff_vs_unaff_05_m, annotation_col = df_m, annotation_colors = ann_colors2, fontsize = 3.75)
+```
 
 
 ```{r, all-genes-female-only}
@@ -603,7 +745,7 @@ library(mygene)
 
 genes <- res_aff_vs_unaff_df_genename_05$gene_name
 my_gene_data <- queryMany(genes, scopes = "symbol", fields = c("symbol", "name", "summary", species = "human"))
-
+my_gene_data_unique <- as.data.frame(my_gene_data) %>% dplyr::distinct(query, .keep_all = TRUE)
 #paged_table(my_gene_data, options = list(rows.print = 15))
 ```
 
@@ -616,19 +758,30 @@ maplot <- ggmaplot(res_aff_vs_unaff_df_m,
   fdr = .1, fc = 1, size = 0.4, # Same used for others.
   genenames = as.vector(res_aff_vs_unaff_df_m_genename$gene_name),
   ggtheme = ggplot2::theme_minimal(),
-  legend = "top", top = 20,
+  legend = "top", top = 30,
   label.select = c("KCNQ5"),
-  font.label = c("bold", 5), label.rectangle = TRUE,
+  font.label = c("bold", 6), label.rectangle = TRUE,
   font.legend = "bold", font.main = "bold"
 )
 
 maplot
 
-significant_data <- subset(maplot$data, grepl("Up|Down", sig))
+significant_data <- maplot$data %>%
+  filter(grepl("Up|Down", sig)) %>%
+  mutate(direction = ifelse(grepl("Up", sig), "Up", "Down")) %>%
+  dplyr::select(-sig) # This removes the 'sig' column
 
-paged_table(as.data.frame(significant_data), options = list(rows.print = 20))
+# Combine DataFrames based on matching 'query' in my_gene_data_unique to 'gene' in significant_data
+combined_data <- inner_join(my_gene_data_unique, significant_data, by = c("query" = "name"))
+
+combined_data <- combined_data %>% dplyr::select(-notfound, -X_id, -X_score) %>% rename(gene = query)
+
+paged_table(as.data.frame(significant_data), options = list(rows.print = 30))
 # Save significant genes
 write.csv(significant_data, file = "output/res_aff_vs_unaff_significant_all_samples.csv", row.names = FALSE)
+
+# Save significant genes
+write.csv(combined_data, file = "output/res_aff_vs_unaff_significant_all_mygene.csv", row.names = FALSE)
 ```
 
 ## Expression of Candidate Genes
@@ -671,14 +824,14 @@ Below is a heatmap highlighting the expression of our genes of interest across b
 ```{r, heatmap-genes-interest-female, out.width = "1200px"}
 mat2 <- assay(vsd_limma_female)[filtered_by_interest$Ensembl_ID, ]
 rownames(mat2) <- gene_info$gene_name[match(filtered_by_interest$Ensembl_ID, gene_info$Ensembl_ID)]
-df <- as.data.frame(colData(vsd_limma_female)[, c("Affected", "Category")])
+df <- as.data.frame(colData(vsd_limma_female)[, c("Affected", "SubCategory")])
 pheatmap(mat2, annotation_col = df, annotation_colors = ann_colors2, fontsize = 4)
 ```
 
 ```{r, heatmap-genes-interest-all, out.width = "1200px"}
 mat3 <- assay(vsd_limma)[filtered_by_interest$Ensembl_ID, ]
 rownames(mat3) <- gene_info$gene_name[match(filtered_by_interest$Ensembl_ID, gene_info$Ensembl_ID)]
-df_m <- as.data.frame(colData(vsd_limma)[, c("Affected", "Category")])
+df_m <- as.data.frame(colData(vsd_limma)[, c("Affected", "SubCategory")])
 pheatmap(mat3, annotation_col = df_m, annotation_colors = ann_colors2, fontsize = 4)
 ```
 
