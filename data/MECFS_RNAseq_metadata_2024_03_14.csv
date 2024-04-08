@@ -21,10 +21,10 @@
 26,26,LW001974,LW000483,v,F,Proband,,Metabolism,Affected,DDHA-014,MECFS,7547-EW-1,7548-EW-01,50M,B1,,8.707908924,,Unknown,2,F,White,Mitochondrial disorder
 27,27,LW001980,LW000489,w,F,Proband,,Transporter-Immune-Metabolism,Affected,DDHA-024,MECFS,7547-EW-5,7548-EW-05,50M,B1,,10,,Unknown,3,F,White,Channelopathy
 28,28,LW001990,LW000499,w,F,Proband,,Transporter-Metabolism,Affected,DDHA-033,MECFS,8288-EW-6,8289-EW-06,50M,B2,,,,Unknown,2,F,White,Channelopathy
-10H,10HFDR,LW001977,LW000486,i,F,Mother,,NA,Unaffected,DDHA-019,MECFS,7547-EW-4,7548-EW-04,50M,B1,,9.771113135,,Unknown,None,F,White,None
-11H,11HFDR,LW001985,LW000494,j,M,Father,,NA,Unaffected,DDHA-027,MECFS,7547-EW-7,7548-EW-07,50M,B1,,10,,Unknown,None,M,White,None
-13H,13HFDR,LW001984,LW000493,k,M,Father,,NA,Unaffected,DDHA-039,MECFS,8288-EW-3,8289-EW-03,50M,B2,,,,Unknown,None,M,White,None
-25H,25HFDR,LW001983,LW000492,u,F,Mother,,NA,Unaffected,DDHA-023,MECFS,7547-EW-6,7548-EW-06,50M,B1,,9.408044477,,Unknown,None,F,White,None
-26H,26HFDR,LW001975,LW000484,v,F,Mother,,NA,Unaffected,DDHA-015,MECFS,7547-EW-2,7548-EW-02,50M,B1,,9.841389374,,Unknown,None,F,White,None
-28_27H,28_27HFDR,LW001999,LW000508,w,F,Mother,,NA,Unaffected,DDHA-025,MECFS,7547-EW-12,7548-EW-12,50M,B1,,10,,Unknown,None,F,White,None
-9H,9HFDR,LW001998,LW000507,h,F,Mother,,NA,Unaffected,DDHA-017,MECFS,7547-EW-11,7548-EW-11,50M,B1,,10,,Unknown,None,F,White,None
+10H,10HFDR,LW001977,LW000486,i,F,Mother,,Unaffected,Unaffected,DDHA-019,MECFS,7547-EW-4,7548-EW-04,50M,B1,,9.771113135,,Unknown,Unaffected,F,White,Unaffected
+11H,11HFDR,LW001985,LW000494,j,M,Father,,Unaffected,Unaffected,DDHA-027,MECFS,7547-EW-7,7548-EW-07,50M,B1,,10,,Unknown,Unaffected,M,White,Unaffected
+13H,13HFDR,LW001984,LW000493,k,M,Father,,Unaffected,Unaffected,DDHA-039,MECFS,8288-EW-3,8289-EW-03,50M,B2,,,,Unknown,Unaffected,M,White,Unaffected
+25H,25HFDR,LW001983,LW000492,u,F,Mother,,Unaffected,Unaffected,DDHA-023,MECFS,7547-EW-6,7548-EW-06,50M,B1,,9.408044477,,Unknown,Unaffected,F,White,Unaffected
+26H,26HFDR,LW001975,LW000484,v,F,Mother,,Unaffected,Unaffected,DDHA-015,MECFS,7547-EW-2,7548-EW-02,50M,B1,,9.841389374,,Unknown,Unaffected,F,White,Unaffected
+28_27H,28_27HFDR,LW001999,LW000508,w,F,Mother,,Unaffected,Unaffected,DDHA-025,MECFS,7547-EW-12,7548-EW-12,50M,B1,,10,,Unknown,Unaffected,F,White,Unaffected
+9H,9HFDR,LW001998,LW000507,h,F,Mother,,Unaffected,Unaffected,DDHA-017,MECFS,7547-EW-11,7548-EW-11,50M,B1,,10,,Unknown,Unaffected,F,White,Unaffected
