@@ -462,27 +462,6 @@ res_aff_vs_unaff_df_1_m <- subset(res_aff_vs_unaff_df_m, padj < 0.05)
 summary(res_aff_vs_unaff_m)
 ```
 
-```{r, top-100-genes-deseq-female, out.height="570px", out.width ="800px"}
-# topgenes_byensemblid <- head(rownames(res_aff_vs_unaff_df), 100)
-# topgenes_aff_vs_unaff_05 <- assay(vsd_limma_female)[topgenes_byensemblid, ]
-# topgenes_aff_vs_unaff_05 <- topgenes_aff_vs_unaff_05 - rowMeans(topgenes_aff_vs_unaff_05)
-# 
-# ensembl_to_gene <- setNames(gene_info$gene_name, gene_info$Ensembl_ID)
-# 
-# # Get the current row names of the matrix 'mat'
-# current_ensembl_ids <- rownames(topgenes_aff_vs_unaff_05)
-# 
-# # Find the corresponding gene names for the Ensembl IDs
-# new_row_names <- ensembl_to_gene[current_ensembl_ids]
-# 
-# # Set the new row names for the matrix 'mat'
-# rownames(topgenes_aff_vs_unaff_05) <- new_row_names
-# 
-# topgenes_aff_vs_unaff_05 <- topgenes_aff_vs_unaff_05[order(row.names(topgenes_aff_vs_unaff_05)), ]
-# 
-# df <- colData(vsd_limma_female) %>% as.data.frame() %>% dplyr::select(CombinedCategory)
-# pheatmap(topgenes_aff_vs_unaff_05, annotation_col = df, annotation_colors = ann_colors2, fontsize = 3)
-```
 
 ```{r, top-100-genes-deseq-all-with-sub, out.height="570px", out.width ="800px"}
 topgenes_byensemblid_m <- head(rownames(res_aff_vs_unaff_df_m), 100)
@@ -507,7 +486,7 @@ pheatmap(topgenes_aff_vs_unaff_05_m, annotation_col = df_m, annotation_colors = 
 ```
 
 ```{r, top-100-genes-deseq-all, out.height="570px", out.width ="800px"}
-topgenes_byensemblid_m <- head(rownames(res_aff_vs_unaff_df_m), 100)
+topgenes_byensemblid_m <- head(rownames(res_aff_vs_unaff_df_m), 64)
 topgenes_aff_vs_unaff_05_m <- assay(vsd_limma)[topgenes_byensemblid_m, ]
 topgenes_aff_vs_unaff_05_m <- topgenes_aff_vs_unaff_05_m - rowMeans(topgenes_aff_vs_unaff_05_m)
 
