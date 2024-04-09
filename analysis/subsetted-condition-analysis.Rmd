@@ -50,6 +50,7 @@ library(DOSE)
 library(org.Hs.eg.db) # Available via Bioconductor
 library(UpSetR)
 library(ggrepel)
+library(ReactomePA)
 ```
 
 ```{r, include=FALSE}
@@ -113,11 +114,18 @@ dds <- DESeqDataSetFromMatrix(
 keep <- rowSums(counts(dds)) >= 10
 dds <- dds[keep, ]
 
-# Remove male samples
+# Remove samples from family's with multiple samples
 remove_multiple_fam <- c("8", "12", "19", "21", "23", "27")
+
+# Save excluded/removed samples
+# Code is commented out since this is for 1 time usage
+# excluded_samples_df <- filter(sample_metadata,
+#                        ID %in% remove_multiple_fam)
+# write.csv(excluded_samples_df, "data/excluded_samples_df.csv")
+
 # Create a logical vector to index the columns you want to keep
-multiple_fam_members <- !(colnames(dds) %in% remove_multiple_fam)
-dds <- dds[, multiple_fam_members]
+kept_fam_members <- !(colnames(dds) %in% remove_multiple_fam)
+dds <- dds[, kept_fam_members]
 
 # Run DESeq function
 dds <- DESeq(dds)
@@ -464,7 +472,7 @@ topgenes_aff_vs_unaff_05_sub <- topgenes_aff_vs_unaff_05_sub[order(row.names(top
 df_sub <- df <- colData(vsd_limma) %>%
   as.data.frame() %>%
   dplyr::select(Affected, SubCategory, CombinedCategory)
-pheatmap(topgenes_aff_vs_unaff_05_sub, annotation_col = df_sub, 
+pheatmap(topgenes_aff_vs_unaff_05_sub, annotation_col = df_sub,
          annotation_colors = ann_colors2, fontsize = 5, angle_col = 0)
 ```
 
@@ -776,6 +784,7 @@ gostplot(res, capped = FALSE, interactive = TRUE)
 ```{r, enrichgo-cc}
 # Your existing code for obtaining geneList with Ensembl IDs
 rownames(res_aff_vs_unaff_df_sub) <- gsub("\\..*", "", rownames(res_aff_vs_unaff_df_sub))
+res_aff_vs_unaff_df_sub <- res_aff_vs_unaff_df_sub %>% dplyr::distinct()
 geneList <- res_aff_vs_unaff_df_sub$log2FoldChange
 names(geneList) <- rownames(res_aff_vs_unaff_df_sub)
 
@@ -810,7 +819,7 @@ ego_cc <- enrichGO(
 )
 
 # Plot results
-barplot(ego_cc, showCategory = 10) + ggthemes::theme_clean()
+barplot(ego_cc, showCategory = 10, title = "Overrepresented Cellular Components") + ggthemes::theme_clean()
 ```
 
 ```{r, enrichgo-bp}
@@ -826,7 +835,7 @@ ego_bp <- enrichGO(
 )
 
 # Plot results
-barplot(ego_bp, showCategory = 10) + ggthemes::theme_clean()
+barplot(ego_bp, showCategory = 10, title = "Overrepresented Biological Processes") + ggthemes::theme_clean()
 ```
 
 ```{r, enrichgo-mf}
@@ -842,7 +851,7 @@ ego_mf <- enrichGO(
 )
 
 # Plot results
-barplot(ego_mf, showCategory = 10) + ggthemes::theme_clean()
+dotplot(ego_mf, showCategory = 10, title = "Overrepresented Molecular Functions") + ggthemes::theme_clean()
 ```
 
 
@@ -852,7 +861,6 @@ gl <- geneList_entrez[abs(geneList_entrez) > 2]
 gl <- na.omit(gl)
 gl_sorted <- sort(gl, decreasing = TRUE)
 
-geneList = sort(geneList, decreasing = TRUE)
 gse <- gseGO(geneList     = gl_sorted,
               OrgDb        = org.Hs.eg.db,
               ont          = "ALL",
@@ -861,8 +869,9 @@ gse <- gseGO(geneList     = gl_sorted,
               pvalueCutoff = 0.05,
               verbose      = FALSE)
 
-dotplot(gse, showCategory=10, split=".sign") + facet_grid(.~.sign)
+dotplot(gse, showCategory = 10, split = ".sign", title = "GO Gene Set Enrichment Analysis") + facet_grid(.~.sign)
 ```
+
 
 ```{r, kegg-plot}
 kk2 <- gseKEGG(geneList     = gl_sorted,
@@ -874,7 +883,13 @@ kk2 <- gseKEGG(geneList     = gl_sorted,
                pAdjustMethod = "none",
                keyType       = "ncbi-geneid")
 
-dotplot(kk2, showCategory = 10, title = "Enriched Pathways" , split=".sign") + facet_grid(.~.sign)
+dotplot(kk2, showCategory = 10, title = "Enriched KEGG Pathways" , split=".sign") + facet_grid(.~.sign)
+```
+
+```{r, reactome-plot}
+y <- enrichPathway(gene_entrez, pvalueCutoff = 0.05)
+
+dotplot(y, title = "Reactome Pathway Over-representation Analysis") 
 ```
 
 ```{r, generate-plot-counts-genes-interest-subsetted}
@@ -884,10 +899,10 @@ for (ensembl_id in filtered_by_interest$Ensembl_ID) {
   gene_name <- filtered_by_interest$gene_name[filtered_by_interest$Ensembl_ID == ensembl_id]
   ggplot_box <- ggboxplot(d, x = "Affected", y = "count", add = "jitter",
                           color = "Affected", palette = c("navy", "red"),
-                          title = gene_name) + 
+                          title = gene_name) +
     geom_text_repel(aes(label = rownames(d))) +
-    scale_color_manual(name = "Affected Status", 
-                       labels = c("Unaffected", "Affected"), 
+    scale_color_manual(name = "Affected Status",
+                       labels = c("Unaffected", "Affected"),
                        values = c("navy", "red"))
   print(ggplot_box) # Ensure each plot is printed during the loop
   ggsave(
