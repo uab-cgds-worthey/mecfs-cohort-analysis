@@ -931,13 +931,13 @@ kk2 <- gseKEGG(geneList     = gl_sorted,
                pAdjustMethod = "none",
                keyType       = "ncbi-geneid")
 
-dotplot(kk2, showCategory = 10, title = "Enriched KEGG Pathways" , split=".sign") + facet_grid(.~.sign)
+dotplot(kk2, showCategory = 10, title = "Enriched KEGG Pathways", split=".sign") + facet_grid(.~.sign)
 ```
 
 ```{r, reactome-plot}
 y <- enrichPathway(gene_entrez, pvalueCutoff = 0.05)
 
-dotplot(y, showCategory = 10, title = "Reactome Pathway Over-representation Analysis", font.size = 10) 
+dotplot(y, showCategory = 10, title = "Reactome Pathway Over-representation Analysis", font.size = 10)
 ```
 
 
