@@ -546,15 +546,15 @@ project makes it easier to run your code on other machines.</p>
 <div class="panel panel-default">
 <div class="panel-heading">
 <p class="panel-title">
-<a data-toggle="collapse" data-parent="#workflowr-checks" href="#strongRepositoryversionstrongahrefhttpsgithubcomuabcgdswortheymecfsdgeanalysistree87dacd3858aa32e51f16183bd6f880156cbf05c0targetblank87dacd3a">
+<a data-toggle="collapse" data-parent="#workflowr-checks" href="#strongRepositoryversionstrongahrefhttpsgithubcomuabcgdswortheymecfsdgeanalysistree0f3dffdf9d1e194d05ee5a23b80b76ed6df808bftargetblank0f3dffda">
 <span class="glyphicon glyphicon-ok text-success"
 aria-hidden="true"></span> <strong>Repository version:</strong>
-<a href="https://github.com/uab-cgds-worthey/mecfs-dge-analysis/tree/87dacd3858aa32e51f16183bd6f880156cbf05c0" target="_blank">87dacd3</a>
+<a href="https://github.com/uab-cgds-worthey/mecfs-dge-analysis/tree/0f3dffdf9d1e194d05ee5a23b80b76ed6df808bf" target="_blank">0f3dffd</a>
 </a>
 </p>
 </div>
 <div
-id="strongRepositoryversionstrongahrefhttpsgithubcomuabcgdswortheymecfsdgeanalysistree87dacd3858aa32e51f16183bd6f880156cbf05c0targetblank87dacd3a"
+id="strongRepositoryversionstrongahrefhttpsgithubcomuabcgdswortheymecfsdgeanalysistree0f3dffdf9d1e194d05ee5a23b80b76ed6df808bftargetblank0f3dffda"
 class="panel-collapse collapse">
 <div class="panel-body">
 <p>
@@ -564,7 +564,7 @@ reproducibility.
 </p>
 <p>
 The results in this page were generated with repository version
-<a href="https://github.com/uab-cgds-worthey/mecfs-dge-analysis/tree/87dacd3858aa32e51f16183bd6f880156cbf05c0" target="_blank">87dacd3</a>.
+<a href="https://github.com/uab-cgds-worthey/mecfs-dge-analysis/tree/0f3dffdf9d1e194d05ee5a23b80b76ed6df808bf" target="_blank">0f3dffd</a>.
 See the <em>Past versions</em> tab to see a history of the changes made
 to the R Markdown and HTML files.
 </p>
@@ -583,6 +583,7 @@ Ignored files:
     Ignored:    .Rhistory
     Ignored:    .Rproj.user/
     Ignored:    analysis/.DS_Store
+    Ignored:    analysis/figure/
     Ignored:    data/.DS_Store
     Ignored:    omnipathr-log/
     Ignored:    output/.DS_Store
@@ -650,6 +651,40 @@ Message
 </tr>
 </thead>
 <tbody>
+<tr>
+<td>
+Rmd
+</td>
+<td>
+<a href="https://github.com/uab-cgds-worthey/mecfs-dge-analysis/blob/0f3dffdf9d1e194d05ee5a23b80b76ed6df808bf/analysis/subsetted-condition-analysis.Rmd" target="_blank">0f3dffd</a>
+</td>
+<td>
+sdhutchins
+</td>
+<td>
+2024-04-12
+</td>
+<td>
+workflowr::wflow_publish("analysis/subsetted-condition-analysis.Rmd")
+</td>
+</tr>
+<tr>
+<td>
+html
+</td>
+<td>
+<a href="https://rawcdn.githack.com/uab-cgds-worthey/mecfs-dge-analysis/18ba804d02740506535c894d347feb5a54165451/docs/subsetted-condition-analysis.html" target="_blank">18ba804</a>
+</td>
+<td>
+sdhutchins
+</td>
+<td>
+2024-04-12
+</td>
+<td>
+Build site.
+</td>
+</tr>
 <tr>
 <td>
 Rmd
@@ -3193,7 +3228,7 @@ sdhutchins
                pAdjustMethod = &quot;none&quot;,
                keyType       = &quot;ncbi-geneid&quot;)
 
-dotplot(kk2, showCategory = 10, title = &quot;Enriched KEGG Pathways&quot; , split=&quot;.sign&quot;) + facet_grid(.~.sign)</code></pre>
+dotplot(kk2, showCategory = 10, title = &quot;Enriched KEGG Pathways&quot;, split=&quot;.sign&quot;) + facet_grid(.~.sign)</code></pre>
 <p><img src="figure/subsetted-condition-analysis.Rmd/kegg-plot-1.png" width="672" style="display: block; margin: auto;" /></p>
 <p>
 <button type="button" class="btn btn-default btn-xs btn-workflowr btn-workflowr-fig" data-toggle="collapse" data-target="#fig-kegg-plot-1">
@@ -3234,7 +3269,7 @@ sdhutchins
 </div>
 <pre class="r"><code>y &lt;- enrichPathway(gene_entrez, pvalueCutoff = 0.05)
 
-dotplot(y, showCategory = 10, title = &quot;Reactome Pathway Over-representation Analysis&quot;, font.size = 10) </code></pre>
+dotplot(y, showCategory = 10, title = &quot;Reactome Pathway Over-representation Analysis&quot;, font.size = 10)</code></pre>
 <p><img src="figure/subsetted-condition-analysis.Rmd/reactome-plot-1.png" width="672" style="display: block; margin: auto;" /></p>
 <p>
 <button type="button" class="btn btn-default btn-xs btn-workflowr btn-workflowr-fig" data-toggle="collapse" data-target="#fig-reactome-plot-1">
@@ -3296,6 +3331,43 @@ mapped_degs_dec &lt;- string_db$add_diff_exp_color(mapped_degs, logFcColStr=&quo
 payload_id &lt;- string_db$post_payload(mapped_degs_dec$STRING_id, colors=mapped_degs_dec$color)
 string_db$plot_network(hits, payload_id=payload_id)</code></pre>
 <p><img src="figure/subsetted-condition-analysis.Rmd/stringdb-network-1.png" width="672" style="display: block; margin: auto;" /></p>
+<p>
+<button type="button" class="btn btn-default btn-xs btn-workflowr btn-workflowr-fig" data-toggle="collapse" data-target="#fig-stringdb-network-1">
+Past versions of stringdb-network-1.png
+</button>
+</p>
+<div id="fig-stringdb-network-1" class="collapse">
+<div class="table-responsive">
+<table class="table table-condensed table-hover">
+<thead>
+<tr>
+<th>
+Version
+</th>
+<th>
+Author
+</th>
+<th>
+Date
+</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>
+<a href="https://github.com/uab-cgds-worthey/mecfs-dge-analysis/blob/18ba804d02740506535c894d347feb5a54165451/docs/figure/subsetted-condition-analysis.Rmd/stringdb-network-1.png" target="_blank">18ba804</a>
+</td>
+<td>
+sdhutchins
+</td>
+<td>
+2024-04-12
+</td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
 <pre class="r"><code>library(enrichR)
 listEnrichrSites()
 setEnrichrSite(&quot;Enrichr&quot;) # Human genes
