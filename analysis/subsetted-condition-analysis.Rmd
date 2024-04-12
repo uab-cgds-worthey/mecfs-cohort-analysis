@@ -941,8 +941,37 @@ dotplot(y, showCategory = 10, title = "Reactome Pathway Over-representation Anal
 ```
 
 
-```{r, stringdb}
+```{r, stringdb-network}
 library(STRINGdb)
+string_db <- STRINGdb$new(version="11.5", species=9606, score_threshold=100, network_type="full", input_directory="")
+
+mapped_degs <- string_db$map(significant_data, "name", removeUnmappedRows = TRUE)
+hits <- mapped_degs$STRING_id[1:29]
+
+mapped_degs_dec <- string_db$add_diff_exp_color(mapped_degs, logFcColStr="lfc")
+
+payload_id <- string_db$post_payload(mapped_degs_dec$STRING_id, colors=mapped_degs_dec$color)
+string_db$plot_network(hits, payload_id=payload_id)
+```
+
+
+```{r, enrichr-analysis}
+library(enrichR)
+listEnrichrSites()
+setEnrichrSite("Enrichr") # Human genes
+dbs <- listEnrichrDbs()
+query_dbs <- c("GO_Molecular_Function_2015", "GO_Cellular_Component_2015", "GO_Biological_Process_2015")
+enriched <- enrichr(genes = significant_data$name, databases = dbs$libraryName)
+
+db_names<- names(enriched)
+
+for (db_name in db_names) {
+  df <- as.data.frame(enriched[[db_name]])  # Access the data frame by name
+  if (is.data.frame(df)) {  # Ensure it is a data frame
+    file_name <- paste0("output/enrichr-dbs/", db_name, ".csv")
+    write.csv(df, file_name, row.names = FALSE)  # Write to CSV without row names
+  }
+}
 ```
 
 ## Plot Counts
