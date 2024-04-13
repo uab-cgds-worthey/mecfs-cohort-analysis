@@ -546,15 +546,15 @@ project makes it easier to run your code on other machines.</p>
 <div class="panel panel-default">
 <div class="panel-heading">
 <p class="panel-title">
-<a data-toggle="collapse" data-parent="#workflowr-checks" href="#strongRepositoryversionstrongahrefhttpsgithubcomuabcgdswortheymecfsdgeanalysistree0f3dffdf9d1e194d05ee5a23b80b76ed6df808bftargetblank0f3dffda">
+<a data-toggle="collapse" data-parent="#workflowr-checks" href="#strongRepositoryversionstrongahrefhttpsgithubcomuabcgdswortheymecfsdgeanalysistree989f2c318e7048d5df079b0d5d768c7d53487819targetblank989f2c3a">
 <span class="glyphicon glyphicon-ok text-success"
 aria-hidden="true"></span> <strong>Repository version:</strong>
-<a href="https://github.com/uab-cgds-worthey/mecfs-dge-analysis/tree/0f3dffdf9d1e194d05ee5a23b80b76ed6df808bf" target="_blank">0f3dffd</a>
+<a href="https://github.com/uab-cgds-worthey/mecfs-dge-analysis/tree/989f2c318e7048d5df079b0d5d768c7d53487819" target="_blank">989f2c3</a>
 </a>
 </p>
 </div>
 <div
-id="strongRepositoryversionstrongahrefhttpsgithubcomuabcgdswortheymecfsdgeanalysistree0f3dffdf9d1e194d05ee5a23b80b76ed6df808bftargetblank0f3dffda"
+id="strongRepositoryversionstrongahrefhttpsgithubcomuabcgdswortheymecfsdgeanalysistree989f2c318e7048d5df079b0d5d768c7d53487819targetblank989f2c3a"
 class="panel-collapse collapse">
 <div class="panel-body">
 <p>
@@ -564,7 +564,7 @@ reproducibility.
 </p>
 <p>
 The results in this page were generated with repository version
-<a href="https://github.com/uab-cgds-worthey/mecfs-dge-analysis/tree/0f3dffdf9d1e194d05ee5a23b80b76ed6df808bf" target="_blank">0f3dffd</a>.
+<a href="https://github.com/uab-cgds-worthey/mecfs-dge-analysis/tree/989f2c318e7048d5df079b0d5d768c7d53487819" target="_blank">989f2c3</a>.
 See the <em>Past versions</em> tab to see a history of the changes made
 to the R Markdown and HTML files.
 </p>
@@ -583,7 +583,6 @@ Ignored files:
     Ignored:    .Rhistory
     Ignored:    .Rproj.user/
     Ignored:    analysis/.DS_Store
-    Ignored:    analysis/figure/
     Ignored:    data/.DS_Store
     Ignored:    omnipathr-log/
     Ignored:    output/.DS_Store
@@ -598,8 +597,17 @@ Untracked files:
     Untracked:  output/res_aff_vs_unaff_df_sub_genename_05.csv
     Untracked:  output/res_aff_vs_unaff_df_sub_genename_padj1.csv
     Untracked:  output/res_aff_vs_unaff_sub.csv
+    Untracked:  renv.lock
+    Untracked:  renv/
 
 Unstaged changes:
+    Modified:   .Rbuildignore
+    Modified:   .Rprofile
+    Modified:   analysis/batch-analysis.Rmd
+    Modified:   analysis/complex-upset.Rmd
+    Modified:   analysis/condition-analysis.Rmd
+    Deleted:    analysis/decoupler.Rmd
+    Modified:   code/helpers.R
     Modified:   output/bysample_upset.png
     Modified:   output/counts_vst.csv
     Modified:   output/counts_vst_female.csv
@@ -651,6 +659,40 @@ Message
 </tr>
 </thead>
 <tbody>
+<tr>
+<td>
+Rmd
+</td>
+<td>
+<a href="https://github.com/uab-cgds-worthey/mecfs-dge-analysis/blob/989f2c318e7048d5df079b0d5d768c7d53487819/analysis/subsetted-condition-analysis.Rmd" target="_blank">989f2c3</a>
+</td>
+<td>
+sdhutchins
+</td>
+<td>
+2024-04-12
+</td>
+<td>
+Update subsetted analysis.
+</td>
+</tr>
+<tr>
+<td>
+html
+</td>
+<td>
+<a href="https://rawcdn.githack.com/uab-cgds-worthey/mecfs-dge-analysis/c835cb714796b678825d37dff129e1e5eb06abce/docs/subsetted-condition-analysis.html" target="_blank">c835cb7</a>
+</td>
+<td>
+sdhutchins
+</td>
+<td>
+2024-04-12
+</td>
+<td>
+Build site.
+</td>
+</tr>
 <tr>
 <td>
 Rmd
@@ -961,7 +1003,8 @@ transformation (vst) on normalized counts.</p>
 write.csv(counts_vst, file = &quot;output/counts_vst_subsetted..csv&quot;)
 mm &lt;- model.matrix(~ Batch + Affected, colData(vsd))
 
-counts_vst_limma &lt;- limma::removeBatchEffect(counts_vst, batch = vsd$Batch, design = mm)</code></pre>
+counts_vst_limma &lt;- limma::removeBatchEffect(counts_vst, batch = vsd$Batch, 
+                                             design = mm)</code></pre>
 <pre><code>Coefficients not estimable: batch1 batch2 </code></pre>
 <pre class="r"><code>write.csv(counts_vst_limma, file = &quot;output/counts_vst_limma_subsetted.csv&quot;)
 
@@ -972,11 +1015,14 @@ assay(vsd_limma) &lt;- counts_vst_limma</code></pre>
 <h3>Sample distances heatmap</h3>
 <pre class="r"><code>sample_dists_all &lt;- dist(t(assay(vsd_limma)))
 sample_dist_matrix_all &lt;- as.matrix(sample_dists_all)
-rownames(sample_dist_matrix_all) &lt;- paste(vsd_limma$Batch, vsd_limma$Affected, sep = &quot; | &quot;)
-colnames(sample_dist_matrix_all) &lt;- paste(vsd_limma$ID, vsd_limma$Affected, sep = &quot; | &quot;)
+rownames(sample_dist_matrix_all) &lt;- paste(vsd_limma$Batch, vsd_limma$Affected, 
+                                          sep = &quot; | &quot;)
+colnames(sample_dist_matrix_all) &lt;- paste(vsd_limma$ID, vsd_limma$Affected, 
+                                          sep = &quot; | &quot;)
 colors &lt;- colorRampPalette(rev(brewer.pal(9, &quot;Blues&quot;)))(255)
 
-pheatmap(sample_dist_matrix_all, clustering_distance_rows = sample_dists_all, clustering_distance_cols = sample_dists_all, col = colors)</code></pre>
+pheatmap(sample_dist_matrix_all, clustering_distance_rows = sample_dists_all, 
+         clustering_distance_cols = sample_dists_all, col = colors)</code></pre>
 <p><img src="figure/subsetted-condition-analysis.Rmd/sample-dist-heatmap-1.png" width="672" style="display: block; margin: auto;" /></p>
 <p>
 <button type="button" class="btn btn-default btn-xs btn-workflowr btn-workflowr-fig" data-toggle="collapse" data-target="#fig-sample-dist-heatmap-1">
@@ -1033,7 +1079,8 @@ sdhutchins
 effect occurring after using limma. However, we can see that our 3 male
 samples are grouping. Given this knowledge, removing them from
 downstream analyses is the best option.</p>
-<pre class="r"><code>pca_data_all &lt;- plotPCA(vsd_limma, intgroup = c(&quot;Batch&quot;, &quot;Affected&quot;, &quot;Sex&quot;), returnData = TRUE)
+<pre class="r"><code>pca_data_all &lt;- plotPCA(vsd_limma, intgroup = c(&quot;Batch&quot;, &quot;Affected&quot;, &quot;Sex&quot;), 
+                        returnData = TRUE)
 percent_var_all &lt;- round(100 * attr(pca_data_all, &quot;percentVar&quot;))
 
 ggplot(pca_data_all, aes(PC1, PC2)) +
@@ -1097,7 +1144,9 @@ sdhutchins
 </table>
 </div>
 </div>
-<pre class="r"><code>pca_data_all &lt;- plotPCA(vsd_limma, intgroup = c(&quot;Affected&quot;, &quot;Sex&quot;, &quot;CombinedCategory&quot;), returnData = TRUE)
+<pre class="r"><code>pca_data_all &lt;- plotPCA(vsd_limma, intgroup = c(&quot;Affected&quot;, &quot;Sex&quot;, 
+                                                &quot;CombinedCategory&quot;),
+                        returnData = TRUE)
 percent_var_all &lt;- round(100 * attr(pca_data_all, &quot;percentVar&quot;))
 
 ggplot(pca_data_all, aes(PC1, PC2)) +
@@ -1229,7 +1278,8 @@ sdhutchins
 </table>
 </div>
 </div>
-<pre class="r"><code>pca_data_all &lt;- plotPCA(vsd_limma, intgroup = c(&quot;CombinedCategory&quot;), returnData = TRUE)
+<pre class="r"><code>pca_data_all &lt;- plotPCA(vsd_limma, intgroup = c(&quot;CombinedCategory&quot;), 
+                        returnData = TRUE)
 percent_var_all &lt;- round(100 * attr(pca_data_all, &quot;percentVar&quot;))
 
 ggplot(pca_data_all, aes(PC1, PC2)) +
@@ -1360,8 +1410,10 @@ new_row_names &lt;- ensembl_to_gene[current_ensembl_ids]
 # Set the new row names for the matrix &#39;mat&#39;
 rownames(mat) &lt;- new_row_names
 
-ComplexHeatmap::pheatmap(mat, annotation_col = df, annotation_colors = ann_colors2, 
-                         fontsize = 5, angle_col = c(&quot;0&quot;))</code></pre>
+ComplexHeatmap::pheatmap(mat,
+  annotation_col = df, annotation_colors = ann_colors2,
+  fontsize = 5, angle_col = c(&quot;0&quot;)
+)</code></pre>
 <p><img src="figure/subsetted-condition-analysis.Rmd/top50-heatmap-batch-combined-1.png" width="800px" height="570px" style="display: block; margin: auto;" /></p>
 <p>
 <button type="button" class="btn btn-default btn-xs btn-workflowr btn-workflowr-fig" data-toggle="collapse" data-target="#fig-top50-heatmap-batch-combined-1">
@@ -1430,7 +1482,8 @@ new_row_names_all &lt;- ensembl_to_gene[current_ensembl_ids_all]
 # Set the new row names for the matrix &#39;mat&#39;
 rownames(mat_all) &lt;- new_row_names_all
 
-pheatmap(mat_all, annotation_col = df_all, annotation_colors = ann_colors, fontsize = 5)</code></pre>
+pheatmap(mat_all, annotation_col = df_all, annotation_colors = ann_colors, 
+         fontsize = 5)</code></pre>
 <p><img src="figure/subsetted-condition-analysis.Rmd/top50-heatmap-subsetted-1.png" width="800px" height="570px" style="display: block; margin: auto;" /></p>
 <p>
 <button type="button" class="btn btn-default btn-xs btn-workflowr btn-workflowr-fig" data-toggle="collapse" data-target="#fig-top50-heatmap-subsetted-1">
@@ -1480,7 +1533,8 @@ sdhutchins
 </table>
 </div>
 </div>
-<pre class="r"><code>pheatmap(mat_all, annotation_col = df_affcat, annotation_colors = ann_colors2, fontsize = 5)</code></pre>
+<pre class="r"><code>pheatmap(mat_all, annotation_col = df_affcat, annotation_colors = ann_colors2, 
+         fontsize = 5)</code></pre>
 <p><img src="figure/subsetted-condition-analysis.Rmd/top50-heatmap-subsetted-2.png" width="800px" height="570px" style="display: block; margin: auto;" /></p>
 <p>
 <button type="button" class="btn btn-default btn-xs btn-workflowr btn-workflowr-fig" data-toggle="collapse" data-target="#fig-top50-heatmap-subsetted-2">
@@ -1548,7 +1602,8 @@ new_row_names_100_all &lt;- ensembl_to_gene[current_ensembl_ids_100_all]
 # Set the new row names for the matrix &#39;mat&#39;
 rownames(mat_100_all) &lt;- new_row_names_100_all
 
-pheatmap(mat_100_all, annotation_col = df_100_all, annotation_colors = ann_colors2, fontsize = 6)</code></pre>
+pheatmap(mat_100_all, annotation_col = df_100_all, 
+         annotation_colors = ann_colors2, fontsize = 6)</code></pre>
 <p><img src="figure/subsetted-condition-analysis.Rmd/top100-heatmap-subsetted-1.png" width="1200px" style="display: block; margin: auto;" /></p>
 <p>
 <button type="button" class="btn btn-default btn-xs btn-workflowr btn-workflowr-fig" data-toggle="collapse" data-target="#fig-top100-heatmap-subsetted-1">
@@ -1882,8 +1937,10 @@ topgenes_aff_vs_unaff_05_sub &lt;- topgenes_aff_vs_unaff_05_sub[order(row.names(
 df_sub &lt;- df &lt;- colData(vsd_limma) %&gt;%
   as.data.frame() %&gt;%
   dplyr::select(Affected, SubCategory, CombinedCategory)
-pheatmap(topgenes_aff_vs_unaff_05_sub, annotation_col = df_sub,
-         annotation_colors = ann_colors2, fontsize = 5, angle_col = 0)</code></pre>
+pheatmap(topgenes_aff_vs_unaff_05_sub,
+  annotation_col = df_sub,
+  annotation_colors = ann_colors2, fontsize = 5, angle_col = 0
+)</code></pre>
 <p><img src="figure/subsetted-condition-analysis.Rmd/top-50-genes-deseq-subsetted-subcategory-1.png" width="800px" height="570px" style="display: block; margin: auto;" /></p>
 <p>
 <button type="button" class="btn btn-default btn-xs btn-workflowr btn-workflowr-fig" data-toggle="collapse" data-target="#fig-top-50-genes-deseq-subsetted-subcategory-1">
@@ -2104,8 +2161,10 @@ rownames(topgenes_aff_vs_unaff_05_sub) &lt;- new_row_names_sub
 topgenes_aff_vs_unaff_05_sub &lt;- topgenes_aff_vs_unaff_05_sub[order(row.names(topgenes_aff_vs_unaff_05_sub)), ]
 
 df_sub &lt;- as.data.frame(colData(vsd_limma)[, c(&quot;Affected&quot;, &quot;CombinedCategory&quot;)])
-pheatmap(topgenes_aff_vs_unaff_05_sub, annotation_col = df_sub, 
-         annotation_colors = ann_colors2, fontsize = 4, angle_col = 0)</code></pre>
+pheatmap(topgenes_aff_vs_unaff_05_sub,
+  annotation_col = df_sub,
+  annotation_colors = ann_colors2, fontsize = 4, angle_col = 0
+)</code></pre>
 <p><img src="figure/subsetted-condition-analysis.Rmd/top-75-genes-deseq-subsetted-1.png" width="800px" height="570px" style="display: block; margin: auto;" /></p>
 <p>
 <button type="button" class="btn btn-default btn-xs btn-workflowr btn-workflowr-fig" data-toggle="collapse" data-target="#fig-top-75-genes-deseq-subsetted-1">
@@ -2904,9 +2963,10 @@ sdhutchins
 
 x &lt;- gostplot(res, capped = FALSE, interactive = FALSE)
 x + geom_label_repel(aes(label = &quot;term_id&quot;),
-                  box.padding   = 0.35, 
-                  point.padding = 0.5,
-                  segment.color = &#39;grey50&#39;)</code></pre>
+  box.padding   = 0.35,
+  point.padding = 0.5,
+  segment.color = &quot;grey50&quot;
+)</code></pre>
 <p><img src="figure/subsetted-condition-analysis.Rmd/gostplot-1.png" width="672" style="display: block; margin: auto;" /></p>
 <p>
 <button type="button" class="btn btn-default btn-xs btn-workflowr btn-workflowr-fig" data-toggle="collapse" data-target="#fig-gostplot-1">
@@ -3172,15 +3232,17 @@ gl &lt;- geneList_entrez[abs(geneList_entrez) &gt; 2]
 gl &lt;- na.omit(gl)
 gl_sorted &lt;- sort(gl, decreasing = TRUE)
 
-gse &lt;- gseGO(geneList     = gl_sorted,
-              OrgDb        = org.Hs.eg.db,
-              ont          = &quot;ALL&quot;,
-              minGSSize    = 3,
-              maxGSSize    = 500,
-              pvalueCutoff = 0.05,
-              verbose      = FALSE)
+gse &lt;- gseGO(
+  geneList = gl_sorted,
+  OrgDb = org.Hs.eg.db,
+  ont = &quot;ALL&quot;,
+  minGSSize = 3,
+  maxGSSize = 500,
+  pvalueCutoff = 0.05,
+  verbose = FALSE
+)
 
-dotplot(gse, showCategory = 10, split = &quot;.sign&quot;, title = &quot;GO Gene Set Enrichment Analysis&quot;) + facet_grid(.~.sign)</code></pre>
+dotplot(gse, showCategory = 10, split = &quot;.sign&quot;, title = &quot;GO Gene Set Enrichment Analysis&quot;) + facet_grid(. ~ .sign)</code></pre>
 <p><img src="figure/subsetted-condition-analysis.Rmd/dose-plot-1.png" width="672" style="display: block; margin: auto;" /></p>
 <p>
 <button type="button" class="btn btn-default btn-xs btn-workflowr btn-workflowr-fig" data-toggle="collapse" data-target="#fig-dose-plot-1">
@@ -3219,16 +3281,18 @@ sdhutchins
 </table>
 </div>
 </div>
-<pre class="r"><code>kk2 &lt;- gseKEGG(geneList     = gl_sorted,
-               organism     = &quot;hsa&quot;, # humans = hsa for KEGG
-               nPerm        = 100000,
-               minGSSize    = 3,
-               maxGSSize    = 800,
-               pvalueCutoff = 0.05,
-               pAdjustMethod = &quot;none&quot;,
-               keyType       = &quot;ncbi-geneid&quot;)
+<pre class="r"><code>kk2 &lt;- gseKEGG(
+  geneList = gl_sorted,
+  organism = &quot;hsa&quot;, # humans = hsa for KEGG
+  nPerm = 100000,
+  minGSSize = 3,
+  maxGSSize = 800,
+  pvalueCutoff = 0.05,
+  pAdjustMethod = &quot;none&quot;,
+  keyType = &quot;ncbi-geneid&quot;
+)
 
-dotplot(kk2, showCategory = 10, title = &quot;Enriched KEGG Pathways&quot;, split=&quot;.sign&quot;) + facet_grid(.~.sign)</code></pre>
+dotplot(kk2, showCategory = 10, title = &quot;Enriched KEGG Pathways&quot;, split = &quot;.sign&quot;) + facet_grid(. ~ .sign)</code></pre>
 <p><img src="figure/subsetted-condition-analysis.Rmd/kegg-plot-1.png" width="672" style="display: block; margin: auto;" /></p>
 <p>
 <button type="button" class="btn btn-default btn-xs btn-workflowr btn-workflowr-fig" data-toggle="collapse" data-target="#fig-kegg-plot-1">
@@ -3320,16 +3384,16 @@ sdhutchins
 </div>
 </div>
 <pre class="r"><code>library(STRINGdb)
-string_db &lt;- STRINGdb$new(version=&quot;11.5&quot;, species=9606, score_threshold=100, network_type=&quot;full&quot;, input_directory=&quot;&quot;)
+string_db &lt;- STRINGdb$new(version = &quot;11.5&quot;, species = 9606, score_threshold = 100, network_type = &quot;full&quot;, input_directory = &quot;&quot;)
 
 mapped_degs &lt;- string_db$map(significant_data, &quot;name&quot;, removeUnmappedRows = TRUE)</code></pre>
 <pre><code>Warning:  we couldn&#39;t map to STRING 47% of your identifiers</code></pre>
 <pre class="r"><code>hits &lt;- mapped_degs$STRING_id[1:29]
 
-mapped_degs_dec &lt;- string_db$add_diff_exp_color(mapped_degs, logFcColStr=&quot;lfc&quot;)
+mapped_degs_dec &lt;- string_db$add_diff_exp_color(mapped_degs, logFcColStr = &quot;lfc&quot;)
 
-payload_id &lt;- string_db$post_payload(mapped_degs_dec$STRING_id, colors=mapped_degs_dec$color)
-string_db$plot_network(hits, payload_id=payload_id)</code></pre>
+payload_id &lt;- string_db$post_payload(mapped_degs_dec$STRING_id, colors = mapped_degs_dec$color)
+string_db$plot_network(hits, payload_id = payload_id)</code></pre>
 <p><img src="figure/subsetted-condition-analysis.Rmd/stringdb-network-1.png" width="672" style="display: block; margin: auto;" /></p>
 <p>
 <button type="button" class="btn btn-default btn-xs btn-workflowr btn-workflowr-fig" data-toggle="collapse" data-target="#fig-stringdb-network-1">
@@ -3602,13 +3666,13 @@ enriched &lt;- enrichr(genes = significant_data$name, databases = dbs$libraryNam
   Querying SynGO_2024... Done.
   Querying CellMarker_2024... Done.
 Parsing results... Done.</code></pre>
-<pre class="r"><code>db_names&lt;- names(enriched)
+<pre class="r"><code>db_names &lt;- names(enriched)
 
 for (db_name in db_names) {
-  df &lt;- as.data.frame(enriched[[db_name]])  # Access the data frame by name
-  if (is.data.frame(df)) {  # Ensure it is a data frame
+  df &lt;- as.data.frame(enriched[[db_name]]) # Access the data frame by name
+  if (is.data.frame(df)) { # Ensure it is a data frame
     file_name &lt;- paste0(&quot;output/enrichr-dbs/&quot;, db_name, &quot;.csv&quot;)
-    write.csv(df, file_name, row.names = FALSE)  # Write to CSV without row names
+    write.csv(df, file_name, row.names = FALSE) # Write to CSV without row names
   }
 }</code></pre>
 </div>
@@ -3618,13 +3682,17 @@ for (db_name in db_names) {
 for (ensembl_id in filtered_by_interest$Ensembl_ID) {
   d &lt;- plotCounts(dds, gene = ensembl_id, intgroup = &quot;Affected&quot;, returnData = TRUE)
   gene_name &lt;- filtered_by_interest$gene_name[filtered_by_interest$Ensembl_ID == ensembl_id]
-  ggplot_box &lt;- ggboxplot(d, x = &quot;Affected&quot;, y = &quot;count&quot;, add = &quot;jitter&quot;,
-                          color = &quot;Affected&quot;, palette = c(&quot;red&quot;, &quot;navy&quot;),
-                          title = gene_name) +
+  ggplot_box &lt;- ggboxplot(d,
+    x = &quot;Affected&quot;, y = &quot;count&quot;, add = &quot;jitter&quot;,
+    color = &quot;Affected&quot;, palette = c(&quot;red&quot;, &quot;navy&quot;),
+    title = gene_name
+  ) +
     geom_text_repel(aes(label = rownames(d))) +
-    scale_color_manual(name = &quot;Affected Status&quot;,
-                       labels = c(&quot;Unaffected&quot;, &quot;Affected&quot;),
-                       values = c(&quot;red&quot;, &quot;navy&quot;))
+    scale_color_manual(
+      name = &quot;Affected Status&quot;,
+      labels = c(&quot;Unaffected&quot;, &quot;Affected&quot;),
+      values = c(&quot;red&quot;, &quot;navy&quot;)
+    )
   print(ggplot_box) # Ensure each plot is printed during the loop
   ggsave(
     filename = paste0(gene_name, &quot;-subsetted-plot-counts.png&quot;),
