@@ -57,12 +57,12 @@ rename_counts_columns <- function(counts_df, metadata_df, id_column, rna_samples
   name_mapping <- setNames(metadata_df[[id_column]], metadata_df[[rna_samples_id_column]])
 
   # Check if all column names in counts are present in the name mapping
-  if(!all(colnames(counts_df) %in% names(name_mapping))) {
+  if (!all(colnames(counts_df) %in% names(name_mapping))) {
     stop("Not all columns in counts can be mapped to new names.")
   }
 
   # Use the mapping to rename columns
-  counts_df <- counts_df[, names(name_mapping)]  # Subset the counts_df to columns that are in name_mapping
+  counts_df <- counts_df[, names(name_mapping)] # Subset the counts_df to columns that are in name_mapping
   colnames(counts_df) <- name_mapping[colnames(counts_df)]
 
   return(counts_df)
