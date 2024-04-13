@@ -149,7 +149,8 @@ counts_vst <- assay(vsd)
 write.csv(counts_vst, file = "output/counts_vst_subsetted..csv")
 mm <- model.matrix(~ Batch + Affected, colData(vsd))
 
-counts_vst_limma <- limma::removeBatchEffect(counts_vst, batch = vsd$Batch, design = mm)
+counts_vst_limma <- limma::removeBatchEffect(counts_vst, batch = vsd$Batch, 
+                                             design = mm)
 
 write.csv(counts_vst_limma, file = "output/counts_vst_limma_subsetted.csv")
 
@@ -162,19 +163,25 @@ assay(vsd_limma) <- counts_vst_limma
 ```{r, sample-dist-heatmap}
 sample_dists_all <- dist(t(assay(vsd_limma)))
 sample_dist_matrix_all <- as.matrix(sample_dists_all)
-rownames(sample_dist_matrix_all) <- paste(vsd_limma$Batch, vsd_limma$Affected, sep = " | ")
-colnames(sample_dist_matrix_all) <- paste(vsd_limma$ID, vsd_limma$Affected, sep = " | ")
+rownames(sample_dist_matrix_all) <- paste(vsd_limma$Batch, vsd_limma$Affected, 
+                                          sep = " | ")
+colnames(sample_dist_matrix_all) <- paste(vsd_limma$ID, vsd_limma$Affected, 
+                                          sep = " | ")
 colors <- colorRampPalette(rev(brewer.pal(9, "Blues")))(255)
 
-pheatmap(sample_dist_matrix_all, clustering_distance_rows = sample_dists_all, clustering_distance_cols = sample_dists_all, col = colors)
+pheatmap(sample_dist_matrix_all, clustering_distance_rows = sample_dists_all, 
+         clustering_distance_cols = sample_dists_all, col = colors)
 ```
 
 ### Principal Components Analysis
 
-Our below PCA shows that there does not seem to be a batch-related effect occurring after using limma. However, we can see that our 3 male samples are grouping. Given this knowledge, removing them from downstream analyses is the best option.
+Our below PCA shows that there does not seem to be a batch-related effect 
+occurring after using limma. However, we can see that our 3 male samples are 
+grouping. Given this knowledge, removing them from downstream analyses is the best option.
 
 ```{r, principal-components-analysis-all}
-pca_data_all <- plotPCA(vsd_limma, intgroup = c("Batch", "Affected", "Sex"), returnData = TRUE)
+pca_data_all <- plotPCA(vsd_limma, intgroup = c("Batch", "Affected", "Sex"), 
+                        returnData = TRUE)
 percent_var_all <- round(100 * attr(pca_data_all, "percentVar"))
 
 ggplot(pca_data_all, aes(PC1, PC2)) +
@@ -192,7 +199,9 @@ ggplot(pca_data_all, aes(PC1, PC2)) +
 ```
 
 ```{r, principal-components-analysis-combocategory-all}
-pca_data_all <- plotPCA(vsd_limma, intgroup = c("Affected", "Sex", "CombinedCategory"), returnData = TRUE)
+pca_data_all <- plotPCA(vsd_limma, intgroup = c("Affected", "Sex", 
+                                                "CombinedCategory"),
+                        returnData = TRUE)
 percent_var_all <- round(100 * attr(pca_data_all, "percentVar"))
 
 ggplot(pca_data_all, aes(PC1, PC2)) +
@@ -229,7 +238,8 @@ ggplot(pca_data, aes(PC1, PC2)) +
 ```
 
 ```{r, principal-components-analysis-subsetted-category}
-pca_data_all <- plotPCA(vsd_limma, intgroup = c("CombinedCategory"), returnData = TRUE)
+pca_data_all <- plotPCA(vsd_limma, intgroup = c("CombinedCategory"), 
+                        returnData = TRUE)
 percent_var_all <- round(100 * attr(pca_data_all, "percentVar"))
 
 ggplot(pca_data_all, aes(PC1, PC2)) +
@@ -315,8 +325,10 @@ new_row_names <- ensembl_to_gene[current_ensembl_ids]
 # Set the new row names for the matrix 'mat'
 rownames(mat) <- new_row_names
 
-ComplexHeatmap::pheatmap(mat, annotation_col = df, annotation_colors = ann_colors2, 
-                         fontsize = 5, angle_col = c("0"))
+ComplexHeatmap::pheatmap(mat,
+  annotation_col = df, annotation_colors = ann_colors2,
+  fontsize = 5, angle_col = c("0")
+)
 ```
 
 
@@ -340,9 +352,11 @@ new_row_names_all <- ensembl_to_gene[current_ensembl_ids_all]
 # Set the new row names for the matrix 'mat'
 rownames(mat_all) <- new_row_names_all
 
-pheatmap(mat_all, annotation_col = df_all, annotation_colors = ann_colors, fontsize = 5)
+pheatmap(mat_all, annotation_col = df_all, annotation_colors = ann_colors, 
+         fontsize = 5)
 
-pheatmap(mat_all, annotation_col = df_affcat, annotation_colors = ann_colors2, fontsize = 5)
+pheatmap(mat_all, annotation_col = df_affcat, annotation_colors = ann_colors2, 
+         fontsize = 5)
 ```
 
 This is a heatmap of the top 100 genes with the highest variance across
@@ -363,7 +377,8 @@ new_row_names_100_all <- ensembl_to_gene[current_ensembl_ids_100_all]
 # Set the new row names for the matrix 'mat'
 rownames(mat_100_all) <- new_row_names_100_all
 
-pheatmap(mat_100_all, annotation_col = df_100_all, annotation_colors = ann_colors2, fontsize = 6)
+pheatmap(mat_100_all, annotation_col = df_100_all, 
+         annotation_colors = ann_colors2, fontsize = 6)
 ```
 
 ### Comparison/Contrast of Affected_Affected_vs_Unaffected 
@@ -472,8 +487,10 @@ topgenes_aff_vs_unaff_05_sub <- topgenes_aff_vs_unaff_05_sub[order(row.names(top
 df_sub <- df <- colData(vsd_limma) %>%
   as.data.frame() %>%
   dplyr::select(Affected, SubCategory, CombinedCategory)
-pheatmap(topgenes_aff_vs_unaff_05_sub, annotation_col = df_sub,
-         annotation_colors = ann_colors2, fontsize = 5, angle_col = 0)
+pheatmap(topgenes_aff_vs_unaff_05_sub,
+  annotation_col = df_sub,
+  annotation_colors = ann_colors2, fontsize = 5, angle_col = 0
+)
 ```
 
 
@@ -546,8 +563,10 @@ rownames(topgenes_aff_vs_unaff_05_sub) <- new_row_names_sub
 topgenes_aff_vs_unaff_05_sub <- topgenes_aff_vs_unaff_05_sub[order(row.names(topgenes_aff_vs_unaff_05_sub)), ]
 
 df_sub <- as.data.frame(colData(vsd_limma)[, c("Affected", "CombinedCategory")])
-pheatmap(topgenes_aff_vs_unaff_05_sub, annotation_col = df_sub, 
-         annotation_colors = ann_colors2, fontsize = 4, angle_col = 0)
+pheatmap(topgenes_aff_vs_unaff_05_sub,
+  annotation_col = df_sub,
+  annotation_colors = ann_colors2, fontsize = 4, angle_col = 0
+)
 ```
 
 ```{r, top-75-genes-deseq-subsetted-subcategory, out.height="570px", out.width ="800px"}
@@ -824,9 +843,10 @@ res <- gost(query = significant_data$name, organism = "hsapiens", significant = 
 
 x <- gostplot(res, capped = FALSE, interactive = FALSE)
 x + geom_label_repel(aes(label = "term_id"),
-                  box.padding   = 0.35, 
-                  point.padding = 0.5,
-                  segment.color = 'grey50')
+  box.padding   = 0.35,
+  point.padding = 0.5,
+  segment.color = "grey50"
+)
 ```
 
 ```{r, enrichgo-cc}
@@ -909,29 +929,33 @@ gl <- geneList_entrez[abs(geneList_entrez) > 2]
 gl <- na.omit(gl)
 gl_sorted <- sort(gl, decreasing = TRUE)
 
-gse <- gseGO(geneList     = gl_sorted,
-              OrgDb        = org.Hs.eg.db,
-              ont          = "ALL",
-              minGSSize    = 3,
-              maxGSSize    = 500,
-              pvalueCutoff = 0.05,
-              verbose      = FALSE)
+gse <- gseGO(
+  geneList = gl_sorted,
+  OrgDb = org.Hs.eg.db,
+  ont = "ALL",
+  minGSSize = 3,
+  maxGSSize = 500,
+  pvalueCutoff = 0.05,
+  verbose = FALSE
+)
 
-dotplot(gse, showCategory = 10, split = ".sign", title = "GO Gene Set Enrichment Analysis") + facet_grid(.~.sign)
+dotplot(gse, showCategory = 10, split = ".sign", title = "GO Gene Set Enrichment Analysis") + facet_grid(. ~ .sign)
 ```
 
 
 ```{r, kegg-plot}
-kk2 <- gseKEGG(geneList     = gl_sorted,
-               organism     = "hsa", # humans = hsa for KEGG
-               nPerm        = 100000,
-               minGSSize    = 3,
-               maxGSSize    = 800,
-               pvalueCutoff = 0.05,
-               pAdjustMethod = "none",
-               keyType       = "ncbi-geneid")
+kk2 <- gseKEGG(
+  geneList = gl_sorted,
+  organism = "hsa", # humans = hsa for KEGG
+  nPerm = 100000,
+  minGSSize = 3,
+  maxGSSize = 800,
+  pvalueCutoff = 0.05,
+  pAdjustMethod = "none",
+  keyType = "ncbi-geneid"
+)
 
-dotplot(kk2, showCategory = 10, title = "Enriched KEGG Pathways", split=".sign") + facet_grid(.~.sign)
+dotplot(kk2, showCategory = 10, title = "Enriched KEGG Pathways", split = ".sign") + facet_grid(. ~ .sign)
 ```
 
 ```{r, reactome-plot}
@@ -943,15 +967,15 @@ dotplot(y, showCategory = 10, title = "Reactome Pathway Over-representation Anal
 
 ```{r, stringdb-network}
 library(STRINGdb)
-string_db <- STRINGdb$new(version="11.5", species=9606, score_threshold=100, network_type="full", input_directory="")
+string_db <- STRINGdb$new(version = "11.5", species = 9606, score_threshold = 100, network_type = "full", input_directory = "")
 
 mapped_degs <- string_db$map(significant_data, "name", removeUnmappedRows = TRUE)
 hits <- mapped_degs$STRING_id[1:29]
 
-mapped_degs_dec <- string_db$add_diff_exp_color(mapped_degs, logFcColStr="lfc")
+mapped_degs_dec <- string_db$add_diff_exp_color(mapped_degs, logFcColStr = "lfc")
 
-payload_id <- string_db$post_payload(mapped_degs_dec$STRING_id, colors=mapped_degs_dec$color)
-string_db$plot_network(hits, payload_id=payload_id)
+payload_id <- string_db$post_payload(mapped_degs_dec$STRING_id, colors = mapped_degs_dec$color)
+string_db$plot_network(hits, payload_id = payload_id)
 ```
 
 
@@ -963,13 +987,13 @@ dbs <- listEnrichrDbs()
 query_dbs <- c("GO_Molecular_Function_2015", "GO_Cellular_Component_2015", "GO_Biological_Process_2015")
 enriched <- enrichr(genes = significant_data$name, databases = dbs$libraryName)
 
-db_names<- names(enriched)
+db_names <- names(enriched)
 
 for (db_name in db_names) {
-  df <- as.data.frame(enriched[[db_name]])  # Access the data frame by name
-  if (is.data.frame(df)) {  # Ensure it is a data frame
+  df <- as.data.frame(enriched[[db_name]]) # Access the data frame by name
+  if (is.data.frame(df)) { # Ensure it is a data frame
     file_name <- paste0("output/enrichr-dbs/", db_name, ".csv")
-    write.csv(df, file_name, row.names = FALSE)  # Write to CSV without row names
+    write.csv(df, file_name, row.names = FALSE) # Write to CSV without row names
   }
 }
 ```
@@ -981,13 +1005,17 @@ for (db_name in db_names) {
 for (ensembl_id in filtered_by_interest$Ensembl_ID) {
   d <- plotCounts(dds, gene = ensembl_id, intgroup = "Affected", returnData = TRUE)
   gene_name <- filtered_by_interest$gene_name[filtered_by_interest$Ensembl_ID == ensembl_id]
-  ggplot_box <- ggboxplot(d, x = "Affected", y = "count", add = "jitter",
-                          color = "Affected", palette = c("red", "navy"),
-                          title = gene_name) +
+  ggplot_box <- ggboxplot(d,
+    x = "Affected", y = "count", add = "jitter",
+    color = "Affected", palette = c("red", "navy"),
+    title = gene_name
+  ) +
     geom_text_repel(aes(label = rownames(d))) +
-    scale_color_manual(name = "Affected Status",
-                       labels = c("Unaffected", "Affected"),
-                       values = c("red", "navy"))
+    scale_color_manual(
+      name = "Affected Status",
+      labels = c("Unaffected", "Affected"),
+      values = c("red", "navy")
+    )
   print(ggplot_box) # Ensure each plot is printed during the loop
   ggsave(
     filename = paste0(gene_name, "-subsetted-plot-counts.png"),
