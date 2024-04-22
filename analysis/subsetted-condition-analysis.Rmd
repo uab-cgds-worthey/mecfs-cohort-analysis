@@ -67,7 +67,7 @@ for the project which is hosted on Box. This also ensures data is properly order
 counts <- read_tsv("data/star-salmon/salmon.merged.gene_counts_length_scaled.tsv")
 
 # Import variants of interest
-genes_of_interest <- read_csv("data/Patient_Genes_2024_03_05.csv")
+genes_of_interest <- read_csv("data/Patient_Genes_2024_04_19.csv")
 genes_of_interest <- unique(genes_of_interest$Genes)
 genes_of_interest <- genes_of_interest[!is.na(genes_of_interest)]
 
@@ -391,7 +391,7 @@ res_aff_vs_unaff_df_sub <- process_and_save_results(
 )
 res_aff_vs_unaff_df_sub <- arrange(res_aff_vs_unaff_df_sub, padj)
 res_aff_vs_unaff_df_05_sub <- subset(res_aff_vs_unaff_df_sub, padj < 0.05)
-res_aff_vs_unaff_df_1_sub <- subset(res_aff_vs_unaff_df_sub, padj < 0.05)
+res_aff_vs_unaff_df_1_sub <- subset(res_aff_vs_unaff_df_sub, padj < 0.1)
 
 summary(res_aff_vs_unaff_sub)
 ```
@@ -794,11 +794,7 @@ write.csv(combined_data, file = "output/res_aff_vs_unaff_significant_subsetted_m
 
 ## Expression of Candidate Genes
 
-Below is a table of expression of the genes identified during our WGS analysis. 
-
-8 of the genes were not included using DESeq2's count filtering method (these genes had no counts):
-
-"DPEP1", "RERGL", "TDO2", "CCDC178", "ADRA1D", "AVPR1B", "LRCOL1", "KCNJ18"
+Below is a table of expression of the genes identified during our WGS analysis.
 
 ```{r, genes-of-interest-table-subsetted}
 # Subset gene_info using genes of interest
@@ -854,6 +850,10 @@ x + geom_label_repel(aes(label = "term_id"),
 rownames(res_aff_vs_unaff_df_sub) <- gsub("\\..*", "", rownames(res_aff_vs_unaff_df_sub))
 res_aff_vs_unaff_df_sub <- res_aff_vs_unaff_df_sub %>% dplyr::distinct()
 geneList <- res_aff_vs_unaff_df_sub$log2FoldChange
+geneList2 <- res_aff_vs_unaff_df_sub$padj
+geneList3 <- res_aff_vs_unaff_df_sub$padj
+names(geneList3) <- rownames(res_aff_vs_unaff_df_sub)
+names(geneList2) <- rownames(res_aff_vs_unaff_df_sub)
 names(geneList) <- rownames(res_aff_vs_unaff_df_sub)
 
 # Initialize BioMart
@@ -863,16 +863,37 @@ ensembl <- useMart("ensembl", dataset = "hsapiens_gene_ensembl")
 attributes <- c("ensembl_gene_id", "entrezgene_id")
 filters <- "ensembl_gene_id"
 results <- getBM(attributes = attributes, filters = filters, values = names(geneList), mart = ensembl)
+results3 <- getBM(attributes = attributes, filters = filters, values = names(geneList2), mart = ensembl)
+
+# Convert all Ensembl IDs in geneList to Entrez IDs
+# This is for genes of interest
+attributes2 <- c("hgnc_symbol", "ensembl_gene_id", "entrezgene_id")
+filters2 <- "hgnc_symbol"
+results2 <- getBM(attributes = attributes2, filters = filters2, values = genes_of_interest, mart = ensembl)
 
 # Remove rows with NA or empty Entrez IDs
 results <- results[!is.na(results$entrezgene_id) & results$entrezgene_id != "", ]
+results3 <- results3[!is.na(results3$entrezgene_id) & results3$entrezgene_id != "", ]
+
+results2 <- results2[!is.na(results2$entrezgene_id) & results2$entrezgene_id != "", ]
 
 # Create a new geneList with Entrez IDs
 geneList_entrez <- geneList[results$ensembl_gene_id]
 names(geneList_entrez) <- results$entrezgene_id
 
+# Create a new geneList with Entrez IDs
+geneList_entrez2 <- geneList2[results3$ensembl_gene_id]
+names(geneList_entrez2) <- results3$entrezgene_id
+
+# Create a new geneList with Entrez IDs
+geneList_entrez3 <- geneList3[results2$ensembl_gene_id]
+names(geneList_entrez3) <- results2$entrezgene_id
+
 # Filter genes with abs(log2FoldChange) > 2
 gene_entrez <- names(geneList_entrez)[abs(geneList_entrez) > 2]
+
+# Filter genes with padj < .05
+gene_entrez2 <- names(geneList_entrez2)[!is.na(geneList_entrez2) & geneList_entrez2 < .05]
 
 # Run enrichGO with Entrez IDs
 ego_cc <- enrichGO(
@@ -965,7 +986,7 @@ dotplot(y, showCategory = 10, title = "Reactome Pathway Over-representation Anal
 ```
 
 
-```{r, stringdb-network}
+```{r, stringdb-network-significant}
 library(STRINGdb)
 string_db <- STRINGdb$new(version = "11.5", species = 9606, score_threshold = 100, network_type = "full", input_directory = "")
 
@@ -978,13 +999,38 @@ payload_id <- string_db$post_payload(mapped_degs_dec$STRING_id, colors = mapped_
 string_db$plot_network(hits, payload_id = payload_id)
 ```
 
+```{r, stringdb-network-combined}
+library(STRINGdb)
+string_db <- STRINGdb$new(version = "11.5", species = 9606, score_threshold = 200, network_type = "full", input_directory = "")
+
+significant_data_copy <- significant_data %>% 
+  rename(gene_name = name, log2FoldChange = lfc, baseMean = mean)
+
+# Ensure both dataframes have the same columns (optional step to demonstrate alignment)
+# This step is not necessary if you are sure both dataframes are already aligned
+significant_data_copy <- significant_data_copy[c("gene_name", "baseMean", "log2FoldChange")]
+filtered_by_interest2 <- filtered_by_interest[c("gene_name", "baseMean", "log2FoldChange")]
+
+combined_df <- dplyr::bind_rows(significant_data_copy, filtered_by_interest2)
+
+combined_df_mapped <- string_db$map(combined_df, "gene_name", removeUnmappedRows = TRUE)
+
+combined_hits <- combined_df_mapped$STRING_id
+
+string_db$plot_network(combined_hits)
+combined_enrichment <- string_db$get_enrichment(combined_hits)
+
+enrich_file_name <- "output/stringdb_combined_enrichment.csv"
+write.csv(combined_enrichment, enrich_file_name, row.names = FALSE)
+```
+
 
 ```{r, enrichr-analysis}
 library(enrichR)
 listEnrichrSites()
 setEnrichrSite("Enrichr") # Human genes
 dbs <- listEnrichrDbs()
-query_dbs <- c("GO_Molecular_Function_2015", "GO_Cellular_Component_2015", "GO_Biological_Process_2015")
+#query_dbs <- c("GO_Molecular_Function_2015", "GO_Cellular_Component_2015", "GO_Biological_Process_2015")
 enriched <- enrichr(genes = significant_data$name, databases = dbs$libraryName)
 
 db_names <- names(enriched)
@@ -996,6 +1042,21 @@ for (db_name in db_names) {
     write.csv(df, file_name, row.names = FALSE) # Write to CSV without row names
   }
 }
+```
+
+```{r, compare-clusters}
+cluster <- list("Significant Genes" = gene_entrez2, "Genes of Interest" = as.character(results2$entrezgene_id))
+ck <- compareCluster(geneCluster = cluster, fun = "enrichGO", OrgDb='org.Hs.eg.db')
+ck <- setReadable(ck, OrgDb = org.Hs.eg.db, keyType="ENTREZID")
+dotplot(ck)
+
+xx <- compareCluster(cluster, fun="enrichKEGG",
+                     organism="hsa", pvalueCutoff=0.05)
+dotplot(xx)
+
+
+xx <- compareCluster(cluster, fun="enrichPathway", pvalueCutoff=0.05)
+dotplot(xx)
 ```
 
 ## Plot Counts
