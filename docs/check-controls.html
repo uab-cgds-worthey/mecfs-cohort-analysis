@@ -546,15 +546,15 @@ project makes it easier to run your code on other machines.</p>
 <div class="panel panel-default">
 <div class="panel-heading">
 <p class="panel-title">
-<a data-toggle="collapse" data-parent="#workflowr-checks" href="#strongRepositoryversionstrongahrefhttpsgithubcomuabcgdswortheymecfsdgeanalysistree5de09e70ba634c3f604af61e47ed8e59b4db4cd8targetblank5de09e7a">
+<a data-toggle="collapse" data-parent="#workflowr-checks" href="#strongRepositoryversionstrongahrefhttpsgithubcomuabcgdswortheymecfsdgeanalysistree178301437797874c5264a065b928640baddd2781targetblank1783014a">
 <span class="glyphicon glyphicon-ok text-success"
 aria-hidden="true"></span> <strong>Repository version:</strong>
-<a href="https://github.com/uab-cgds-worthey/mecfs-dge-analysis/tree/5de09e70ba634c3f604af61e47ed8e59b4db4cd8" target="_blank">5de09e7</a>
+<a href="https://github.com/uab-cgds-worthey/mecfs-dge-analysis/tree/178301437797874c5264a065b928640baddd2781" target="_blank">1783014</a>
 </a>
 </p>
 </div>
 <div
-id="strongRepositoryversionstrongahrefhttpsgithubcomuabcgdswortheymecfsdgeanalysistree5de09e70ba634c3f604af61e47ed8e59b4db4cd8targetblank5de09e7a"
+id="strongRepositoryversionstrongahrefhttpsgithubcomuabcgdswortheymecfsdgeanalysistree178301437797874c5264a065b928640baddd2781targetblank1783014a"
 class="panel-collapse collapse">
 <div class="panel-body">
 <p>
@@ -564,7 +564,7 @@ reproducibility.
 </p>
 <p>
 The results in this page were generated with repository version
-<a href="https://github.com/uab-cgds-worthey/mecfs-dge-analysis/tree/5de09e70ba634c3f604af61e47ed8e59b4db4cd8" target="_blank">5de09e7</a>.
+<a href="https://github.com/uab-cgds-worthey/mecfs-dge-analysis/tree/178301437797874c5264a065b928640baddd2781" target="_blank">1783014</a>.
 See the <em>Past versions</em> tab to see a history of the changes made
 to the R Markdown and HTML files.
 </p>
@@ -587,6 +587,7 @@ Ignored files:
     Ignored:    omnipathr-log/
     Ignored:    output/.DS_Store
     Ignored:    output/batch-correction-limma/
+    Ignored:    output/check-controls.RData
     Ignored:    output/condition-analysis.RData
     Ignored:    output/subsetted-condition-analysis.RData
     Ignored:    renv/library/
@@ -662,6 +663,40 @@ Message
 </tr>
 </thead>
 <tbody>
+<tr>
+<td>
+Rmd
+</td>
+<td>
+<a href="https://github.com/uab-cgds-worthey/mecfs-dge-analysis/blob/178301437797874c5264a065b928640baddd2781/analysis/check-controls.Rmd" target="_blank">1783014</a>
+</td>
+<td>
+sdhutchins
+</td>
+<td>
+2024-04-23
+</td>
+<td>
+workflowr::wflow_publish(files = "analysis/check-controls.Rmd")
+</td>
+</tr>
+<tr>
+<td>
+html
+</td>
+<td>
+<a href="https://rawcdn.githack.com/uab-cgds-worthey/mecfs-dge-analysis/77caa9969073bb8bbc7aad1a3c7b5393643a3614/docs/check-controls.html" target="_blank">77caa99</a>
+</td>
+<td>
+sdhutchins
+</td>
+<td>
+2024-04-23
+</td>
+<td>
+Build site.
+</td>
+</tr>
 <tr>
 <td>
 Rmd
@@ -811,6 +846,43 @@ colors &lt;- colorRampPalette(rev(brewer.pal(9, &quot;Blues&quot;)))(255)
 pheatmap(sample_dist_matrix_all, clustering_distance_rows = sample_dists_all, 
          clustering_distance_cols = sample_dists_all, col = colors)</code></pre>
 <p><img src="figure/check-controls.Rmd/sample-dist-heatmap-1.png" width="672" style="display: block; margin: auto;" /></p>
+<p>
+<button type="button" class="btn btn-default btn-xs btn-workflowr btn-workflowr-fig" data-toggle="collapse" data-target="#fig-sample-dist-heatmap-1">
+Past versions of sample-dist-heatmap-1.png
+</button>
+</p>
+<div id="fig-sample-dist-heatmap-1" class="collapse">
+<div class="table-responsive">
+<table class="table table-condensed table-hover">
+<thead>
+<tr>
+<th>
+Version
+</th>
+<th>
+Author
+</th>
+<th>
+Date
+</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>
+<a href="https://github.com/uab-cgds-worthey/mecfs-dge-analysis/blob/77caa9969073bb8bbc7aad1a3c7b5393643a3614/docs/figure/check-controls.Rmd/sample-dist-heatmap-1.png" target="_blank">77caa99</a>
+</td>
+<td>
+sdhutchins
+</td>
+<td>
+2024-04-23
+</td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
 </div>
 <div id="principal-components-analysis" class="section level3">
 <h3>Principal Components Analysis</h3>
@@ -831,6 +903,43 @@ ggplot(pca_data_all, aes(PC1, PC2)) +
   ylab(paste0(&quot;PC2: &quot;, percent_var_all[2], &quot;% variance&quot;)) +
   coord_fixed()</code></pre>
 <p><img src="figure/check-controls.Rmd/principal-components-analysis-all-1.png" width="672" style="display: block; margin: auto;" /></p>
+<p>
+<button type="button" class="btn btn-default btn-xs btn-workflowr btn-workflowr-fig" data-toggle="collapse" data-target="#fig-principal-components-analysis-all-1">
+Past versions of principal-components-analysis-all-1.png
+</button>
+</p>
+<div id="fig-principal-components-analysis-all-1" class="collapse">
+<div class="table-responsive">
+<table class="table table-condensed table-hover">
+<thead>
+<tr>
+<th>
+Version
+</th>
+<th>
+Author
+</th>
+<th>
+Date
+</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>
+<a href="https://github.com/uab-cgds-worthey/mecfs-dge-analysis/blob/77caa9969073bb8bbc7aad1a3c7b5393643a3614/docs/figure/check-controls.Rmd/principal-components-analysis-all-1.png" target="_blank">77caa99</a>
+</td>
+<td>
+sdhutchins
+</td>
+<td>
+2024-04-23
+</td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
 <pre class="r"><code>pca_data_all &lt;- plotPCA(vsd_limma, intgroup = c(&quot;Affected&quot;, &quot;Sex&quot;, 
                                                 &quot;CombinedCategory&quot;),
                         returnData = TRUE)
@@ -846,6 +955,44 @@ ggplot(pca_data_all, aes(PC1, PC2)) +
   ylab(paste0(&quot;PC2: &quot;, percent_var_all[2], &quot;% variance&quot;)) +
   coord_fixed()</code></pre>
 <p><img src="figure/check-controls.Rmd/principal-components-analysis-combocategory-all-1.png" width="672" style="display: block; margin: auto;" /></p>
+<p>
+<button type="button" class="btn btn-default btn-xs btn-workflowr btn-workflowr-fig" data-toggle="collapse" data-target="#fig-principal-components-analysis-combocategory-all-1">
+Past versions of principal-components-analysis-combocategory-all-1.png
+</button>
+</p>
+<div id="fig-principal-components-analysis-combocategory-all-1"
+class="collapse">
+<div class="table-responsive">
+<table class="table table-condensed table-hover">
+<thead>
+<tr>
+<th>
+Version
+</th>
+<th>
+Author
+</th>
+<th>
+Date
+</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>
+<a href="https://github.com/uab-cgds-worthey/mecfs-dge-analysis/blob/77caa9969073bb8bbc7aad1a3c7b5393643a3614/docs/figure/check-controls.Rmd/principal-components-analysis-combocategory-all-1.png" target="_blank">77caa99</a>
+</td>
+<td>
+sdhutchins
+</td>
+<td>
+2024-04-23
+</td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
 <pre class="r"><code>pca_data &lt;- plotPCA(vsd_limma, intgroup = c(&quot;Sex&quot;, &quot;Affected&quot;), returnData = TRUE)
 percent_var &lt;- round(100 * attr(pca_data, &quot;percentVar&quot;))
 
@@ -866,6 +1013,45 @@ ggplot(pca_data, aes(PC1, PC2)) +
   ylab(paste0(&quot;PC2: &quot;, percent_var[2], &quot;% variance&quot;)) +
   coord_fixed()</code></pre>
 <p><img src="figure/check-controls.Rmd/principal-components-analysis-subsetted-affected-status-1.png" width="672" style="display: block; margin: auto;" /></p>
+<p>
+<button type="button" class="btn btn-default btn-xs btn-workflowr btn-workflowr-fig" data-toggle="collapse" data-target="#fig-principal-components-analysis-subsetted-affected-status-1">
+Past versions of
+principal-components-analysis-subsetted-affected-status-1.png
+</button>
+</p>
+<div id="fig-principal-components-analysis-subsetted-affected-status-1"
+class="collapse">
+<div class="table-responsive">
+<table class="table table-condensed table-hover">
+<thead>
+<tr>
+<th>
+Version
+</th>
+<th>
+Author
+</th>
+<th>
+Date
+</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>
+<a href="https://github.com/uab-cgds-worthey/mecfs-dge-analysis/blob/77caa9969073bb8bbc7aad1a3c7b5393643a3614/docs/figure/check-controls.Rmd/principal-components-analysis-subsetted-affected-status-1.png" target="_blank">77caa99</a>
+</td>
+<td>
+sdhutchins
+</td>
+<td>
+2024-04-23
+</td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
 <pre class="r"><code>pca_data_all &lt;- plotPCA(vsd_limma, intgroup = c(&quot;CombinedCategory&quot;), 
                         returnData = TRUE)
 percent_var_all &lt;- round(100 * attr(pca_data_all, &quot;percentVar&quot;))
@@ -886,6 +1072,44 @@ ggplot(pca_data_all, aes(PC1, PC2)) +
   ylab(paste0(&quot;PC2: &quot;, percent_var_all[2], &quot;% variance&quot;)) +
   ggthemes::theme_clean()</code></pre>
 <p><img src="figure/check-controls.Rmd/principal-components-analysis-subsetted-category-1.png" width="672" style="display: block; margin: auto;" /></p>
+<p>
+<button type="button" class="btn btn-default btn-xs btn-workflowr btn-workflowr-fig" data-toggle="collapse" data-target="#fig-principal-components-analysis-subsetted-category-1">
+Past versions of principal-components-analysis-subsetted-category-1.png
+</button>
+</p>
+<div id="fig-principal-components-analysis-subsetted-category-1"
+class="collapse">
+<div class="table-responsive">
+<table class="table table-condensed table-hover">
+<thead>
+<tr>
+<th>
+Version
+</th>
+<th>
+Author
+</th>
+<th>
+Date
+</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>
+<a href="https://github.com/uab-cgds-worthey/mecfs-dge-analysis/blob/77caa9969073bb8bbc7aad1a3c7b5393643a3614/docs/figure/check-controls.Rmd/principal-components-analysis-subsetted-category-1.png" target="_blank">77caa99</a>
+</td>
+<td>
+sdhutchins
+</td>
+<td>
+2024-04-23
+</td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
 </div>
 <div id="heatmap-of-all-genes-top-50-top-100-genes"
 class="section level3">
@@ -954,6 +1178,43 @@ ComplexHeatmap::pheatmap(mat,
   fontsize = 5, angle_col = c(&quot;0&quot;)
 )</code></pre>
 <p><img src="figure/check-controls.Rmd/top50-heatmap-batch-combined-1.png" width="800px" height="570px" style="display: block; margin: auto;" /></p>
+<p>
+<button type="button" class="btn btn-default btn-xs btn-workflowr btn-workflowr-fig" data-toggle="collapse" data-target="#fig-top50-heatmap-batch-combined-1">
+Past versions of top50-heatmap-batch-combined-1.png
+</button>
+</p>
+<div id="fig-top50-heatmap-batch-combined-1" class="collapse">
+<div class="table-responsive">
+<table class="table table-condensed table-hover">
+<thead>
+<tr>
+<th>
+Version
+</th>
+<th>
+Author
+</th>
+<th>
+Date
+</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>
+<a href="https://github.com/uab-cgds-worthey/mecfs-dge-analysis/blob/77caa9969073bb8bbc7aad1a3c7b5393643a3614/docs/figure/check-controls.Rmd/top50-heatmap-batch-combined-1.png" target="_blank">77caa99</a>
+</td>
+<td>
+sdhutchins
+</td>
+<td>
+2024-04-23
+</td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
 <p>This is a heatmap of the top 50 genes with the highest variance
 across all samples.</p>
 <pre class="r"><code>top_var_genes_all &lt;- head(order(-rowVars(assay(vsd_limma))), 50)
@@ -976,9 +1237,83 @@ rownames(mat_all) &lt;- new_row_names_all
 pheatmap(mat_all, annotation_col = df_all, annotation_colors = ann_colors, 
          fontsize = 5)</code></pre>
 <p><img src="figure/check-controls.Rmd/top50-heatmap-subsetted-1.png" width="800px" height="570px" style="display: block; margin: auto;" /></p>
+<p>
+<button type="button" class="btn btn-default btn-xs btn-workflowr btn-workflowr-fig" data-toggle="collapse" data-target="#fig-top50-heatmap-subsetted-1">
+Past versions of top50-heatmap-subsetted-1.png
+</button>
+</p>
+<div id="fig-top50-heatmap-subsetted-1" class="collapse">
+<div class="table-responsive">
+<table class="table table-condensed table-hover">
+<thead>
+<tr>
+<th>
+Version
+</th>
+<th>
+Author
+</th>
+<th>
+Date
+</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>
+<a href="https://github.com/uab-cgds-worthey/mecfs-dge-analysis/blob/77caa9969073bb8bbc7aad1a3c7b5393643a3614/docs/figure/check-controls.Rmd/top50-heatmap-subsetted-1.png" target="_blank">77caa99</a>
+</td>
+<td>
+sdhutchins
+</td>
+<td>
+2024-04-23
+</td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
 <pre class="r"><code>pheatmap(mat_all, annotation_col = df_affcat, annotation_colors = ann_colors2, 
          fontsize = 5)</code></pre>
 <p><img src="figure/check-controls.Rmd/top50-heatmap-subsetted-2.png" width="800px" height="570px" style="display: block; margin: auto;" /></p>
+<p>
+<button type="button" class="btn btn-default btn-xs btn-workflowr btn-workflowr-fig" data-toggle="collapse" data-target="#fig-top50-heatmap-subsetted-2">
+Past versions of top50-heatmap-subsetted-2.png
+</button>
+</p>
+<div id="fig-top50-heatmap-subsetted-2" class="collapse">
+<div class="table-responsive">
+<table class="table table-condensed table-hover">
+<thead>
+<tr>
+<th>
+Version
+</th>
+<th>
+Author
+</th>
+<th>
+Date
+</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>
+<a href="https://github.com/uab-cgds-worthey/mecfs-dge-analysis/blob/77caa9969073bb8bbc7aad1a3c7b5393643a3614/docs/figure/check-controls.Rmd/top50-heatmap-subsetted-2.png" target="_blank">77caa99</a>
+</td>
+<td>
+sdhutchins
+</td>
+<td>
+2024-04-23
+</td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
 <p>This is a heatmap of the top 100 genes with the highest variance
 across</p>
 <pre class="r"><code>top_var_genes_100_all &lt;- head(order(-rowVars(assay(vsd_limma))), 100)
@@ -1000,11 +1335,48 @@ rownames(mat_100_all) &lt;- new_row_names_100_all
 pheatmap(mat_100_all, annotation_col = df_100_all, 
          annotation_colors = ann_colors2, fontsize = 6)</code></pre>
 <p><img src="figure/check-controls.Rmd/top100-heatmap-subsetted-1.png" width="1200px" style="display: block; margin: auto;" /></p>
+<p>
+<button type="button" class="btn btn-default btn-xs btn-workflowr btn-workflowr-fig" data-toggle="collapse" data-target="#fig-top100-heatmap-subsetted-1">
+Past versions of top100-heatmap-subsetted-1.png
+</button>
+</p>
+<div id="fig-top100-heatmap-subsetted-1" class="collapse">
+<div class="table-responsive">
+<table class="table table-condensed table-hover">
+<thead>
+<tr>
+<th>
+Version
+</th>
+<th>
+Author
+</th>
+<th>
+Date
+</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>
+<a href="https://github.com/uab-cgds-worthey/mecfs-dge-analysis/blob/77caa9969073bb8bbc7aad1a3c7b5393643a3614/docs/figure/check-controls.Rmd/top100-heatmap-subsetted-1.png" target="_blank">77caa99</a>
+</td>
+<td>
+sdhutchins
+</td>
+<td>
+2024-04-23
+</td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
 </div>
 <div id="comparisoncontrast-of-unaffected-groups"
 class="section level3">
 <h3>Comparison/Contrast of Unaffected Groups</h3>
-<pre class="r"><code>res_unaff_vs_unaff_sub &lt;- results(dds, contrast = c(&quot;Affected&quot;, &quot;Unaffected1&quot;, &quot;Affected&quot;))
+<pre class="r"><code>res_unaff_vs_unaff_sub &lt;- results(dds, contrast = c(&quot;Affected&quot;, &quot;Unaffected1&quot;, &quot;Unaffected2&quot;))
 res_unaff_vs_unaff_df_sub &lt;- process_and_save_results(
   res_unaff_vs_unaff_sub,
   &quot;output/res_unaff_vs_unaff_sub.csv&quot;
@@ -1017,11 +1389,11 @@ summary(res_unaff_vs_unaff_sub)</code></pre>
 <pre><code>
 out of 29608 with nonzero total read count
 adjusted p-value &lt; 0.1
-LFC &gt; 0 (up)       : 28, 0.095%
-LFC &lt; 0 (down)     : 70, 0.24%
+LFC &gt; 0 (up)       : 10, 0.034%
+LFC &lt; 0 (down)     : 21, 0.071%
 outliers [1]       : 292, 0.99%
-low counts [2]     : 6818, 23%
-(mean count &lt; 3)
+low counts [2]     : 7932, 27%
+(mean count &lt; 5)
 [1] see &#39;cooksCutoff&#39; argument of ?results
 [2] see &#39;independentFiltering&#39; argument of ?results</code></pre>
 <pre class="r"><code>topgenes_byensemblid_sub &lt;- head(rownames(res_unaff_vs_unaff_df_sub), 31)
@@ -1050,6 +1422,43 @@ topgenes_unaff_vs_unaff_05_sub &lt;- topgenes_unaff_vs_unaff_05_sub[,keep_contro
 
 pheatmap(topgenes_unaff_vs_unaff_05_sub, annotation_col = df_sub, annotation_colors = ann_colors2, fontsize = 5, angle_col = c(&quot;0&quot;))</code></pre>
 <p><img src="figure/check-controls.Rmd/top-100-genes-deseq-subsetted-1.png" width="800px" height="570px" style="display: block; margin: auto;" /></p>
+<p>
+<button type="button" class="btn btn-default btn-xs btn-workflowr btn-workflowr-fig" data-toggle="collapse" data-target="#fig-top-100-genes-deseq-subsetted-1">
+Past versions of top-100-genes-deseq-subsetted-1.png
+</button>
+</p>
+<div id="fig-top-100-genes-deseq-subsetted-1" class="collapse">
+<div class="table-responsive">
+<table class="table table-condensed table-hover">
+<thead>
+<tr>
+<th>
+Version
+</th>
+<th>
+Author
+</th>
+<th>
+Date
+</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>
+<a href="https://github.com/uab-cgds-worthey/mecfs-dge-analysis/blob/77caa9969073bb8bbc7aad1a3c7b5393643a3614/docs/figure/check-controls.Rmd/top-100-genes-deseq-subsetted-1.png" target="_blank">77caa99</a>
+</td>
+<td>
+sdhutchins
+</td>
+<td>
+2024-04-23
+</td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
 <pre class="r"><code>topgenes_byensemblid_sub &lt;- head(rownames(res_unaff_vs_unaff_df_sub), 100)
 topgenes_unaff_vs_unaff_05_sub &lt;- assay(vsd_limma)[topgenes_byensemblid_sub, ]
 topgenes_unaff_vs_unaff_05_sub &lt;- topgenes_unaff_vs_unaff_05_sub - rowMeans(topgenes_unaff_vs_unaff_05_sub)
@@ -1070,6 +1479,44 @@ topgenes_unaff_vs_unaff_05_sub &lt;- topgenes_unaff_vs_unaff_05_sub[order(row.na
 df_sub &lt;- as.data.frame(colData(vsd_limma)[, c(&quot;Affected&quot;, &quot;SubCategory&quot;, &quot;CombinedCategory&quot;)])
 pheatmap(topgenes_unaff_vs_unaff_05_sub, annotation_col = df_sub, annotation_colors = ann_colors2, fontsize = 5, angle_col = 0)</code></pre>
 <p><img src="figure/check-controls.Rmd/top-100-genes-deseq-subsetted-subcategory-1.png" width="800px" height="570px" style="display: block; margin: auto;" /></p>
+<p>
+<button type="button" class="btn btn-default btn-xs btn-workflowr btn-workflowr-fig" data-toggle="collapse" data-target="#fig-top-100-genes-deseq-subsetted-subcategory-1">
+Past versions of top-100-genes-deseq-subsetted-subcategory-1.png
+</button>
+</p>
+<div id="fig-top-100-genes-deseq-subsetted-subcategory-1"
+class="collapse">
+<div class="table-responsive">
+<table class="table table-condensed table-hover">
+<thead>
+<tr>
+<th>
+Version
+</th>
+<th>
+Author
+</th>
+<th>
+Date
+</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>
+<a href="https://github.com/uab-cgds-worthey/mecfs-dge-analysis/blob/77caa9969073bb8bbc7aad1a3c7b5393643a3614/docs/figure/check-controls.Rmd/top-100-genes-deseq-subsetted-subcategory-1.png" target="_blank">77caa99</a>
+</td>
+<td>
+sdhutchins
+</td>
+<td>
+2024-04-23
+</td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
 <pre class="r"><code>topgenes_byensemblid_sub &lt;- head(rownames(res_unaff_vs_unaff_df_sub), 50)
 topgenes_unaff_vs_unaff_05_sub &lt;- assay(vsd_limma)[topgenes_byensemblid_sub, ]
 topgenes_unaff_vs_unaff_05_sub &lt;- topgenes_unaff_vs_unaff_05_sub - rowMeans(topgenes_unaff_vs_unaff_05_sub)
@@ -1092,6 +1539,43 @@ df_sub &lt;- df &lt;- colData(vsd_limma) %&gt;%
   dplyr::select(CombinedCategory)
 pheatmap(topgenes_unaff_vs_unaff_05_sub, annotation_col = df_sub, annotation_colors = ann_colors2, fontsize = 5, angle_col = 0)</code></pre>
 <p><img src="figure/check-controls.Rmd/top-50-genes-deseq-subsetted-1.png" width="800px" height="570px" style="display: block; margin: auto;" /></p>
+<p>
+<button type="button" class="btn btn-default btn-xs btn-workflowr btn-workflowr-fig" data-toggle="collapse" data-target="#fig-top-50-genes-deseq-subsetted-1">
+Past versions of top-50-genes-deseq-subsetted-1.png
+</button>
+</p>
+<div id="fig-top-50-genes-deseq-subsetted-1" class="collapse">
+<div class="table-responsive">
+<table class="table table-condensed table-hover">
+<thead>
+<tr>
+<th>
+Version
+</th>
+<th>
+Author
+</th>
+<th>
+Date
+</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>
+<a href="https://github.com/uab-cgds-worthey/mecfs-dge-analysis/blob/77caa9969073bb8bbc7aad1a3c7b5393643a3614/docs/figure/check-controls.Rmd/top-50-genes-deseq-subsetted-1.png" target="_blank">77caa99</a>
+</td>
+<td>
+sdhutchins
+</td>
+<td>
+2024-04-23
+</td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
 <pre class="r"><code>topgenes_byensemblid_sub &lt;- head(rownames(res_unaff_vs_unaff_df_sub), 50)
 topgenes_unaff_vs_unaff_05_sub &lt;- assay(vsd_limma)[topgenes_byensemblid_sub, ]
 topgenes_unaff_vs_unaff_05_sub &lt;- topgenes_unaff_vs_unaff_05_sub - rowMeans(topgenes_unaff_vs_unaff_05_sub)
@@ -1117,6 +1601,44 @@ pheatmap(topgenes_unaff_vs_unaff_05_sub,
   annotation_colors = ann_colors2, fontsize = 5, angle_col = 0
 )</code></pre>
 <p><img src="figure/check-controls.Rmd/top-50-genes-deseq-subsetted-subcategory-1.png" width="800px" height="570px" style="display: block; margin: auto;" /></p>
+<p>
+<button type="button" class="btn btn-default btn-xs btn-workflowr btn-workflowr-fig" data-toggle="collapse" data-target="#fig-top-50-genes-deseq-subsetted-subcategory-1">
+Past versions of top-50-genes-deseq-subsetted-subcategory-1.png
+</button>
+</p>
+<div id="fig-top-50-genes-deseq-subsetted-subcategory-1"
+class="collapse">
+<div class="table-responsive">
+<table class="table table-condensed table-hover">
+<thead>
+<tr>
+<th>
+Version
+</th>
+<th>
+Author
+</th>
+<th>
+Date
+</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>
+<a href="https://github.com/uab-cgds-worthey/mecfs-dge-analysis/blob/77caa9969073bb8bbc7aad1a3c7b5393643a3614/docs/figure/check-controls.Rmd/top-50-genes-deseq-subsetted-subcategory-1.png" target="_blank">77caa99</a>
+</td>
+<td>
+sdhutchins
+</td>
+<td>
+2024-04-23
+</td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
 <pre class="r"><code>topgenes_byensemblid_sub &lt;- head(rownames(res_unaff_vs_unaff_df_sub), 31)
 topgenes_unaff_vs_unaff_05_sub &lt;- assay(vsd_limma)[topgenes_byensemblid_sub, ]
 topgenes_unaff_vs_unaff_05_sub &lt;- topgenes_unaff_vs_unaff_05_sub - rowMeans(topgenes_unaff_vs_unaff_05_sub)
@@ -1139,6 +1661,43 @@ df_sub &lt;- df &lt;- colData(vsd_limma) %&gt;%
   dplyr::select(Affected)
 pheatmap(topgenes_unaff_vs_unaff_05_sub, annotation_col = df_sub, annotation_colors = ann_colors2, fontsize = 5, angle_col = 0)</code></pre>
 <p><img src="figure/check-controls.Rmd/significant-genes-deseq-subsetted-1.png" width="800px" height="570px" style="display: block; margin: auto;" /></p>
+<p>
+<button type="button" class="btn btn-default btn-xs btn-workflowr btn-workflowr-fig" data-toggle="collapse" data-target="#fig-significant-genes-deseq-subsetted-1">
+Past versions of significant-genes-deseq-subsetted-1.png
+</button>
+</p>
+<div id="fig-significant-genes-deseq-subsetted-1" class="collapse">
+<div class="table-responsive">
+<table class="table table-condensed table-hover">
+<thead>
+<tr>
+<th>
+Version
+</th>
+<th>
+Author
+</th>
+<th>
+Date
+</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>
+<a href="https://github.com/uab-cgds-worthey/mecfs-dge-analysis/blob/77caa9969073bb8bbc7aad1a3c7b5393643a3614/docs/figure/check-controls.Rmd/significant-genes-deseq-subsetted-1.png" target="_blank">77caa99</a>
+</td>
+<td>
+sdhutchins
+</td>
+<td>
+2024-04-23
+</td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
 <pre class="r"><code>topgenes_byensemblid_sub &lt;- head(rownames(res_unaff_vs_unaff_df_sub), 55)
 topgenes_unaff_vs_unaff_05_sub &lt;- assay(vsd_limma)[topgenes_byensemblid_sub, ]
 topgenes_unaff_vs_unaff_05_sub &lt;- topgenes_unaff_vs_unaff_05_sub - rowMeans(topgenes_unaff_vs_unaff_05_sub)
@@ -1161,6 +1720,44 @@ df_sub &lt;- df &lt;- colData(vsd_limma) %&gt;%
   dplyr::select(Affected, SubCategory, CombinedCategory)
 pheatmap(topgenes_unaff_vs_unaff_05_sub, annotation_col = df_sub, annotation_colors = ann_colors2, fontsize = 5, angle_col = 0)</code></pre>
 <p><img src="figure/check-controls.Rmd/significant-genes-deseq-subsetted-subcategory-1.png" width="800px" height="570px" style="display: block; margin: auto;" /></p>
+<p>
+<button type="button" class="btn btn-default btn-xs btn-workflowr btn-workflowr-fig" data-toggle="collapse" data-target="#fig-significant-genes-deseq-subsetted-subcategory-1">
+Past versions of significant-genes-deseq-subsetted-subcategory-1.png
+</button>
+</p>
+<div id="fig-significant-genes-deseq-subsetted-subcategory-1"
+class="collapse">
+<div class="table-responsive">
+<table class="table table-condensed table-hover">
+<thead>
+<tr>
+<th>
+Version
+</th>
+<th>
+Author
+</th>
+<th>
+Date
+</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>
+<a href="https://github.com/uab-cgds-worthey/mecfs-dge-analysis/blob/77caa9969073bb8bbc7aad1a3c7b5393643a3614/docs/figure/check-controls.Rmd/significant-genes-deseq-subsetted-subcategory-1.png" target="_blank">77caa99</a>
+</td>
+<td>
+sdhutchins
+</td>
+<td>
+2024-04-23
+</td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
 <pre class="r"><code>topgenes_byensemblid_sub &lt;- head(rownames(res_unaff_vs_unaff_df_sub), 75)
 topgenes_unaff_vs_unaff_05_sub &lt;- assay(vsd_limma)[topgenes_byensemblid_sub, ]
 topgenes_unaff_vs_unaff_05_sub &lt;- topgenes_unaff_vs_unaff_05_sub - rowMeans(topgenes_unaff_vs_unaff_05_sub)
@@ -1184,6 +1781,43 @@ pheatmap(topgenes_unaff_vs_unaff_05_sub,
   annotation_colors = ann_colors2, fontsize = 4, angle_col = 0
 )</code></pre>
 <p><img src="figure/check-controls.Rmd/top-75-genes-deseq-subsetted-1.png" width="800px" height="570px" style="display: block; margin: auto;" /></p>
+<p>
+<button type="button" class="btn btn-default btn-xs btn-workflowr btn-workflowr-fig" data-toggle="collapse" data-target="#fig-top-75-genes-deseq-subsetted-1">
+Past versions of top-75-genes-deseq-subsetted-1.png
+</button>
+</p>
+<div id="fig-top-75-genes-deseq-subsetted-1" class="collapse">
+<div class="table-responsive">
+<table class="table table-condensed table-hover">
+<thead>
+<tr>
+<th>
+Version
+</th>
+<th>
+Author
+</th>
+<th>
+Date
+</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>
+<a href="https://github.com/uab-cgds-worthey/mecfs-dge-analysis/blob/77caa9969073bb8bbc7aad1a3c7b5393643a3614/docs/figure/check-controls.Rmd/top-75-genes-deseq-subsetted-1.png" target="_blank">77caa99</a>
+</td>
+<td>
+sdhutchins
+</td>
+<td>
+2024-04-23
+</td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
 <pre class="r"><code>topgenes_byensemblid_sub &lt;- head(rownames(res_unaff_vs_unaff_df_sub), 75)
 topgenes_unaff_vs_unaff_05_sub &lt;- assay(vsd_limma)[topgenes_byensemblid_sub, ]
 topgenes_unaff_vs_unaff_05_sub &lt;- topgenes_unaff_vs_unaff_05_sub - rowMeans(topgenes_unaff_vs_unaff_05_sub)
@@ -1204,6 +1838,44 @@ topgenes_unaff_vs_unaff_05_sub &lt;- topgenes_unaff_vs_unaff_05_sub[order(row.na
 df_sub &lt;- as.data.frame(colData(vsd_limma)[, c(&quot;Affected&quot;, &quot;SubCategory&quot;, &quot;CombinedCategory&quot;)])
 pheatmap(topgenes_unaff_vs_unaff_05_sub, annotation_col = df_sub, annotation_colors = ann_colors2, fontsize = 4, angle_col = 0)</code></pre>
 <p><img src="figure/check-controls.Rmd/top-75-genes-deseq-subsetted-subcategory-1.png" width="800px" height="570px" style="display: block; margin: auto;" /></p>
+<p>
+<button type="button" class="btn btn-default btn-xs btn-workflowr btn-workflowr-fig" data-toggle="collapse" data-target="#fig-top-75-genes-deseq-subsetted-subcategory-1">
+Past versions of top-75-genes-deseq-subsetted-subcategory-1.png
+</button>
+</p>
+<div id="fig-top-75-genes-deseq-subsetted-subcategory-1"
+class="collapse">
+<div class="table-responsive">
+<table class="table table-condensed table-hover">
+<thead>
+<tr>
+<th>
+Version
+</th>
+<th>
+Author
+</th>
+<th>
+Date
+</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>
+<a href="https://github.com/uab-cgds-worthey/mecfs-dge-analysis/blob/77caa9969073bb8bbc7aad1a3c7b5393643a3614/docs/figure/check-controls.Rmd/top-75-genes-deseq-subsetted-subcategory-1.png" target="_blank">77caa99</a>
+</td>
+<td>
+sdhutchins
+</td>
+<td>
+2024-04-23
+</td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
 <pre class="r"><code>topgenes_byensemblid_sub &lt;- head(rownames(res_unaff_vs_unaff_df_sub), 200)
 topgenes_unaff_vs_unaff_05_sub &lt;- assay(vsd_limma)[topgenes_byensemblid_sub, ]
 topgenes_unaff_vs_unaff_05_sub &lt;- topgenes_unaff_vs_unaff_05_sub - rowMeans(topgenes_unaff_vs_unaff_05_sub)
@@ -1224,6 +1896,43 @@ topgenes_unaff_vs_unaff_05_sub &lt;- topgenes_unaff_vs_unaff_05_sub[order(row.na
 df_sub &lt;- as.data.frame(colData(vsd_limma)[, c(&quot;Affected&quot;, &quot;CombinedCategory&quot;)])
 pheatmap(topgenes_unaff_vs_unaff_05_sub, annotation_col = df_sub, annotation_colors = ann_colors2, fontsize = 2.25, angle_col = 0)</code></pre>
 <p><img src="figure/check-controls.Rmd/top-200-genes-deseq-subsetted-1.png" width="800px" height="570px" style="display: block; margin: auto;" /></p>
+<p>
+<button type="button" class="btn btn-default btn-xs btn-workflowr btn-workflowr-fig" data-toggle="collapse" data-target="#fig-top-200-genes-deseq-subsetted-1">
+Past versions of top-200-genes-deseq-subsetted-1.png
+</button>
+</p>
+<div id="fig-top-200-genes-deseq-subsetted-1" class="collapse">
+<div class="table-responsive">
+<table class="table table-condensed table-hover">
+<thead>
+<tr>
+<th>
+Version
+</th>
+<th>
+Author
+</th>
+<th>
+Date
+</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>
+<a href="https://github.com/uab-cgds-worthey/mecfs-dge-analysis/blob/77caa9969073bb8bbc7aad1a3c7b5393643a3614/docs/figure/check-controls.Rmd/top-200-genes-deseq-subsetted-1.png" target="_blank">77caa99</a>
+</td>
+<td>
+sdhutchins
+</td>
+<td>
+2024-04-23
+</td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
 <pre class="r"><code>gb_df &lt;- genes_biomart[, c(1, ncol(genes_biomart))]
 res_unaff_vs_unaff_df_sub_genename &lt;- res_unaff_vs_unaff_df_sub
 res_unaff_vs_unaff_df_sub_genename$Ensembl_ID &lt;- row.names(res_unaff_vs_unaff_df_sub)
@@ -1263,6 +1972,43 @@ maplot &lt;- ggmaplot(res_unaff_vs_unaff_df_sub,
 
 maplot</code></pre>
 <p><img src="figure/check-controls.Rmd/maplot-subsetted-samples-1.png" width="672" style="display: block; margin: auto;" /></p>
+<p>
+<button type="button" class="btn btn-default btn-xs btn-workflowr btn-workflowr-fig" data-toggle="collapse" data-target="#fig-maplot-subsetted-samples-1">
+Past versions of maplot-subsetted-samples-1.png
+</button>
+</p>
+<div id="fig-maplot-subsetted-samples-1" class="collapse">
+<div class="table-responsive">
+<table class="table table-condensed table-hover">
+<thead>
+<tr>
+<th>
+Version
+</th>
+<th>
+Author
+</th>
+<th>
+Date
+</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>
+<a href="https://github.com/uab-cgds-worthey/mecfs-dge-analysis/blob/77caa9969073bb8bbc7aad1a3c7b5393643a3614/docs/figure/check-controls.Rmd/maplot-subsetted-samples-1.png" target="_blank">77caa99</a>
+</td>
+<td>
+sdhutchins
+</td>
+<td>
+2024-04-23
+</td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
 <pre class="r"><code>significant_data &lt;- maplot$data %&gt;%
   filter(grepl(&quot;Up|Down&quot;, sig)) %&gt;%
   mutate(direction = ifelse(grepl(&quot;Up&quot;, sig), &quot;Up&quot;, &quot;Down&quot;)) %&gt;%
@@ -1278,7 +2024,7 @@ combined_data &lt;- combined_data %&gt;%
 paged_table(as.data.frame(significant_data), options = list(rows.print = 30))</code></pre>
 <div data-pagedtable="false">
 <script data-pagedtable-source type="application/json">
-{"columns":[{"label":["name"],"name":[1],"type":["chr"],"align":["left"]},{"label":["mean"],"name":[2],"type":["dbl"],"align":["right"]},{"label":["lfc"],"name":[3],"type":["dbl"],"align":["right"]},{"label":["padj"],"name":[4],"type":["dbl"],"align":["right"]},{"label":["direction"],"name":[5],"type":["chr"],"align":["left"]}],"data":[{"1":"ENSG00000288534","2":"5.568714","3":"-21.9511154","4":"5.722819e-22","5":"Down"},{"1":"RNU1-1","2":"7.136644","3":"-23.3546456","4":"4.867057e-12","5":"Down"},{"1":"ENSG00000268400","2":"5.213692","3":"-21.2680079","4":"9.718468e-11","5":"Down"},{"1":"RNU1-3","2":"7.080038","3":"-23.4000218","4":"8.136298e-10","5":"Down"},{"1":"ENSG00000289694","2":"9.242564","3":"-25.7437025","4":"8.136298e-10","5":"Down"},{"1":"SLC39A14","2":"7.484569","3":"1.3699626","4":"1.463398e-04","5":"Up"},{"1":"CPSF1P1","2":"4.540450","3":"-20.8984045","4":"3.572097e-04","5":"Down"},{"1":"ZNF571-AS1","2":"5.473715","3":"-3.7583223","4":"4.814319e-04","5":"Down"},{"1":"CDAN1","2":"9.224371","3":"0.8311278","4":"2.507017e-03","5":"Up"},{"1":"ENSG00000258354","2":"4.301122","3":"-6.8692475","4":"3.269940e-03","5":"Down"},{"1":"F8A2","2":"5.058768","3":"-21.5090570","4":"3.782514e-03","5":"Down"},{"1":"RAP1GAP","2":"8.925589","3":"-4.9963117","4":"5.837525e-03","5":"Down"},{"1":"ENSG00000264324","2":"5.805691","3":"-2.1925668","4":"5.837525e-03","5":"Down"},{"1":"KLRC3","2":"4.862315","3":"-3.1653361","4":"9.576878e-03","5":"Down"},{"1":"DOCK6","2":"6.250327","3":"1.9707673","4":"1.048765e-02","5":"Up"},{"1":"EFCAB7","2":"6.906723","3":"-1.2780256","4":"1.048765e-02","5":"Down"},{"1":"CBX3P2","2":"5.306697","3":"1.4886867","4":"1.048765e-02","5":"Up"},{"1":"SNORD3B-2","2":"3.963039","3":"-6.1454579","4":"1.315793e-02","5":"Down"},{"1":"OR5AN1","2":"3.535685","3":"4.0537235","4":"1.343737e-02","5":"Up"},{"1":"ADAMTS6","2":"6.293797","3":"-1.5553065","4":"1.445525e-02","5":"Down"},{"1":"LIMCH1","2":"4.371946","3":"2.8966010","4":"1.445525e-02","5":"Up"},{"1":"CD1E","2":"4.346563","3":"1.9743127","4":"1.445525e-02","5":"Up"},{"1":"RBM14-RBM4","2":"9.943123","3":"-1.0084689","4":"1.445525e-02","5":"Down"},{"1":"RN7SKP203","2":"6.652843","3":"-2.8246995","4":"1.457542e-02","5":"Down"},{"1":"KISS1R","2":"5.310388","3":"-2.4096947","4":"1.559221e-02","5":"Down"},{"1":"ENSG00000289027","2":"7.845973","3":"-1.1097862","4":"2.178008e-02","5":"Down"},{"1":"PPARGC1A","2":"4.187867","3":"-6.8398079","4":"2.191881e-02","5":"Down"},{"1":"RPL13P5","2":"6.843404","3":"0.9687263","4":"2.691135e-02","5":"Up"},{"1":"ENSG00000287167","2":"4.856605","3":"-3.0167019","4":"2.691135e-02","5":"Down"},{"1":"SLC4A10","2":"7.928155","3":"-2.5324117","4":"2.808561e-02","5":"Down"},{"1":"MPPED2","2":"5.272400","3":"-2.5970569","4":"3.000471e-02","5":"Down"},{"1":"LRRN2","2":"4.310414","3":"-5.8898038","4":"3.039282e-02","5":"Down"},{"1":"ENSG00000286132","2":"4.401343","3":"-6.9300885","4":"3.229891e-02","5":"Down"},{"1":"ENSG00000286782","2":"5.796618","3":"-1.4116030","4":"3.387525e-02","5":"Down"},{"1":"BTN2A3P","2":"7.268827","3":"0.6970038","4":"3.409231e-02","5":"Up"},{"1":"RABGGTA","2":"8.997640","3":"0.3597232","4":"3.476709e-02","5":"Up"},{"1":"CACHD1","2":"6.506722","3":"-1.9973526","4":"3.476709e-02","5":"Down"},{"1":"GSTO2","2":"5.736238","3":"1.7588768","4":"3.594309e-02","5":"Up"},{"1":"IGHV3-11","2":"6.499792","3":"-2.6310703","4":"3.594309e-02","5":"Down"},{"1":"FGGY-DT","2":"2.949126","3":"-5.3729141","4":"3.594309e-02","5":"Down"},{"1":"ZNF683","2":"7.865210","3":"1.7956185","4":"4.132214e-02","5":"Up"},{"1":"AIFM3","2":"7.315752","3":"1.1354227","4":"4.212657e-02","5":"Up"},{"1":"ENSG00000253214","2":"5.921309","3":"-2.5296086","4":"4.212657e-02","5":"Down"},{"1":"LRRN3","2":"8.369808","3":"-1.8171200","4":"4.318023e-02","5":"Down"},{"1":"NBEA","2":"9.035026","3":"-1.3058689","4":"5.739974e-02","5":"Down"},{"1":"SPIRE1","2":"7.437446","3":"1.6507135","4":"6.040186e-02","5":"Up"},{"1":"LIX1-AS1","2":"5.759069","3":"-1.9861240","4":"6.300008e-02","5":"Down"},{"1":"SLIT3","2":"2.963555","3":"-5.5667604","4":"6.583442e-02","5":"Down"},{"1":"FAM189B","2":"8.481808","3":"0.4322393","4":"7.578839e-02","5":"Up"},{"1":"B3GALT2","2":"5.908565","3":"-1.5779533","4":"7.668306e-02","5":"Down"},{"1":"ENSG00000224610","2":"4.409982","3":"-2.9658702","4":"7.668306e-02","5":"Down"},{"1":"DZANK1","2":"6.391832","3":"1.3849317","4":"7.727232e-02","5":"Up"},{"1":"LYPD5","2":"3.267316","3":"2.2743705","4":"7.903181e-02","5":"Up"},{"1":"RPL21P75","2":"3.518579","3":"-5.9226842","4":"7.903181e-02","5":"Down"},{"1":"ERCC6L","2":"4.892769","3":"-1.6818014","4":"7.974533e-02","5":"Down"},{"1":"HLA-F","2":"13.224438","3":"0.4815605","4":"7.974533e-02","5":"Up"},{"1":"IGLV2-14","2":"8.144679","3":"-2.0895247","4":"7.974533e-02","5":"Down"},{"1":"GUSB","2":"10.350411","3":"0.4956819","4":"8.312526e-02","5":"Up"},{"1":"ENSG00000289523","2":"5.506867","3":"-0.9555106","4":"8.473246e-02","5":"Down"},{"1":"ASB9","2":"2.981762","3":"-5.5924965","4":"8.489843e-02","5":"Down"},{"1":"ENSG00000289564","2":"5.576768","3":"-1.4158706","4":"8.489843e-02","5":"Down"},{"1":"CCDC77","2":"7.722001","3":"0.6179007","4":"8.534105e-02","5":"Up"},{"1":"KIF18B","2":"6.026682","3":"-2.8272574","4":"8.799204e-02","5":"Down"},{"1":"ENSG00000227080","2":"3.283597","3":"-5.9533825","4":"8.799204e-02","5":"Down"},{"1":"RPL23AP42","2":"7.047378","3":"-1.9627765","4":"8.799204e-02","5":"Down"},{"1":"ENSG00000257767","2":"5.906702","3":"-8.2851668","4":"8.799204e-02","5":"Down"},{"1":"ENSG00000260052","2":"2.770171","3":"-4.9701879","4":"8.799204e-02","5":"Down"},{"1":"AK2","2":"11.844813","3":"0.3709691","4":"8.839878e-02","5":"Up"},{"1":"ANO8","2":"8.875571","3":"0.5544108","4":"8.839878e-02","5":"Up"},{"1":"KCNH8","2":"6.743683","3":"-1.9502012","4":"8.839878e-02","5":"Down"},{"1":"ENSG00000259371","2":"3.076212","3":"-5.5469267","4":"8.839878e-02","5":"Down"},{"1":"ENSG00000272010","2":"2.715523","3":"-5.1648462","4":"8.839878e-02","5":"Down"},{"1":"ENSG00000288727","2":"4.069283","3":"2.5822707","4":"8.945489e-02","5":"Up"},{"1":"GTF2H1","2":"9.717335","3":"-0.5002850","4":"9.071822e-02","5":"Down"},{"1":"PFKM","2":"8.034916","3":"0.7748150","4":"9.071822e-02","5":"Up"},{"1":"CAPN13","2":"3.887764","3":"-4.6000222","4":"9.071822e-02","5":"Down"},{"1":"TAPT1","2":"9.778812","3":"-0.5209894","4":"9.071822e-02","5":"Down"},{"1":"C15orf61","2":"7.098833","3":"-0.9722071","4":"9.071822e-02","5":"Down"},{"1":"IGLV8-61","2":"5.458324","3":"-2.5149204","4":"9.071822e-02","5":"Down"},{"1":"LINC00885","2":"3.910791","3":"-3.0799283","4":"9.071822e-02","5":"Down"},{"1":"ENSG00000258790","2":"6.427278","3":"-4.8897580","4":"9.071822e-02","5":"Down"},{"1":"ZNF45-AS1","2":"4.257812","3":"-4.0646331","4":"9.071822e-02","5":"Down"},{"1":"MRPS28","2":"6.735106","3":"0.6664853","4":"9.142539e-02","5":"Up"},{"1":"RBMS1P1","2":"3.484274","3":"-2.7937152","4":"9.435713e-02","5":"Down"},{"1":"SLC2A6","2":"9.978985","3":"0.6452053","4":"9.593416e-02","5":"Up"},{"1":"ENSG00000288888","2":"3.263603","3":"-4.6602930","4":"9.593416e-02","5":"Down"},{"1":"COL19A1","2":"9.142976","3":"-1.8988409","4":"9.916983e-02","5":"Down"},{"1":"DNAH17","2":"5.391635","3":"2.7759587","4":"9.916983e-02","5":"Up"},{"1":"ENSG00000249685","2":"4.130593","3":"-3.1989181","4":"9.916983e-02","5":"Down"},{"1":"MGP","2":"2.871071","3":"-5.3701324","4":"9.928725e-02","5":"Down"},{"1":"CNNM4","2":"9.286551","3":"0.4716874","4":"9.928725e-02","5":"Up"},{"1":"NEK10","2":"5.148347","3":"-1.8351962","4":"9.928725e-02","5":"Down"},{"1":"SPRY1","2":"6.046003","3":"-1.2217741","4":"9.928725e-02","5":"Down"},{"1":"RN7SKP80","2":"6.980538","3":"-2.0643653","4":"9.928725e-02","5":"Down"},{"1":"IGKV1D-16","2":"3.122822","3":"-5.5269462","4":"9.928725e-02","5":"Down"},{"1":"GYPB","2":"8.562260","3":"-2.3227381","4":"9.928725e-02","5":"Down"},{"1":"ENSG00000284606","2":"5.315063","3":"-2.1037677","4":"9.928725e-02","5":"Down"},{"1":"ENSG00000273183","2":"4.555059","3":"-1.9871178","4":"9.979438e-02","5":"Down"}],"options":{"columns":{"min":{},"max":[10]},"rows":{"min":[30],"max":[30]},"pages":{}}}
+{"columns":[{"label":["name"],"name":[1],"type":["chr"],"align":["left"]},{"label":["mean"],"name":[2],"type":["dbl"],"align":["right"]},{"label":["lfc"],"name":[3],"type":["dbl"],"align":["right"]},{"label":["padj"],"name":[4],"type":["dbl"],"align":["right"]},{"label":["direction"],"name":[5],"type":["chr"],"align":["left"]}],"data":[{"1":"ENSG00000288534","2":"5.568714","3":"-21.056257","4":"1.832155e-14","5":"Down"},{"1":"H3C14","2":"6.998687","3":"22.973248","4":"3.615487e-09","5":"Up"},{"1":"RNU1-1","2":"7.136644","3":"-24.502996","4":"3.615487e-09","5":"Down"},{"1":"ENSG00000268400","2":"5.213692","3":"-21.746930","4":"1.206394e-07","5":"Down"},{"1":"RNU1-3","2":"7.080038","3":"-24.234342","4":"5.426732e-07","5":"Down"},{"1":"ENSG00000289694","2":"9.242564","3":"-25.093208","4":"6.135774e-06","5":"Down"},{"1":"KLRC3","2":"4.862315","3":"-3.783530","4":"3.766641e-03","5":"Down"},{"1":"SNORD3B-2","2":"3.963039","3":"-7.178297","4":"3.766641e-03","5":"Down"},{"1":"CPSF1P1","2":"4.540450","3":"-21.952656","4":"7.518803e-03","5":"Down"},{"1":"SPAG17","2":"3.496547","3":"-7.490912","4":"8.662096e-03","5":"Down"},{"1":"ULK4P3","2":"3.007464","3":"7.371227","4":"8.662096e-03","5":"Up"},{"1":"ENSG00000283228","2":"3.989355","3":"-23.557168","4":"2.420037e-02","5":"Down"},{"1":"SLC39A14","2":"7.484569","3":"1.314853","4":"2.573985e-02","5":"Up"},{"1":"IGKV1-9","2":"5.968692","3":"-3.290276","4":"2.752347e-02","5":"Down"},{"1":"PALM","2":"3.869517","3":"4.748766","4":"3.187498e-02","5":"Up"},{"1":"OR5AN1","2":"3.535685","3":"5.114816","4":"3.684294e-02","5":"Up"},{"1":"ENSG00000227242","2":"3.721212","3":"6.684089","4":"4.615658e-02","5":"Up"},{"1":"TCTN2","2":"6.903025","3":"-1.276225","4":"4.638277e-02","5":"Down"},{"1":"ENSG00000258354","2":"4.301122","3":"-6.312021","4":"4.638277e-02","5":"Down"},{"1":"BHLHE41","2":"6.031587","3":"-2.506055","4":"4.846747e-02","5":"Down"},{"1":"DNAH17","2":"5.391635","3":"3.941167","4":"4.846747e-02","5":"Up"},{"1":"TNFRSF17","2":"4.453553","3":"-3.126396","4":"5.782599e-02","5":"Down"},{"1":"JCHAIN","2":"9.839791","3":"-2.897421","4":"6.757337e-02","5":"Down"},{"1":"LIMCH1","2":"4.371946","3":"3.279727","4":"7.212649e-02","5":"Up"},{"1":"IGHV3-11","2":"6.499792","3":"-3.091851","4":"7.212649e-02","5":"Down"},{"1":"HULC","2":"5.026568","3":"2.355575","4":"8.903213e-02","5":"Up"},{"1":"PRC1","2":"6.446976","3":"-2.106877","4":"9.572798e-02","5":"Down"},{"1":"LINC02298","2":"5.061841","3":"2.283823","4":"9.572798e-02","5":"Up"},{"1":"NME1-NME2","2":"3.571628","3":"-7.054064","4":"9.690903e-02","5":"Down"},{"1":"ENSG00000260052","2":"2.770171","3":"-5.503276","4":"9.824136e-02","5":"Down"},{"1":"POLR2K","2":"6.369146","3":"-1.814776","4":"9.896219e-02","5":"Down"}],"options":{"columns":{"min":{},"max":[10]},"rows":{"min":[30],"max":[30]},"pages":{}}}
   </script>
 </div>
 <pre class="r"><code># Save significant genes
@@ -1315,7 +2061,7 @@ missing_gene_counts &lt;- counts[row.names(counts) %in% missing_genes, ]
 paged_table(filtered_by_interest, options = list(rows.print = 15))</code></pre>
 <div data-pagedtable="false">
 <script data-pagedtable-source type="application/json">
-{"columns":[{"label":["gene_name"],"name":[1],"type":["chr"],"align":["left"]},{"label":["Ensembl_ID"],"name":[2],"type":["chr"],"align":["left"]},{"label":["baseMean"],"name":[3],"type":["dbl"],"align":["right"]},{"label":["log2FoldChange"],"name":[4],"type":["dbl"],"align":["right"]},{"label":["lfcSE"],"name":[5],"type":["dbl"],"align":["right"]},{"label":["stat"],"name":[6],"type":["dbl"],"align":["right"]},{"label":["pvalue"],"name":[7],"type":["dbl"],"align":["right"]},{"label":["padj"],"name":[8],"type":["dbl"],"align":["right"]}],"data":[{"1":"CARD14","2":"ENSG00000141527.18","3":"5.831711e+00","4":"-5.2649511698","5":"1.5017424","6":"-3.505894919","7":"0.0004550748","8":"0.1004422"},{"1":"CR2","2":"ENSG00000117322.18","3":"2.217099e+02","4":"-1.2111623824","5":"0.5173670","6":"-2.341012151","7":"0.0192315412","8":"0.4151100"},{"1":"SLC4A1","2":"ENSG00000004939.16","3":"5.114960e+04","4":"-1.6843039082","5":"0.7776900","6":"-2.165777883","7":"0.0303281642","8":"0.4778640"},{"1":"CENPF","2":"ENSG00000117724.14","3":"2.099299e+02","4":"-0.8315333709","5":"0.3886038","6":"-2.139797117","7":"0.0323711664","8":"0.4840457"},{"1":"ACACB","2":"ENSG00000076555.16","3":"1.068331e+03","4":"0.5489811118","5":"0.2786175","6":"1.970375884","7":"0.0487953074","8":"0.5470654"},{"1":"ELOVL4","2":"ENSG00000118402.6","3":"4.910125e+01","4":"-0.8660411072","5":"0.4413369","6":"-1.962312935","7":"0.0497260621","8":"0.5487661"},{"1":"SLC12A3","2":"ENSG00000070915.10","3":"3.350271e+01","4":"1.2567526253","5":"0.7476774","6":"1.680875418","7":"0.0927871157","8":"0.6386170"},{"1":"RYR1","2":"ENSG00000196218.14","3":"1.389845e+02","4":"0.8107380915","5":"0.4880339","6":"1.661233303","7":"0.0966665995","8":"0.6449015"},{"1":"MADD","2":"ENSG00000110514.19","3":"3.294426e+03","4":"0.1931330886","5":"0.1250491","6":"1.544458395","7":"0.1224773229","8":"0.6723717"},{"1":"ENO3","2":"ENSG00000108515.18","3":"1.143681e+02","4":"0.3908216690","5":"0.2571810","6":"1.519636866","7":"0.1286022671","8":"0.6786789"},{"1":"CLCN1","2":"ENSG00000188037.14","3":"1.467436e+01","4":"1.4793365788","5":"0.9977731","6":"1.482638234","7":"0.1381705532","8":"0.6907914"},{"1":"CUBN","2":"ENSG00000107611.16","3":"6.813116e+02","4":"0.3625280099","5":"0.2837070","6":"1.277825332","7":"0.2013110204","8":"0.7486150"},{"1":"SLC3A1","2":"ENSG00000138079.14","3":"1.114572e+01","4":"1.1905674595","5":"0.9975742","6":"1.193462542","7":"0.2326882738","8":"0.7698883"},{"1":"SBF1","2":"ENSG00000100241.22","3":"9.380027e+03","4":"0.1778796060","5":"0.1497817","6":"1.187592617","7":"0.2349939478","8":"0.7709997"},{"1":"LRBA","2":"ENSG00000198589.14","3":"6.124575e+03","4":"-0.1544652221","5":"0.1449610","6":"-1.065564180","7":"0.2866206986","8":"0.8045651"},{"1":"NLRC4","2":"ENSG00000091106.19","3":"1.371793e+03","4":"-0.2898821977","5":"0.2737298","6":"-1.059008579","7":"0.2895958725","8":"0.8068752"},{"1":"HAGHL","2":"ENSG00000103253.19","3":"1.511289e+02","4":"0.3129284001","5":"0.3135138","6":"0.998132645","7":"0.3182150420","8":"0.8188896"},{"1":"NOD2","2":"ENSG00000167207.14","3":"2.785087e+03","4":"0.3623584889","5":"0.3677647","6":"0.985299684","7":"0.3244768881","8":"0.8214552"},{"1":"PGAM2","2":"ENSG00000164708.6","3":"1.235820e+01","4":"-0.5795120692","5":"0.6191180","6":"-0.936028473","7":"0.3492585281","8":"0.8314473"},{"1":"TRPM2","2":"ENSG00000142185.18","3":"9.479748e+02","4":"0.3035497572","5":"0.3668143","6":"0.827529811","7":"0.4079368325","8":"0.8567054"},{"1":"INF2","2":"ENSG00000203485.14","3":"1.991620e+03","4":"0.1206786192","5":"0.1808482","6":"0.667292518","7":"0.5045853045","8":"0.8976943"},{"1":"TACO1","2":"ENSG00000136463.9","3":"3.294387e+02","4":"0.1109060784","5":"0.1881918","6":"0.589324844","7":"0.5556433820","8":"0.9133663"},{"1":"FCSK","2":"ENSG00000157353.17","3":"5.860094e+02","4":"0.1152215159","5":"0.2123496","6":"0.542603018","7":"0.5874031604","8":"0.9200313"},{"1":"ACAD9","2":"ENSG00000177646.20","3":"1.565631e+03","4":"0.1376442055","5":"0.2585864","6":"0.532294881","7":"0.5945217768","8":"0.9216283"},{"1":"SLC16A3","2":"ENSG00000141526.18","3":"1.586538e+04","4":"0.1173059579","5":"0.2744618","6":"0.427403573","7":"0.6690854056","8":"0.9434103"},{"1":"ACADM","2":"ENSG00000117054.15","3":"1.026365e+03","4":"-0.0565026979","5":"0.1607036","6":"-0.351595659","7":"0.7251415212","8":"0.9577852"},{"1":"CHRNA10","2":"ENSG00000129749.3","3":"1.542297e+02","4":"-0.0652358679","5":"0.3234936","6":"-0.201660489","7":"0.8401821535","8":"0.9783800"},{"1":"CHRNE","2":"ENSG00000108556.10","3":"9.770709e+01","4":"-0.0688326864","5":"0.4078276","6":"-0.168778888","7":"0.8659705649","8":"0.9824045"},{"1":"NLRP12","2":"ENSG00000142405.22","3":"6.104105e+03","4":"0.0206553034","5":"0.3328087","6":"0.062063588","7":"0.9505121938","8":"0.9946881"},{"1":"CHRFAM7A","2":"ENSG00000166664.15","3":"5.240865e+01","4":"0.0372484809","5":"0.7010613","6":"0.053131563","7":"0.9576270831","8":"0.9952189"},{"1":"SIAE","2":"ENSG00000110013.13","3":"2.519640e+02","4":"0.0144422579","5":"0.3241693","6":"0.044551597","7":"0.9644647241","8":"0.9956394"},{"1":"SLC17A9","2":"ENSG00000101194.18","3":"3.117019e+02","4":"-0.0001000532","5":"0.3348233","6":"-0.000298824","7":"0.9997615730","8":"0.9999784"},{"1":"CACNA1G","2":"ENSG00000006283.18","3":"4.991999e-01","4":"-1.5257398755","5":"4.5341267","6":"-0.336501375","7":"0.7364928145","8":"NA"},{"1":"MYH14","2":"ENSG00000105357.20","3":"9.557558e-01","4":"-2.8013672700","5":"2.3231429","6":"-1.205852301","7":"0.2278744450","8":"NA"},{"1":"SLC13A5","2":"ENSG00000141485.17","3":"1.074975e+00","4":"-2.3993423245","5":"2.4738926","6":"-0.969865202","7":"0.3321136873","8":"NA"},{"1":"SCNN1B","2":"ENSG00000168447.11","3":"2.138286e-01","4":"-0.7962170011","5":"4.5378142","6":"-0.175462671","7":"0.8607161001","8":"NA"},{"1":"CLCNKA","2":"ENSG00000186510.12","3":"2.732683e-01","4":"-0.1394571219","5":"4.4867878","6":"-0.031081729","7":"0.9752043607","8":"NA"}],"options":{"columns":{"min":{},"max":[10]},"rows":{"min":[15],"max":[15]},"pages":{}}}
+{"columns":[{"label":["gene_name"],"name":[1],"type":["chr"],"align":["left"]},{"label":["Ensembl_ID"],"name":[2],"type":["chr"],"align":["left"]},{"label":["baseMean"],"name":[3],"type":["dbl"],"align":["right"]},{"label":["log2FoldChange"],"name":[4],"type":["dbl"],"align":["right"]},{"label":["lfcSE"],"name":[5],"type":["dbl"],"align":["right"]},{"label":["stat"],"name":[6],"type":["dbl"],"align":["right"]},{"label":["pvalue"],"name":[7],"type":["dbl"],"align":["right"]},{"label":["padj"],"name":[8],"type":["dbl"],"align":["right"]}],"data":[{"1":"CENPF","2":"ENSG00000117724.14","3":"2.099299e+02","4":"-1.142381146","5":"0.4696940","6":"-2.432181519","7":"0.01500818","8":"0.6372225"},{"1":"CARD14","2":"ENSG00000141527.18","3":"5.831711e+00","4":"-4.025888111","5":"1.6727363","6":"-2.406767882","7":"0.01609440","8":"0.6425479"},{"1":"SLC12A3","2":"ENSG00000070915.10","3":"3.350271e+01","4":"1.893829828","5":"0.9158351","6":"2.067872109","7":"0.03865205","8":"0.8040600"},{"1":"MADD","2":"ENSG00000110514.19","3":"3.294426e+03","4":"0.291530506","5":"0.1518448","6":"1.919924735","7":"0.05486741","8":"0.8428973"},{"1":"ACACB","2":"ENSG00000076555.16","3":"1.068331e+03","4":"0.628100252","5":"0.3383753","6":"1.856223904","7":"0.06342165","8":"0.8605960"},{"1":"SLC4A1","2":"ENSG00000004939.16","3":"5.114960e+04","4":"-1.443235257","5":"0.9440734","6":"-1.528731971","7":"0.12633090","8":"0.9376281"},{"1":"NLRC4","2":"ENSG00000091106.19","3":"1.371793e+03","4":"-0.449362385","5":"0.3321087","6":"-1.353058334","7":"0.17603700","8":"0.9720263"},{"1":"CUBN","2":"ENSG00000107611.16","3":"6.813116e+02","4":"0.464812086","5":"0.3445738","6":"1.348947794","7":"0.17735374","8":"0.9723783"},{"1":"INF2","2":"ENSG00000203485.14","3":"1.991620e+03","4":"0.286114917","5":"0.2195989","6":"1.302897908","7":"0.19260962","8":"0.9767355"},{"1":"SBF1","2":"ENSG00000100241.22","3":"9.380027e+03","4":"0.216327129","5":"0.1818326","6":"1.189704914","7":"0.23416239","8":"0.9795903"},{"1":"SLC17A9","2":"ENSG00000101194.18","3":"3.117019e+02","4":"0.504938687","5":"0.4071092","6":"1.240302895","7":"0.21486338","8":"0.9795903"},{"1":"CHRNE","2":"ENSG00000108556.10","3":"9.770709e+01","4":"-0.594546962","5":"0.4927350","6":"-1.206626303","7":"0.22757609","8":"0.9795903"},{"1":"CLCN1","2":"ENSG00000188037.14","3":"1.467436e+01","4":"1.251254838","5":"1.2152464","6":"1.029630588","7":"0.30318345","8":"0.9872698"},{"1":"SLC3A1","2":"ENSG00000138079.14","3":"1.114572e+01","4":"1.152097767","5":"1.2172889","6":"0.946445599","7":"0.34392136","8":"0.9947907"},{"1":"HAGHL","2":"ENSG00000103253.19","3":"1.511289e+02","4":"0.341864989","5":"0.3809443","6":"0.897414683","7":"0.36949768","8":"0.9987648"},{"1":"ENO3","2":"ENSG00000108515.18","3":"1.143681e+02","4":"-0.160317754","5":"0.3103669","6":"-0.516542681","7":"0.60547544","8":"1.0000000"},{"1":"SIAE","2":"ENSG00000110013.13","3":"2.519640e+02","4":"-0.321711785","5":"0.3927793","6":"-0.819064972","7":"0.41274935","8":"1.0000000"},{"1":"ACADM","2":"ENSG00000117054.15","3":"1.026365e+03","4":"-0.146819293","5":"0.1948751","6":"-0.753402018","7":"0.45120837","8":"1.0000000"},{"1":"CR2","2":"ENSG00000117322.18","3":"2.217099e+02","4":"0.004405305","5":"0.6285631","6":"0.007008533","7":"0.99440805","8":"1.0000000"},{"1":"ELOVL4","2":"ENSG00000118402.6","3":"4.910125e+01","4":"0.429494529","5":"0.5421992","6":"0.792134229","7":"0.42828241","8":"1.0000000"},{"1":"CHRNA10","2":"ENSG00000129749.3","3":"1.542297e+02","4":"-0.129913109","5":"0.3920613","6":"-0.331359182","7":"0.74037319","8":"1.0000000"},{"1":"TACO1","2":"ENSG00000136463.9","3":"3.294387e+02","4":"0.100460258","5":"0.2283416","6":"0.439956061","7":"0.65996893","8":"1.0000000"},{"1":"SLC16A3","2":"ENSG00000141526.18","3":"1.586538e+04","4":"0.089938076","5":"0.3331820","6":"0.269936810","7":"0.78720887","8":"1.0000000"},{"1":"TRPM2","2":"ENSG00000142185.18","3":"9.479748e+02","4":"-0.004505519","5":"0.4452065","6":"-0.010120065","7":"0.99192549","8":"1.0000000"},{"1":"NLRP12","2":"ENSG00000142405.22","3":"6.104105e+03","4":"-0.190241070","5":"0.4039929","6":"-0.470902008","7":"0.63771071","8":"1.0000000"},{"1":"FCSK","2":"ENSG00000157353.17","3":"5.860094e+02","4":"0.100524109","5":"0.2577240","6":"0.390045521","7":"0.69650289","8":"1.0000000"},{"1":"PGAM2","2":"ENSG00000164708.6","3":"1.235820e+01","4":"0.062428342","5":"0.7548739","6":"0.082700355","7":"0.93408980","8":"1.0000000"},{"1":"CHRFAM7A","2":"ENSG00000166664.15","3":"5.240865e+01","4":"0.272222709","5":"0.8517065","6":"0.319620331","7":"0.74925616","8":"1.0000000"},{"1":"NOD2","2":"ENSG00000167207.14","3":"2.785087e+03","4":"0.024748320","5":"0.4464202","6":"0.055437274","7":"0.95579010","8":"1.0000000"},{"1":"ACAD9","2":"ENSG00000177646.20","3":"1.565631e+03","4":"-0.026064298","5":"0.3138470","6":"-0.083047793","7":"0.93381354","8":"1.0000000"},{"1":"RYR1","2":"ENSG00000196218.14","3":"1.389845e+02","4":"0.287593199","5":"0.5921472","6":"0.485678591","7":"0.62719506","8":"1.0000000"},{"1":"LRBA","2":"ENSG00000198589.14","3":"6.124575e+03","4":"0.094964803","5":"0.1759835","6":"0.539623417","7":"0.58945676","8":"1.0000000"},{"1":"CACNA1G","2":"ENSG00000006283.18","3":"4.991999e-01","4":"-1.212777513","5":"5.5049560","6":"-0.220306485","7":"0.82563247","8":"NA"},{"1":"MYH14","2":"ENSG00000105357.20","3":"9.557558e-01","4":"0.000000000","5":"2.8627474","6":"0.000000000","7":"1.00000000","8":"NA"},{"1":"SLC13A5","2":"ENSG00000141485.17","3":"1.074975e+00","4":"-3.434646393","5":"2.9005732","6":"-1.184126782","7":"0.23636288","8":"NA"},{"1":"SCNN1B","2":"ENSG00000168447.11","3":"2.138286e-01","4":"0.000000000","5":"5.5092974","6":"0.000000000","7":"1.00000000","8":"NA"},{"1":"CLCNKA","2":"ENSG00000186510.12","3":"2.732683e-01","4":"1.113139509","5":"5.4486248","6":"0.204297331","7":"0.83812116","8":"NA"}],"options":{"columns":{"min":{},"max":[10]},"rows":{"min":[15],"max":[15]},"pages":{}}}
   </script>
 </div>
 <pre class="r"><code>paged_table(filtered_counts, options = list(rows.print = 15))</code></pre>
