@@ -14,7 +14,7 @@ editor_options:
 knitr::opts_chunk$set(echo = TRUE, warning = FALSE, message = FALSE)
 ```
 
-# DGE Analysis Setup {.tabset}
+# DGE Analysis Setup
 
 Ensure you have all necessary libraries installed and load the helper code.
 
@@ -67,7 +67,7 @@ for the project which is hosted on Box. This also ensures data is properly order
 counts <- read_tsv("data/star-salmon/salmon.merged.gene_counts_length_scaled.tsv")
 
 # Import variants of interest
-genes_of_interest <- read_csv("data/Patient_Genes_2024_04_19.csv")
+genes_of_interest <- read_csv("data/Prioritized_Genes_From_WGS_2024_04_25.csv")
 genes_of_interest <- unique(genes_of_interest$Genes)
 genes_of_interest <- genes_of_interest[!is.na(genes_of_interest)]
 
@@ -79,7 +79,7 @@ gene_info <- counts[, drop]
 counts <- counts[, !(names(counts) %in% drop)] # remove both columns
 
 # Import metadata
-sample_metadata <- read_csv("data/MECFS_RNAseq_metadata_2024_03_14.csv")
+sample_metadata <- read_csv("data/Metadata_2024_03_14.csv")
 row.names(sample_metadata) <- sample_metadata$ID
 
 # Assuming counts is your counts dataframe and sample_metadata is your metadata dataframe
@@ -146,7 +146,7 @@ vsd <- vst(dds, blind = FALSE)
 
 ```{r, limma}
 counts_vst <- assay(vsd)
-write.csv(counts_vst, file = "output/counts_vst_subsetted..csv")
+write.csv(counts_vst, file = "output/counts_vst_subsetted.csv")
 mm <- model.matrix(~ Batch + Affected, colData(vsd))
 
 counts_vst_limma <- limma::removeBatchEffect(counts_vst, batch = vsd$Batch, 
@@ -518,6 +518,7 @@ df_sub <- df <- colData(vsd_limma) %>%
 pheatmap(topgenes_aff_vs_unaff_05_sub, annotation_col = df_sub, annotation_colors = ann_colors2, fontsize = 5, angle_col = 0)
 ```
 
+
 ```{r, significant-genes-deseq-subsetted-subcategory, out.height="570px", out.width ="800px"}
 topgenes_byensemblid_sub <- head(rownames(res_aff_vs_unaff_df_sub), 55)
 topgenes_aff_vs_unaff_05_sub <- assay(vsd_limma)[topgenes_byensemblid_sub, ]
@@ -610,7 +611,7 @@ rownames(topgenes_aff_vs_unaff_05_sub) <- new_row_names_sub
 topgenes_aff_vs_unaff_05_sub <- topgenes_aff_vs_unaff_05_sub[order(row.names(topgenes_aff_vs_unaff_05_sub)), ]
 
 df_sub <- as.data.frame(colData(vsd_limma)[, c("Affected", "CombinedCategory")])
-pheatmap(topgenes_aff_vs_unaff_05_sub, annotation_col = df_sub, annotation_colors = ann_colors2, fontsize = 2.25, angle_col = 0)
+pheatmap(topgenes_aff_vs_unaff_05_sub, annotation_col = df_sub, annotation_colors = ann_colors2, fontsize = 4, angle_col = 0)
 ```
 
 ```{r, top-200-genes-deseq-subsetted-subcategory, out.height="570px", out.width ="800px"}
@@ -724,6 +725,7 @@ df_sub <- as.data.frame(colData(vsd_limma)[, c("Affected", "SubCategory", "Combi
 pheatmap(topgenes_aff_vs_unaff_05_sub, annotation_col = df_sub, annotation_colors = ann_colors2, fontsize = 3.5, angle_col = 0)
 ```
 
+
 ```{r, all-genes-list-subsetted}
 gb_df <- genes_biomart[, c(1, ncol(genes_biomart))]
 res_aff_vs_unaff_df_sub_genename <- res_aff_vs_unaff_df_sub
@@ -835,14 +837,14 @@ pheatmap(mat3, annotation_col = df_sub, annotation_colors = ann_colors2, fontsiz
 ## Enrichment analysis
 
 ```{r, gostplot}
-res <- gost(query = significant_data$name, organism = "hsapiens", significant = FALSE) # should significant be true or false?
-
-x <- gostplot(res, capped = FALSE, interactive = FALSE)
-x + geom_label_repel(aes(label = "term_id"),
-  box.padding   = 0.35,
-  point.padding = 0.5,
-  segment.color = "grey50"
-)
+# res <- gost(query = significant_data$name, organism = "hsapiens", significant = FALSE) # should significant be true or false?
+# 
+# x <- gostplot(res, capped = FALSE, interactive = FALSE)
+# x + geom_label_repel(aes(label = "term_id"),
+#   box.padding   = 0.35,
+#   point.padding = 0.5,
+#   segment.color = "grey50"
+# )
 ```
 
 ```{r, enrichgo-cc}
@@ -1085,6 +1087,16 @@ for (ensembl_id in filtered_by_interest$Ensembl_ID) {
   )
 }
 ```
+
+## Combined Heatmap of DEGs and Patient Genes
+
+```{r, combined-heatmap-genes-interest-subsetted, out.width = "1200px"}
+mat3 <- assay(vsd_limma)[filtered_by_interest$Ensembl_ID, ]
+rownames(mat3) <- gene_info$gene_name[match(filtered_by_interest$Ensembl_ID, gene_info$Ensembl_ID)]
+df_sub <- as.data.frame(colData(vsd_limma)[, c("Affected", "CombinedCategory")])
+pheatmap(mat3, annotation_col = df_sub, annotation_colors = ann_colors2, fontsize = 4, angle_col = 0)
+```
+
 
 ### Save data
 
