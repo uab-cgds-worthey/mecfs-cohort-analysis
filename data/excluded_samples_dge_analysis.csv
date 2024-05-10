@@ -1,7 +1,0 @@
-ID,ID2,RNA_Samples_id,DNA_Samples id,Family,Gender,Relation,Category,CombinedCategory,Affected,Study_id,Study_group,Vantage_id_DNA,Vantage_id_RNA,Seq,Batch,Replicate,RIN,RIN Analysis Error,Disease Group,Tier,Sex,Ancestry,SubCategory,Reason(s) Excluded
-8,8,LW001994,LW000503,g,M,Proband,NA,Metabolism,Affected,DDHA-036,MECFS,8288-EW-8,8289-EW-08,50M,B2,NA,NA,NA,Mitochondrial Disorder,1,M,White,Myasthenic disorder,
-12,12,LW001987,LW000496,j,F,Proband/Mother,NA,Immune-Transporter,Affected,DDHA-030,MECFS,8288-EW-5,8289-EW-05,50M,B2,NA,NA,NA,Immunodeficiency/Autoinflammatory Diseases,1,F,White,Autoimmune disorder,
-19,19,LW001982,LW000491,r,F,Proband,NA,Transporter-Metabolism,Affected,DDHA-034,MECFS,8288-EW-2,8289-EW-02,50M,B2,NA,NA,NA,Gitelman Syndrome,1,F,White,Channelopathy,
-21,21,LW001997,LW000506,s,F,Proband/Mother,NA,Cytoskeletal,Affected,DDHA-040,MECFS,8920-EW-0004,8921-EW-0003,50M,B3,NA,8,NA,Stromme syndrome,2,F,White,Neurologic disorder,
-23,23,LW002000,LW000509,s,F,Proband,NA,Cytoskeletal,Affected,DDHA-042,MECFS,8920-EW-0003,8921-EW-0004,50M,B3,NA,8.4,NA,Stromme syndrome,2,F,White,Neurologic disorder,
-27,27,LW001980,LW000489,w,F,Proband,NA,Transporter-Immune-Metabolism,Affected,DDHA-024,MECFS,7547-EW-5,7548-EW-05,50M,B1,NA,10,NA,Unknown,3,F,White,Channelopathy,
