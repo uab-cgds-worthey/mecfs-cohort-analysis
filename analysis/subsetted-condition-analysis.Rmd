@@ -22,7 +22,6 @@ At a later date, `renv` will be integrated to ensure reproducibility of this ana
 
 Use the below code to install these packages:
 
-
 ```
 # Install packages from CRAN
 install.packages(c("tidyverse", "RColorBrewer", "pheatmap", "gprofiler2", "plotly", "ggupset"))
@@ -305,7 +304,6 @@ ann_colors2 <- list(
 )
 ```
 
-
 This is a heatmap of the top 50 genes with the highest variance across samples
 
 ```{r, top50-heatmap-batch-combined, out.height="570px", out.width ="800px"}
@@ -330,7 +328,6 @@ ComplexHeatmap::pheatmap(mat,
   fontsize = 5, angle_col = c("0")
 )
 ```
-
 
 This is a heatmap of the top 50 genes with the highest variance across all samples.
 
@@ -395,7 +392,6 @@ res_aff_vs_unaff_df_1_sub <- subset(res_aff_vs_unaff_df_sub, padj < 0.1)
 
 summary(res_aff_vs_unaff_sub)
 ```
-
 
 ```{r, top-100-genes-deseq-subsetted, out.height="570px", out.width ="800px"}
 topgenes_byensemblid_sub <- head(rownames(res_aff_vs_unaff_df_sub), 100)
@@ -542,8 +538,6 @@ df_sub <- df <- colData(vsd_limma) %>%
   dplyr::select(Affected, SubCategory, CombinedCategory)
 pheatmap(topgenes_aff_vs_unaff_05_sub, annotation_col = df_sub, annotation_colors = ann_colors2, fontsize = 5, angle_col = 0)
 ```
-
-
 
 ```{r, top-75-genes-deseq-subsetted, out.height="570px", out.width ="800px"}
 topgenes_byensemblid_sub <- head(rownames(res_aff_vs_unaff_df_sub), 75)
@@ -1046,17 +1040,20 @@ for (db_name in db_names) {
 }
 ```
 
-```{r, compare-clusters}
+```{r, compare-clusters-enrich-go}
 cluster <- list("Significant Genes" = gene_entrez2, "Genes of Interest" = as.character(results2$entrezgene_id))
 ck <- compareCluster(geneCluster = cluster, fun = "enrichGO", OrgDb='org.Hs.eg.db')
 ck <- setReadable(ck, OrgDb = org.Hs.eg.db, keyType="ENTREZID")
 dotplot(ck)
+```
 
+```{r, compare-clusters-enrich-kegg}
 xx <- compareCluster(cluster, fun="enrichKEGG",
                      organism="hsa", pvalueCutoff=0.05)
 dotplot(xx)
+```
 
-
+```{r, compare-clusters-enrich-pathway}
 xx <- compareCluster(cluster, fun="enrichPathway", pvalueCutoff=0.05)
 dotplot(xx)
 ```
@@ -1096,7 +1093,6 @@ rownames(mat3) <- gene_info$gene_name[match(filtered_by_interest$Ensembl_ID, gen
 df_sub <- as.data.frame(colData(vsd_limma)[, c("Affected", "CombinedCategory")])
 pheatmap(mat3, annotation_col = df_sub, annotation_colors = ann_colors2, fontsize = 4, angle_col = 0)
 ```
-
 
 ### Save data
 
