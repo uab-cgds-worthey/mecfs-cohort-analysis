@@ -6,42 +6,31 @@ This repository hosts the differential gene expression analysis of a cohort of 2
 
 Myalgic Encephalomyelitis/Chronic Fatigue Syndrome (ME/CFS) is a chronic and debilitating illness affecting millions of Americans, characterized by severe fatigue, pain, flu-like symptoms, and cognitive issues. The cause of ME/CFS is not well understood, but there is evidence suggesting a genetic predisposition and dysregulation of the immune system leading to an overactive immune response.
 
-## Our Hypothesis
-
-We hypothesize that ME/CFS is a genetically inherited disease that results in disrupted metabolic regulation of the immune system,thus resulting in an inappropriately activated immune system.
-
 ## Rerunning the analysis
 
 This project has been created using the workflowr template.
 
-The analysis and associated code is modified from [Gurpreet's]() example: https://github.com/uab-cgds-worthey/bulk_rna-seq_dge
+The analysis and associated code is modified from [Dr.Gurpreet Kaur's]() example: https://github.com/uab-cgds-worthey/bulk_rna-seq_dge
 
 Analysis Rmarkdown files are located in the `analysis` folder.
 
-To rerun the entire workflow, clone this repository and run the below in your R console':
+To rerun the entire workflow, clone this repository and run the below in your R console. This project is using both `renv` and `workflowr` to improve reproducibility and allow results to be viewed in a web browser.
 
 ```r
-# Install packages from CRAN
-install.packages(c("tidyverse", "RColorBrewer", "pheatmap", "gprofiler2", "plotly", "ggpubr", "rmarkdown"))
+# After cloning the project, open it in RStudio
+# renv should automatically install
+# restore the r environment
+renv::restore()
 
-# Install packages from Bioconductor using BiocManager
-if (!requireNamespace("BiocManager", quietly = TRUE)) {
-  install.packages("BiocManager")
-}
-
-BiocManager::install(c("DESeq2", "genefilter", "limma", "biomaRt", "clusterProfiler"))
-
-install.packages('workflowr')
+# Rebuild the workflow R site to view all figures in the browser.
 library(workflowr)
 wflow_build("analysis/*.Rmd")
 wflow_view()
 ```
 
-This will allow you to view the analysis website. In the future, this project will incorporate renv.
-
 ## Results
 
-TBD.
+Please review detailed results in our publication.
 
 ## Authors
 
