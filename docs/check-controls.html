@@ -415,7 +415,7 @@ class="glyphicon glyphicon-ok text-success" aria-hidden="true"></span>
 <div class="tab-content">
 <div id="summary" class="tab-pane fade in active">
 <p>
-<strong>Last updated:</strong> 2024-04-23
+<strong>Last updated:</strong> 2024-05-15
 </p>
 <p>
 <strong>Checks:</strong> <span
@@ -546,15 +546,15 @@ project makes it easier to run your code on other machines.</p>
 <div class="panel panel-default">
 <div class="panel-heading">
 <p class="panel-title">
-<a data-toggle="collapse" data-parent="#workflowr-checks" href="#strongRepositoryversionstrongahrefhttpsgithubcomuabcgdswortheymecfsdgeanalysistree178301437797874c5264a065b928640baddd2781targetblank1783014a">
+<a data-toggle="collapse" data-parent="#workflowr-checks" href="#strongRepositoryversionstrongahrefhttpsgithubcomuabcgdswortheymecfsdgeanalysistree8e3ad2aa5550085050d7707629fc231446871b7atargetblank8e3ad2aa">
 <span class="glyphicon glyphicon-ok text-success"
 aria-hidden="true"></span> <strong>Repository version:</strong>
-<a href="https://github.com/uab-cgds-worthey/mecfs-dge-analysis/tree/178301437797874c5264a065b928640baddd2781" target="_blank">1783014</a>
+<a href="https://github.com/uab-cgds-worthey/mecfs-dge-analysis/tree/8e3ad2aa5550085050d7707629fc231446871b7a" target="_blank">8e3ad2a</a>
 </a>
 </p>
 </div>
 <div
-id="strongRepositoryversionstrongahrefhttpsgithubcomuabcgdswortheymecfsdgeanalysistree178301437797874c5264a065b928640baddd2781targetblank1783014a"
+id="strongRepositoryversionstrongahrefhttpsgithubcomuabcgdswortheymecfsdgeanalysistree8e3ad2aa5550085050d7707629fc231446871b7atargetblank8e3ad2aa"
 class="panel-collapse collapse">
 <div class="panel-body">
 <p>
@@ -564,7 +564,7 @@ reproducibility.
 </p>
 <p>
 The results in this page were generated with repository version
-<a href="https://github.com/uab-cgds-worthey/mecfs-dge-analysis/tree/178301437797874c5264a065b928640baddd2781" target="_blank">1783014</a>.
+<a href="https://github.com/uab-cgds-worthey/mecfs-dge-analysis/tree/8e3ad2aa5550085050d7707629fc231446871b7a" target="_blank">8e3ad2a</a>.
 See the <em>Past versions</em> tab to see a history of the changes made
 to the R Markdown and HTML files.
 </p>
@@ -593,12 +593,12 @@ Ignored files:
     Ignored:    renv/library/
 
 Untracked files:
-    Untracked:  data/check_controls.csv
     Untracked:  output/counts_vst_limma_unaff.csv
     Untracked:  output/counts_vst_subsetted..csv
     Untracked:  output/counts_vst_subsetted.csv
     Untracked:  output/counts_vst_unaff.csv
     Untracked:  output/enrichr-dbs/
+    Untracked:  output/res_aff_vs_unaff_df_sub_genename_padj05.csv
     Untracked:  output/res_unaff_vs_unaff_df_sub_genename.csv
     Untracked:  output/res_unaff_vs_unaff_df_sub_genename_05.csv
     Untracked:  output/res_unaff_vs_unaff_df_sub_genename_padj1.csv
@@ -617,7 +617,6 @@ Unstaged changes:
     Modified:   output/counts_vst_female.csv
     Modified:   output/counts_vst_limma.csv
     Modified:   output/counts_vst_limma_female.csv
-    Modified:   output/counts_vst_limma_subsetted.csv
 
 </code></pre>
 <p>
@@ -663,6 +662,40 @@ Message
 </tr>
 </thead>
 <tbody>
+<tr>
+<td>
+Rmd
+</td>
+<td>
+<a href="https://github.com/uab-cgds-worthey/mecfs-dge-analysis/blob/8e3ad2aa5550085050d7707629fc231446871b7a/analysis/check-controls.Rmd" target="_blank">8e3ad2a</a>
+</td>
+<td>
+sdhutchins
+</td>
+<td>
+2024-05-15
+</td>
+<td>
+wflow_publish(files = "analysis/check-controls.Rmd")
+</td>
+</tr>
+<tr>
+<td>
+html
+</td>
+<td>
+<a href="https://rawcdn.githack.com/uab-cgds-worthey/mecfs-dge-analysis/87186be6c919761bbb17c60806080312a1bc6ace/docs/check-controls.html" target="_blank">87186be</a>
+</td>
+<td>
+sdhutchins
+</td>
+<td>
+2024-04-23
+</td>
+<td>
+Build site.
+</td>
+</tr>
 <tr>
 <td>
 Rmd
@@ -756,7 +789,7 @@ data is properly ordered by sample id.</p>
 <pre class="r"><code>counts &lt;- read_tsv(&quot;data/star-salmon/salmon.merged.gene_counts_length_scaled.tsv&quot;)
 
 # Import variants of interest
-genes_of_interest &lt;- read_csv(&quot;data/Patient_Genes_2024_04_19.csv&quot;)
+genes_of_interest &lt;- read_csv(&quot;data/Prioritized_Genes_From_WGS_2024_04_25.csv&quot;)
 genes_of_interest &lt;- unique(genes_of_interest$Genes)
 genes_of_interest &lt;- genes_of_interest[!is.na(genes_of_interest)]
 
@@ -1376,7 +1409,7 @@ sdhutchins
 <div id="comparisoncontrast-of-unaffected-groups"
 class="section level3">
 <h3>Comparison/Contrast of Unaffected Groups</h3>
-<pre class="r"><code>res_unaff_vs_unaff_sub &lt;- results(dds, contrast = c(&quot;Affected&quot;, &quot;Unaffected1&quot;, &quot;Unaffected2&quot;))
+<pre class="r"><code>res_unaff_vs_unaff_sub &lt;- results(dds, contrast = c(&quot;Affected&quot;, &quot;Unaffected1&quot;, &quot;Affected&quot;))
 res_unaff_vs_unaff_df_sub &lt;- process_and_save_results(
   res_unaff_vs_unaff_sub,
   &quot;output/res_unaff_vs_unaff_sub.csv&quot;
@@ -1389,14 +1422,40 @@ summary(res_unaff_vs_unaff_sub)</code></pre>
 <pre><code>
 out of 29608 with nonzero total read count
 adjusted p-value &lt; 0.1
-LFC &gt; 0 (up)       : 10, 0.034%
-LFC &lt; 0 (down)     : 21, 0.071%
+LFC &gt; 0 (up)       : 28, 0.095%
+LFC &lt; 0 (down)     : 70, 0.24%
 outliers [1]       : 292, 0.99%
-low counts [2]     : 7932, 27%
-(mean count &lt; 5)
+low counts [2]     : 6818, 23%
+(mean count &lt; 3)
 [1] see &#39;cooksCutoff&#39; argument of ?results
 [2] see &#39;independentFiltering&#39; argument of ?results</code></pre>
-<pre class="r"><code>topgenes_byensemblid_sub &lt;- head(rownames(res_unaff_vs_unaff_df_sub), 31)
+<pre class="r"><code>topgenes_byensemblid_sub &lt;- head(rownames(res_unaff_vs_unaff_df_sub), 98)
+topgenes_unaff_vs_unaff_05_sub &lt;- assay(vsd_limma)[topgenes_byensemblid_sub, ]
+topgenes_unaff_vs_unaff_05_sub &lt;- topgenes_unaff_vs_unaff_05_sub - rowMeans(topgenes_unaff_vs_unaff_05_sub)
+
+keep_controls &lt;- c(&quot;11H&quot;, &quot;10H&quot;, &quot;13H&quot;, &quot;26H&quot;, &quot;28_27H&quot;, &quot;9H&quot;, &quot;25H&quot;)
+
+ensembl_to_gene_sub &lt;- setNames(gene_info$gene_name, gene_info$Ensembl_ID)
+
+# Get the current row names of the matrix &#39;mat&#39;
+current_ensembl_ids_sub &lt;- rownames(topgenes_unaff_vs_unaff_05_sub)
+
+# Find the corresponding gene names for the Ensembl IDs
+new_row_names_sub &lt;- ensembl_to_gene_sub[current_ensembl_ids_sub]
+
+# Set the new row names for the matrix &#39;mat&#39;
+rownames(topgenes_unaff_vs_unaff_05_sub) &lt;- new_row_names_sub
+
+topgenes_unaff_vs_unaff_05_sub &lt;- topgenes_unaff_vs_unaff_05_sub[order(row.names(topgenes_unaff_vs_unaff_05_sub)), ]
+
+df_sub &lt;- as.data.frame(colData(vsd_limma)[, c(&quot;Affected&quot;, &quot;CombinedCategory&quot;)])
+
+#df_sub &lt;- df_sub[rownames(df_sub) %in% keep_controls, ]
+#topgenes_unaff_vs_unaff_05_sub &lt;- topgenes_unaff_vs_unaff_05_sub[ ,keep_controls]
+
+pheatmap(topgenes_unaff_vs_unaff_05_sub, annotation_col = df_sub, annotation_colors = ann_colors2, fontsize = 5, angle_col = c(&quot;0&quot;))</code></pre>
+<p><img src="figure/check-controls.Rmd/significant-genes-deseq-1.png" width="800px" height="570px" style="display: block; margin: auto;" /></p>
+<pre class="r"><code>topgenes_byensemblid_sub &lt;- head(rownames(res_unaff_vs_unaff_df_sub), 50)
 topgenes_unaff_vs_unaff_05_sub &lt;- assay(vsd_limma)[topgenes_byensemblid_sub, ]
 topgenes_unaff_vs_unaff_05_sub &lt;- topgenes_unaff_vs_unaff_05_sub - rowMeans(topgenes_unaff_vs_unaff_05_sub)
 
@@ -1418,521 +1477,10 @@ topgenes_unaff_vs_unaff_05_sub &lt;- topgenes_unaff_vs_unaff_05_sub[order(row.na
 df_sub &lt;- as.data.frame(colData(vsd_limma)[, c(&quot;Affected&quot;, &quot;CombinedCategory&quot;)])
 
 df_sub &lt;- df_sub[rownames(df_sub) %in% keep_controls, ]
-topgenes_unaff_vs_unaff_05_sub &lt;- topgenes_unaff_vs_unaff_05_sub[,keep_controls]
+topgenes_unaff_vs_unaff_05_sub &lt;- topgenes_unaff_vs_unaff_05_sub[ ,keep_controls]
 
 pheatmap(topgenes_unaff_vs_unaff_05_sub, annotation_col = df_sub, annotation_colors = ann_colors2, fontsize = 5, angle_col = c(&quot;0&quot;))</code></pre>
-<p><img src="figure/check-controls.Rmd/top-100-genes-deseq-subsetted-1.png" width="800px" height="570px" style="display: block; margin: auto;" /></p>
-<p>
-<button type="button" class="btn btn-default btn-xs btn-workflowr btn-workflowr-fig" data-toggle="collapse" data-target="#fig-top-100-genes-deseq-subsetted-1">
-Past versions of top-100-genes-deseq-subsetted-1.png
-</button>
-</p>
-<div id="fig-top-100-genes-deseq-subsetted-1" class="collapse">
-<div class="table-responsive">
-<table class="table table-condensed table-hover">
-<thead>
-<tr>
-<th>
-Version
-</th>
-<th>
-Author
-</th>
-<th>
-Date
-</th>
-</tr>
-</thead>
-<tbody>
-<tr>
-<td>
-<a href="https://github.com/uab-cgds-worthey/mecfs-dge-analysis/blob/77caa9969073bb8bbc7aad1a3c7b5393643a3614/docs/figure/check-controls.Rmd/top-100-genes-deseq-subsetted-1.png" target="_blank">77caa99</a>
-</td>
-<td>
-sdhutchins
-</td>
-<td>
-2024-04-23
-</td>
-</tr>
-</tbody>
-</table>
-</div>
-</div>
-<pre class="r"><code>topgenes_byensemblid_sub &lt;- head(rownames(res_unaff_vs_unaff_df_sub), 100)
-topgenes_unaff_vs_unaff_05_sub &lt;- assay(vsd_limma)[topgenes_byensemblid_sub, ]
-topgenes_unaff_vs_unaff_05_sub &lt;- topgenes_unaff_vs_unaff_05_sub - rowMeans(topgenes_unaff_vs_unaff_05_sub)
-
-ensembl_to_gene_sub &lt;- setNames(gene_info$gene_name, gene_info$Ensembl_ID)
-
-# Get the current row names of the matrix &#39;mat&#39;
-current_ensembl_ids_sub &lt;- rownames(topgenes_unaff_vs_unaff_05_sub)
-
-# Find the corresponding gene names for the Ensembl IDs
-new_row_names_sub &lt;- ensembl_to_gene_sub[current_ensembl_ids_sub]
-
-# Set the new row names for the matrix &#39;mat&#39;
-rownames(topgenes_unaff_vs_unaff_05_sub) &lt;- new_row_names_sub
-
-topgenes_unaff_vs_unaff_05_sub &lt;- topgenes_unaff_vs_unaff_05_sub[order(row.names(topgenes_unaff_vs_unaff_05_sub)), ]
-
-df_sub &lt;- as.data.frame(colData(vsd_limma)[, c(&quot;Affected&quot;, &quot;SubCategory&quot;, &quot;CombinedCategory&quot;)])
-pheatmap(topgenes_unaff_vs_unaff_05_sub, annotation_col = df_sub, annotation_colors = ann_colors2, fontsize = 5, angle_col = 0)</code></pre>
-<p><img src="figure/check-controls.Rmd/top-100-genes-deseq-subsetted-subcategory-1.png" width="800px" height="570px" style="display: block; margin: auto;" /></p>
-<p>
-<button type="button" class="btn btn-default btn-xs btn-workflowr btn-workflowr-fig" data-toggle="collapse" data-target="#fig-top-100-genes-deseq-subsetted-subcategory-1">
-Past versions of top-100-genes-deseq-subsetted-subcategory-1.png
-</button>
-</p>
-<div id="fig-top-100-genes-deseq-subsetted-subcategory-1"
-class="collapse">
-<div class="table-responsive">
-<table class="table table-condensed table-hover">
-<thead>
-<tr>
-<th>
-Version
-</th>
-<th>
-Author
-</th>
-<th>
-Date
-</th>
-</tr>
-</thead>
-<tbody>
-<tr>
-<td>
-<a href="https://github.com/uab-cgds-worthey/mecfs-dge-analysis/blob/77caa9969073bb8bbc7aad1a3c7b5393643a3614/docs/figure/check-controls.Rmd/top-100-genes-deseq-subsetted-subcategory-1.png" target="_blank">77caa99</a>
-</td>
-<td>
-sdhutchins
-</td>
-<td>
-2024-04-23
-</td>
-</tr>
-</tbody>
-</table>
-</div>
-</div>
-<pre class="r"><code>topgenes_byensemblid_sub &lt;- head(rownames(res_unaff_vs_unaff_df_sub), 50)
-topgenes_unaff_vs_unaff_05_sub &lt;- assay(vsd_limma)[topgenes_byensemblid_sub, ]
-topgenes_unaff_vs_unaff_05_sub &lt;- topgenes_unaff_vs_unaff_05_sub - rowMeans(topgenes_unaff_vs_unaff_05_sub)
-
-ensembl_to_gene_sub &lt;- setNames(gene_info$gene_name, gene_info$Ensembl_ID)
-
-# Get the current row names of the matrix &#39;mat&#39;
-current_ensembl_ids_sub &lt;- rownames(topgenes_unaff_vs_unaff_05_sub)
-
-# Find the corresponding gene names for the Ensembl IDs
-new_row_names_sub &lt;- ensembl_to_gene_sub[current_ensembl_ids_sub]
-
-# Set the new row names for the matrix &#39;mat&#39;
-rownames(topgenes_unaff_vs_unaff_05_sub) &lt;- new_row_names_sub
-
-topgenes_unaff_vs_unaff_05_sub &lt;- topgenes_unaff_vs_unaff_05_sub[order(row.names(topgenes_unaff_vs_unaff_05_sub)), ]
-
-df_sub &lt;- df &lt;- colData(vsd_limma) %&gt;%
-  as.data.frame() %&gt;%
-  dplyr::select(CombinedCategory)
-pheatmap(topgenes_unaff_vs_unaff_05_sub, annotation_col = df_sub, annotation_colors = ann_colors2, fontsize = 5, angle_col = 0)</code></pre>
-<p><img src="figure/check-controls.Rmd/top-50-genes-deseq-subsetted-1.png" width="800px" height="570px" style="display: block; margin: auto;" /></p>
-<p>
-<button type="button" class="btn btn-default btn-xs btn-workflowr btn-workflowr-fig" data-toggle="collapse" data-target="#fig-top-50-genes-deseq-subsetted-1">
-Past versions of top-50-genes-deseq-subsetted-1.png
-</button>
-</p>
-<div id="fig-top-50-genes-deseq-subsetted-1" class="collapse">
-<div class="table-responsive">
-<table class="table table-condensed table-hover">
-<thead>
-<tr>
-<th>
-Version
-</th>
-<th>
-Author
-</th>
-<th>
-Date
-</th>
-</tr>
-</thead>
-<tbody>
-<tr>
-<td>
-<a href="https://github.com/uab-cgds-worthey/mecfs-dge-analysis/blob/77caa9969073bb8bbc7aad1a3c7b5393643a3614/docs/figure/check-controls.Rmd/top-50-genes-deseq-subsetted-1.png" target="_blank">77caa99</a>
-</td>
-<td>
-sdhutchins
-</td>
-<td>
-2024-04-23
-</td>
-</tr>
-</tbody>
-</table>
-</div>
-</div>
-<pre class="r"><code>topgenes_byensemblid_sub &lt;- head(rownames(res_unaff_vs_unaff_df_sub), 50)
-topgenes_unaff_vs_unaff_05_sub &lt;- assay(vsd_limma)[topgenes_byensemblid_sub, ]
-topgenes_unaff_vs_unaff_05_sub &lt;- topgenes_unaff_vs_unaff_05_sub - rowMeans(topgenes_unaff_vs_unaff_05_sub)
-
-ensembl_to_gene_sub &lt;- setNames(gene_info$gene_name, gene_info$Ensembl_ID)
-
-# Get the current row names of the matrix &#39;mat&#39;
-current_ensembl_ids_sub &lt;- rownames(topgenes_unaff_vs_unaff_05_sub)
-
-# Find the corresponding gene names for the Ensembl IDs
-new_row_names_sub &lt;- ensembl_to_gene_sub[current_ensembl_ids_sub]
-
-# Set the new row names for the matrix &#39;mat&#39;
-rownames(topgenes_unaff_vs_unaff_05_sub) &lt;- new_row_names_sub
-
-topgenes_unaff_vs_unaff_05_sub &lt;- topgenes_unaff_vs_unaff_05_sub[order(row.names(topgenes_unaff_vs_unaff_05_sub)), ]
-
-df_sub &lt;- df &lt;- colData(vsd_limma) %&gt;%
-  as.data.frame() %&gt;%
-  dplyr::select(Affected, SubCategory, CombinedCategory)
-pheatmap(topgenes_unaff_vs_unaff_05_sub,
-  annotation_col = df_sub,
-  annotation_colors = ann_colors2, fontsize = 5, angle_col = 0
-)</code></pre>
-<p><img src="figure/check-controls.Rmd/top-50-genes-deseq-subsetted-subcategory-1.png" width="800px" height="570px" style="display: block; margin: auto;" /></p>
-<p>
-<button type="button" class="btn btn-default btn-xs btn-workflowr btn-workflowr-fig" data-toggle="collapse" data-target="#fig-top-50-genes-deseq-subsetted-subcategory-1">
-Past versions of top-50-genes-deseq-subsetted-subcategory-1.png
-</button>
-</p>
-<div id="fig-top-50-genes-deseq-subsetted-subcategory-1"
-class="collapse">
-<div class="table-responsive">
-<table class="table table-condensed table-hover">
-<thead>
-<tr>
-<th>
-Version
-</th>
-<th>
-Author
-</th>
-<th>
-Date
-</th>
-</tr>
-</thead>
-<tbody>
-<tr>
-<td>
-<a href="https://github.com/uab-cgds-worthey/mecfs-dge-analysis/blob/77caa9969073bb8bbc7aad1a3c7b5393643a3614/docs/figure/check-controls.Rmd/top-50-genes-deseq-subsetted-subcategory-1.png" target="_blank">77caa99</a>
-</td>
-<td>
-sdhutchins
-</td>
-<td>
-2024-04-23
-</td>
-</tr>
-</tbody>
-</table>
-</div>
-</div>
-<pre class="r"><code>topgenes_byensemblid_sub &lt;- head(rownames(res_unaff_vs_unaff_df_sub), 31)
-topgenes_unaff_vs_unaff_05_sub &lt;- assay(vsd_limma)[topgenes_byensemblid_sub, ]
-topgenes_unaff_vs_unaff_05_sub &lt;- topgenes_unaff_vs_unaff_05_sub - rowMeans(topgenes_unaff_vs_unaff_05_sub)
-
-ensembl_to_gene_sub &lt;- setNames(gene_info$gene_name, gene_info$Ensembl_ID)
-
-# Get the current row names of the matrix &#39;mat&#39;
-current_ensembl_ids_sub &lt;- rownames(topgenes_unaff_vs_unaff_05_sub)
-
-# Find the corresponding gene names for the Ensembl IDs
-new_row_names_sub &lt;- ensembl_to_gene_sub[current_ensembl_ids_sub]
-
-# Set the new row names for the matrix &#39;mat&#39;
-rownames(topgenes_unaff_vs_unaff_05_sub) &lt;- new_row_names_sub
-
-topgenes_unaff_vs_unaff_05_sub &lt;- topgenes_unaff_vs_unaff_05_sub[order(row.names(topgenes_unaff_vs_unaff_05_sub)), ]
-
-df_sub &lt;- df &lt;- colData(vsd_limma) %&gt;%
-  as.data.frame() %&gt;%
-  dplyr::select(Affected)
-pheatmap(topgenes_unaff_vs_unaff_05_sub, annotation_col = df_sub, annotation_colors = ann_colors2, fontsize = 5, angle_col = 0)</code></pre>
-<p><img src="figure/check-controls.Rmd/significant-genes-deseq-subsetted-1.png" width="800px" height="570px" style="display: block; margin: auto;" /></p>
-<p>
-<button type="button" class="btn btn-default btn-xs btn-workflowr btn-workflowr-fig" data-toggle="collapse" data-target="#fig-significant-genes-deseq-subsetted-1">
-Past versions of significant-genes-deseq-subsetted-1.png
-</button>
-</p>
-<div id="fig-significant-genes-deseq-subsetted-1" class="collapse">
-<div class="table-responsive">
-<table class="table table-condensed table-hover">
-<thead>
-<tr>
-<th>
-Version
-</th>
-<th>
-Author
-</th>
-<th>
-Date
-</th>
-</tr>
-</thead>
-<tbody>
-<tr>
-<td>
-<a href="https://github.com/uab-cgds-worthey/mecfs-dge-analysis/blob/77caa9969073bb8bbc7aad1a3c7b5393643a3614/docs/figure/check-controls.Rmd/significant-genes-deseq-subsetted-1.png" target="_blank">77caa99</a>
-</td>
-<td>
-sdhutchins
-</td>
-<td>
-2024-04-23
-</td>
-</tr>
-</tbody>
-</table>
-</div>
-</div>
-<pre class="r"><code>topgenes_byensemblid_sub &lt;- head(rownames(res_unaff_vs_unaff_df_sub), 55)
-topgenes_unaff_vs_unaff_05_sub &lt;- assay(vsd_limma)[topgenes_byensemblid_sub, ]
-topgenes_unaff_vs_unaff_05_sub &lt;- topgenes_unaff_vs_unaff_05_sub - rowMeans(topgenes_unaff_vs_unaff_05_sub)
-
-ensembl_to_gene_sub &lt;- setNames(gene_info$gene_name, gene_info$Ensembl_ID)
-
-# Get the current row names of the matrix &#39;mat&#39;
-current_ensembl_ids_sub &lt;- rownames(topgenes_unaff_vs_unaff_05_sub)
-
-# Find the corresponding gene names for the Ensembl IDs
-new_row_names_sub &lt;- ensembl_to_gene_sub[current_ensembl_ids_sub]
-
-# Set the new row names for the matrix &#39;mat&#39;
-rownames(topgenes_unaff_vs_unaff_05_sub) &lt;- new_row_names_sub
-
-topgenes_unaff_vs_unaff_05_sub &lt;- topgenes_unaff_vs_unaff_05_sub[order(row.names(topgenes_unaff_vs_unaff_05_sub)), ]
-
-df_sub &lt;- df &lt;- colData(vsd_limma) %&gt;%
-  as.data.frame() %&gt;%
-  dplyr::select(Affected, SubCategory, CombinedCategory)
-pheatmap(topgenes_unaff_vs_unaff_05_sub, annotation_col = df_sub, annotation_colors = ann_colors2, fontsize = 5, angle_col = 0)</code></pre>
-<p><img src="figure/check-controls.Rmd/significant-genes-deseq-subsetted-subcategory-1.png" width="800px" height="570px" style="display: block; margin: auto;" /></p>
-<p>
-<button type="button" class="btn btn-default btn-xs btn-workflowr btn-workflowr-fig" data-toggle="collapse" data-target="#fig-significant-genes-deseq-subsetted-subcategory-1">
-Past versions of significant-genes-deseq-subsetted-subcategory-1.png
-</button>
-</p>
-<div id="fig-significant-genes-deseq-subsetted-subcategory-1"
-class="collapse">
-<div class="table-responsive">
-<table class="table table-condensed table-hover">
-<thead>
-<tr>
-<th>
-Version
-</th>
-<th>
-Author
-</th>
-<th>
-Date
-</th>
-</tr>
-</thead>
-<tbody>
-<tr>
-<td>
-<a href="https://github.com/uab-cgds-worthey/mecfs-dge-analysis/blob/77caa9969073bb8bbc7aad1a3c7b5393643a3614/docs/figure/check-controls.Rmd/significant-genes-deseq-subsetted-subcategory-1.png" target="_blank">77caa99</a>
-</td>
-<td>
-sdhutchins
-</td>
-<td>
-2024-04-23
-</td>
-</tr>
-</tbody>
-</table>
-</div>
-</div>
-<pre class="r"><code>topgenes_byensemblid_sub &lt;- head(rownames(res_unaff_vs_unaff_df_sub), 75)
-topgenes_unaff_vs_unaff_05_sub &lt;- assay(vsd_limma)[topgenes_byensemblid_sub, ]
-topgenes_unaff_vs_unaff_05_sub &lt;- topgenes_unaff_vs_unaff_05_sub - rowMeans(topgenes_unaff_vs_unaff_05_sub)
-
-ensembl_to_gene_sub &lt;- setNames(gene_info$gene_name, gene_info$Ensembl_ID)
-
-# Get the current row names of the matrix &#39;mat&#39;
-current_ensembl_ids_sub &lt;- rownames(topgenes_unaff_vs_unaff_05_sub)
-
-# Find the corresponding gene names for the Ensembl IDs
-new_row_names_sub &lt;- ensembl_to_gene_sub[current_ensembl_ids_sub]
-
-# Set the new row names for the matrix &#39;mat&#39;
-rownames(topgenes_unaff_vs_unaff_05_sub) &lt;- new_row_names_sub
-
-topgenes_unaff_vs_unaff_05_sub &lt;- topgenes_unaff_vs_unaff_05_sub[order(row.names(topgenes_unaff_vs_unaff_05_sub)), ]
-
-df_sub &lt;- as.data.frame(colData(vsd_limma)[, c(&quot;Affected&quot;, &quot;CombinedCategory&quot;)])
-pheatmap(topgenes_unaff_vs_unaff_05_sub,
-  annotation_col = df_sub,
-  annotation_colors = ann_colors2, fontsize = 4, angle_col = 0
-)</code></pre>
-<p><img src="figure/check-controls.Rmd/top-75-genes-deseq-subsetted-1.png" width="800px" height="570px" style="display: block; margin: auto;" /></p>
-<p>
-<button type="button" class="btn btn-default btn-xs btn-workflowr btn-workflowr-fig" data-toggle="collapse" data-target="#fig-top-75-genes-deseq-subsetted-1">
-Past versions of top-75-genes-deseq-subsetted-1.png
-</button>
-</p>
-<div id="fig-top-75-genes-deseq-subsetted-1" class="collapse">
-<div class="table-responsive">
-<table class="table table-condensed table-hover">
-<thead>
-<tr>
-<th>
-Version
-</th>
-<th>
-Author
-</th>
-<th>
-Date
-</th>
-</tr>
-</thead>
-<tbody>
-<tr>
-<td>
-<a href="https://github.com/uab-cgds-worthey/mecfs-dge-analysis/blob/77caa9969073bb8bbc7aad1a3c7b5393643a3614/docs/figure/check-controls.Rmd/top-75-genes-deseq-subsetted-1.png" target="_blank">77caa99</a>
-</td>
-<td>
-sdhutchins
-</td>
-<td>
-2024-04-23
-</td>
-</tr>
-</tbody>
-</table>
-</div>
-</div>
-<pre class="r"><code>topgenes_byensemblid_sub &lt;- head(rownames(res_unaff_vs_unaff_df_sub), 75)
-topgenes_unaff_vs_unaff_05_sub &lt;- assay(vsd_limma)[topgenes_byensemblid_sub, ]
-topgenes_unaff_vs_unaff_05_sub &lt;- topgenes_unaff_vs_unaff_05_sub - rowMeans(topgenes_unaff_vs_unaff_05_sub)
-
-ensembl_to_gene_sub &lt;- setNames(gene_info$gene_name, gene_info$Ensembl_ID)
-
-# Get the current row names of the matrix &#39;mat&#39;
-current_ensembl_ids_sub &lt;- rownames(topgenes_unaff_vs_unaff_05_sub)
-
-# Find the corresponding gene names for the Ensembl IDs
-new_row_names_sub &lt;- ensembl_to_gene_sub[current_ensembl_ids_sub]
-
-# Set the new row names for the matrix &#39;mat&#39;
-rownames(topgenes_unaff_vs_unaff_05_sub) &lt;- new_row_names_sub
-
-topgenes_unaff_vs_unaff_05_sub &lt;- topgenes_unaff_vs_unaff_05_sub[order(row.names(topgenes_unaff_vs_unaff_05_sub)), ]
-
-df_sub &lt;- as.data.frame(colData(vsd_limma)[, c(&quot;Affected&quot;, &quot;SubCategory&quot;, &quot;CombinedCategory&quot;)])
-pheatmap(topgenes_unaff_vs_unaff_05_sub, annotation_col = df_sub, annotation_colors = ann_colors2, fontsize = 4, angle_col = 0)</code></pre>
-<p><img src="figure/check-controls.Rmd/top-75-genes-deseq-subsetted-subcategory-1.png" width="800px" height="570px" style="display: block; margin: auto;" /></p>
-<p>
-<button type="button" class="btn btn-default btn-xs btn-workflowr btn-workflowr-fig" data-toggle="collapse" data-target="#fig-top-75-genes-deseq-subsetted-subcategory-1">
-Past versions of top-75-genes-deseq-subsetted-subcategory-1.png
-</button>
-</p>
-<div id="fig-top-75-genes-deseq-subsetted-subcategory-1"
-class="collapse">
-<div class="table-responsive">
-<table class="table table-condensed table-hover">
-<thead>
-<tr>
-<th>
-Version
-</th>
-<th>
-Author
-</th>
-<th>
-Date
-</th>
-</tr>
-</thead>
-<tbody>
-<tr>
-<td>
-<a href="https://github.com/uab-cgds-worthey/mecfs-dge-analysis/blob/77caa9969073bb8bbc7aad1a3c7b5393643a3614/docs/figure/check-controls.Rmd/top-75-genes-deseq-subsetted-subcategory-1.png" target="_blank">77caa99</a>
-</td>
-<td>
-sdhutchins
-</td>
-<td>
-2024-04-23
-</td>
-</tr>
-</tbody>
-</table>
-</div>
-</div>
-<pre class="r"><code>topgenes_byensemblid_sub &lt;- head(rownames(res_unaff_vs_unaff_df_sub), 200)
-topgenes_unaff_vs_unaff_05_sub &lt;- assay(vsd_limma)[topgenes_byensemblid_sub, ]
-topgenes_unaff_vs_unaff_05_sub &lt;- topgenes_unaff_vs_unaff_05_sub - rowMeans(topgenes_unaff_vs_unaff_05_sub)
-
-ensembl_to_gene_sub &lt;- setNames(gene_info$gene_name, gene_info$Ensembl_ID)
-
-# Get the current row names of the matrix &#39;mat&#39;
-current_ensembl_ids_sub &lt;- rownames(topgenes_unaff_vs_unaff_05_sub)
-
-# Find the corresponding gene names for the Ensembl IDs
-new_row_names_sub &lt;- ensembl_to_gene_sub[current_ensembl_ids_sub]
-
-# Set the new row names for the matrix &#39;mat&#39;
-rownames(topgenes_unaff_vs_unaff_05_sub) &lt;- new_row_names_sub
-
-topgenes_unaff_vs_unaff_05_sub &lt;- topgenes_unaff_vs_unaff_05_sub[order(row.names(topgenes_unaff_vs_unaff_05_sub)), ]
-
-df_sub &lt;- as.data.frame(colData(vsd_limma)[, c(&quot;Affected&quot;, &quot;CombinedCategory&quot;)])
-pheatmap(topgenes_unaff_vs_unaff_05_sub, annotation_col = df_sub, annotation_colors = ann_colors2, fontsize = 2.25, angle_col = 0)</code></pre>
-<p><img src="figure/check-controls.Rmd/top-200-genes-deseq-subsetted-1.png" width="800px" height="570px" style="display: block; margin: auto;" /></p>
-<p>
-<button type="button" class="btn btn-default btn-xs btn-workflowr btn-workflowr-fig" data-toggle="collapse" data-target="#fig-top-200-genes-deseq-subsetted-1">
-Past versions of top-200-genes-deseq-subsetted-1.png
-</button>
-</p>
-<div id="fig-top-200-genes-deseq-subsetted-1" class="collapse">
-<div class="table-responsive">
-<table class="table table-condensed table-hover">
-<thead>
-<tr>
-<th>
-Version
-</th>
-<th>
-Author
-</th>
-<th>
-Date
-</th>
-</tr>
-</thead>
-<tbody>
-<tr>
-<td>
-<a href="https://github.com/uab-cgds-worthey/mecfs-dge-analysis/blob/77caa9969073bb8bbc7aad1a3c7b5393643a3614/docs/figure/check-controls.Rmd/top-200-genes-deseq-subsetted-1.png" target="_blank">77caa99</a>
-</td>
-<td>
-sdhutchins
-</td>
-<td>
-2024-04-23
-</td>
-</tr>
-</tbody>
-</table>
-</div>
-</div>
+<p><img src="figure/check-controls.Rmd/top50-genes-deseq-1.png" width="800px" height="570px" style="display: block; margin: auto;" /></p>
 <pre class="r"><code>gb_df &lt;- genes_biomart[, c(1, ncol(genes_biomart))]
 res_unaff_vs_unaff_df_sub_genename &lt;- res_unaff_vs_unaff_df_sub
 res_unaff_vs_unaff_df_sub_genename$Ensembl_ID &lt;- row.names(res_unaff_vs_unaff_df_sub)
@@ -1961,7 +1509,7 @@ Pass returnall=TRUE to return lists of duplicate or missing query terms.</code><
 # set top = 0, then specify genes using label.select argument
 maplot &lt;- ggmaplot(res_unaff_vs_unaff_df_sub,
   main = &quot;Unaffected vs Unaffected MA Plot&quot;,
-  fdr = .1, fc = 1, size = 0.4, # Same used for others.
+  fdr = .05, fc = 1, size = 0.4, # Same used for others.
   genenames = as.vector(res_unaff_vs_unaff_df_sub_genename$gene_name),
   ggtheme = ggplot2::theme_minimal(),
   legend = &quot;top&quot;, top = 30,
@@ -1996,6 +1544,17 @@ Date
 <tbody>
 <tr>
 <td>
+<a href="https://github.com/uab-cgds-worthey/mecfs-dge-analysis/blob/87186be6c919761bbb17c60806080312a1bc6ace/docs/figure/check-controls.Rmd/maplot-subsetted-samples-1.png" target="_blank">87186be</a>
+</td>
+<td>
+sdhutchins
+</td>
+<td>
+2024-04-23
+</td>
+</tr>
+<tr>
+<td>
 <a href="https://github.com/uab-cgds-worthey/mecfs-dge-analysis/blob/77caa9969073bb8bbc7aad1a3c7b5393643a3614/docs/figure/check-controls.Rmd/maplot-subsetted-samples-1.png" target="_blank">77caa99</a>
 </td>
 <td>
@@ -2024,7 +1583,7 @@ combined_data &lt;- combined_data %&gt;%
 paged_table(as.data.frame(significant_data), options = list(rows.print = 30))</code></pre>
 <div data-pagedtable="false">
 <script data-pagedtable-source type="application/json">
-{"columns":[{"label":["name"],"name":[1],"type":["chr"],"align":["left"]},{"label":["mean"],"name":[2],"type":["dbl"],"align":["right"]},{"label":["lfc"],"name":[3],"type":["dbl"],"align":["right"]},{"label":["padj"],"name":[4],"type":["dbl"],"align":["right"]},{"label":["direction"],"name":[5],"type":["chr"],"align":["left"]}],"data":[{"1":"ENSG00000288534","2":"5.568714","3":"-21.056257","4":"1.832155e-14","5":"Down"},{"1":"H3C14","2":"6.998687","3":"22.973248","4":"3.615487e-09","5":"Up"},{"1":"RNU1-1","2":"7.136644","3":"-24.502996","4":"3.615487e-09","5":"Down"},{"1":"ENSG00000268400","2":"5.213692","3":"-21.746930","4":"1.206394e-07","5":"Down"},{"1":"RNU1-3","2":"7.080038","3":"-24.234342","4":"5.426732e-07","5":"Down"},{"1":"ENSG00000289694","2":"9.242564","3":"-25.093208","4":"6.135774e-06","5":"Down"},{"1":"KLRC3","2":"4.862315","3":"-3.783530","4":"3.766641e-03","5":"Down"},{"1":"SNORD3B-2","2":"3.963039","3":"-7.178297","4":"3.766641e-03","5":"Down"},{"1":"CPSF1P1","2":"4.540450","3":"-21.952656","4":"7.518803e-03","5":"Down"},{"1":"SPAG17","2":"3.496547","3":"-7.490912","4":"8.662096e-03","5":"Down"},{"1":"ULK4P3","2":"3.007464","3":"7.371227","4":"8.662096e-03","5":"Up"},{"1":"ENSG00000283228","2":"3.989355","3":"-23.557168","4":"2.420037e-02","5":"Down"},{"1":"SLC39A14","2":"7.484569","3":"1.314853","4":"2.573985e-02","5":"Up"},{"1":"IGKV1-9","2":"5.968692","3":"-3.290276","4":"2.752347e-02","5":"Down"},{"1":"PALM","2":"3.869517","3":"4.748766","4":"3.187498e-02","5":"Up"},{"1":"OR5AN1","2":"3.535685","3":"5.114816","4":"3.684294e-02","5":"Up"},{"1":"ENSG00000227242","2":"3.721212","3":"6.684089","4":"4.615658e-02","5":"Up"},{"1":"TCTN2","2":"6.903025","3":"-1.276225","4":"4.638277e-02","5":"Down"},{"1":"ENSG00000258354","2":"4.301122","3":"-6.312021","4":"4.638277e-02","5":"Down"},{"1":"BHLHE41","2":"6.031587","3":"-2.506055","4":"4.846747e-02","5":"Down"},{"1":"DNAH17","2":"5.391635","3":"3.941167","4":"4.846747e-02","5":"Up"},{"1":"TNFRSF17","2":"4.453553","3":"-3.126396","4":"5.782599e-02","5":"Down"},{"1":"JCHAIN","2":"9.839791","3":"-2.897421","4":"6.757337e-02","5":"Down"},{"1":"LIMCH1","2":"4.371946","3":"3.279727","4":"7.212649e-02","5":"Up"},{"1":"IGHV3-11","2":"6.499792","3":"-3.091851","4":"7.212649e-02","5":"Down"},{"1":"HULC","2":"5.026568","3":"2.355575","4":"8.903213e-02","5":"Up"},{"1":"PRC1","2":"6.446976","3":"-2.106877","4":"9.572798e-02","5":"Down"},{"1":"LINC02298","2":"5.061841","3":"2.283823","4":"9.572798e-02","5":"Up"},{"1":"NME1-NME2","2":"3.571628","3":"-7.054064","4":"9.690903e-02","5":"Down"},{"1":"ENSG00000260052","2":"2.770171","3":"-5.503276","4":"9.824136e-02","5":"Down"},{"1":"POLR2K","2":"6.369146","3":"-1.814776","4":"9.896219e-02","5":"Down"}],"options":{"columns":{"min":{},"max":[10]},"rows":{"min":[30],"max":[30]},"pages":{}}}
+{"columns":[{"label":["name"],"name":[1],"type":["chr"],"align":["left"]},{"label":["mean"],"name":[2],"type":["dbl"],"align":["right"]},{"label":["lfc"],"name":[3],"type":["dbl"],"align":["right"]},{"label":["padj"],"name":[4],"type":["dbl"],"align":["right"]},{"label":["direction"],"name":[5],"type":["chr"],"align":["left"]}],"data":[{"1":"ENSG00000288534","2":"5.568714","3":"-21.9511154","4":"5.722819e-22","5":"Down"},{"1":"RNU1-1","2":"7.136644","3":"-23.3546456","4":"4.867057e-12","5":"Down"},{"1":"ENSG00000268400","2":"5.213692","3":"-21.2680079","4":"9.718468e-11","5":"Down"},{"1":"RNU1-3","2":"7.080038","3":"-23.4000218","4":"8.136298e-10","5":"Down"},{"1":"ENSG00000289694","2":"9.242564","3":"-25.7437025","4":"8.136298e-10","5":"Down"},{"1":"SLC39A14","2":"7.484569","3":"1.3699626","4":"1.463398e-04","5":"Up"},{"1":"CPSF1P1","2":"4.540450","3":"-20.8984045","4":"3.572097e-04","5":"Down"},{"1":"ZNF571-AS1","2":"5.473715","3":"-3.7583223","4":"4.814319e-04","5":"Down"},{"1":"CDAN1","2":"9.224371","3":"0.8311278","4":"2.507017e-03","5":"Up"},{"1":"ENSG00000258354","2":"4.301122","3":"-6.8692475","4":"3.269940e-03","5":"Down"},{"1":"F8A2","2":"5.058768","3":"-21.5090570","4":"3.782514e-03","5":"Down"},{"1":"RAP1GAP","2":"8.925589","3":"-4.9963117","4":"5.837525e-03","5":"Down"},{"1":"ENSG00000264324","2":"5.805691","3":"-2.1925668","4":"5.837525e-03","5":"Down"},{"1":"KLRC3","2":"4.862315","3":"-3.1653361","4":"9.576878e-03","5":"Down"},{"1":"DOCK6","2":"6.250327","3":"1.9707673","4":"1.048765e-02","5":"Up"},{"1":"EFCAB7","2":"6.906723","3":"-1.2780256","4":"1.048765e-02","5":"Down"},{"1":"CBX3P2","2":"5.306697","3":"1.4886867","4":"1.048765e-02","5":"Up"},{"1":"SNORD3B-2","2":"3.963039","3":"-6.1454579","4":"1.315793e-02","5":"Down"},{"1":"OR5AN1","2":"3.535685","3":"4.0537235","4":"1.343737e-02","5":"Up"},{"1":"ADAMTS6","2":"6.293797","3":"-1.5553065","4":"1.445525e-02","5":"Down"},{"1":"LIMCH1","2":"4.371946","3":"2.8966010","4":"1.445525e-02","5":"Up"},{"1":"CD1E","2":"4.346563","3":"1.9743127","4":"1.445525e-02","5":"Up"},{"1":"RBM14-RBM4","2":"9.943123","3":"-1.0084689","4":"1.445525e-02","5":"Down"},{"1":"RN7SKP203","2":"6.652843","3":"-2.8246995","4":"1.457542e-02","5":"Down"},{"1":"KISS1R","2":"5.310388","3":"-2.4096947","4":"1.559221e-02","5":"Down"},{"1":"ENSG00000289027","2":"7.845973","3":"-1.1097862","4":"2.178008e-02","5":"Down"},{"1":"PPARGC1A","2":"4.187867","3":"-6.8398079","4":"2.191881e-02","5":"Down"},{"1":"RPL13P5","2":"6.843404","3":"0.9687263","4":"2.691135e-02","5":"Up"},{"1":"ENSG00000287167","2":"4.856605","3":"-3.0167019","4":"2.691135e-02","5":"Down"},{"1":"SLC4A10","2":"7.928155","3":"-2.5324117","4":"2.808561e-02","5":"Down"},{"1":"MPPED2","2":"5.272400","3":"-2.5970569","4":"3.000471e-02","5":"Down"},{"1":"LRRN2","2":"4.310414","3":"-5.8898038","4":"3.039282e-02","5":"Down"},{"1":"ENSG00000286132","2":"4.401343","3":"-6.9300885","4":"3.229891e-02","5":"Down"},{"1":"ENSG00000286782","2":"5.796618","3":"-1.4116030","4":"3.387525e-02","5":"Down"},{"1":"BTN2A3P","2":"7.268827","3":"0.6970038","4":"3.409231e-02","5":"Up"},{"1":"RABGGTA","2":"8.997640","3":"0.3597232","4":"3.476709e-02","5":"Up"},{"1":"CACHD1","2":"6.506722","3":"-1.9973526","4":"3.476709e-02","5":"Down"},{"1":"GSTO2","2":"5.736238","3":"1.7588768","4":"3.594309e-02","5":"Up"},{"1":"IGHV3-11","2":"6.499792","3":"-2.6310703","4":"3.594309e-02","5":"Down"},{"1":"FGGY-DT","2":"2.949126","3":"-5.3729141","4":"3.594309e-02","5":"Down"},{"1":"ZNF683","2":"7.865210","3":"1.7956185","4":"4.132214e-02","5":"Up"},{"1":"AIFM3","2":"7.315752","3":"1.1354227","4":"4.212657e-02","5":"Up"},{"1":"ENSG00000253214","2":"5.921309","3":"-2.5296086","4":"4.212657e-02","5":"Down"},{"1":"LRRN3","2":"8.369808","3":"-1.8171200","4":"4.318023e-02","5":"Down"}],"options":{"columns":{"min":{},"max":[10]},"rows":{"min":[30],"max":[30]},"pages":{}}}
   </script>
 </div>
 <pre class="r"><code># Save significant genes
@@ -2061,13 +1620,13 @@ missing_gene_counts &lt;- counts[row.names(counts) %in% missing_genes, ]
 paged_table(filtered_by_interest, options = list(rows.print = 15))</code></pre>
 <div data-pagedtable="false">
 <script data-pagedtable-source type="application/json">
-{"columns":[{"label":["gene_name"],"name":[1],"type":["chr"],"align":["left"]},{"label":["Ensembl_ID"],"name":[2],"type":["chr"],"align":["left"]},{"label":["baseMean"],"name":[3],"type":["dbl"],"align":["right"]},{"label":["log2FoldChange"],"name":[4],"type":["dbl"],"align":["right"]},{"label":["lfcSE"],"name":[5],"type":["dbl"],"align":["right"]},{"label":["stat"],"name":[6],"type":["dbl"],"align":["right"]},{"label":["pvalue"],"name":[7],"type":["dbl"],"align":["right"]},{"label":["padj"],"name":[8],"type":["dbl"],"align":["right"]}],"data":[{"1":"CENPF","2":"ENSG00000117724.14","3":"2.099299e+02","4":"-1.142381146","5":"0.4696940","6":"-2.432181519","7":"0.01500818","8":"0.6372225"},{"1":"CARD14","2":"ENSG00000141527.18","3":"5.831711e+00","4":"-4.025888111","5":"1.6727363","6":"-2.406767882","7":"0.01609440","8":"0.6425479"},{"1":"SLC12A3","2":"ENSG00000070915.10","3":"3.350271e+01","4":"1.893829828","5":"0.9158351","6":"2.067872109","7":"0.03865205","8":"0.8040600"},{"1":"MADD","2":"ENSG00000110514.19","3":"3.294426e+03","4":"0.291530506","5":"0.1518448","6":"1.919924735","7":"0.05486741","8":"0.8428973"},{"1":"ACACB","2":"ENSG00000076555.16","3":"1.068331e+03","4":"0.628100252","5":"0.3383753","6":"1.856223904","7":"0.06342165","8":"0.8605960"},{"1":"SLC4A1","2":"ENSG00000004939.16","3":"5.114960e+04","4":"-1.443235257","5":"0.9440734","6":"-1.528731971","7":"0.12633090","8":"0.9376281"},{"1":"NLRC4","2":"ENSG00000091106.19","3":"1.371793e+03","4":"-0.449362385","5":"0.3321087","6":"-1.353058334","7":"0.17603700","8":"0.9720263"},{"1":"CUBN","2":"ENSG00000107611.16","3":"6.813116e+02","4":"0.464812086","5":"0.3445738","6":"1.348947794","7":"0.17735374","8":"0.9723783"},{"1":"INF2","2":"ENSG00000203485.14","3":"1.991620e+03","4":"0.286114917","5":"0.2195989","6":"1.302897908","7":"0.19260962","8":"0.9767355"},{"1":"SBF1","2":"ENSG00000100241.22","3":"9.380027e+03","4":"0.216327129","5":"0.1818326","6":"1.189704914","7":"0.23416239","8":"0.9795903"},{"1":"SLC17A9","2":"ENSG00000101194.18","3":"3.117019e+02","4":"0.504938687","5":"0.4071092","6":"1.240302895","7":"0.21486338","8":"0.9795903"},{"1":"CHRNE","2":"ENSG00000108556.10","3":"9.770709e+01","4":"-0.594546962","5":"0.4927350","6":"-1.206626303","7":"0.22757609","8":"0.9795903"},{"1":"CLCN1","2":"ENSG00000188037.14","3":"1.467436e+01","4":"1.251254838","5":"1.2152464","6":"1.029630588","7":"0.30318345","8":"0.9872698"},{"1":"SLC3A1","2":"ENSG00000138079.14","3":"1.114572e+01","4":"1.152097767","5":"1.2172889","6":"0.946445599","7":"0.34392136","8":"0.9947907"},{"1":"HAGHL","2":"ENSG00000103253.19","3":"1.511289e+02","4":"0.341864989","5":"0.3809443","6":"0.897414683","7":"0.36949768","8":"0.9987648"},{"1":"ENO3","2":"ENSG00000108515.18","3":"1.143681e+02","4":"-0.160317754","5":"0.3103669","6":"-0.516542681","7":"0.60547544","8":"1.0000000"},{"1":"SIAE","2":"ENSG00000110013.13","3":"2.519640e+02","4":"-0.321711785","5":"0.3927793","6":"-0.819064972","7":"0.41274935","8":"1.0000000"},{"1":"ACADM","2":"ENSG00000117054.15","3":"1.026365e+03","4":"-0.146819293","5":"0.1948751","6":"-0.753402018","7":"0.45120837","8":"1.0000000"},{"1":"CR2","2":"ENSG00000117322.18","3":"2.217099e+02","4":"0.004405305","5":"0.6285631","6":"0.007008533","7":"0.99440805","8":"1.0000000"},{"1":"ELOVL4","2":"ENSG00000118402.6","3":"4.910125e+01","4":"0.429494529","5":"0.5421992","6":"0.792134229","7":"0.42828241","8":"1.0000000"},{"1":"CHRNA10","2":"ENSG00000129749.3","3":"1.542297e+02","4":"-0.129913109","5":"0.3920613","6":"-0.331359182","7":"0.74037319","8":"1.0000000"},{"1":"TACO1","2":"ENSG00000136463.9","3":"3.294387e+02","4":"0.100460258","5":"0.2283416","6":"0.439956061","7":"0.65996893","8":"1.0000000"},{"1":"SLC16A3","2":"ENSG00000141526.18","3":"1.586538e+04","4":"0.089938076","5":"0.3331820","6":"0.269936810","7":"0.78720887","8":"1.0000000"},{"1":"TRPM2","2":"ENSG00000142185.18","3":"9.479748e+02","4":"-0.004505519","5":"0.4452065","6":"-0.010120065","7":"0.99192549","8":"1.0000000"},{"1":"NLRP12","2":"ENSG00000142405.22","3":"6.104105e+03","4":"-0.190241070","5":"0.4039929","6":"-0.470902008","7":"0.63771071","8":"1.0000000"},{"1":"FCSK","2":"ENSG00000157353.17","3":"5.860094e+02","4":"0.100524109","5":"0.2577240","6":"0.390045521","7":"0.69650289","8":"1.0000000"},{"1":"PGAM2","2":"ENSG00000164708.6","3":"1.235820e+01","4":"0.062428342","5":"0.7548739","6":"0.082700355","7":"0.93408980","8":"1.0000000"},{"1":"CHRFAM7A","2":"ENSG00000166664.15","3":"5.240865e+01","4":"0.272222709","5":"0.8517065","6":"0.319620331","7":"0.74925616","8":"1.0000000"},{"1":"NOD2","2":"ENSG00000167207.14","3":"2.785087e+03","4":"0.024748320","5":"0.4464202","6":"0.055437274","7":"0.95579010","8":"1.0000000"},{"1":"ACAD9","2":"ENSG00000177646.20","3":"1.565631e+03","4":"-0.026064298","5":"0.3138470","6":"-0.083047793","7":"0.93381354","8":"1.0000000"},{"1":"RYR1","2":"ENSG00000196218.14","3":"1.389845e+02","4":"0.287593199","5":"0.5921472","6":"0.485678591","7":"0.62719506","8":"1.0000000"},{"1":"LRBA","2":"ENSG00000198589.14","3":"6.124575e+03","4":"0.094964803","5":"0.1759835","6":"0.539623417","7":"0.58945676","8":"1.0000000"},{"1":"CACNA1G","2":"ENSG00000006283.18","3":"4.991999e-01","4":"-1.212777513","5":"5.5049560","6":"-0.220306485","7":"0.82563247","8":"NA"},{"1":"MYH14","2":"ENSG00000105357.20","3":"9.557558e-01","4":"0.000000000","5":"2.8627474","6":"0.000000000","7":"1.00000000","8":"NA"},{"1":"SLC13A5","2":"ENSG00000141485.17","3":"1.074975e+00","4":"-3.434646393","5":"2.9005732","6":"-1.184126782","7":"0.23636288","8":"NA"},{"1":"SCNN1B","2":"ENSG00000168447.11","3":"2.138286e-01","4":"0.000000000","5":"5.5092974","6":"0.000000000","7":"1.00000000","8":"NA"},{"1":"CLCNKA","2":"ENSG00000186510.12","3":"2.732683e-01","4":"1.113139509","5":"5.4486248","6":"0.204297331","7":"0.83812116","8":"NA"}],"options":{"columns":{"min":{},"max":[10]},"rows":{"min":[15],"max":[15]},"pages":{}}}
+{"columns":[{"label":["gene_name"],"name":[1],"type":["chr"],"align":["left"]},{"label":["Ensembl_ID"],"name":[2],"type":["chr"],"align":["left"]},{"label":["baseMean"],"name":[3],"type":["dbl"],"align":["right"]},{"label":["log2FoldChange"],"name":[4],"type":["dbl"],"align":["right"]},{"label":["lfcSE"],"name":[5],"type":["dbl"],"align":["right"]},{"label":["stat"],"name":[6],"type":["dbl"],"align":["right"]},{"label":["pvalue"],"name":[7],"type":["dbl"],"align":["right"]},{"label":["padj"],"name":[8],"type":["dbl"],"align":["right"]}],"data":[{"1":"CARD14","2":"ENSG00000141527.18","3":"5.831711e+00","4":"-5.26495117","5":"1.5017424","6":"-3.50589492","7":"0.0004550748","8":"0.1004422"},{"1":"CR2","2":"ENSG00000117322.18","3":"2.217099e+02","4":"-1.21116238","5":"0.5173670","6":"-2.34101215","7":"0.0192315412","8":"0.4151100"},{"1":"SLC4A1","2":"ENSG00000004939.16","3":"5.114960e+04","4":"-1.68430391","5":"0.7776900","6":"-2.16577788","7":"0.0303281642","8":"0.4778640"},{"1":"CENPF","2":"ENSG00000117724.14","3":"2.099299e+02","4":"-0.83153337","5":"0.3886038","6":"-2.13979712","7":"0.0323711664","8":"0.4840457"},{"1":"ACACB","2":"ENSG00000076555.16","3":"1.068331e+03","4":"0.54898111","5":"0.2786175","6":"1.97037588","7":"0.0487953074","8":"0.5470654"},{"1":"ELOVL4","2":"ENSG00000118402.6","3":"4.910125e+01","4":"-0.86604111","5":"0.4413369","6":"-1.96231294","7":"0.0497260621","8":"0.5487661"},{"1":"SLC12A3","2":"ENSG00000070915.10","3":"3.350271e+01","4":"1.25675263","5":"0.7476774","6":"1.68087542","7":"0.0927871157","8":"0.6386170"},{"1":"RYR1","2":"ENSG00000196218.14","3":"1.389845e+02","4":"0.81073809","5":"0.4880339","6":"1.66123330","7":"0.0966665995","8":"0.6449015"},{"1":"MADD","2":"ENSG00000110514.19","3":"3.294426e+03","4":"0.19313309","5":"0.1250491","6":"1.54445839","7":"0.1224773229","8":"0.6723717"},{"1":"ENO3","2":"ENSG00000108515.18","3":"1.143681e+02","4":"0.39082167","5":"0.2571810","6":"1.51963687","7":"0.1286022671","8":"0.6786789"},{"1":"CLCN1","2":"ENSG00000188037.14","3":"1.467436e+01","4":"1.47933658","5":"0.9977731","6":"1.48263823","7":"0.1381705532","8":"0.6907914"},{"1":"CUBN","2":"ENSG00000107611.16","3":"6.813116e+02","4":"0.36252801","5":"0.2837070","6":"1.27782533","7":"0.2013110204","8":"0.7486150"},{"1":"SLC3A1","2":"ENSG00000138079.14","3":"1.114572e+01","4":"1.19056746","5":"0.9975742","6":"1.19346254","7":"0.2326882738","8":"0.7698883"},{"1":"SBF1","2":"ENSG00000100241.22","3":"9.380027e+03","4":"0.17787961","5":"0.1497817","6":"1.18759262","7":"0.2349939478","8":"0.7709997"},{"1":"CFAP92","2":"ENSG00000114656.13","3":"6.553260e+02","4":"-0.39477048","5":"0.3424371","6":"-1.15282630","7":"0.2489816864","8":"0.7782909"},{"1":"LRBA","2":"ENSG00000198589.14","3":"6.124575e+03","4":"-0.15446522","5":"0.1449610","6":"-1.06556418","7":"0.2866206986","8":"0.8045651"},{"1":"NLRC4","2":"ENSG00000091106.19","3":"1.371793e+03","4":"-0.28988220","5":"0.2737298","6":"-1.05900858","7":"0.2895958725","8":"0.8068752"},{"1":"HAGHL","2":"ENSG00000103253.19","3":"1.511289e+02","4":"0.31292840","5":"0.3135138","6":"0.99813265","7":"0.3182150420","8":"0.8188896"},{"1":"NOD2","2":"ENSG00000167207.14","3":"2.785087e+03","4":"0.36235849","5":"0.3677647","6":"0.98529968","7":"0.3244768881","8":"0.8214552"},{"1":"PGAM2","2":"ENSG00000164708.6","3":"1.235820e+01","4":"-0.57951207","5":"0.6191180","6":"-0.93602847","7":"0.3492585281","8":"0.8314473"},{"1":"TRPM2","2":"ENSG00000142185.18","3":"9.479748e+02","4":"0.30354976","5":"0.3668143","6":"0.82752981","7":"0.4079368325","8":"0.8567054"},{"1":"INF2","2":"ENSG00000203485.14","3":"1.991620e+03","4":"0.12067862","5":"0.1808482","6":"0.66729252","7":"0.5045853045","8":"0.8976943"},{"1":"TACO1","2":"ENSG00000136463.9","3":"3.294387e+02","4":"0.11090608","5":"0.1881918","6":"0.58932484","7":"0.5556433820","8":"0.9133663"},{"1":"FCSK","2":"ENSG00000157353.17","3":"5.860094e+02","4":"0.11522152","5":"0.2123496","6":"0.54260302","7":"0.5874031604","8":"0.9200313"},{"1":"ACAD9","2":"ENSG00000177646.20","3":"1.565631e+03","4":"0.13764421","5":"0.2585864","6":"0.53229488","7":"0.5945217768","8":"0.9216283"},{"1":"SLC16A3","2":"ENSG00000141526.18","3":"1.586538e+04","4":"0.11730596","5":"0.2744618","6":"0.42740357","7":"0.6690854056","8":"0.9434103"},{"1":"ACADM","2":"ENSG00000117054.15","3":"1.026365e+03","4":"-0.05650270","5":"0.1607036","6":"-0.35159566","7":"0.7251415212","8":"0.9577852"},{"1":"CHRNA10","2":"ENSG00000129749.3","3":"1.542297e+02","4":"-0.06523587","5":"0.3234936","6":"-0.20166049","7":"0.8401821535","8":"0.9783800"},{"1":"CHRNE","2":"ENSG00000108556.10","3":"9.770709e+01","4":"-0.06883269","5":"0.4078276","6":"-0.16877889","7":"0.8659705649","8":"0.9824045"},{"1":"TOMM7","2":"ENSG00000196683.12","3":"4.929973e+02","4":"-0.05011374","5":"0.3967538","6":"-0.12630942","7":"0.8994870009","8":"0.9877689"},{"1":"SLC12A9","2":"ENSG00000146828.18","3":"9.772221e+03","4":"0.02122638","5":"0.2181157","6":"0.09731709","7":"0.9224745848","8":"0.9916282"},{"1":"NLRP12","2":"ENSG00000142405.22","3":"6.104105e+03","4":"0.02065530","5":"0.3328087","6":"0.06206359","7":"0.9505121938","8":"0.9946881"},{"1":"CHRFAM7A","2":"ENSG00000166664.15","3":"5.240865e+01","4":"0.03724848","5":"0.7010613","6":"0.05313156","7":"0.9576270831","8":"0.9952189"},{"1":"SIAE","2":"ENSG00000110013.13","3":"2.519640e+02","4":"0.01444226","5":"0.3241693","6":"0.04455160","7":"0.9644647241","8":"0.9956394"},{"1":"CACNG6","2":"ENSG00000130433.8","3":"1.088814e+02","4":"-0.03983939","5":"0.9234326","6":"-0.04314272","7":"0.9655877690","8":"0.9956394"},{"1":"CACNA1G","2":"ENSG00000006283.18","3":"4.991999e-01","4":"-1.52573988","5":"4.5341267","6":"-0.33650138","7":"0.7364928145","8":"NA"},{"1":"MYH14","2":"ENSG00000105357.20","3":"9.557558e-01","4":"-2.80136727","5":"2.3231429","6":"-1.20585230","7":"0.2278744450","8":"NA"},{"1":"SLC13A5","2":"ENSG00000141485.17","3":"1.074975e+00","4":"-2.39934232","5":"2.4738926","6":"-0.96986520","7":"0.3321136873","8":"NA"},{"1":"CACNA1B","2":"ENSG00000148408.14","3":"1.973468e+00","4":"-1.10124110","5":"1.3549455","6":"-0.81275675","7":"0.4163575360","8":"NA"},{"1":"SCNN1B","2":"ENSG00000168447.11","3":"2.138286e-01","4":"-0.79621700","5":"4.5378142","6":"-0.17546267","7":"0.8607161001","8":"NA"},{"1":"CLCNKA","2":"ENSG00000186510.12","3":"2.732683e-01","4":"-0.13945712","5":"4.4867878","6":"-0.03108173","7":"0.9752043607","8":"NA"}],"options":{"columns":{"min":{},"max":[10]},"rows":{"min":[15],"max":[15]},"pages":{}}}
   </script>
 </div>
 <pre class="r"><code>paged_table(filtered_counts, options = list(rows.print = 15))</code></pre>
 <div data-pagedtable="false">
 <script data-pagedtable-source type="application/json">
-{"columns":[{"label":[""],"name":["_rn_"],"type":[""],"align":["left"]},{"label":["4"],"name":[1],"type":["dbl"],"align":["right"]},{"label":["5"],"name":[2],"type":["dbl"],"align":["right"]},{"label":["6"],"name":[3],"type":["dbl"],"align":["right"]},{"label":["7"],"name":[4],"type":["dbl"],"align":["right"]},{"label":["8"],"name":[5],"type":["dbl"],"align":["right"]},{"label":["9"],"name":[6],"type":["dbl"],"align":["right"]},{"label":["10"],"name":[7],"type":["dbl"],"align":["right"]},{"label":["11"],"name":[8],"type":["dbl"],"align":["right"]},{"label":["12"],"name":[9],"type":["dbl"],"align":["right"]},{"label":["13"],"name":[10],"type":["dbl"],"align":["right"]},{"label":["14"],"name":[11],"type":["dbl"],"align":["right"]},{"label":["18"],"name":[12],"type":["dbl"],"align":["right"]},{"label":["19"],"name":[13],"type":["dbl"],"align":["right"]},{"label":["20"],"name":[14],"type":["dbl"],"align":["right"]},{"label":["21"],"name":[15],"type":["dbl"],"align":["right"]},{"label":["22"],"name":[16],"type":["dbl"],"align":["right"]},{"label":["23"],"name":[17],"type":["dbl"],"align":["right"]},{"label":["24"],"name":[18],"type":["dbl"],"align":["right"]},{"label":["25"],"name":[19],"type":["dbl"],"align":["right"]},{"label":["26"],"name":[20],"type":["dbl"],"align":["right"]},{"label":["27"],"name":[21],"type":["dbl"],"align":["right"]},{"label":["28"],"name":[22],"type":["dbl"],"align":["right"]},{"label":["10H"],"name":[23],"type":["dbl"],"align":["right"]},{"label":["11H"],"name":[24],"type":["dbl"],"align":["right"]},{"label":["13H"],"name":[25],"type":["dbl"],"align":["right"]},{"label":["25H"],"name":[26],"type":["dbl"],"align":["right"]},{"label":["26H"],"name":[27],"type":["dbl"],"align":["right"]},{"label":["28_27H"],"name":[28],"type":["dbl"],"align":["right"]},{"label":["9H"],"name":[29],"type":["dbl"],"align":["right"]}],"data":[{"1":"18413.559011","2":"37154.907565","3":"29905.467599","4":"37269.520078","5":"65123.830420","6":"70386.517387","7":"11692.927915","8":"20594.837963","9":"1.288786e+05","10":"49540.841807","11":"1.819237e+05","12":"55246.437833","13":"85492.280370","14":"70448.615955","15":"72095.363151","16":"5.947517e+04","17":"5859.6638755","18":"2.740718e+05","19":"8717.629476","20":"68331.154564","21":"29626.637329","22":"29494.586674","23":"2.310700e+04","24":"11006.22323","25":"46656.422138","26":"86179.317173","27":"35174.012033","28":"1.629950e+04","29":"19179.725568","_rn_":"SLC4A1"},{"1":"0.000000","2":"0.000000","3":"0.000000","4":"0.000000","5":"0.000000","6":"0.000000","7":"0.000000","8":"0.000000","9":"1.632462e+00","10":"1.030403","11":"0.000000e+00","12":"7.052327","13":"0.000000","14":"0.000000","15":"0.000000","16":"0.000000e+00","17":"0.0000000","18":"0.000000e+00","19":"0.000000","20":"0.000000","21":"0.000000","22":"0.000000","23":"0.000000e+00","24":"0.00000","25":"1.608435","26":"0.000000","27":"0.000000","28":"0.000000e+00","29":"0.000000","_rn_":"CACNA1G"},{"1":"0.000000","2":"0.000000","3":"0.000000","4":"0.000000","5":"0.000000","6":"0.000000","7":"0.000000","8":"0.000000","9":"0.000000e+00","10":"0.000000","11":"0.000000e+00","12":"0.000000","13":"0.000000","14":"0.000000","15":"0.000000","16":"0.000000e+00","17":"0.0000000","18":"0.000000e+00","19":"0.000000","20":"0.000000","21":"0.000000","22":"0.000000","23":"0.000000e+00","24":"0.00000","25":"0.000000","26":"0.000000","27":"0.000000","28":"0.000000e+00","29":"0.000000","_rn_":"C6"},{"1":"9.075933","2":"20.535213","3":"20.817857","4":"10.299503","5":"30.686296","6":"108.438888","7":"64.011776","8":"14.516938","9":"3.585940e+01","10":"21.124614","11":"2.596236e+01","12":"14.093153","13":"34.199203","14":"17.582618","15":"14.001306","16":"3.173719e+01","17":"25.8651867","18":"4.952495e+00","19":"26.020176","20":"47.429881","21":"20.610677","22":"33.687060","23":"1.357002e+02","24":"11.72896","25":"37.974730","26":"0.000000","27":"27.905433","28":"5.212373e+01","29":"19.647406","_rn_":"SLC12A3"},{"1":"1062.300434","2":"818.307877","3":"689.445570","4":"710.525923","5":"1048.445092","6":"1013.525460","7":"919.501350","8":"1536.506845","9":"1.543077e+03","10":"850.968933","11":"2.138352e+03","12":"732.915208","13":"989.450301","14":"1593.910012","15":"805.445488","16":"9.285314e+02","17":"823.8140420","18":"8.607010e+02","19":"808.836044","20":"671.581926","21":"861.653799","22":"1626.712005","23":"1.626308e+03","24":"1418.55783","25":"1162.484962","26":"306.542300","27":"1137.447176","28":"1.130615e+03","29":"1611.803806","_rn_":"ACACB"},{"1":"0.000000","2":"0.000000","3":"0.000000","4":"0.000000","5":"0.000000","6":"0.000000","7":"0.000000","8":"0.000000","9":"0.000000e+00","10":"0.000000","11":"0.000000e+00","12":"0.000000","13":"0.000000","14":"0.000000","15":"0.000000","16":"0.000000e+00","17":"0.0000000","18":"0.000000e+00","19":"0.000000","20":"0.000000","21":"0.000000","22":"0.000000","23":"0.000000e+00","24":"0.00000","25":"0.000000","26":"0.000000","27":"0.000000","28":"0.000000e+00","29":"0.000000","_rn_":"CACNA1S"},{"1":"788.753549","2":"835.097894","3":"1253.411021","4":"2263.971205","5":"1381.257207","6":"1541.866757","7":"1255.515991","8":"1081.130021","9":"1.287859e+03","10":"2006.640998","11":"1.909900e+03","12":"774.772604","13":"2603.407664","14":"1970.990233","15":"612.513156","16":"8.027249e+02","17":"767.4039262","18":"2.823940e+03","19":"927.649788","20":"1255.373720","21":"945.329893","22":"1755.635024","23":"1.179051e+03","24":"1174.04059","25":"2215.654658","26":"1881.252344","27":"1079.710083","28":"8.124181e+02","29":"1104.140305","_rn_":"NLRC4"},{"1":"0.000000","2":"0.000000","3":"0.000000","4":"1.085422","5":"0.000000","6":"0.000000","7":"0.000000","8":"0.000000","9":"0.000000e+00","10":"0.000000","11":"0.000000e+00","12":"0.000000","13":"0.000000","14":"0.000000","15":"0.000000","16":"0.000000e+00","17":"2.9396430","18":"0.000000e+00","19":"0.000000","20":"1.920892","21":"0.000000","22":"0.000000","23":"0.000000e+00","24":"0.00000","25":"0.000000","26":"0.000000","27":"0.000000","28":"0.000000e+00","29":"0.000000","_rn_":"MYH7"},{"1":"7932.458843","2":"7254.237848","3":"8833.315727","4":"7489.761901","5":"10995.004437","6":"10873.875758","7":"8187.040331","8":"9886.053952","9":"1.588488e+04","10":"10010.770750","11":"1.111862e+04","12":"6731.530521","13":"9598.274061","14":"11841.362910","15":"7039.720102","16":"7.439721e+03","17":"6591.3404498","18":"8.011283e+03","19":"8268.051202","20":"11582.869188","21":"11630.711462","22":"17184.531486","23":"9.277256e+03","24":"10650.99002","25":"9550.378338","26":"6443.944584","27":"10505.064061","28":"9.456160e+03","29":"11429.155317","_rn_":"SBF1"},{"1":"195.653452","2":"326.478159","3":"402.741881","4":"181.522899","5":"298.178818","6":"450.097749","7":"563.867054","8":"273.040882","9":"4.060787e+02","10":"360.037764","11":"3.150537e+02","12":"293.677862","13":"188.179871","14":"535.869214","15":"254.746570","16":"2.399746e+02","17":"234.5868847","18":"2.267563e+02","19":"125.439997","20":"270.473928","21":"407.533395","22":"688.452075","23":"4.230149e+02","24":"320.72970","25":"317.404063","26":"131.542318","27":"323.722813","28":"1.805604e+02","29":"206.179861","_rn_":"SLC17A9"},{"1":"142.434866","2":"130.146948","3":"136.293246","4":"80.692736","5":"154.980101","6":"274.710410","7":"183.807134","8":"153.781359","9":"1.866005e+02","10":"124.933315","11":"1.730426e+02","12":"84.080492","13":"120.939944","14":"225.644946","15":"106.842703","16":"8.030370e+01","17":"105.9262431","18":"1.281893e+02","19":"115.300692","20":"154.901099","21":"218.125713","22":"237.923581","23":"2.492694e+02","24":"148.81975","25":"93.480741","26":"83.549239","27":"186.347512","28":"1.148204e+02","29":"245.157426","_rn_":"HAGHL"},{"1":"4.567232","2":"3.470169","3":"1.589024","4":"0.000000","5":"1.263354","6":"0.000000","7":"0.000000","8":"0.000000","9":"1.201768e+00","10":"1.223673","11":"1.183274e+00","12":"0.000000","13":"1.270854","14":"3.833963","15":"0.000000","16":"0.000000e+00","17":"0.0000000","18":"6.196551e+00","19":"0.000000","20":"0.000000","21":"0.000000","22":"1.186347","23":"0.000000e+00","24":"0.00000","25":"0.000000","26":"0.000000","27":"0.000000","28":"0.000000e+00","29":"0.000000","_rn_":"MYH14"},{"1":"713.442059","2":"385.998711","3":"569.254295","4":"608.932952","5":"479.415800","6":"730.810821","7":"828.389234","8":"917.911584","9":"8.373560e+02","10":"688.849676","11":"8.275453e+02","12":"415.946550","13":"642.230717","14":"971.403731","15":"746.302416","16":"7.061477e+02","17":"565.7279499","18":"5.358893e+02","19":"250.016155","20":"709.477548","21":"654.876636","22":"1022.666798","23":"5.659908e+02","24":"861.12508","25":"614.310885","26":"439.406561","27":"958.777208","28":"9.605722e+02","29":"539.957087","_rn_":"CUBN"},{"1":"76.289141","2":"70.750718","3":"60.340725","4":"40.012201","5":"117.769337","6":"96.516506","7":"86.771197","8":"101.670688","9":"2.228812e+02","10":"118.494345","11":"1.220687e+02","12":"109.015043","13":"128.068220","14":"142.458684","15":"143.874115","16":"1.025198e+02","17":"109.5204929","18":"1.177443e+02","19":"102.346193","20":"118.451891","21":"133.561863","22":"246.159651","23":"1.476159e+02","24":"124.78517","25":"116.593626","26":"130.323871","27":"182.708586","28":"1.019817e+02","29":"185.237880","_rn_":"ENO3"},{"1":"91.268952","2":"53.420116","3":"38.418425","4":"175.063446","5":"133.740410","6":"63.009497","7":"80.625531","8":"105.671914","9":"1.239286e+02","10":"112.335556","11":"1.243973e+02","12":"49.487736","13":"58.463509","14":"140.923168","15":"46.698967","16":"6.173562e+01","17":"42.9579221","18":"4.760082e+01","19":"115.849543","20":"111.384814","21":"115.489067","22":"122.427577","23":"4.873094e+01","24":"71.77813","25":"71.960057","26":"214.005369","27":"96.498993","28":"1.210786e+02","29":"126.734494","_rn_":"CHRNE"},{"1":"152.142907","2":"181.843280","3":"189.522945","4":"183.562606","5":"202.290378","6":"283.609606","7":"216.425055","8":"107.491097","9":"2.964571e+02","10":"185.100959","11":"3.909292e+02","12":"171.103402","13":"298.059754","14":"406.359233","15":"232.715438","16":"2.273287e+02","17":"174.3662640","18":"4.577276e+02","19":"216.549341","20":"290.560480","21":"164.055070","22":"407.544264","23":"2.600964e+02","24":"250.12891","25":"235.487776","26":"537.356780","27":"189.806713","28":"1.725613e+02","29":"205.308627","_rn_":"SIAE"},{"1":"2861.536153","2":"2617.759994","3":"2760.587249","4":"2380.200522","5":"3661.180142","6":"3309.428696","7":"3152.433536","8":"3063.883451","9":"6.221585e+03","10":"3454.669874","11":"5.223174e+03","12":"2557.858055","13":"3341.819268","14":"4809.972672","15":"3065.422645","16":"2.694258e+03","17":"2418.2177052","18":"3.319698e+03","19":"2840.429573","20":"3455.830925","21":"3554.732808","22":"6069.418757","23":"3.420021e+03","24":"3817.02563","25":"3634.392182","26":"2115.144691","27":"3772.533141","28":"3.251596e+03","29":"3321.420757","_rn_":"MADD"},{"1":"1127.179235","2":"857.179242","3":"721.495001","4":"824.679648","5":"956.037910","6":"993.833257","7":"903.658758","8":"776.180378","9":"1.323546e+03","10":"944.048960","11":"1.550434e+03","12":"933.094493","13":"1105.063785","14":"1730.721949","15":"884.605918","16":"7.532732e+02","17":"1313.7113453","18":"1.338929e+03","19":"808.387534","20":"1112.815958","21":"734.010586","22":"1549.289819","23":"9.764989e+02","24":"947.86312","25":"1145.538335","26":"742.660376","27":"1230.561907","28":"8.268803e+02","29":"1465.828954","_rn_":"ACADM"},{"1":"187.329941","2":"325.410239","3":"174.812380","4":"249.518522","5":"369.949124","6":"212.859620","7":"298.686667","8":"95.789864","9":"1.742035e+02","10":"152.515328","11":"3.249609e+02","12":"257.967514","13":"266.462801","14":"459.400769","15":"345.272057","16":"1.813451e+02","17":"310.9734945","18":"1.618706e+02","19":"130.558303","20":"607.463496","21":"242.028356","22":"700.472549","23":"1.306034e+02","24":"17.55116","25":"139.038511","26":"21.312699","27":"236.020105","28":"1.719474e+02","29":"95.646722","_rn_":"CR2"},{"1":"151.331836","2":"171.847138","3":"138.169608","4":"121.132605","5":"220.308491","6":"154.759873","7":"284.600152","8":"189.246613","9":"3.385679e+02","10":"416.972167","11":"2.706268e+02","12":"88.869477","13":"229.975341","14":"346.218821","15":"204.744989","16":"1.311001e+02","17":"83.7335548","18":"3.503489e+02","19":"130.155476","20":"369.481654","21":"128.881148","22":"273.376322","23":"1.376684e+02","24":"101.06168","25":"172.743924","26":"236.574096","27":"519.265362","28":"9.683763e+01","29":"113.572210","_rn_":"CENPF"},{"1":"53.584460","2":"47.680681","3":"45.468460","4":"57.142839","5":"55.914331","6":"58.738406","7":"106.036461","8":"29.571657","9":"4.940112e+01","10":"51.118231","11":"9.411371e+01","12":"64.370886","13":"44.396944","14":"120.043382","15":"42.645956","16":"3.541889e+01","17":"98.1855005","18":"6.445648e+01","19":"45.215958","20":"32.520734","21":"51.833553","22":"48.821798","23":"6.165953e+01","24":"7.67458","25":"33.891634","26":"13.846146","27":"14.438947","28":"2.014471e+01","29":"41.970576","_rn_":"ELOVL4"},{"1":"79.286921","2":"100.662839","3":"80.633155","4":"257.527769","5":"172.357928","6":"157.484851","7":"139.497511","8":"234.414531","9":"1.736914e+02","10":"217.905423","11":"1.864112e+02","12":"110.755492","13":"186.383886","14":"199.632228","15":"97.798714","16":"9.802516e+01","17":"90.8157281","18":"2.266362e+02","19":"154.013885","20":"56.324651","21":"130.222967","22":"301.426129","23":"1.271294e+02","24":"120.65460","25":"213.486102","26":"199.361621","27":"137.941855","28":"1.630681e+02","29":"101.809544","_rn_":"CHRNA10"},{"1":"254.399940","2":"253.453781","3":"291.366235","4":"271.270268","5":"313.486105","6":"346.753633","7":"208.904248","8":"302.512840","9":"4.270296e+02","10":"402.261713","11":"4.192567e+02","12":"241.188690","13":"381.782134","14":"552.218576","15":"213.444459","16":"2.484185e+02","17":"243.8416758","18":"3.820154e+02","19":"286.271862","20":"421.495654","21":"489.883874","22":"601.255867","23":"4.036403e+02","24":"299.60782","25":"403.622898","26":"145.205540","27":"330.577508","28":"2.826651e+02","29":"549.145017","_rn_":"TACO1"},{"1":"0.000000","2":"11.234047","3":"12.109335","4":"18.756652","5":"12.134933","6":"7.464057","7":"19.330725","8":"13.909461","9":"1.347118e+01","10":"13.493307","11":"8.279918e+00","12":"3.544482","13":"4.868367","14":"9.311505","15":"15.846435","16":"1.116485e+01","17":"7.4756105","18":"6.621533e+00","19":"5.016031","20":"0.000000","21":"4.929832","22":"13.904249","23":"0.000000e+00","24":"61.48943","25":"16.977839","26":"0.000000","27":"17.446105","28":"9.454719e-01","29":"9.456307","_rn_":"SLC3A1"},{"1":"0.000000","2":"0.000000","3":"0.000000","4":"2.207571","5":"0.000000","6":"0.000000","7":"2.173201","8":"0.000000","9":"4.467181e+00","10":"0.000000","11":"0.000000e+00","12":"0.000000","13":"0.000000","14":"1.002083","15":"0.000000","16":"9.141087e-01","17":"0.0000000","18":"5.406349e-01","19":"1.544079","20":"0.000000","21":"0.000000","22":"11.900801","23":"0.000000e+00","24":"0.00000","25":"0.000000","26":"0.000000","27":"0.000000","28":"0.000000e+00","29":"9.731740","_rn_":"SLC13A5"},{"1":"9595.833195","2":"10789.477338","3":"13635.768496","4":"28474.637591","5":"16615.951324","6":"13701.273630","7":"13603.222521","8":"20646.258960","9":"1.322420e+04","10":"19421.733954","11":"1.813765e+04","12":"7647.413726","13":"22214.232149","14":"18033.436793","15":"5770.461128","16":"9.975484e+03","17":"6436.6634113","18":"1.989949e+04","19":"12911.157159","20":"15437.572785","21":"21057.809224","22":"30041.080220","23":"1.588465e+04","24":"16931.25390","25":"19719.340313","26":"21800.919991","27":"13135.595955","28":"1.477119e+04","29":"8880.060346","_rn_":"SLC16A3"},{"1":"0.000000","2":"1.228988","3":"18.466566","4":"1.703805","5":"11.833146","6":"19.941276","7":"12.941246","8":"8.904761","9":"1.040279e+01","10":"11.212233","11":"3.296844e+00","12":"3.800509","13":"10.162633","14":"7.163213","15":"4.236601","16":"1.255703e+00","17":"0.6811458","18":"2.365148e+01","19":"1.577225","20":"2.772764","21":"15.219942","22":"8.767794","23":"0.000000e+00","24":"0.00000","25":"2.218436","26":"7.106482","27":"2.796926","28":"0.000000e+00","29":"0.000000","_rn_":"CARD14"},{"1":"888.385263","2":"1020.295410","3":"627.491422","4":"1136.075706","5":"1035.273292","6":"1339.135769","7":"811.052564","8":"584.999925","9":"9.493489e+02","10":"1309.609839","11":"9.358026e+02","12":"590.028148","13":"1050.838250","14":"640.049241","15":"524.273411","16":"7.581540e+02","17":"428.9480223","18":"7.129526e+02","19":"729.899290","20":"1092.894402","21":"1120.373013","22":"794.499162","23":"1.586971e+03","24":"1086.77657","25":"1203.805259","26":"1635.680953","27":"824.949600","28":"4.057694e+02","29":"648.210124","_rn_":"TRPM2"},{"1":"2816.661038","2":"3163.829016","3":"4777.561026","4":"9600.613988","5":"5491.561193","6":"6048.077418","7":"5023.039693","8":"9195.378942","9":"6.034266e+03","10":"8187.869866","11":"8.906448e+03","12":"2308.816429","13":"6510.054452","14":"6923.582257","15":"2150.728655","16":"3.939811e+03","17":"2249.3371448","18":"7.799573e+03","19":"5687.087940","20":"5022.843115","21":"7523.828789","22":"11178.363260","23":"4.464482e+03","24":"6571.47698","25":"8550.572374","26":"10891.555440","27":"4149.331926","28":"5.826652e+03","29":"3407.561258","_rn_":"NLRP12"},{"1":"442.981203","2":"573.965581","3":"379.422312","4":"513.041880","5":"598.938138","6":"858.442746","7":"590.593160","8":"683.629387","9":"1.086520e+03","10":"445.002319","11":"6.661853e+02","12":"471.875112","13":"529.047202","14":"821.543572","15":"474.118695","16":"3.930306e+02","17":"308.2508720","18":"5.309963e+02","19":"537.066827","20":"561.574398","21":"558.633306","22":"1096.326169","23":"6.452391e+02","24":"544.12072","25":"618.329079","26":"306.700526","27":"624.100063","28":"5.666637e+02","29":"969.363426","_rn_":"FCSK"},{"1":"17.995131","2":"7.923227","3":"5.292013","4":"18.905450","5":"4.446078","6":"6.048713","7":"11.083364","8":"4.223217","9":"1.671735e+01","10":"22.822704","11":"1.717881e+01","12":"6.361447","13":"12.205096","14":"12.523207","15":"3.706650","16":"1.640222e+01","17":"7.1694966","18":"9.597481e+00","19":"24.175203","20":"10.747098","21":"0.000000","22":"40.158207","23":"5.202201e+00","24":"14.12070","25":"21.500378","26":"1.022654","27":"11.897370","28":"6.751762e+00","29":"4.219849","_rn_":"PGAM2"},{"1":"21.138781","2":"18.015349","3":"0.000000","4":"70.514136","5":"73.046664","6":"19.236417","7":"24.042454","8":"118.705125","9":"1.282044e+02","10":"87.497461","11":"1.235095e+02","12":"98.795934","13":"39.419526","14":"136.788048","15":"12.941198","16":"3.226335e+01","17":"12.2749240","18":"6.887071e+01","19":"14.701003","20":"20.308024","21":"22.689632","22":"94.416887","23":"3.050247e+01","24":"59.72605","25":"43.610238","26":"79.891425","27":"9.088040","28":"6.318782e+01","29":"47.099352","_rn_":"CHRFAM7A"},{"1":"2735.552515","2":"1124.500199","3":"2626.273402","4":"2303.150548","5":"2086.875979","6":"2128.304732","7":"1123.940305","8":"4090.246846","9":"4.120913e+03","10":"4875.939206","11":"2.877152e+03","12":"1463.498943","13":"8124.287816","14":"4653.718588","15":"1321.607659","16":"1.207700e+03","17":"1155.6136266","18":"3.633788e+03","19":"1495.706206","20":"2869.083821","21":"4173.244865","22":"4941.273984","23":"3.789945e+03","24":"3089.22380","25":"3174.618505","26":"5762.837320","27":"1903.768625","28":"2.406940e+03","29":"1649.191736","_rn_":"NOD2"},{"1":"0.000000","2":"0.000000","3":"0.000000","4":"0.000000","5":"0.000000","6":"0.000000","7":"2.893543","8":"0.000000","9":"0.000000e+00","10":"0.000000","11":"0.000000e+00","12":"0.000000","13":"6.734763","14":"2.193581","15":"0.000000","16":"0.000000e+00","17":"0.6342587","18":"0.000000e+00","19":"0.000000","20":"0.000000","21":"0.000000","22":"0.000000","23":"0.000000e+00","24":"0.00000","25":"0.000000","26":"0.000000","27":"0.000000","28":"0.000000e+00","29":"0.000000","_rn_":"SCNN1B"},{"1":"1181.695038","2":"1338.446269","3":"967.785215","4":"1116.668156","5":"1424.809827","6":"1817.252460","7":"1500.493580","8":"1895.309173","9":"2.380886e+03","10":"1368.762145","11":"1.867884e+03","12":"1227.077150","13":"1265.098898","14":"2239.041458","15":"1215.262417","16":"1.134400e+03","17":"1414.2982231","18":"9.376756e+02","19":"1551.858380","20":"2140.658120","21":"1814.913815","22":"2520.862706","23":"1.504007e+03","24":"1555.54910","25":"1399.280964","26":"814.664860","27":"2503.354274","28":"1.604873e+03","29":"2469.290384","_rn_":"ACAD9"},{"1":"0.000000","2":"0.000000","3":"0.000000","4":"0.000000","5":"1.646037","6":"0.000000","7":"0.000000","8":"0.000000","9":"0.000000e+00","10":"0.000000","11":"4.224352e+00","12":"0.000000","13":"0.000000","14":"2.609011","15":"0.000000","16":"0.000000e+00","17":"0.0000000","18":"0.000000e+00","19":"0.000000","20":"0.000000","21":"0.000000","22":"1.072744","23":"9.506601e-01","24":"0.00000","25":"0.000000","26":"0.000000","27":"0.000000","28":"0.000000e+00","29":"0.000000","_rn_":"CLCNKA"},{"1":"0.000000","2":"23.038105","3":"9.712320","4":"23.139042","5":"23.601222","6":"11.910610","7":"3.888318","8":"25.110559","9":"1.995568e+01","10":"14.358246","11":"6.961501e+00","12":"15.279349","13":"4.781669","14":"3.912201","15":"8.050006","16":"8.892107e+00","17":"6.1997952","18":"1.990531e+00","19":"12.206454","20":"10.181881","21":"18.587616","22":"6.073011","23":"2.005034e+01","24":"72.05354","25":"8.280907","26":"35.781419","27":"3.801355","28":"0.000000e+00","29":"0.000000","_rn_":"CLCN1"},{"1":"161.753797","2":"69.111202","3":"150.323892","4":"80.622358","5":"135.421909","6":"113.802159","7":"53.557780","8":"131.715183","9":"1.091472e+02","10":"131.229194","11":"1.052495e+02","12":"112.501991","13":"120.357371","14":"225.935486","15":"109.936548","16":"1.296353e+02","17":"48.1614680","18":"1.528087e+01","19":"147.103238","20":"119.041034","21":"154.090785","22":"112.955407","23":"2.759285e+02","24":"243.00385","25":"131.955075","26":"269.880981","27":"123.642178","28":"6.742728e+01","29":"136.380386","_rn_":"RYR1"},{"1":"5387.570197","2":"6353.022810","3":"5429.518460","4":"5338.951263","5":"6402.732874","6":"6459.252596","7":"5543.065837","8":"5440.755082","9":"9.448230e+03","10":"6085.820146","11":"8.699591e+03","12":"6294.001641","13":"6320.045619","14":"10226.264881","15":"5967.090756","16":"4.925308e+03","17":"5924.0113657","18":"7.242114e+03","19":"4573.157627","20":"6544.706840","21":"6430.494391","22":"11727.068104","23":"5.249133e+03","24":"5710.46074","25":"6352.429698","26":"2898.219038","27":"6475.578785","28":"5.127992e+03","29":"7259.884507","_rn_":"LRBA"},{"1":"1625.941135","2":"1801.825492","3":"1243.316406","4":"1528.485536","5":"1678.782374","6":"2472.288984","7":"2153.368658","8":"1674.296850","9":"2.576222e+03","10":"1832.273019","11":"2.257282e+03","12":"1676.075191","13":"2219.407716","14":"2784.883889","15":"1629.546939","16":"1.803667e+03","17":"1327.6239193","18":"2.134070e+03","19":"1755.906027","20":"2374.610718","21":"2439.757901","22":"4116.935896","23":"2.140085e+03","24":"2102.81601","25":"1573.823855","26":"1770.679537","27":"2020.309724","28":"1.875075e+03","29":"1938.604560","_rn_":"INF2"}],"options":{"columns":{"min":{},"max":[10]},"rows":{"min":[15],"max":[15]},"pages":{}}}
+{"columns":[{"label":[""],"name":["_rn_"],"type":[""],"align":["left"]},{"label":["4"],"name":[1],"type":["dbl"],"align":["right"]},{"label":["5"],"name":[2],"type":["dbl"],"align":["right"]},{"label":["6"],"name":[3],"type":["dbl"],"align":["right"]},{"label":["7"],"name":[4],"type":["dbl"],"align":["right"]},{"label":["8"],"name":[5],"type":["dbl"],"align":["right"]},{"label":["9"],"name":[6],"type":["dbl"],"align":["right"]},{"label":["10"],"name":[7],"type":["dbl"],"align":["right"]},{"label":["11"],"name":[8],"type":["dbl"],"align":["right"]},{"label":["12"],"name":[9],"type":["dbl"],"align":["right"]},{"label":["13"],"name":[10],"type":["dbl"],"align":["right"]},{"label":["14"],"name":[11],"type":["dbl"],"align":["right"]},{"label":["18"],"name":[12],"type":["dbl"],"align":["right"]},{"label":["19"],"name":[13],"type":["dbl"],"align":["right"]},{"label":["20"],"name":[14],"type":["dbl"],"align":["right"]},{"label":["21"],"name":[15],"type":["dbl"],"align":["right"]},{"label":["22"],"name":[16],"type":["dbl"],"align":["right"]},{"label":["23"],"name":[17],"type":["dbl"],"align":["right"]},{"label":["24"],"name":[18],"type":["dbl"],"align":["right"]},{"label":["25"],"name":[19],"type":["dbl"],"align":["right"]},{"label":["26"],"name":[20],"type":["dbl"],"align":["right"]},{"label":["27"],"name":[21],"type":["dbl"],"align":["right"]},{"label":["28"],"name":[22],"type":["dbl"],"align":["right"]},{"label":["10H"],"name":[23],"type":["dbl"],"align":["right"]},{"label":["11H"],"name":[24],"type":["dbl"],"align":["right"]},{"label":["13H"],"name":[25],"type":["dbl"],"align":["right"]},{"label":["25H"],"name":[26],"type":["dbl"],"align":["right"]},{"label":["26H"],"name":[27],"type":["dbl"],"align":["right"]},{"label":["28_27H"],"name":[28],"type":["dbl"],"align":["right"]},{"label":["9H"],"name":[29],"type":["dbl"],"align":["right"]}],"data":[{"1":"18413.559011","2":"37154.907565","3":"29905.467599","4":"37269.520078","5":"65123.830420","6":"70386.517387","7":"11692.927915","8":"20594.837963","9":"1.288786e+05","10":"49540.841807","11":"1.819237e+05","12":"5.524644e+04","13":"85492.280370","14":"70448.615955","15":"72095.363151","16":"5.947517e+04","17":"5859.6638755","18":"2.740718e+05","19":"8717.629476","20":"68331.154564","21":"29626.637329","22":"29494.586674","23":"2.310700e+04","24":"11006.223225","25":"46656.422138","26":"86179.317173","27":"35174.012033","28":"1.629950e+04","29":"19179.725568","_rn_":"SLC4A1"},{"1":"0.000000","2":"0.000000","3":"0.000000","4":"0.000000","5":"0.000000","6":"0.000000","7":"0.000000","8":"0.000000","9":"1.632462e+00","10":"1.030403","11":"0.000000e+00","12":"7.052327e+00","13":"0.000000","14":"0.000000","15":"0.000000","16":"0.000000e+00","17":"0.0000000","18":"0.000000e+00","19":"0.000000","20":"0.000000","21":"0.000000","22":"0.000000","23":"0.000000e+00","24":"0.000000","25":"1.608435","26":"0.000000","27":"0.000000","28":"0.000000e+00","29":"0.000000","_rn_":"CACNA1G"},{"1":"0.000000","2":"0.000000","3":"0.000000","4":"0.000000","5":"0.000000","6":"0.000000","7":"0.000000","8":"0.000000","9":"0.000000e+00","10":"0.000000","11":"0.000000e+00","12":"0.000000e+00","13":"0.000000","14":"0.000000","15":"0.000000","16":"0.000000e+00","17":"0.0000000","18":"0.000000e+00","19":"0.000000","20":"0.000000","21":"0.000000","22":"0.000000","23":"0.000000e+00","24":"0.000000","25":"0.000000","26":"0.000000","27":"0.000000","28":"0.000000e+00","29":"0.000000","_rn_":"C6"},{"1":"9.075933","2":"20.535213","3":"20.817857","4":"10.299503","5":"30.686296","6":"108.438888","7":"64.011776","8":"14.516938","9":"3.585940e+01","10":"21.124614","11":"2.596236e+01","12":"1.409315e+01","13":"34.199203","14":"17.582618","15":"14.001306","16":"3.173719e+01","17":"25.8651867","18":"4.952495e+00","19":"26.020176","20":"47.429881","21":"20.610677","22":"33.687060","23":"1.357002e+02","24":"11.728961","25":"37.974730","26":"0.000000","27":"27.905433","28":"5.212373e+01","29":"19.647406","_rn_":"SLC12A3"},{"1":"1062.300434","2":"818.307877","3":"689.445570","4":"710.525923","5":"1048.445092","6":"1013.525460","7":"919.501350","8":"1536.506845","9":"1.543077e+03","10":"850.968933","11":"2.138352e+03","12":"7.329152e+02","13":"989.450301","14":"1593.910012","15":"805.445488","16":"9.285314e+02","17":"823.8140420","18":"8.607010e+02","19":"808.836044","20":"671.581926","21":"861.653799","22":"1626.712005","23":"1.626308e+03","24":"1418.557829","25":"1162.484962","26":"306.542300","27":"1137.447176","28":"1.130615e+03","29":"1611.803806","_rn_":"ACACB"},{"1":"0.000000","2":"0.000000","3":"0.000000","4":"0.000000","5":"0.000000","6":"0.000000","7":"0.000000","8":"0.000000","9":"0.000000e+00","10":"0.000000","11":"0.000000e+00","12":"0.000000e+00","13":"0.000000","14":"0.000000","15":"0.000000","16":"0.000000e+00","17":"0.0000000","18":"0.000000e+00","19":"0.000000","20":"0.000000","21":"0.000000","22":"0.000000","23":"0.000000e+00","24":"0.000000","25":"0.000000","26":"0.000000","27":"0.000000","28":"0.000000e+00","29":"0.000000","_rn_":"CACNA1S"},{"1":"788.753549","2":"835.097894","3":"1253.411021","4":"2263.971205","5":"1381.257207","6":"1541.866757","7":"1255.515991","8":"1081.130021","9":"1.287859e+03","10":"2006.640998","11":"1.909900e+03","12":"7.747726e+02","13":"2603.407664","14":"1970.990233","15":"612.513156","16":"8.027249e+02","17":"767.4039262","18":"2.823940e+03","19":"927.649788","20":"1255.373720","21":"945.329893","22":"1755.635024","23":"1.179051e+03","24":"1174.040593","25":"2215.654658","26":"1881.252344","27":"1079.710083","28":"8.124181e+02","29":"1104.140305","_rn_":"NLRC4"},{"1":"0.000000","2":"0.000000","3":"0.000000","4":"1.085422","5":"0.000000","6":"0.000000","7":"0.000000","8":"0.000000","9":"0.000000e+00","10":"0.000000","11":"0.000000e+00","12":"0.000000e+00","13":"0.000000","14":"0.000000","15":"0.000000","16":"0.000000e+00","17":"2.9396430","18":"0.000000e+00","19":"0.000000","20":"1.920892","21":"0.000000","22":"0.000000","23":"0.000000e+00","24":"0.000000","25":"0.000000","26":"0.000000","27":"0.000000","28":"0.000000e+00","29":"0.000000","_rn_":"MYH7"},{"1":"7932.458843","2":"7254.237848","3":"8833.315727","4":"7489.761901","5":"10995.004437","6":"10873.875758","7":"8187.040331","8":"9886.053952","9":"1.588488e+04","10":"10010.770750","11":"1.111862e+04","12":"6.731531e+03","13":"9598.274061","14":"11841.362910","15":"7039.720102","16":"7.439721e+03","17":"6591.3404498","18":"8.011283e+03","19":"8268.051202","20":"11582.869188","21":"11630.711462","22":"17184.531486","23":"9.277256e+03","24":"10650.990023","25":"9550.378338","26":"6443.944584","27":"10505.064061","28":"9.456160e+03","29":"11429.155317","_rn_":"SBF1"},{"1":"142.434866","2":"130.146948","3":"136.293246","4":"80.692736","5":"154.980101","6":"274.710410","7":"183.807134","8":"153.781359","9":"1.866005e+02","10":"124.933315","11":"1.730426e+02","12":"8.408049e+01","13":"120.939944","14":"225.644946","15":"106.842703","16":"8.030370e+01","17":"105.9262431","18":"1.281893e+02","19":"115.300692","20":"154.901099","21":"218.125713","22":"237.923581","23":"2.492694e+02","24":"148.819746","25":"93.480741","26":"83.549239","27":"186.347512","28":"1.148204e+02","29":"245.157426","_rn_":"HAGHL"},{"1":"4.567232","2":"3.470169","3":"1.589024","4":"0.000000","5":"1.263354","6":"0.000000","7":"0.000000","8":"0.000000","9":"1.201768e+00","10":"1.223673","11":"1.183274e+00","12":"0.000000e+00","13":"1.270854","14":"3.833963","15":"0.000000","16":"0.000000e+00","17":"0.0000000","18":"6.196551e+00","19":"0.000000","20":"0.000000","21":"0.000000","22":"1.186347","23":"0.000000e+00","24":"0.000000","25":"0.000000","26":"0.000000","27":"0.000000","28":"0.000000e+00","29":"0.000000","_rn_":"MYH14"},{"1":"713.442059","2":"385.998711","3":"569.254295","4":"608.932952","5":"479.415800","6":"730.810821","7":"828.389234","8":"917.911584","9":"8.373560e+02","10":"688.849676","11":"8.275453e+02","12":"4.159466e+02","13":"642.230717","14":"971.403731","15":"746.302416","16":"7.061477e+02","17":"565.7279499","18":"5.358893e+02","19":"250.016155","20":"709.477548","21":"654.876636","22":"1022.666798","23":"5.659908e+02","24":"861.125078","25":"614.310885","26":"439.406561","27":"958.777208","28":"9.605722e+02","29":"539.957087","_rn_":"CUBN"},{"1":"76.289141","2":"70.750718","3":"60.340725","4":"40.012201","5":"117.769337","6":"96.516506","7":"86.771197","8":"101.670688","9":"2.228812e+02","10":"118.494345","11":"1.220687e+02","12":"1.090150e+02","13":"128.068220","14":"142.458684","15":"143.874115","16":"1.025198e+02","17":"109.5204929","18":"1.177443e+02","19":"102.346193","20":"118.451891","21":"133.561863","22":"246.159651","23":"1.476159e+02","24":"124.785171","25":"116.593626","26":"130.323871","27":"182.708586","28":"1.019817e+02","29":"185.237880","_rn_":"ENO3"},{"1":"91.268952","2":"53.420116","3":"38.418425","4":"175.063446","5":"133.740410","6":"63.009497","7":"80.625531","8":"105.671914","9":"1.239286e+02","10":"112.335556","11":"1.243973e+02","12":"4.948774e+01","13":"58.463509","14":"140.923168","15":"46.698967","16":"6.173562e+01","17":"42.9579221","18":"4.760082e+01","19":"115.849543","20":"111.384814","21":"115.489067","22":"122.427577","23":"4.873094e+01","24":"71.778129","25":"71.960057","26":"214.005369","27":"96.498993","28":"1.210786e+02","29":"126.734494","_rn_":"CHRNE"},{"1":"152.142907","2":"181.843280","3":"189.522945","4":"183.562606","5":"202.290378","6":"283.609606","7":"216.425055","8":"107.491097","9":"2.964571e+02","10":"185.100959","11":"3.909292e+02","12":"1.711034e+02","13":"298.059754","14":"406.359233","15":"232.715438","16":"2.273287e+02","17":"174.3662640","18":"4.577276e+02","19":"216.549341","20":"290.560480","21":"164.055070","22":"407.544264","23":"2.600964e+02","24":"250.128910","25":"235.487776","26":"537.356780","27":"189.806713","28":"1.725613e+02","29":"205.308627","_rn_":"SIAE"},{"1":"2861.536153","2":"2617.759994","3":"2760.587249","4":"2380.200522","5":"3661.180142","6":"3309.428696","7":"3152.433536","8":"3063.883451","9":"6.221585e+03","10":"3454.669874","11":"5.223174e+03","12":"2.557858e+03","13":"3341.819268","14":"4809.972672","15":"3065.422645","16":"2.694258e+03","17":"2418.2177052","18":"3.319698e+03","19":"2840.429573","20":"3455.830925","21":"3554.732808","22":"6069.418757","23":"3.420021e+03","24":"3817.025633","25":"3634.392182","26":"2115.144691","27":"3772.533141","28":"3.251596e+03","29":"3321.420757","_rn_":"MADD"},{"1":"484.638599","2":"624.074544","3":"509.470263","4":"1358.960641","5":"659.793538","6":"469.050983","7":"551.748687","8":"787.001660","9":"5.072710e+02","10":"1094.423958","11":"9.810169e+02","12":"3.010140e+02","13":"825.234355","14":"686.519878","15":"195.553000","16":"4.734371e+02","17":"361.7540403","18":"9.244881e+02","19":"539.063292","20":"275.681996","21":"1057.836568","22":"1343.560097","23":"4.685272e+02","24":"433.811061","25":"1108.608018","26":"884.581155","27":"390.275218","28":"5.354038e+02","29":"386.004627","_rn_":"CFAP92"},{"1":"1127.179235","2":"857.179242","3":"721.495001","4":"824.679648","5":"956.037910","6":"993.833257","7":"903.658758","8":"776.180378","9":"1.323546e+03","10":"944.048960","11":"1.550434e+03","12":"9.330945e+02","13":"1105.063785","14":"1730.721949","15":"884.605918","16":"7.532732e+02","17":"1313.7113453","18":"1.338929e+03","19":"808.387534","20":"1112.815958","21":"734.010586","22":"1549.289819","23":"9.764989e+02","24":"947.863123","25":"1145.538335","26":"742.660376","27":"1230.561907","28":"8.268803e+02","29":"1465.828954","_rn_":"ACADM"},{"1":"187.329941","2":"325.410239","3":"174.812380","4":"249.518522","5":"369.949124","6":"212.859620","7":"298.686667","8":"95.789864","9":"1.742035e+02","10":"152.515328","11":"3.249609e+02","12":"2.579675e+02","13":"266.462801","14":"459.400769","15":"345.272057","16":"1.813451e+02","17":"310.9734945","18":"1.618706e+02","19":"130.558303","20":"607.463496","21":"242.028356","22":"700.472549","23":"1.306034e+02","24":"17.551163","25":"139.038511","26":"21.312699","27":"236.020105","28":"1.719474e+02","29":"95.646722","_rn_":"CR2"},{"1":"151.331836","2":"171.847138","3":"138.169608","4":"121.132605","5":"220.308491","6":"154.759873","7":"284.600152","8":"189.246613","9":"3.385679e+02","10":"416.972167","11":"2.706268e+02","12":"8.886948e+01","13":"229.975341","14":"346.218821","15":"204.744989","16":"1.311001e+02","17":"83.7335548","18":"3.503489e+02","19":"130.155476","20":"369.481654","21":"128.881148","22":"273.376322","23":"1.376684e+02","24":"101.061680","25":"172.743924","26":"236.574096","27":"519.265362","28":"9.683763e+01","29":"113.572210","_rn_":"CENPF"},{"1":"53.584460","2":"47.680681","3":"45.468460","4":"57.142839","5":"55.914331","6":"58.738406","7":"106.036461","8":"29.571657","9":"4.940112e+01","10":"51.118231","11":"9.411371e+01","12":"6.437089e+01","13":"44.396944","14":"120.043382","15":"42.645956","16":"3.541889e+01","17":"98.1855005","18":"6.445648e+01","19":"45.215958","20":"32.520734","21":"51.833553","22":"48.821798","23":"6.165953e+01","24":"7.674580","25":"33.891634","26":"13.846146","27":"14.438947","28":"2.014471e+01","29":"41.970576","_rn_":"ELOVL4"},{"1":"79.286921","2":"100.662839","3":"80.633155","4":"257.527769","5":"172.357928","6":"157.484851","7":"139.497511","8":"234.414531","9":"1.736914e+02","10":"217.905423","11":"1.864112e+02","12":"1.107555e+02","13":"186.383886","14":"199.632228","15":"97.798714","16":"9.802516e+01","17":"90.8157281","18":"2.266362e+02","19":"154.013885","20":"56.324651","21":"130.222967","22":"301.426129","23":"1.271294e+02","24":"120.654603","25":"213.486102","26":"199.361621","27":"137.941855","28":"1.630681e+02","29":"101.809544","_rn_":"CHRNA10"},{"1":"1.696674","2":"53.761035","3":"100.063698","4":"155.648804","5":"160.795642","6":"30.250001","7":"136.337579","8":"247.038401","9":"7.057621e+01","10":"77.011781","11":"6.475814e+02","12":"2.439942e+01","13":"52.958182","14":"30.860914","15":"1.227918","16":"4.753179e+01","17":"6.4099365","18":"1.491739e+01","19":"119.381454","20":"98.693860","21":"73.678320","22":"20.280698","23":"6.663797e+01","24":"156.830507","25":"50.126319","26":"141.075057","27":"265.448159","28":"6.589102e+01","29":"23.747481","_rn_":"CACNG6"},{"1":"254.399940","2":"253.453781","3":"291.366235","4":"271.270268","5":"313.486105","6":"346.753633","7":"208.904248","8":"302.512840","9":"4.270296e+02","10":"402.261713","11":"4.192567e+02","12":"2.411887e+02","13":"381.782134","14":"552.218576","15":"213.444459","16":"2.484185e+02","17":"243.8416758","18":"3.820154e+02","19":"286.271862","20":"421.495654","21":"489.883874","22":"601.255867","23":"4.036403e+02","24":"299.607824","25":"403.622898","26":"145.205540","27":"330.577508","28":"2.826651e+02","29":"549.145017","_rn_":"TACO1"},{"1":"0.000000","2":"11.234047","3":"12.109335","4":"18.756652","5":"12.134933","6":"7.464057","7":"19.330725","8":"13.909461","9":"1.347118e+01","10":"13.493307","11":"8.279918e+00","12":"3.544482e+00","13":"4.868367","14":"9.311505","15":"15.846435","16":"1.116485e+01","17":"7.4756105","18":"6.621533e+00","19":"5.016031","20":"0.000000","21":"4.929832","22":"13.904249","23":"0.000000e+00","24":"61.489435","25":"16.977839","26":"0.000000","27":"17.446105","28":"9.454719e-01","29":"9.456307","_rn_":"SLC3A1"},{"1":"0.000000","2":"0.000000","3":"0.000000","4":"2.207571","5":"0.000000","6":"0.000000","7":"2.173201","8":"0.000000","9":"4.467181e+00","10":"0.000000","11":"0.000000e+00","12":"0.000000e+00","13":"0.000000","14":"1.002083","15":"0.000000","16":"9.141087e-01","17":"0.0000000","18":"5.406349e-01","19":"1.544079","20":"0.000000","21":"0.000000","22":"11.900801","23":"0.000000e+00","24":"0.000000","25":"0.000000","26":"0.000000","27":"0.000000","28":"0.000000e+00","29":"9.731740","_rn_":"SLC13A5"},{"1":"9595.833195","2":"10789.477338","3":"13635.768496","4":"28474.637591","5":"16615.951324","6":"13701.273630","7":"13603.222521","8":"20646.258960","9":"1.322420e+04","10":"19421.733954","11":"1.813765e+04","12":"7.647414e+03","13":"22214.232149","14":"18033.436793","15":"5770.461128","16":"9.975484e+03","17":"6436.6634113","18":"1.989949e+04","19":"12911.157159","20":"15437.572785","21":"21057.809224","22":"30041.080220","23":"1.588465e+04","24":"16931.253902","25":"19719.340313","26":"21800.919991","27":"13135.595955","28":"1.477119e+04","29":"8880.060346","_rn_":"SLC16A3"},{"1":"0.000000","2":"1.228988","3":"18.466566","4":"1.703805","5":"11.833146","6":"19.941276","7":"12.941246","8":"8.904761","9":"1.040279e+01","10":"11.212233","11":"3.296844e+00","12":"3.800509e+00","13":"10.162633","14":"7.163213","15":"4.236601","16":"1.255703e+00","17":"0.6811458","18":"2.365148e+01","19":"1.577225","20":"2.772764","21":"15.219942","22":"8.767794","23":"0.000000e+00","24":"0.000000","25":"2.218436","26":"7.106482","27":"2.796926","28":"0.000000e+00","29":"0.000000","_rn_":"CARD14"},{"1":"888.385263","2":"1020.295410","3":"627.491422","4":"1136.075706","5":"1035.273292","6":"1339.135769","7":"811.052564","8":"584.999925","9":"9.493489e+02","10":"1309.609839","11":"9.358026e+02","12":"5.900281e+02","13":"1050.838250","14":"640.049241","15":"524.273411","16":"7.581540e+02","17":"428.9480223","18":"7.129526e+02","19":"729.899290","20":"1092.894402","21":"1120.373013","22":"794.499162","23":"1.586971e+03","24":"1086.776566","25":"1203.805259","26":"1635.680953","27":"824.949600","28":"4.057694e+02","29":"648.210124","_rn_":"TRPM2"},{"1":"2816.661038","2":"3163.829016","3":"4777.561026","4":"9600.613988","5":"5491.561193","6":"6048.077418","7":"5023.039693","8":"9195.378942","9":"6.034266e+03","10":"8187.869866","11":"8.906448e+03","12":"2.308816e+03","13":"6510.054452","14":"6923.582257","15":"2150.728655","16":"3.939811e+03","17":"2249.3371448","18":"7.799573e+03","19":"5687.087940","20":"5022.843115","21":"7523.828789","22":"11178.363260","23":"4.464482e+03","24":"6571.476983","25":"8550.572374","26":"10891.555440","27":"4149.331926","28":"5.826652e+03","29":"3407.561258","_rn_":"NLRP12"},{"1":"6776.526280","2":"7679.432448","3":"8070.816795","4":"14748.686603","5":"8341.036795","6":"9520.512092","7":"8751.187121","8":"11242.043297","9":"9.796784e+03","10":"15060.491666","11":"1.398725e+04","12":"5.364584e+03","13":"13254.477506","14":"12365.916109","15":"4532.720684","16":"5.761925e+03","17":"4110.8372318","18":"1.205403e+04","19":"7189.393331","20":"8377.772513","21":"12130.659686","22":"15780.137971","23":"8.751368e+03","24":"9945.474576","25":"12634.821906","26":"12947.989103","27":"7092.638650","28":"8.888104e+03","29":"7945.712895","_rn_":"SLC12A9"},{"1":"0.000000","2":"6.087859","3":"1.896604","4":"1.187205","5":"1.753648","6":"6.355633","7":"0.000000","8":"0.853664","9":"4.766054e+00","10":"1.061271","11":"1.003460e+00","12":"9.840591e-01","13":"4.645586","14":"8.192732","15":"1.981425","16":"9.620631e-01","17":"4.7783658","18":"1.232053e+00","19":"3.260698","20":"4.410976","21":"7.702236","22":"1.919039","23":"2.156278e+00","24":"1.145494","25":"7.472596","26":"0.000000","27":"0.000000","28":"0.000000e+00","29":"0.000000","_rn_":"CACNA1B"},{"1":"442.981203","2":"573.965581","3":"379.422312","4":"513.041880","5":"598.938138","6":"858.442746","7":"590.593160","8":"683.629387","9":"1.086520e+03","10":"445.002319","11":"6.661853e+02","12":"4.718751e+02","13":"529.047202","14":"821.543572","15":"474.118695","16":"3.930306e+02","17":"308.2508720","18":"5.309963e+02","19":"537.066827","20":"561.574398","21":"558.633306","22":"1096.326169","23":"6.452391e+02","24":"544.120725","25":"618.329079","26":"306.700526","27":"624.100063","28":"5.666637e+02","29":"969.363426","_rn_":"FCSK"},{"1":"17.995131","2":"7.923227","3":"5.292013","4":"18.905450","5":"4.446078","6":"6.048713","7":"11.083364","8":"4.223217","9":"1.671735e+01","10":"22.822704","11":"1.717881e+01","12":"6.361447e+00","13":"12.205096","14":"12.523207","15":"3.706650","16":"1.640222e+01","17":"7.1694966","18":"9.597481e+00","19":"24.175203","20":"10.747098","21":"0.000000","22":"40.158207","23":"5.202201e+00","24":"14.120704","25":"21.500378","26":"1.022654","27":"11.897370","28":"6.751762e+00","29":"4.219849","_rn_":"PGAM2"},{"1":"21.138781","2":"18.015349","3":"0.000000","4":"70.514136","5":"73.046664","6":"19.236417","7":"24.042454","8":"118.705125","9":"1.282044e+02","10":"87.497461","11":"1.235095e+02","12":"9.879593e+01","13":"39.419526","14":"136.788048","15":"12.941198","16":"3.226335e+01","17":"12.2749240","18":"6.887071e+01","19":"14.701003","20":"20.308024","21":"22.689632","22":"94.416887","23":"3.050247e+01","24":"59.726052","25":"43.610238","26":"79.891425","27":"9.088040","28":"6.318782e+01","29":"47.099352","_rn_":"CHRFAM7A"},{"1":"2735.552515","2":"1124.500199","3":"2626.273402","4":"2303.150548","5":"2086.875979","6":"2128.304732","7":"1123.940305","8":"4090.246846","9":"4.120913e+03","10":"4875.939206","11":"2.877152e+03","12":"1.463499e+03","13":"8124.287816","14":"4653.718588","15":"1321.607659","16":"1.207700e+03","17":"1155.6136266","18":"3.633788e+03","19":"1495.706206","20":"2869.083821","21":"4173.244865","22":"4941.273984","23":"3.789945e+03","24":"3089.223799","25":"3174.618505","26":"5762.837320","27":"1903.768625","28":"2.406940e+03","29":"1649.191736","_rn_":"NOD2"},{"1":"0.000000","2":"0.000000","3":"0.000000","4":"0.000000","5":"0.000000","6":"0.000000","7":"2.893543","8":"0.000000","9":"0.000000e+00","10":"0.000000","11":"0.000000e+00","12":"0.000000e+00","13":"6.734763","14":"2.193581","15":"0.000000","16":"0.000000e+00","17":"0.6342587","18":"0.000000e+00","19":"0.000000","20":"0.000000","21":"0.000000","22":"0.000000","23":"0.000000e+00","24":"0.000000","25":"0.000000","26":"0.000000","27":"0.000000","28":"0.000000e+00","29":"0.000000","_rn_":"SCNN1B"},{"1":"1181.695038","2":"1338.446269","3":"967.785215","4":"1116.668156","5":"1424.809827","6":"1817.252460","7":"1500.493580","8":"1895.309173","9":"2.380886e+03","10":"1368.762145","11":"1.867884e+03","12":"1.227077e+03","13":"1265.098898","14":"2239.041458","15":"1215.262417","16":"1.134400e+03","17":"1414.2982231","18":"9.376756e+02","19":"1551.858380","20":"2140.658120","21":"1814.913815","22":"2520.862706","23":"1.504007e+03","24":"1555.549098","25":"1399.280964","26":"814.664860","27":"2503.354274","28":"1.604873e+03","29":"2469.290384","_rn_":"ACAD9"},{"1":"0.000000","2":"0.000000","3":"0.000000","4":"0.000000","5":"1.646037","6":"0.000000","7":"0.000000","8":"0.000000","9":"0.000000e+00","10":"0.000000","11":"4.224352e+00","12":"0.000000e+00","13":"0.000000","14":"2.609011","15":"0.000000","16":"0.000000e+00","17":"0.0000000","18":"0.000000e+00","19":"0.000000","20":"0.000000","21":"0.000000","22":"1.072744","23":"9.506601e-01","24":"0.000000","25":"0.000000","26":"0.000000","27":"0.000000","28":"0.000000e+00","29":"0.000000","_rn_":"CLCNKA"},{"1":"0.000000","2":"23.038105","3":"9.712320","4":"23.139042","5":"23.601222","6":"11.910610","7":"3.888318","8":"25.110559","9":"1.995568e+01","10":"14.358246","11":"6.961501e+00","12":"1.527935e+01","13":"4.781669","14":"3.912201","15":"8.050006","16":"8.892107e+00","17":"6.1997952","18":"1.990531e+00","19":"12.206454","20":"10.181881","21":"18.587616","22":"6.073011","23":"2.005034e+01","24":"72.053537","25":"8.280907","26":"35.781419","27":"3.801355","28":"0.000000e+00","29":"0.000000","_rn_":"CLCN1"},{"1":"161.753797","2":"69.111202","3":"150.323892","4":"80.622358","5":"135.421909","6":"113.802159","7":"53.557780","8":"131.715183","9":"1.091472e+02","10":"131.229194","11":"1.052495e+02","12":"1.125020e+02","13":"120.357371","14":"225.935486","15":"109.936548","16":"1.296353e+02","17":"48.1614680","18":"1.528087e+01","19":"147.103238","20":"119.041034","21":"154.090785","22":"112.955407","23":"2.759285e+02","24":"243.003849","25":"131.955075","26":"269.880981","27":"123.642178","28":"6.742728e+01","29":"136.380386","_rn_":"RYR1"},{"1":"150.595016","2":"155.430592","3":"241.813398","4":"342.826837","5":"424.134020","6":"776.084146","7":"372.753874","8":"379.073191","9":"8.369385e+02","10":"537.485290","11":"7.615646e+02","12":"1.917086e+02","13":"470.928183","14":"658.974635","15":"220.546454","16":"2.196690e+02","17":"1148.4905798","18":"9.066298e+02","19":"226.878149","20":"674.647719","21":"484.850019","22":"891.989430","23":"3.457686e+02","24":"339.657449","25":"624.809935","26":"405.324752","27":"519.609659","28":"4.550096e+02","29":"2153.390185","_rn_":"TOMM7"},{"1":"5387.570197","2":"6353.022810","3":"5429.518460","4":"5338.951263","5":"6402.732874","6":"6459.252596","7":"5543.065837","8":"5440.755082","9":"9.448230e+03","10":"6085.820146","11":"8.699591e+03","12":"6.294002e+03","13":"6320.045619","14":"10226.264881","15":"5967.090756","16":"4.925308e+03","17":"5924.0113657","18":"7.242114e+03","19":"4573.157627","20":"6544.706840","21":"6430.494391","22":"11727.068104","23":"5.249133e+03","24":"5710.460739","25":"6352.429698","26":"2898.219038","27":"6475.578785","28":"5.127992e+03","29":"7259.884507","_rn_":"LRBA"},{"1":"1625.941135","2":"1801.825492","3":"1243.316406","4":"1528.485536","5":"1678.782374","6":"2472.288984","7":"2153.368658","8":"1674.296850","9":"2.576222e+03","10":"1832.273019","11":"2.257282e+03","12":"1.676075e+03","13":"2219.407716","14":"2784.883889","15":"1629.546939","16":"1.803667e+03","17":"1327.6239193","18":"2.134070e+03","19":"1755.906027","20":"2374.610718","21":"2439.757901","22":"4116.935896","23":"2.140085e+03","24":"2102.816005","25":"1573.823855","26":"1770.679537","27":"2020.309724","28":"1.875075e+03","29":"1938.604560","_rn_":"INF2"},{"1":"0.000000","2":"0.000000","3":"0.000000","4":"0.000000","5":"0.000000","6":"0.000000","7":"0.000000","8":"0.000000","9":"0.000000e+00","10":"0.000000","11":"0.000000e+00","12":"0.000000e+00","13":"0.000000","14":"0.000000","15":"0.000000","16":"0.000000e+00","17":"0.0000000","18":"0.000000e+00","19":"0.000000","20":"0.000000","21":"0.000000","22":"0.000000","23":"0.000000e+00","24":"0.000000","25":"0.000000","26":"0.000000","27":"0.000000","28":"0.000000e+00","29":"0.000000","_rn_":"KCNJ18"}],"options":{"columns":{"min":{},"max":[10]},"rows":{"min":[15],"max":[15]},"pages":{}}}
   </script>
 </div>
 <div id="save-data" class="section level3">
@@ -2173,7 +1732,7 @@ loaded via a namespace (and not attached):
 [142] circlize_0.4.16          locfit_1.5-9.9           ps_1.7.6                
 [145] igraph_2.0.3             ggsignif_0.6.4           reshape2_1.4.4          
 [148] XML_3.99-0.16.1          evaluate_0.23            renv_1.0.7              
-[151] BiocManager_1.30.22      tzdb_0.4.0               foreach_1.5.2           
+[151] BiocManager_1.30.23      tzdb_0.4.0               foreach_1.5.2           
 [154] tweenr_2.0.3             httpuv_1.6.14            polyclip_1.10-6         
 [157] clue_0.3-65              ggforce_0.4.2            broom_1.0.5             
 [160] xtable_1.8-4             restfulr_0.0.15          reactome.db_1.84.0      
