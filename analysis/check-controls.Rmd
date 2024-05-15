@@ -63,7 +63,7 @@ for the project which is hosted on Box. This also ensures data is properly order
 counts <- read_tsv("data/star-salmon/salmon.merged.gene_counts_length_scaled.tsv")
 
 # Import variants of interest
-genes_of_interest <- read_csv("data/Patient_Genes_2024_04_19.csv")
+genes_of_interest <- read_csv("data/Prioritized_Genes_From_WGS_2024_04_25.csv")
 genes_of_interest <- unique(genes_of_interest$Genes)
 genes_of_interest <- genes_of_interest[!is.na(genes_of_interest)]
 
@@ -164,7 +164,6 @@ pheatmap(sample_dist_matrix_all, clustering_distance_rows = sample_dists_all,
 ```
 
 ### Principal Components Analysis
-
 
 ```{r, principal-components-analysis-all}
 pca_data_all <- plotPCA(vsd_limma, intgroup = c("Batch", "Affected", "Sex"), 
@@ -292,7 +291,6 @@ ann_colors2 <- list(
 )
 ```
 
-
 This is a heatmap of the top 50 genes with the highest variance across samples
 
 ```{r, top50-heatmap-batch-combined, out.height="570px", out.width ="800px"}
@@ -317,7 +315,6 @@ ComplexHeatmap::pheatmap(mat,
   fontsize = 5, angle_col = c("0")
 )
 ```
-
 
 This is a heatmap of the top 50 genes with the highest variance across all samples.
 
@@ -371,7 +368,7 @@ pheatmap(mat_100_all, annotation_col = df_100_all,
 ### Comparison/Contrast of Unaffected Groups
 
 ```{r}
-res_unaff_vs_unaff_sub <- results(dds, contrast = c("Affected", "Unaffected1", "Unaffected2"))
+res_unaff_vs_unaff_sub <- results(dds, contrast = c("Affected", "Unaffected1", "Affected"))
 res_unaff_vs_unaff_df_sub <- process_and_save_results(
   res_unaff_vs_unaff_sub,
   "output/res_unaff_vs_unaff_sub.csv"
@@ -384,8 +381,36 @@ summary(res_unaff_vs_unaff_sub)
 ```
 
 
-```{r, top-100-genes-deseq-subsetted, out.height="570px", out.width ="800px"}
-topgenes_byensemblid_sub <- head(rownames(res_unaff_vs_unaff_df_sub), 31)
+```{r, significant-genes-deseq, out.height="570px", out.width ="800px"}
+topgenes_byensemblid_sub <- head(rownames(res_unaff_vs_unaff_df_sub), 98)
+topgenes_unaff_vs_unaff_05_sub <- assay(vsd_limma)[topgenes_byensemblid_sub, ]
+topgenes_unaff_vs_unaff_05_sub <- topgenes_unaff_vs_unaff_05_sub - rowMeans(topgenes_unaff_vs_unaff_05_sub)
+
+keep_controls <- c("11H", "10H", "13H", "26H", "28_27H", "9H", "25H")
+
+ensembl_to_gene_sub <- setNames(gene_info$gene_name, gene_info$Ensembl_ID)
+
+# Get the current row names of the matrix 'mat'
+current_ensembl_ids_sub <- rownames(topgenes_unaff_vs_unaff_05_sub)
+
+# Find the corresponding gene names for the Ensembl IDs
+new_row_names_sub <- ensembl_to_gene_sub[current_ensembl_ids_sub]
+
+# Set the new row names for the matrix 'mat'
+rownames(topgenes_unaff_vs_unaff_05_sub) <- new_row_names_sub
+
+topgenes_unaff_vs_unaff_05_sub <- topgenes_unaff_vs_unaff_05_sub[order(row.names(topgenes_unaff_vs_unaff_05_sub)), ]
+
+df_sub <- as.data.frame(colData(vsd_limma)[, c("Affected", "CombinedCategory")])
+
+#df_sub <- df_sub[rownames(df_sub) %in% keep_controls, ]
+#topgenes_unaff_vs_unaff_05_sub <- topgenes_unaff_vs_unaff_05_sub[ ,keep_controls]
+
+pheatmap(topgenes_unaff_vs_unaff_05_sub, annotation_col = df_sub, annotation_colors = ann_colors2, fontsize = 5, angle_col = c("0"))
+```
+
+```{r, top50-genes-deseq, out.height="570px", out.width ="800px"}
+topgenes_byensemblid_sub <- head(rownames(res_unaff_vs_unaff_df_sub), 50)
 topgenes_unaff_vs_unaff_05_sub <- assay(vsd_limma)[topgenes_byensemblid_sub, ]
 topgenes_unaff_vs_unaff_05_sub <- topgenes_unaff_vs_unaff_05_sub - rowMeans(topgenes_unaff_vs_unaff_05_sub)
 
@@ -407,204 +432,12 @@ topgenes_unaff_vs_unaff_05_sub <- topgenes_unaff_vs_unaff_05_sub[order(row.names
 df_sub <- as.data.frame(colData(vsd_limma)[, c("Affected", "CombinedCategory")])
 
 df_sub <- df_sub[rownames(df_sub) %in% keep_controls, ]
-topgenes_unaff_vs_unaff_05_sub <- topgenes_unaff_vs_unaff_05_sub[,keep_controls]
+topgenes_unaff_vs_unaff_05_sub <- topgenes_unaff_vs_unaff_05_sub[ ,keep_controls]
 
 pheatmap(topgenes_unaff_vs_unaff_05_sub, annotation_col = df_sub, annotation_colors = ann_colors2, fontsize = 5, angle_col = c("0"))
 ```
 
-```{r, top-100-genes-deseq-subsetted-subcategory, out.height="570px", out.width ="800px"}
-topgenes_byensemblid_sub <- head(rownames(res_unaff_vs_unaff_df_sub), 100)
-topgenes_unaff_vs_unaff_05_sub <- assay(vsd_limma)[topgenes_byensemblid_sub, ]
-topgenes_unaff_vs_unaff_05_sub <- topgenes_unaff_vs_unaff_05_sub - rowMeans(topgenes_unaff_vs_unaff_05_sub)
 
-ensembl_to_gene_sub <- setNames(gene_info$gene_name, gene_info$Ensembl_ID)
-
-# Get the current row names of the matrix 'mat'
-current_ensembl_ids_sub <- rownames(topgenes_unaff_vs_unaff_05_sub)
-
-# Find the corresponding gene names for the Ensembl IDs
-new_row_names_sub <- ensembl_to_gene_sub[current_ensembl_ids_sub]
-
-# Set the new row names for the matrix 'mat'
-rownames(topgenes_unaff_vs_unaff_05_sub) <- new_row_names_sub
-
-topgenes_unaff_vs_unaff_05_sub <- topgenes_unaff_vs_unaff_05_sub[order(row.names(topgenes_unaff_vs_unaff_05_sub)), ]
-
-df_sub <- as.data.frame(colData(vsd_limma)[, c("Affected", "SubCategory", "CombinedCategory")])
-pheatmap(topgenes_unaff_vs_unaff_05_sub, annotation_col = df_sub, annotation_colors = ann_colors2, fontsize = 5, angle_col = 0)
-```
-
-
-```{r, top-50-genes-deseq-subsetted, out.height="570px", out.width ="800px"}
-topgenes_byensemblid_sub <- head(rownames(res_unaff_vs_unaff_df_sub), 50)
-topgenes_unaff_vs_unaff_05_sub <- assay(vsd_limma)[topgenes_byensemblid_sub, ]
-topgenes_unaff_vs_unaff_05_sub <- topgenes_unaff_vs_unaff_05_sub - rowMeans(topgenes_unaff_vs_unaff_05_sub)
-
-ensembl_to_gene_sub <- setNames(gene_info$gene_name, gene_info$Ensembl_ID)
-
-# Get the current row names of the matrix 'mat'
-current_ensembl_ids_sub <- rownames(topgenes_unaff_vs_unaff_05_sub)
-
-# Find the corresponding gene names for the Ensembl IDs
-new_row_names_sub <- ensembl_to_gene_sub[current_ensembl_ids_sub]
-
-# Set the new row names for the matrix 'mat'
-rownames(topgenes_unaff_vs_unaff_05_sub) <- new_row_names_sub
-
-topgenes_unaff_vs_unaff_05_sub <- topgenes_unaff_vs_unaff_05_sub[order(row.names(topgenes_unaff_vs_unaff_05_sub)), ]
-
-df_sub <- df <- colData(vsd_limma) %>%
-  as.data.frame() %>%
-  dplyr::select(CombinedCategory)
-pheatmap(topgenes_unaff_vs_unaff_05_sub, annotation_col = df_sub, annotation_colors = ann_colors2, fontsize = 5, angle_col = 0)
-```
-
-```{r, top-50-genes-deseq-subsetted-subcategory, out.height="570px", out.width ="800px"}
-topgenes_byensemblid_sub <- head(rownames(res_unaff_vs_unaff_df_sub), 50)
-topgenes_unaff_vs_unaff_05_sub <- assay(vsd_limma)[topgenes_byensemblid_sub, ]
-topgenes_unaff_vs_unaff_05_sub <- topgenes_unaff_vs_unaff_05_sub - rowMeans(topgenes_unaff_vs_unaff_05_sub)
-
-ensembl_to_gene_sub <- setNames(gene_info$gene_name, gene_info$Ensembl_ID)
-
-# Get the current row names of the matrix 'mat'
-current_ensembl_ids_sub <- rownames(topgenes_unaff_vs_unaff_05_sub)
-
-# Find the corresponding gene names for the Ensembl IDs
-new_row_names_sub <- ensembl_to_gene_sub[current_ensembl_ids_sub]
-
-# Set the new row names for the matrix 'mat'
-rownames(topgenes_unaff_vs_unaff_05_sub) <- new_row_names_sub
-
-topgenes_unaff_vs_unaff_05_sub <- topgenes_unaff_vs_unaff_05_sub[order(row.names(topgenes_unaff_vs_unaff_05_sub)), ]
-
-df_sub <- df <- colData(vsd_limma) %>%
-  as.data.frame() %>%
-  dplyr::select(Affected, SubCategory, CombinedCategory)
-pheatmap(topgenes_unaff_vs_unaff_05_sub,
-  annotation_col = df_sub,
-  annotation_colors = ann_colors2, fontsize = 5, angle_col = 0
-)
-```
-
-
-```{r, significant-genes-deseq-subsetted, out.height="570px", out.width ="800px"}
-topgenes_byensemblid_sub <- head(rownames(res_unaff_vs_unaff_df_sub), 31)
-topgenes_unaff_vs_unaff_05_sub <- assay(vsd_limma)[topgenes_byensemblid_sub, ]
-topgenes_unaff_vs_unaff_05_sub <- topgenes_unaff_vs_unaff_05_sub - rowMeans(topgenes_unaff_vs_unaff_05_sub)
-
-ensembl_to_gene_sub <- setNames(gene_info$gene_name, gene_info$Ensembl_ID)
-
-# Get the current row names of the matrix 'mat'
-current_ensembl_ids_sub <- rownames(topgenes_unaff_vs_unaff_05_sub)
-
-# Find the corresponding gene names for the Ensembl IDs
-new_row_names_sub <- ensembl_to_gene_sub[current_ensembl_ids_sub]
-
-# Set the new row names for the matrix 'mat'
-rownames(topgenes_unaff_vs_unaff_05_sub) <- new_row_names_sub
-
-topgenes_unaff_vs_unaff_05_sub <- topgenes_unaff_vs_unaff_05_sub[order(row.names(topgenes_unaff_vs_unaff_05_sub)), ]
-
-df_sub <- df <- colData(vsd_limma) %>%
-  as.data.frame() %>%
-  dplyr::select(Affected)
-pheatmap(topgenes_unaff_vs_unaff_05_sub, annotation_col = df_sub, annotation_colors = ann_colors2, fontsize = 5, angle_col = 0)
-```
-
-```{r, significant-genes-deseq-subsetted-subcategory, out.height="570px", out.width ="800px"}
-topgenes_byensemblid_sub <- head(rownames(res_unaff_vs_unaff_df_sub), 55)
-topgenes_unaff_vs_unaff_05_sub <- assay(vsd_limma)[topgenes_byensemblid_sub, ]
-topgenes_unaff_vs_unaff_05_sub <- topgenes_unaff_vs_unaff_05_sub - rowMeans(topgenes_unaff_vs_unaff_05_sub)
-
-ensembl_to_gene_sub <- setNames(gene_info$gene_name, gene_info$Ensembl_ID)
-
-# Get the current row names of the matrix 'mat'
-current_ensembl_ids_sub <- rownames(topgenes_unaff_vs_unaff_05_sub)
-
-# Find the corresponding gene names for the Ensembl IDs
-new_row_names_sub <- ensembl_to_gene_sub[current_ensembl_ids_sub]
-
-# Set the new row names for the matrix 'mat'
-rownames(topgenes_unaff_vs_unaff_05_sub) <- new_row_names_sub
-
-topgenes_unaff_vs_unaff_05_sub <- topgenes_unaff_vs_unaff_05_sub[order(row.names(topgenes_unaff_vs_unaff_05_sub)), ]
-
-df_sub <- df <- colData(vsd_limma) %>%
-  as.data.frame() %>%
-  dplyr::select(Affected, SubCategory, CombinedCategory)
-pheatmap(topgenes_unaff_vs_unaff_05_sub, annotation_col = df_sub, annotation_colors = ann_colors2, fontsize = 5, angle_col = 0)
-```
-
-
-
-```{r, top-75-genes-deseq-subsetted, out.height="570px", out.width ="800px"}
-topgenes_byensemblid_sub <- head(rownames(res_unaff_vs_unaff_df_sub), 75)
-topgenes_unaff_vs_unaff_05_sub <- assay(vsd_limma)[topgenes_byensemblid_sub, ]
-topgenes_unaff_vs_unaff_05_sub <- topgenes_unaff_vs_unaff_05_sub - rowMeans(topgenes_unaff_vs_unaff_05_sub)
-
-ensembl_to_gene_sub <- setNames(gene_info$gene_name, gene_info$Ensembl_ID)
-
-# Get the current row names of the matrix 'mat'
-current_ensembl_ids_sub <- rownames(topgenes_unaff_vs_unaff_05_sub)
-
-# Find the corresponding gene names for the Ensembl IDs
-new_row_names_sub <- ensembl_to_gene_sub[current_ensembl_ids_sub]
-
-# Set the new row names for the matrix 'mat'
-rownames(topgenes_unaff_vs_unaff_05_sub) <- new_row_names_sub
-
-topgenes_unaff_vs_unaff_05_sub <- topgenes_unaff_vs_unaff_05_sub[order(row.names(topgenes_unaff_vs_unaff_05_sub)), ]
-
-df_sub <- as.data.frame(colData(vsd_limma)[, c("Affected", "CombinedCategory")])
-pheatmap(topgenes_unaff_vs_unaff_05_sub,
-  annotation_col = df_sub,
-  annotation_colors = ann_colors2, fontsize = 4, angle_col = 0
-)
-```
-
-```{r, top-75-genes-deseq-subsetted-subcategory, out.height="570px", out.width ="800px"}
-topgenes_byensemblid_sub <- head(rownames(res_unaff_vs_unaff_df_sub), 75)
-topgenes_unaff_vs_unaff_05_sub <- assay(vsd_limma)[topgenes_byensemblid_sub, ]
-topgenes_unaff_vs_unaff_05_sub <- topgenes_unaff_vs_unaff_05_sub - rowMeans(topgenes_unaff_vs_unaff_05_sub)
-
-ensembl_to_gene_sub <- setNames(gene_info$gene_name, gene_info$Ensembl_ID)
-
-# Get the current row names of the matrix 'mat'
-current_ensembl_ids_sub <- rownames(topgenes_unaff_vs_unaff_05_sub)
-
-# Find the corresponding gene names for the Ensembl IDs
-new_row_names_sub <- ensembl_to_gene_sub[current_ensembl_ids_sub]
-
-# Set the new row names for the matrix 'mat'
-rownames(topgenes_unaff_vs_unaff_05_sub) <- new_row_names_sub
-
-topgenes_unaff_vs_unaff_05_sub <- topgenes_unaff_vs_unaff_05_sub[order(row.names(topgenes_unaff_vs_unaff_05_sub)), ]
-
-df_sub <- as.data.frame(colData(vsd_limma)[, c("Affected", "SubCategory", "CombinedCategory")])
-pheatmap(topgenes_unaff_vs_unaff_05_sub, annotation_col = df_sub, annotation_colors = ann_colors2, fontsize = 4, angle_col = 0)
-```
-
-```{r, top-200-genes-deseq-subsetted, out.height="570px", out.width ="800px"}
-topgenes_byensemblid_sub <- head(rownames(res_unaff_vs_unaff_df_sub), 200)
-topgenes_unaff_vs_unaff_05_sub <- assay(vsd_limma)[topgenes_byensemblid_sub, ]
-topgenes_unaff_vs_unaff_05_sub <- topgenes_unaff_vs_unaff_05_sub - rowMeans(topgenes_unaff_vs_unaff_05_sub)
-
-ensembl_to_gene_sub <- setNames(gene_info$gene_name, gene_info$Ensembl_ID)
-
-# Get the current row names of the matrix 'mat'
-current_ensembl_ids_sub <- rownames(topgenes_unaff_vs_unaff_05_sub)
-
-# Find the corresponding gene names for the Ensembl IDs
-new_row_names_sub <- ensembl_to_gene_sub[current_ensembl_ids_sub]
-
-# Set the new row names for the matrix 'mat'
-rownames(topgenes_unaff_vs_unaff_05_sub) <- new_row_names_sub
-
-topgenes_unaff_vs_unaff_05_sub <- topgenes_unaff_vs_unaff_05_sub[order(row.names(topgenes_unaff_vs_unaff_05_sub)), ]
-
-df_sub <- as.data.frame(colData(vsd_limma)[, c("Affected", "CombinedCategory")])
-pheatmap(topgenes_unaff_vs_unaff_05_sub, annotation_col = df_sub, annotation_colors = ann_colors2, fontsize = 2.25, angle_col = 0)
-```
 
 ```{r, all-genes-list-subsetted}
 gb_df <- genes_biomart[, c(1, ncol(genes_biomart))]
@@ -643,7 +476,7 @@ filtered_gene_names <- res_unaff_vs_unaff_df_sub_genename$gene_name[!grepl("^ENS
 # set top = 0, then specify genes using label.select argument
 maplot <- ggmaplot(res_unaff_vs_unaff_df_sub,
   main = "Unaffected vs Unaffected MA Plot",
-  fdr = .1, fc = 1, size = 0.4, # Same used for others.
+  fdr = .05, fc = 1, size = 0.4, # Same used for others.
   genenames = as.vector(res_unaff_vs_unaff_df_sub_genename$gene_name),
   ggtheme = ggplot2::theme_minimal(),
   legend = "top", top = 30,
