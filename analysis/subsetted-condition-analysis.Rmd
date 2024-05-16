@@ -129,6 +129,10 @@ dds <- dds[, kept_fam_members]
 # Run DESeq function
 dds <- DESeq(dds)
 
+# Remove RNU genes
+genestoremove <- c('RNU1-1',' RNU1-3', 'RNVU1-18')
+dds <- dds[setdiff(rownames(dds), genestoremove),]
+
 # Normalize gene counts for differences in seq. depth/global differences
 counts_norm <- counts(dds, normalized = TRUE)
 ```
