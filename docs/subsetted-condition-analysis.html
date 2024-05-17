@@ -546,15 +546,15 @@ project makes it easier to run your code on other machines.</p>
 <div class="panel panel-default">
 <div class="panel-heading">
 <p class="panel-title">
-<a data-toggle="collapse" data-parent="#workflowr-checks" href="#strongRepositoryversionstrongahrefhttpsgithubcomuabcgdswortheymecfsdgeanalysistree4af9cd29340e2f49a1919930e82ea410adb7fec6targetblank4af9cd2a">
+<a data-toggle="collapse" data-parent="#workflowr-checks" href="#strongRepositoryversionstrongahrefhttpsgithubcomuabcgdswortheymecfsdgeanalysistree9267d29f89396c38f5f6250cd1801805970abd71targetblank9267d29a">
 <span class="glyphicon glyphicon-ok text-success"
 aria-hidden="true"></span> <strong>Repository version:</strong>
-<a href="https://github.com/uab-cgds-worthey/mecfs-dge-analysis/tree/4af9cd29340e2f49a1919930e82ea410adb7fec6" target="_blank">4af9cd2</a>
+<a href="https://github.com/uab-cgds-worthey/mecfs-dge-analysis/tree/9267d29f89396c38f5f6250cd1801805970abd71" target="_blank">9267d29</a>
 </a>
 </p>
 </div>
 <div
-id="strongRepositoryversionstrongahrefhttpsgithubcomuabcgdswortheymecfsdgeanalysistree4af9cd29340e2f49a1919930e82ea410adb7fec6targetblank4af9cd2a"
+id="strongRepositoryversionstrongahrefhttpsgithubcomuabcgdswortheymecfsdgeanalysistree9267d29f89396c38f5f6250cd1801805970abd71targetblank9267d29a"
 class="panel-collapse collapse">
 <div class="panel-body">
 <p>
@@ -564,7 +564,7 @@ reproducibility.
 </p>
 <p>
 The results in this page were generated with repository version
-<a href="https://github.com/uab-cgds-worthey/mecfs-dge-analysis/tree/4af9cd29340e2f49a1919930e82ea410adb7fec6" target="_blank">4af9cd2</a>.
+<a href="https://github.com/uab-cgds-worthey/mecfs-dge-analysis/tree/9267d29f89396c38f5f6250cd1801805970abd71" target="_blank">9267d29</a>.
 See the <em>Past versions</em> tab to see a history of the changes made
 to the R Markdown and HTML files.
 </p>
@@ -583,7 +583,6 @@ Ignored files:
     Ignored:    .Rhistory
     Ignored:    .Rproj.user/
     Ignored:    analysis/.DS_Store
-    Ignored:    analysis/figure/
     Ignored:    data/.DS_Store
     Ignored:    omnipathr-log/
     Ignored:    output/.DS_Store
@@ -617,13 +616,6 @@ Unstaged changes:
     Modified:   output/counts_vst_female.csv
     Modified:   output/counts_vst_limma.csv
     Modified:   output/counts_vst_limma_female.csv
-    Modified:   output/counts_vst_limma_subsetted.csv
-    Modified:   output/res_aff_vs_unaff_df_sub_genename.csv
-    Modified:   output/res_aff_vs_unaff_df_sub_genename_05.csv
-    Modified:   output/res_aff_vs_unaff_df_sub_genename_padj1.csv
-    Modified:   output/res_aff_vs_unaff_significant_subsetted_mygene.csv
-    Modified:   output/res_aff_vs_unaff_significant_subsetted_samples.csv
-    Modified:   output/res_aff_vs_unaff_sub.csv
 
 </code></pre>
 <p>
@@ -670,6 +662,40 @@ Message
 </tr>
 </thead>
 <tbody>
+<tr>
+<td>
+Rmd
+</td>
+<td>
+<a href="https://github.com/uab-cgds-worthey/mecfs-dge-analysis/blob/9267d29f89396c38f5f6250cd1801805970abd71/analysis/subsetted-condition-analysis.Rmd" target="_blank">9267d29</a>
+</td>
+<td>
+sdhutchins
+</td>
+<td>
+2024-05-17
+</td>
+<td>
+Higher filter.
+</td>
+</tr>
+<tr>
+<td>
+html
+</td>
+<td>
+<a href="https://rawcdn.githack.com/uab-cgds-worthey/mecfs-dge-analysis/7b22b815d3c87c292e26539c70189568d532709b/docs/subsetted-condition-analysis.html" target="_blank">7b22b81</a>
+</td>
+<td>
+sdhutchins
+</td>
+<td>
+2024-05-17
+</td>
+<td>
+Build site.
+</td>
+</tr>
 <tr>
 <td>
 Rmd
@@ -1156,7 +1182,7 @@ dds &lt;- DESeqDataSetFromMatrix(
 )
 
 # Pre-filtering: Keep only rows that have at least 10 reads total
-keep &lt;- rowSums(counts(dds)) &gt;= 10
+keep &lt;- rowSums(counts(dds)) &gt;= 50
 dds &lt;- dds[keep, ]
 
 # Remove samples from family&#39;s with multiple samples
@@ -1854,11 +1880,11 @@ res_aff_vs_unaff_df_1_sub &lt;- subset(res_aff_vs_unaff_df_sub, padj &lt; 0.1)
 
 summary(res_aff_vs_unaff_sub)</code></pre>
 <pre><code>
-out of 29623 with nonzero total read count
+out of 24628 with nonzero total read count
 adjusted p-value &lt; 0.1
-LFC &gt; 0 (up)       : 22, 0.074%
-LFC &lt; 0 (down)     : 33, 0.11%
-outliers [1]       : 219, 0.74%
+LFC &gt; 0 (up)       : 22, 0.089%
+LFC &lt; 0 (down)     : 28, 0.11%
+outliers [1]       : 164, 0.67%
 low counts [2]     : 0, 0%
 (mean count &lt; 0)
 [1] see &#39;cooksCutoff&#39; argument of ?results
@@ -3037,7 +3063,7 @@ combined_data &lt;- combined_data %&gt;%
 paged_table(as.data.frame(significant_data), options = list(rows.print = 30))</code></pre>
 <div data-pagedtable="false">
 <script data-pagedtable-source type="application/json">
-{"columns":[{"label":["name"],"name":[1],"type":["chr"],"align":["left"]},{"label":["mean"],"name":[2],"type":["dbl"],"align":["right"]},{"label":["lfc"],"name":[3],"type":["dbl"],"align":["right"]},{"label":["padj"],"name":[4],"type":["dbl"],"align":["right"]},{"label":["direction"],"name":[5],"type":["chr"],"align":["left"]}],"data":[{"1":"XGY2","2":"1.6497425","3":"-22.3540875","4":"8.210423e-08","5":"Down"},{"1":"ENSG00000142539","2":"3.1151549","3":"22.9764127","4":"1.270567e-05","5":"Up"},{"1":"F8A2","2":"5.0587685","3":"22.5393851","4":"1.673582e-05","5":"Up"},{"1":"ENSG00000285505","2":"3.8559606","3":"21.9791017","4":"3.279422e-05","5":"Up"},{"1":"ENSG00000267793","2":"1.2371933","3":"-21.5231261","4":"5.343729e-05","5":"Down"},{"1":"TBC1D3K","2":"3.2963854","3":"21.6164504","4":"6.549373e-05","5":"Up"},{"1":"KDM5DP1","2":"0.7986904","3":"-20.8276085","4":"1.458825e-04","5":"Down"},{"1":"RNVU1-18","2":"7.4457900","3":"-8.9869525","4":"2.001605e-04","5":"Down"},{"1":"TBC1D3G","2":"4.5109914","3":"20.1613463","4":"3.806048e-04","5":"Up"},{"1":"ZNF683","2":"7.8652105","3":"-1.7873683","4":"4.875572e-04","5":"Down"},{"1":"NEFLP1","2":"0.4592322","3":"-19.7576544","4":"4.875572e-04","5":"Down"},{"1":"SNTG2","2":"4.7030930","3":"2.1153851","4":"1.062011e-03","5":"Up"},{"1":"CD248","2":"7.3845905","3":"1.6779869","4":"1.421808e-03","5":"Up"},{"1":"ENSG00000254732","2":"4.0381543","3":"-6.5031556","4":"1.421808e-03","5":"Down"},{"1":"RNU1-3","2":"7.0800384","3":"-12.1010909","4":"3.272060e-03","5":"Down"},{"1":"MPPED2","2":"5.2723996","3":"2.3099828","4":"5.513531e-03","5":"Up"},{"1":"ENSG00000224610","2":"4.4099822","3":"2.7850933","4":"7.630828e-03","5":"Up"},{"1":"PIK3R3","2":"6.9893165","3":"-1.0365559","4":"1.233385e-02","5":"Down"},{"1":"LRRN3","2":"8.3698081","3":"1.6459457","4":"1.233385e-02","5":"Up"},{"1":"SHROOM2P1","2":"0.4378807","3":"-16.7565491","4":"1.233385e-02","5":"Down"},{"1":"ENSG00000285952","2":"0.4378807","3":"-16.7565491","4":"1.233385e-02","5":"Down"},{"1":"ENSG00000289694","2":"9.2425641","3":"-11.2412320","4":"1.233385e-02","5":"Down"},{"1":"ODF3","2":"2.1407498","3":"5.4041939","4":"1.352004e-02","5":"Up"},{"1":"SLC4A10","2":"7.9281551","3":"2.0718985","4":"1.808545e-02","5":"Up"},{"1":"POLR3G","2":"4.6035193","3":"-1.5717131","4":"1.875718e-02","5":"Down"},{"1":"CBX3P2","2":"5.3066966","3":"-1.3345487","4":"1.895757e-02","5":"Down"},{"1":"ENSG00000229308","2":"0.1458521","3":"-16.0918271","4":"2.204922e-02","5":"Down"},{"1":"ENSG00000273088","2":"0.1913671","3":"-16.0935957","4":"2.204922e-02","5":"Down"},{"1":"TMC1","2":"2.3550376","3":"-5.2389716","4":"2.418417e-02","5":"Down"},{"1":"DEFA1","2":"10.0727245","3":"-12.5740820","4":"2.418417e-02","5":"Down"},{"1":"KLHL4","2":"2.0740601","3":"-4.2460152","4":"2.844242e-02","5":"Down"},{"1":"ENSG00000273162","2":"2.0018108","3":"-3.9682631","4":"3.015775e-02","5":"Down"},{"1":"KCNQ5","2":"7.7830606","3":"1.2995015","4":"3.669301e-02","5":"Up"},{"1":"ENSG00000225544","2":"4.5119667","3":"4.7099459","4":"3.869225e-02","5":"Up"},{"1":"FSCN2","2":"5.1799916","3":"1.4454055","4":"4.168538e-02","5":"Up"},{"1":"MED14OS","2":"2.0224146","3":"-3.9602328","4":"4.389807e-02","5":"Down"},{"1":"TMEM37","2":"2.4291694","3":"5.1167549","4":"4.869895e-02","5":"Up"},{"1":"ENSG00000227080","2":"3.2835975","3":"4.2714597","4":"4.869895e-02","5":"Up"},{"1":"GRAMD4","2":"10.5782565","3":"-0.6270433","4":"4.928749e-02","5":"Down"},{"1":"BEX1","2":"2.8559840","3":"-5.2340413","4":"5.296765e-02","5":"Down"},{"1":"CACHD1","2":"6.5067223","3":"1.6250671","4":"5.296765e-02","5":"Up"},{"1":"RNU1-1","2":"7.1366439","3":"-8.9691527","4":"5.296765e-02","5":"Down"},{"1":"ENSG00000281348","2":"3.3528703","3":"-4.4454477","4":"5.296765e-02","5":"Down"},{"1":"SLC25A20","2":"9.1402190","3":"-0.5819537","4":"5.361399e-02","5":"Down"},{"1":"ADAMTS6","2":"6.2937968","3":"1.1442985","4":"6.028762e-02","5":"Up"},{"1":"ENSG00000228897","2":"2.6337614","3":"-5.7862111","4":"6.167071e-02","5":"Down"},{"1":"GPT2","2":"6.1426743","3":"-0.8845202","4":"7.388896e-02","5":"Down"},{"1":"GIMAP3P","2":"3.8659380","3":"-3.5758678","4":"7.388896e-02","5":"Down"},{"1":"OGFRP1","2":"7.3404778","3":"0.5636652","4":"7.388896e-02","5":"Up"},{"1":"ENSG00000273026","2":"2.3128888","3":"-3.4646522","4":"7.388896e-02","5":"Down"},{"1":"FGFBP2","2":"9.5023853","3":"-1.2735789","4":"7.890344e-02","5":"Down"},{"1":"IMPDH1P8","2":"4.5133379","3":"1.3398432","4":"7.976615e-02","5":"Up"},{"1":"GFAP","2":"2.6073133","3":"-4.0635638","4":"8.147010e-02","5":"Down"},{"1":"VMO1","2":"4.4986097","3":"-2.2433682","4":"8.592535e-02","5":"Down"},{"1":"ENSG00000273374","2":"4.3890638","3":"1.6624015","4":"9.165060e-02","5":"Up"}],"options":{"columns":{"min":{},"max":[10]},"rows":{"min":[30],"max":[30]},"pages":{}}}
+{"columns":[{"label":["name"],"name":[1],"type":["chr"],"align":["left"]},{"label":["mean"],"name":[2],"type":["dbl"],"align":["right"]},{"label":["lfc"],"name":[3],"type":["dbl"],"align":["right"]},{"label":["padj"],"name":[4],"type":["dbl"],"align":["right"]},{"label":["direction"],"name":[5],"type":["chr"],"align":["left"]}],"data":[{"1":"XGY2","2":"1.649742","3":"-22.2614925","4":"5.340891e-07","5":"Down"},{"1":"ENSG00000142539","2":"3.115155","3":"22.9764127","4":"1.057106e-05","5":"Up"},{"1":"F8A2","2":"5.058768","3":"22.5393851","4":"1.392413e-05","5":"Up"},{"1":"ENSG00000285505","2":"3.855961","3":"21.9791017","4":"2.728464e-05","5":"Up"},{"1":"ENSG00000267793","2":"1.237193","3":"-21.5231261","4":"4.445960e-05","5":"Down"},{"1":"TBC1D3K","2":"3.296385","3":"21.6164504","4":"5.449050e-05","5":"Up"},{"1":"RNVU1-18","2":"7.445790","3":"-8.9869525","4":"1.903231e-04","5":"Down"},{"1":"TBC1D3G","2":"4.510991","3":"20.1613463","4":"3.562442e-04","5":"Up"},{"1":"ZNF683","2":"7.865210","3":"-1.7873696","4":"5.120803e-04","5":"Down"},{"1":"SNTG2","2":"4.703093","3":"2.1159042","4":"1.218410e-03","5":"Up"},{"1":"CD248","2":"7.384590","3":"1.6779775","4":"1.542625e-03","5":"Up"},{"1":"ENSG00000254732","2":"4.038154","3":"-6.5075964","4":"1.600685e-03","5":"Down"},{"1":"RNU1-3","2":"7.080038","3":"-12.1010909","4":"3.141162e-03","5":"Down"},{"1":"MPPED2","2":"5.272400","3":"2.3098805","4":"5.896053e-03","5":"Up"},{"1":"ENSG00000224610","2":"4.409982","3":"2.7852111","4":"8.100966e-03","5":"Up"},{"1":"PIK3R3","2":"6.989316","3":"-1.0365286","4":"1.176756e-02","5":"Down"},{"1":"LRRN3","2":"8.369808","3":"1.6459464","4":"1.176756e-02","5":"Up"},{"1":"ENSG00000289694","2":"9.242564","3":"-11.2412320","4":"1.176756e-02","5":"Down"},{"1":"ODF3","2":"2.140750","3":"5.4035544","4":"1.613492e-02","5":"Up"},{"1":"SLC4A10","2":"7.928155","3":"2.0718949","4":"1.855189e-02","5":"Up"},{"1":"POLR3G","2":"4.603519","3":"-1.5721117","4":"2.056128e-02","5":"Down"},{"1":"CBX3P2","2":"5.306697","3":"-1.3347789","4":"2.056128e-02","5":"Down"},{"1":"DEFA1","2":"10.072724","3":"-12.5740820","4":"2.624494e-02","5":"Down"},{"1":"TMC1","2":"2.355038","3":"-5.2460843","4":"2.835998e-02","5":"Down"},{"1":"KLHL4","2":"2.074060","3":"-4.2583640","4":"3.223994e-02","5":"Down"},{"1":"ENSG00000273162","2":"2.001811","3":"-3.9809814","4":"3.353379e-02","5":"Down"},{"1":"KCNQ5","2":"7.783061","3":"1.2995011","4":"3.810706e-02","5":"Up"},{"1":"ENSG00000225544","2":"4.511967","3":"4.7096654","4":"4.433923e-02","5":"Up"},{"1":"FSCN2","2":"5.179992","3":"1.4453086","4":"4.572479e-02","5":"Up"},{"1":"MED14OS","2":"2.022415","3":"-3.9718667","4":"4.797778e-02","5":"Down"},{"1":"GRAMD4","2":"10.578257","3":"-0.6270392","4":"4.934595e-02","5":"Down"},{"1":"ENSG00000227080","2":"3.283597","3":"4.2727810","4":"5.271047e-02","5":"Up"},{"1":"TMEM37","2":"2.429169","3":"5.1167148","4":"5.302887e-02","5":"Up"},{"1":"CACHD1","2":"6.506722","3":"1.6250641","4":"5.395473e-02","5":"Up"},{"1":"SLC25A20","2":"9.140219","3":"-0.5819561","4":"5.395473e-02","5":"Down"},{"1":"RNU1-1","2":"7.136644","3":"-8.9691527","4":"5.395473e-02","5":"Down"},{"1":"ENSG00000281348","2":"3.352870","3":"-4.4538638","4":"5.395473e-02","5":"Down"},{"1":"BEX1","2":"2.855984","3":"-5.2394171","4":"5.474021e-02","5":"Down"},{"1":"ADAMTS6","2":"6.293797","3":"1.1443170","4":"6.102446e-02","5":"Up"},{"1":"ENSG00000228897","2":"2.633761","3":"-5.7918410","4":"7.119845e-02","5":"Down"},{"1":"GPT2","2":"6.142674","3":"-0.8845462","4":"7.346549e-02","5":"Down"},{"1":"OGFRP1","2":"7.340478","3":"0.5636633","4":"7.346549e-02","5":"Up"},{"1":"ENSG00000273026","2":"2.312889","3":"-3.4785526","4":"7.346549e-02","5":"Down"},{"1":"FGFBP2","2":"9.502385","3":"-1.2735792","4":"7.477446e-02","5":"Down"},{"1":"GIMAP3P","2":"3.865938","3":"-3.5776902","4":"7.477446e-02","5":"Down"},{"1":"GFAP","2":"2.607313","3":"-4.0709238","4":"8.334616e-02","5":"Down"},{"1":"IMPDH1P8","2":"4.513338","3":"1.3393985","4":"8.334616e-02","5":"Up"},{"1":"VMO1","2":"4.498610","3":"-2.2436036","4":"8.756507e-02","5":"Down"},{"1":"B3GAT1","2":"9.022275","3":"-1.3053749","4":"9.582907e-02","5":"Down"},{"1":"ENSG00000273374","2":"4.389064","3":"1.6621292","4":"9.582907e-02","5":"Up"}],"options":{"columns":{"min":{},"max":[10]},"rows":{"min":[30],"max":[30]},"pages":{}}}
   </script>
 </div>
 <pre class="r"><code># Save significant genes
@@ -3074,7 +3100,7 @@ missing_gene_counts &lt;- counts[row.names(counts) %in% missing_genes, ]
 paged_table(filtered_by_interest, options = list(rows.print = 15))</code></pre>
 <div data-pagedtable="false">
 <script data-pagedtable-source type="application/json">
-{"columns":[{"label":["gene_name"],"name":[1],"type":["chr"],"align":["left"]},{"label":["Ensembl_ID"],"name":[2],"type":["chr"],"align":["left"]},{"label":["baseMean"],"name":[3],"type":["dbl"],"align":["right"]},{"label":["log2FoldChange"],"name":[4],"type":["dbl"],"align":["right"]},{"label":["lfcSE"],"name":[5],"type":["dbl"],"align":["right"]},{"label":["stat"],"name":[6],"type":["dbl"],"align":["right"]},{"label":["pvalue"],"name":[7],"type":["dbl"],"align":["right"]},{"label":["padj"],"name":[8],"type":["dbl"],"align":["right"]}],"data":[{"1":"ELOVL4","2":"ENSG00000118402.6","3":"4.910125e+01","4":"1.114445859","5":"0.37854240","6":"2.94404503","7":"0.003239529","8":"0.4409958"},{"1":"CR2","2":"ENSG00000117322.18","3":"2.217099e+02","4":"1.268731642","5":"0.43816850","6":"2.89553364","7":"0.003785145","8":"0.4696135"},{"1":"CARD14","2":"ENSG00000141527.18","3":"5.831711e+00","4":"2.343464595","5":"0.97050300","6":"2.41469073","7":"0.015748575","8":"0.7915745"},{"1":"SLC4A1","2":"ENSG00000004939.16","3":"5.114960e+04","4":"0.280895611","5":"0.67773319","6":"0.41446341","7":"0.678534755","8":"0.9997567"},{"1":"CACNA1G","2":"ENSG00000006283.18","3":"4.991999e-01","4":"-1.012058991","5":"3.80209323","6":"-0.26618469","7":"0.790096977","8":"0.9997567"},{"1":"SLC12A3","2":"ENSG00000070915.10","3":"3.350271e+01","4":"-0.078032806","5":"0.61192134","6":"-0.12752098","7":"0.898528072","8":"0.9997567"},{"1":"ACACB","2":"ENSG00000076555.16","3":"1.068331e+03","4":"-0.150450879","5":"0.24782601","6":"-0.60708269","7":"0.543796039","8":"0.9997567"},{"1":"NLRC4","2":"ENSG00000091106.19","3":"1.371793e+03","4":"-0.005814032","5":"0.21152131","6":"-0.02748675","7":"0.978071512","8":"0.9997567"},{"1":"SBF1","2":"ENSG00000100241.22","3":"9.380027e+03","4":"0.075273947","5":"0.09064828","6":"0.83039573","7":"0.406315080","8":"0.9997567"},{"1":"HAGHL","2":"ENSG00000103253.19","3":"1.511289e+02","4":"0.228068917","5":"0.21072447","6":"1.08230865","7":"0.279115402","8":"0.9997567"},{"1":"MYH14","2":"ENSG00000105357.20","3":"9.557558e-01","4":"0.699882002","5":"1.88640585","6":"0.37101348","7":"0.710627490","8":"0.9997567"},{"1":"CUBN","2":"ENSG00000107611.16","3":"6.813116e+02","4":"0.020337319","5":"0.23337694","6":"0.08714365","7":"0.930557329","8":"0.9997567"},{"1":"ENO3","2":"ENSG00000108515.18","3":"1.143681e+02","4":"-0.352552696","5":"0.20554123","6":"-1.71524074","7":"0.086301098","8":"0.9997567"},{"1":"CHRNE","2":"ENSG00000108556.10","3":"9.770709e+01","4":"-0.014407725","5":"0.33917975","6":"-0.04247814","7":"0.966117537","8":"0.9997567"},{"1":"SIAE","2":"ENSG00000110013.13","3":"2.519640e+02","4":"-0.123389516","5":"0.27809541","6":"-0.44369490","7":"0.657263181","8":"0.9997567"},{"1":"MADD","2":"ENSG00000110514.19","3":"3.294426e+03","4":"0.023638785","5":"0.10505161","6":"0.22502069","7":"0.821963181","8":"0.9997567"},{"1":"CFAP92","2":"ENSG00000114656.13","3":"6.553260e+02","4":"0.006324425","5":"0.26918227","6":"0.02349495","7":"0.981255464","8":"0.9997567"},{"1":"ACADM","2":"ENSG00000117054.15","3":"1.026365e+03","4":"-0.046712056","5":"0.13144402","6":"-0.35537603","7":"0.722307900","8":"0.9997567"},{"1":"CENPF","2":"ENSG00000117724.14","3":"2.099299e+02","4":"0.313646274","5":"0.34815503","6":"0.90088107","7":"0.367651558","8":"0.9997567"},{"1":"CHRNA10","2":"ENSG00000129749.3","3":"1.542297e+02","4":"0.079077904","5":"0.25350218","6":"0.31194171","7":"0.755084823","8":"0.9997567"},{"1":"CACNG6","2":"ENSG00000130433.8","3":"1.088814e+02","4":"0.396153674","5":"0.75270828","6":"0.52630439","7":"0.598676730","8":"0.9997567"},{"1":"TACO1","2":"ENSG00000136463.9","3":"3.294387e+02","4":"-0.012138301","5":"0.15950113","6":"-0.07610166","7":"0.939338216","8":"0.9997567"},{"1":"SLC3A1","2":"ENSG00000138079.14","3":"1.114572e+01","4":"-0.582126802","5":"0.88660757","6":"-0.65657775","7":"0.511452461","8":"0.9997567"},{"1":"SLC13A5","2":"ENSG00000141485.17","3":"1.074975e+00","4":"0.002477518","5":"2.04841636","6":"0.00120948","7":"0.999034975","8":"0.9997567"},{"1":"SLC16A3","2":"ENSG00000141526.18","3":"1.586538e+04","4":"0.037107801","5":"0.21997415","6":"0.16869164","7":"0.866039192","8":"0.9997567"},{"1":"TRPM2","2":"ENSG00000142185.18","3":"9.479748e+02","4":"-0.237889485","5":"0.30075101","6":"-0.79098481","7":"0.428952853","8":"0.9997567"},{"1":"NLRP12","2":"ENSG00000142405.22","3":"6.104105e+03","4":"0.039424541","5":"0.25431045","6":"0.15502525","7":"0.876801411","8":"0.9997567"},{"1":"SLC12A9","2":"ENSG00000146828.18","3":"9.772221e+03","4":"0.005115543","5":"0.17334916","6":"0.02951005","7":"0.976457800","8":"0.9997567"},{"1":"CACNA1B","2":"ENSG00000148408.14","3":"1.973468e+00","4":"0.770787184","5":"1.09525517","6":"0.70375124","7":"0.481587705","8":"0.9997567"},{"1":"FCSK","2":"ENSG00000157353.17","3":"5.860094e+02","4":"0.124561492","5":"0.14800273","6":"0.84161617","7":"0.400002833","8":"0.9997567"},{"1":"PGAM2","2":"ENSG00000164708.6","3":"1.235820e+01","4":"0.473135727","5":"0.51233207","6":"0.92349427","7":"0.355749687","8":"0.9997567"},{"1":"CHRFAM7A","2":"ENSG00000166664.15","3":"5.240865e+01","4":"-0.044869895","5":"0.59029587","6":"-0.07601255","7":"0.939409113","8":"0.9997567"},{"1":"NOD2","2":"ENSG00000167207.14","3":"2.785087e+03","4":"-0.308124819","5":"0.30985066","6":"-0.99443009","7":"0.320013524","8":"0.9997567"},{"1":"SCNN1B","2":"ENSG00000168447.11","3":"2.138286e-01","4":"1.655821116","5":"3.79972363","6":"0.43577409","7":"0.663000643","8":"0.9997567"},{"1":"ACAD9","2":"ENSG00000177646.20","3":"1.565631e+03","4":"0.116133793","5":"0.16489921","6":"0.70427138","7":"0.481263785","8":"0.9997567"},{"1":"CLCNKA","2":"ENSG00000186510.12","3":"2.732683e-01","4":"0.134460102","5":"3.79437729","6":"0.03543667","7":"0.971731543","8":"0.9997567"},{"1":"CLCN1","2":"ENSG00000188037.14","3":"1.467436e+01","4":"-0.606971209","5":"0.85868063","6":"-0.70686492","7":"0.479650428","8":"0.9997567"},{"1":"RYR1","2":"ENSG00000196218.14","3":"1.389845e+02","4":"-0.616871611","5":"0.37836501","6":"-1.63036115","7":"0.103025191","8":"0.9997567"},{"1":"TOMM7","2":"ENSG00000196683.12","3":"4.929973e+02","4":"-0.313744268","5":"0.30611825","6":"-1.02491199","7":"0.305404718","8":"0.9997567"},{"1":"LRBA","2":"ENSG00000198589.14","3":"6.124575e+03","4":"0.164970109","5":"0.11108985","6":"1.48501508","7":"0.137539829","8":"0.9997567"},{"1":"INF2","2":"ENSG00000203485.14","3":"1.991620e+03","4":"0.208583991","5":"0.12454972","6":"1.67470455","7":"0.093992213","8":"0.9997567"}],"options":{"columns":{"min":{},"max":[10]},"rows":{"min":[15],"max":[15]},"pages":{}}}
+{"columns":[{"label":["gene_name"],"name":[1],"type":["chr"],"align":["left"]},{"label":["Ensembl_ID"],"name":[2],"type":["chr"],"align":["left"]},{"label":["baseMean"],"name":[3],"type":["dbl"],"align":["right"]},{"label":["log2FoldChange"],"name":[4],"type":["dbl"],"align":["right"]},{"label":["lfcSE"],"name":[5],"type":["dbl"],"align":["right"]},{"label":["stat"],"name":[6],"type":["dbl"],"align":["right"]},{"label":["pvalue"],"name":[7],"type":["dbl"],"align":["right"]},{"label":["padj"],"name":[8],"type":["dbl"],"align":["right"]}],"data":[{"1":"ELOVL4","2":"ENSG00000118402.6","3":"49.101247","4":"1.114490223","5":"0.38019839","6":"2.93133860","7":"0.003375047","8":"0.3944804"},{"1":"CR2","2":"ENSG00000117322.18","3":"221.709929","4":"1.268731397","5":"0.43882589","6":"2.89119541","7":"0.003837794","8":"0.4152369"},{"1":"CARD14","2":"ENSG00000141527.18","3":"5.831711","4":"2.342819697","5":"0.97787165","6":"2.39583558","7":"0.016582527","8":"0.6922781"},{"1":"ENO3","2":"ENSG00000108515.18","3":"114.368145","4":"-0.352560031","5":"0.20598996","6":"-1.71153987","7":"0.086981498","8":"0.9532373"},{"1":"INF2","2":"ENSG00000203485.14","3":"1991.619637","4":"0.208585015","5":"0.12412021","6":"1.68050812","7":"0.092858495","8":"0.9603002"},{"1":"RYR1","2":"ENSG00000196218.14","3":"138.984498","4":"-0.616874202","5":"0.37922973","6":"-1.62665044","7":"0.103811361","8":"0.9707674"},{"1":"SLC4A1","2":"ENSG00000004939.16","3":"51149.597916","4":"0.280895611","5":"0.67773319","6":"0.41446341","7":"0.678534755","8":"0.9998177"},{"1":"SLC12A3","2":"ENSG00000070915.10","3":"33.502714","4":"-0.078180862","5":"0.61515288","6":"-0.12709176","7":"0.898867773","8":"0.9998177"},{"1":"ACACB","2":"ENSG00000076555.16","3":"1068.330875","4":"-0.150451088","5":"0.24749656","6":"-0.60789163","7":"0.543259350","8":"0.9998177"},{"1":"NLRC4","2":"ENSG00000091106.19","3":"1371.793157","4":"-0.005813755","5":"0.21118075","6":"-0.02752976","7":"0.978037205","8":"0.9998177"},{"1":"SBF1","2":"ENSG00000100241.22","3":"9380.026812","4":"0.075273984","5":"0.09020195","6":"0.83450508","7":"0.403996427","8":"0.9998177"},{"1":"HAGHL","2":"ENSG00000103253.19","3":"151.128879","4":"0.228076790","5":"0.21102555","6":"1.08080180","7":"0.279785290","8":"0.9998177"},{"1":"CUBN","2":"ENSG00000107611.16","3":"681.311559","4":"0.020337922","5":"0.23313501","6":"0.08723667","7":"0.930483394","8":"0.9998177"},{"1":"CHRNE","2":"ENSG00000108556.10","3":"97.707095","4":"-0.014409434","5":"0.33996256","6":"-0.04238536","7":"0.966191502","8":"0.9998177"},{"1":"SIAE","2":"ENSG00000110013.13","3":"251.963974","4":"-0.123392657","5":"0.27829973","6":"-0.44338044","7":"0.657490582","8":"0.9998177"},{"1":"MADD","2":"ENSG00000110514.19","3":"3294.426267","4":"0.023638666","5":"0.10460961","6":"0.22597032","7":"0.821224505","8":"0.9998177"},{"1":"CFAP92","2":"ENSG00000114656.13","3":"655.325970","4":"0.006324432","5":"0.26898903","6":"0.02351186","7":"0.981241979","8":"0.9998177"},{"1":"ACADM","2":"ENSG00000117054.15","3":"1026.365193","4":"-0.046714050","5":"0.13106830","6":"-0.35640999","7":"0.721533551","8":"0.9998177"},{"1":"CENPF","2":"ENSG00000117724.14","3":"209.929937","4":"0.313645329","5":"0.34862331","6":"0.89966827","7":"0.368296812","8":"0.9998177"},{"1":"CHRNA10","2":"ENSG00000129749.3","3":"154.229743","4":"0.079075678","5":"0.25391674","6":"0.31142365","7":"0.755478581","8":"0.9998177"},{"1":"CACNG6","2":"ENSG00000130433.8","3":"108.881373","4":"0.396096508","5":"0.69207698","6":"0.57233013","7":"0.567098339","8":"0.9998177"},{"1":"TACO1","2":"ENSG00000136463.9","3":"329.438679","4":"-0.012140901","5":"0.15936738","6":"-0.07618184","7":"0.939274427","8":"0.9998177"},{"1":"SLC3A1","2":"ENSG00000138079.14","3":"11.145720","4":"-0.582045173","5":"0.89314690","6":"-0.65167911","7":"0.514608203","8":"0.9998177"},{"1":"SLC16A3","2":"ENSG00000141526.18","3":"15865.380342","4":"0.037107906","5":"0.21945224","6":"0.16909331","7":"0.865723244","8":"0.9998177"},{"1":"TRPM2","2":"ENSG00000142185.18","3":"947.974771","4":"-0.237889365","5":"0.30049288","6":"-0.79166390","7":"0.428556677","8":"0.9998177"},{"1":"NLRP12","2":"ENSG00000142405.22","3":"6104.104518","4":"0.039424741","5":"0.25381616","6":"0.15532794","7":"0.876562791","8":"0.9998177"},{"1":"SLC12A9","2":"ENSG00000146828.18","3":"9772.220511","4":"0.005115839","5":"0.17284490","6":"0.02959786","7":"0.976387771","8":"0.9998177"},{"1":"CACNA1B","2":"ENSG00000148408.14","3":"1.973468","4":"0.773413544","5":"1.10412049","6":"0.70047929","7":"0.483628032","8":"0.9998177"},{"1":"FCSK","2":"ENSG00000157353.17","3":"586.009390","4":"0.124559430","5":"0.14771671","6":"0.84323181","7":"0.399098810","8":"0.9998177"},{"1":"PGAM2","2":"ENSG00000164708.6","3":"12.358204","4":"0.473627761","5":"0.51574340","6":"0.91833994","7":"0.358440925","8":"0.9998177"},{"1":"CHRFAM7A","2":"ENSG00000166664.15","3":"52.408645","4":"-0.044932381","5":"0.59300802","6":"-0.07577028","7":"0.939601864","8":"0.9998177"},{"1":"NOD2","2":"ENSG00000167207.14","3":"2785.086887","4":"-0.308124121","5":"0.30942727","6":"-0.99578851","7":"0.319352913","8":"0.9998177"},{"1":"ACAD9","2":"ENSG00000177646.20","3":"1565.630919","4":"0.116133036","5":"0.16448293","6":"0.70604917","7":"0.480157560","8":"0.9998177"},{"1":"CLCN1","2":"ENSG00000188037.14","3":"14.674358","4":"-0.606947129","5":"0.86424170","6":"-0.70228864","7":"0.482499177","8":"0.9998177"},{"1":"TOMM7","2":"ENSG00000196683.12","3":"492.997256","4":"-0.313744301","5":"0.30606941","6":"-1.02507565","7":"0.305327495","8":"0.9998177"},{"1":"LRBA","2":"ENSG00000198589.14","3":"6124.575373","4":"0.164969319","5":"0.11062744","6":"1.49121525","7":"0.135904990","8":"0.9998177"}],"options":{"columns":{"min":{},"max":[10]},"rows":{"min":[15],"max":[15]},"pages":{}}}
   </script>
 </div>
 <pre class="r"><code>paged_table(filtered_counts, options = list(rows.print = 15))</code></pre>
@@ -3644,7 +3670,7 @@ sdhutchins
 string_db &lt;- STRINGdb$new(version = &quot;11.5&quot;, species = 9606, score_threshold = 100, network_type = &quot;full&quot;, input_directory = &quot;&quot;)
 
 mapped_degs &lt;- string_db$map(significant_data, &quot;name&quot;, removeUnmappedRows = TRUE)</code></pre>
-<pre><code>Warning:  we couldn&#39;t map to STRING 47% of your identifiers</code></pre>
+<pre><code>Warning:  we couldn&#39;t map to STRING 40% of your identifiers</code></pre>
 <pre class="r"><code>hits &lt;- mapped_degs$STRING_id[1:29]
 
 mapped_degs_dec &lt;- string_db$add_diff_exp_color(mapped_degs, logFcColStr = &quot;lfc&quot;)
@@ -3714,7 +3740,7 @@ filtered_by_interest2 &lt;- filtered_by_interest[c(&quot;gene_name&quot;, &quot;
 combined_df &lt;- dplyr::bind_rows(significant_data_copy, filtered_by_interest2)
 
 combined_df_mapped &lt;- string_db$map(combined_df, &quot;gene_name&quot;, removeUnmappedRows = TRUE)</code></pre>
-<pre><code>Warning:  we couldn&#39;t map to STRING 27% of your identifiers</code></pre>
+<pre><code>Warning:  we couldn&#39;t map to STRING 23% of your identifiers</code></pre>
 <pre class="r"><code>combined_hits &lt;- combined_df_mapped$STRING_id
 
 string_db$plot_network(combined_hits)</code></pre>
@@ -7568,476 +7594,6 @@ sdhutchins
 </table>
 </div>
 </div>
-<p><img src="figure/subsetted-condition-analysis.Rmd/generate-plot-counts-genes-interest-subsetted-37.png" width="672" style="display: block; margin: auto;" /></p>
-<p>
-<button type="button" class="btn btn-default btn-xs btn-workflowr btn-workflowr-fig" data-toggle="collapse" data-target="#fig-generate-plot-counts-genes-interest-subsetted-37">
-Past versions of generate-plot-counts-genes-interest-subsetted-37.png
-</button>
-</p>
-<div id="fig-generate-plot-counts-genes-interest-subsetted-37"
-class="collapse">
-<div class="table-responsive">
-<table class="table table-condensed table-hover">
-<thead>
-<tr>
-<th>
-Version
-</th>
-<th>
-Author
-</th>
-<th>
-Date
-</th>
-</tr>
-</thead>
-<tbody>
-<tr>
-<td>
-<a href="https://github.com/uab-cgds-worthey/mecfs-dge-analysis/blob/1d7ef34ccf16ef30959a336663868176a3b1c132/docs/figure/subsetted-condition-analysis.Rmd/generate-plot-counts-genes-interest-subsetted-37.png" target="_blank">1d7ef34</a>
-</td>
-<td>
-sdhutchins
-</td>
-<td>
-2024-05-16
-</td>
-</tr>
-<tr>
-<td>
-<a href="https://github.com/uab-cgds-worthey/mecfs-dge-analysis/blob/8a91bc045d88eaa3eb5eb92c64116676e9875d6b/docs/figure/subsetted-condition-analysis.Rmd/generate-plot-counts-genes-interest-subsetted-37.png" target="_blank">8a91bc0</a>
-</td>
-<td>
-sdhutchins
-</td>
-<td>
-2024-04-29
-</td>
-</tr>
-<tr>
-<td>
-<a href="https://github.com/uab-cgds-worthey/mecfs-dge-analysis/blob/ac28b95b9767a07ee1e1a6204dca051ae70b7f60/docs/figure/subsetted-condition-analysis.Rmd/generate-plot-counts-genes-interest-subsetted-37.png" target="_blank">ac28b95</a>
-</td>
-<td>
-sdhutchins
-</td>
-<td>
-2024-04-22
-</td>
-</tr>
-<tr>
-<td>
-<a href="https://github.com/uab-cgds-worthey/mecfs-dge-analysis/blob/f2c768c219cfb8473d5eb47d9633f3862125712a/docs/figure/subsetted-condition-analysis.Rmd/generate-plot-counts-genes-interest-subsetted-37.png" target="_blank">f2c768c</a>
-</td>
-<td>
-sdhutchins
-</td>
-<td>
-2024-04-11
-</td>
-</tr>
-<tr>
-<td>
-<a href="https://github.com/uab-cgds-worthey/mecfs-dge-analysis/blob/1e45c538be682f70f8cf14eb896190323e8f4ae3/docs/figure/subsetted-condition-analysis.Rmd/generate-plot-counts-genes-interest-subsetted-37.png" target="_blank">1e45c53</a>
-</td>
-<td>
-sdhutchins
-</td>
-<td>
-2024-04-09
-</td>
-</tr>
-<tr>
-<td>
-<a href="https://github.com/uab-cgds-worthey/mecfs-dge-analysis/blob/0c1afe675909d44abf1ef5bb02024ad4d53078aa/docs/figure/subsetted-condition-analysis.Rmd/generate-plot-counts-genes-interest-subsetted-37.png" target="_blank">0c1afe6</a>
-</td>
-<td>
-sdhutchins
-</td>
-<td>
-2024-03-13
-</td>
-</tr>
-</tbody>
-</table>
-</div>
-</div>
-<p><img src="figure/subsetted-condition-analysis.Rmd/generate-plot-counts-genes-interest-subsetted-38.png" width="672" style="display: block; margin: auto;" /></p>
-<p>
-<button type="button" class="btn btn-default btn-xs btn-workflowr btn-workflowr-fig" data-toggle="collapse" data-target="#fig-generate-plot-counts-genes-interest-subsetted-38">
-Past versions of generate-plot-counts-genes-interest-subsetted-38.png
-</button>
-</p>
-<div id="fig-generate-plot-counts-genes-interest-subsetted-38"
-class="collapse">
-<div class="table-responsive">
-<table class="table table-condensed table-hover">
-<thead>
-<tr>
-<th>
-Version
-</th>
-<th>
-Author
-</th>
-<th>
-Date
-</th>
-</tr>
-</thead>
-<tbody>
-<tr>
-<td>
-<a href="https://github.com/uab-cgds-worthey/mecfs-dge-analysis/blob/1d7ef34ccf16ef30959a336663868176a3b1c132/docs/figure/subsetted-condition-analysis.Rmd/generate-plot-counts-genes-interest-subsetted-38.png" target="_blank">1d7ef34</a>
-</td>
-<td>
-sdhutchins
-</td>
-<td>
-2024-05-16
-</td>
-</tr>
-<tr>
-<td>
-<a href="https://github.com/uab-cgds-worthey/mecfs-dge-analysis/blob/8a91bc045d88eaa3eb5eb92c64116676e9875d6b/docs/figure/subsetted-condition-analysis.Rmd/generate-plot-counts-genes-interest-subsetted-38.png" target="_blank">8a91bc0</a>
-</td>
-<td>
-sdhutchins
-</td>
-<td>
-2024-04-29
-</td>
-</tr>
-<tr>
-<td>
-<a href="https://github.com/uab-cgds-worthey/mecfs-dge-analysis/blob/ac28b95b9767a07ee1e1a6204dca051ae70b7f60/docs/figure/subsetted-condition-analysis.Rmd/generate-plot-counts-genes-interest-subsetted-38.png" target="_blank">ac28b95</a>
-</td>
-<td>
-sdhutchins
-</td>
-<td>
-2024-04-22
-</td>
-</tr>
-<tr>
-<td>
-<a href="https://github.com/uab-cgds-worthey/mecfs-dge-analysis/blob/f2c768c219cfb8473d5eb47d9633f3862125712a/docs/figure/subsetted-condition-analysis.Rmd/generate-plot-counts-genes-interest-subsetted-38.png" target="_blank">f2c768c</a>
-</td>
-<td>
-sdhutchins
-</td>
-<td>
-2024-04-11
-</td>
-</tr>
-<tr>
-<td>
-<a href="https://github.com/uab-cgds-worthey/mecfs-dge-analysis/blob/1e45c538be682f70f8cf14eb896190323e8f4ae3/docs/figure/subsetted-condition-analysis.Rmd/generate-plot-counts-genes-interest-subsetted-38.png" target="_blank">1e45c53</a>
-</td>
-<td>
-sdhutchins
-</td>
-<td>
-2024-04-09
-</td>
-</tr>
-<tr>
-<td>
-<a href="https://github.com/uab-cgds-worthey/mecfs-dge-analysis/blob/0c1afe675909d44abf1ef5bb02024ad4d53078aa/docs/figure/subsetted-condition-analysis.Rmd/generate-plot-counts-genes-interest-subsetted-38.png" target="_blank">0c1afe6</a>
-</td>
-<td>
-sdhutchins
-</td>
-<td>
-2024-03-13
-</td>
-</tr>
-</tbody>
-</table>
-</div>
-</div>
-<p><img src="figure/subsetted-condition-analysis.Rmd/generate-plot-counts-genes-interest-subsetted-39.png" width="672" style="display: block; margin: auto;" /></p>
-<p>
-<button type="button" class="btn btn-default btn-xs btn-workflowr btn-workflowr-fig" data-toggle="collapse" data-target="#fig-generate-plot-counts-genes-interest-subsetted-39">
-Past versions of generate-plot-counts-genes-interest-subsetted-39.png
-</button>
-</p>
-<div id="fig-generate-plot-counts-genes-interest-subsetted-39"
-class="collapse">
-<div class="table-responsive">
-<table class="table table-condensed table-hover">
-<thead>
-<tr>
-<th>
-Version
-</th>
-<th>
-Author
-</th>
-<th>
-Date
-</th>
-</tr>
-</thead>
-<tbody>
-<tr>
-<td>
-<a href="https://github.com/uab-cgds-worthey/mecfs-dge-analysis/blob/1d7ef34ccf16ef30959a336663868176a3b1c132/docs/figure/subsetted-condition-analysis.Rmd/generate-plot-counts-genes-interest-subsetted-39.png" target="_blank">1d7ef34</a>
-</td>
-<td>
-sdhutchins
-</td>
-<td>
-2024-05-16
-</td>
-</tr>
-<tr>
-<td>
-<a href="https://github.com/uab-cgds-worthey/mecfs-dge-analysis/blob/8a91bc045d88eaa3eb5eb92c64116676e9875d6b/docs/figure/subsetted-condition-analysis.Rmd/generate-plot-counts-genes-interest-subsetted-39.png" target="_blank">8a91bc0</a>
-</td>
-<td>
-sdhutchins
-</td>
-<td>
-2024-04-29
-</td>
-</tr>
-<tr>
-<td>
-<a href="https://github.com/uab-cgds-worthey/mecfs-dge-analysis/blob/ac28b95b9767a07ee1e1a6204dca051ae70b7f60/docs/figure/subsetted-condition-analysis.Rmd/generate-plot-counts-genes-interest-subsetted-39.png" target="_blank">ac28b95</a>
-</td>
-<td>
-sdhutchins
-</td>
-<td>
-2024-04-22
-</td>
-</tr>
-<tr>
-<td>
-<a href="https://github.com/uab-cgds-worthey/mecfs-dge-analysis/blob/f2c768c219cfb8473d5eb47d9633f3862125712a/docs/figure/subsetted-condition-analysis.Rmd/generate-plot-counts-genes-interest-subsetted-39.png" target="_blank">f2c768c</a>
-</td>
-<td>
-sdhutchins
-</td>
-<td>
-2024-04-11
-</td>
-</tr>
-<tr>
-<td>
-<a href="https://github.com/uab-cgds-worthey/mecfs-dge-analysis/blob/1e45c538be682f70f8cf14eb896190323e8f4ae3/docs/figure/subsetted-condition-analysis.Rmd/generate-plot-counts-genes-interest-subsetted-39.png" target="_blank">1e45c53</a>
-</td>
-<td>
-sdhutchins
-</td>
-<td>
-2024-04-09
-</td>
-</tr>
-<tr>
-<td>
-<a href="https://github.com/uab-cgds-worthey/mecfs-dge-analysis/blob/0c1afe675909d44abf1ef5bb02024ad4d53078aa/docs/figure/subsetted-condition-analysis.Rmd/generate-plot-counts-genes-interest-subsetted-39.png" target="_blank">0c1afe6</a>
-</td>
-<td>
-sdhutchins
-</td>
-<td>
-2024-03-13
-</td>
-</tr>
-</tbody>
-</table>
-</div>
-</div>
-<p><img src="figure/subsetted-condition-analysis.Rmd/generate-plot-counts-genes-interest-subsetted-40.png" width="672" style="display: block; margin: auto;" /></p>
-<p>
-<button type="button" class="btn btn-default btn-xs btn-workflowr btn-workflowr-fig" data-toggle="collapse" data-target="#fig-generate-plot-counts-genes-interest-subsetted-40">
-Past versions of generate-plot-counts-genes-interest-subsetted-40.png
-</button>
-</p>
-<div id="fig-generate-plot-counts-genes-interest-subsetted-40"
-class="collapse">
-<div class="table-responsive">
-<table class="table table-condensed table-hover">
-<thead>
-<tr>
-<th>
-Version
-</th>
-<th>
-Author
-</th>
-<th>
-Date
-</th>
-</tr>
-</thead>
-<tbody>
-<tr>
-<td>
-<a href="https://github.com/uab-cgds-worthey/mecfs-dge-analysis/blob/1d7ef34ccf16ef30959a336663868176a3b1c132/docs/figure/subsetted-condition-analysis.Rmd/generate-plot-counts-genes-interest-subsetted-40.png" target="_blank">1d7ef34</a>
-</td>
-<td>
-sdhutchins
-</td>
-<td>
-2024-05-16
-</td>
-</tr>
-<tr>
-<td>
-<a href="https://github.com/uab-cgds-worthey/mecfs-dge-analysis/blob/8a91bc045d88eaa3eb5eb92c64116676e9875d6b/docs/figure/subsetted-condition-analysis.Rmd/generate-plot-counts-genes-interest-subsetted-40.png" target="_blank">8a91bc0</a>
-</td>
-<td>
-sdhutchins
-</td>
-<td>
-2024-04-29
-</td>
-</tr>
-<tr>
-<td>
-<a href="https://github.com/uab-cgds-worthey/mecfs-dge-analysis/blob/ac28b95b9767a07ee1e1a6204dca051ae70b7f60/docs/figure/subsetted-condition-analysis.Rmd/generate-plot-counts-genes-interest-subsetted-40.png" target="_blank">ac28b95</a>
-</td>
-<td>
-sdhutchins
-</td>
-<td>
-2024-04-22
-</td>
-</tr>
-<tr>
-<td>
-<a href="https://github.com/uab-cgds-worthey/mecfs-dge-analysis/blob/f2c768c219cfb8473d5eb47d9633f3862125712a/docs/figure/subsetted-condition-analysis.Rmd/generate-plot-counts-genes-interest-subsetted-40.png" target="_blank">f2c768c</a>
-</td>
-<td>
-sdhutchins
-</td>
-<td>
-2024-04-11
-</td>
-</tr>
-<tr>
-<td>
-<a href="https://github.com/uab-cgds-worthey/mecfs-dge-analysis/blob/1e45c538be682f70f8cf14eb896190323e8f4ae3/docs/figure/subsetted-condition-analysis.Rmd/generate-plot-counts-genes-interest-subsetted-40.png" target="_blank">1e45c53</a>
-</td>
-<td>
-sdhutchins
-</td>
-<td>
-2024-04-09
-</td>
-</tr>
-<tr>
-<td>
-<a href="https://github.com/uab-cgds-worthey/mecfs-dge-analysis/blob/0c1afe675909d44abf1ef5bb02024ad4d53078aa/docs/figure/subsetted-condition-analysis.Rmd/generate-plot-counts-genes-interest-subsetted-40.png" target="_blank">0c1afe6</a>
-</td>
-<td>
-sdhutchins
-</td>
-<td>
-2024-03-13
-</td>
-</tr>
-</tbody>
-</table>
-</div>
-</div>
-<p><img src="figure/subsetted-condition-analysis.Rmd/generate-plot-counts-genes-interest-subsetted-41.png" width="672" style="display: block; margin: auto;" /></p>
-<p>
-<button type="button" class="btn btn-default btn-xs btn-workflowr btn-workflowr-fig" data-toggle="collapse" data-target="#fig-generate-plot-counts-genes-interest-subsetted-41">
-Past versions of generate-plot-counts-genes-interest-subsetted-41.png
-</button>
-</p>
-<div id="fig-generate-plot-counts-genes-interest-subsetted-41"
-class="collapse">
-<div class="table-responsive">
-<table class="table table-condensed table-hover">
-<thead>
-<tr>
-<th>
-Version
-</th>
-<th>
-Author
-</th>
-<th>
-Date
-</th>
-</tr>
-</thead>
-<tbody>
-<tr>
-<td>
-<a href="https://github.com/uab-cgds-worthey/mecfs-dge-analysis/blob/1d7ef34ccf16ef30959a336663868176a3b1c132/docs/figure/subsetted-condition-analysis.Rmd/generate-plot-counts-genes-interest-subsetted-41.png" target="_blank">1d7ef34</a>
-</td>
-<td>
-sdhutchins
-</td>
-<td>
-2024-05-16
-</td>
-</tr>
-<tr>
-<td>
-<a href="https://github.com/uab-cgds-worthey/mecfs-dge-analysis/blob/8a91bc045d88eaa3eb5eb92c64116676e9875d6b/docs/figure/subsetted-condition-analysis.Rmd/generate-plot-counts-genes-interest-subsetted-41.png" target="_blank">8a91bc0</a>
-</td>
-<td>
-sdhutchins
-</td>
-<td>
-2024-04-29
-</td>
-</tr>
-<tr>
-<td>
-<a href="https://github.com/uab-cgds-worthey/mecfs-dge-analysis/blob/ac28b95b9767a07ee1e1a6204dca051ae70b7f60/docs/figure/subsetted-condition-analysis.Rmd/generate-plot-counts-genes-interest-subsetted-41.png" target="_blank">ac28b95</a>
-</td>
-<td>
-sdhutchins
-</td>
-<td>
-2024-04-22
-</td>
-</tr>
-<tr>
-<td>
-<a href="https://github.com/uab-cgds-worthey/mecfs-dge-analysis/blob/f2c768c219cfb8473d5eb47d9633f3862125712a/docs/figure/subsetted-condition-analysis.Rmd/generate-plot-counts-genes-interest-subsetted-41.png" target="_blank">f2c768c</a>
-</td>
-<td>
-sdhutchins
-</td>
-<td>
-2024-04-11
-</td>
-</tr>
-<tr>
-<td>
-<a href="https://github.com/uab-cgds-worthey/mecfs-dge-analysis/blob/1e45c538be682f70f8cf14eb896190323e8f4ae3/docs/figure/subsetted-condition-analysis.Rmd/generate-plot-counts-genes-interest-subsetted-41.png" target="_blank">1e45c53</a>
-</td>
-<td>
-sdhutchins
-</td>
-<td>
-2024-04-09
-</td>
-</tr>
-<tr>
-<td>
-<a href="https://github.com/uab-cgds-worthey/mecfs-dge-analysis/blob/0c1afe675909d44abf1ef5bb02024ad4d53078aa/docs/figure/subsetted-condition-analysis.Rmd/generate-plot-counts-genes-interest-subsetted-41.png" target="_blank">0c1afe6</a>
-</td>
-<td>
-sdhutchins
-</td>
-<td>
-2024-03-13
-</td>
-</tr>
-</tbody>
-</table>
-</div>
-</div>
 <pre class="r"><code># For loop for plot counts
 for (ensembl_id in res_aff_vs_unaff_df_genename_1$Ensembl_ID) {
   d &lt;- plotCounts(dds, gene = ensembl_id, intgroup = &quot;Affected&quot;, returnData = TRUE)
@@ -8060,7 +7616,1947 @@ for (ensembl_id in res_aff_vs_unaff_df_genename_1$Ensembl_ID) {
     plot = ggplot_box, dpi = 450
   )
 }</code></pre>
-<p><img src="figure/subsetted-condition-analysis.Rmd/generate-plot-counts-genes-significant-1.png" width="672" style="display: block; margin: auto;" /><img src="figure/subsetted-condition-analysis.Rmd/generate-plot-counts-genes-significant-2.png" width="672" style="display: block; margin: auto;" /><img src="figure/subsetted-condition-analysis.Rmd/generate-plot-counts-genes-significant-3.png" width="672" style="display: block; margin: auto;" /><img src="figure/subsetted-condition-analysis.Rmd/generate-plot-counts-genes-significant-4.png" width="672" style="display: block; margin: auto;" /><img src="figure/subsetted-condition-analysis.Rmd/generate-plot-counts-genes-significant-5.png" width="672" style="display: block; margin: auto;" /><img src="figure/subsetted-condition-analysis.Rmd/generate-plot-counts-genes-significant-6.png" width="672" style="display: block; margin: auto;" /><img src="figure/subsetted-condition-analysis.Rmd/generate-plot-counts-genes-significant-7.png" width="672" style="display: block; margin: auto;" /><img src="figure/subsetted-condition-analysis.Rmd/generate-plot-counts-genes-significant-8.png" width="672" style="display: block; margin: auto;" /><img src="figure/subsetted-condition-analysis.Rmd/generate-plot-counts-genes-significant-9.png" width="672" style="display: block; margin: auto;" /><img src="figure/subsetted-condition-analysis.Rmd/generate-plot-counts-genes-significant-10.png" width="672" style="display: block; margin: auto;" /><img src="figure/subsetted-condition-analysis.Rmd/generate-plot-counts-genes-significant-11.png" width="672" style="display: block; margin: auto;" /><img src="figure/subsetted-condition-analysis.Rmd/generate-plot-counts-genes-significant-12.png" width="672" style="display: block; margin: auto;" /><img src="figure/subsetted-condition-analysis.Rmd/generate-plot-counts-genes-significant-13.png" width="672" style="display: block; margin: auto;" /><img src="figure/subsetted-condition-analysis.Rmd/generate-plot-counts-genes-significant-14.png" width="672" style="display: block; margin: auto;" /><img src="figure/subsetted-condition-analysis.Rmd/generate-plot-counts-genes-significant-15.png" width="672" style="display: block; margin: auto;" /><img src="figure/subsetted-condition-analysis.Rmd/generate-plot-counts-genes-significant-16.png" width="672" style="display: block; margin: auto;" /><img src="figure/subsetted-condition-analysis.Rmd/generate-plot-counts-genes-significant-17.png" width="672" style="display: block; margin: auto;" /><img src="figure/subsetted-condition-analysis.Rmd/generate-plot-counts-genes-significant-18.png" width="672" style="display: block; margin: auto;" /><img src="figure/subsetted-condition-analysis.Rmd/generate-plot-counts-genes-significant-19.png" width="672" style="display: block; margin: auto;" /><img src="figure/subsetted-condition-analysis.Rmd/generate-plot-counts-genes-significant-20.png" width="672" style="display: block; margin: auto;" /><img src="figure/subsetted-condition-analysis.Rmd/generate-plot-counts-genes-significant-21.png" width="672" style="display: block; margin: auto;" /><img src="figure/subsetted-condition-analysis.Rmd/generate-plot-counts-genes-significant-22.png" width="672" style="display: block; margin: auto;" /><img src="figure/subsetted-condition-analysis.Rmd/generate-plot-counts-genes-significant-23.png" width="672" style="display: block; margin: auto;" /><img src="figure/subsetted-condition-analysis.Rmd/generate-plot-counts-genes-significant-24.png" width="672" style="display: block; margin: auto;" /><img src="figure/subsetted-condition-analysis.Rmd/generate-plot-counts-genes-significant-25.png" width="672" style="display: block; margin: auto;" /><img src="figure/subsetted-condition-analysis.Rmd/generate-plot-counts-genes-significant-26.png" width="672" style="display: block; margin: auto;" /><img src="figure/subsetted-condition-analysis.Rmd/generate-plot-counts-genes-significant-27.png" width="672" style="display: block; margin: auto;" /><img src="figure/subsetted-condition-analysis.Rmd/generate-plot-counts-genes-significant-28.png" width="672" style="display: block; margin: auto;" /><img src="figure/subsetted-condition-analysis.Rmd/generate-plot-counts-genes-significant-29.png" width="672" style="display: block; margin: auto;" /><img src="figure/subsetted-condition-analysis.Rmd/generate-plot-counts-genes-significant-30.png" width="672" style="display: block; margin: auto;" /><img src="figure/subsetted-condition-analysis.Rmd/generate-plot-counts-genes-significant-31.png" width="672" style="display: block; margin: auto;" /><img src="figure/subsetted-condition-analysis.Rmd/generate-plot-counts-genes-significant-32.png" width="672" style="display: block; margin: auto;" /><img src="figure/subsetted-condition-analysis.Rmd/generate-plot-counts-genes-significant-33.png" width="672" style="display: block; margin: auto;" /><img src="figure/subsetted-condition-analysis.Rmd/generate-plot-counts-genes-significant-34.png" width="672" style="display: block; margin: auto;" /><img src="figure/subsetted-condition-analysis.Rmd/generate-plot-counts-genes-significant-35.png" width="672" style="display: block; margin: auto;" /><img src="figure/subsetted-condition-analysis.Rmd/generate-plot-counts-genes-significant-36.png" width="672" style="display: block; margin: auto;" /><img src="figure/subsetted-condition-analysis.Rmd/generate-plot-counts-genes-significant-37.png" width="672" style="display: block; margin: auto;" /><img src="figure/subsetted-condition-analysis.Rmd/generate-plot-counts-genes-significant-38.png" width="672" style="display: block; margin: auto;" /><img src="figure/subsetted-condition-analysis.Rmd/generate-plot-counts-genes-significant-39.png" width="672" style="display: block; margin: auto;" /><img src="figure/subsetted-condition-analysis.Rmd/generate-plot-counts-genes-significant-40.png" width="672" style="display: block; margin: auto;" /><img src="figure/subsetted-condition-analysis.Rmd/generate-plot-counts-genes-significant-41.png" width="672" style="display: block; margin: auto;" /><img src="figure/subsetted-condition-analysis.Rmd/generate-plot-counts-genes-significant-42.png" width="672" style="display: block; margin: auto;" /><img src="figure/subsetted-condition-analysis.Rmd/generate-plot-counts-genes-significant-43.png" width="672" style="display: block; margin: auto;" /><img src="figure/subsetted-condition-analysis.Rmd/generate-plot-counts-genes-significant-44.png" width="672" style="display: block; margin: auto;" /><img src="figure/subsetted-condition-analysis.Rmd/generate-plot-counts-genes-significant-45.png" width="672" style="display: block; margin: auto;" /><img src="figure/subsetted-condition-analysis.Rmd/generate-plot-counts-genes-significant-46.png" width="672" style="display: block; margin: auto;" /><img src="figure/subsetted-condition-analysis.Rmd/generate-plot-counts-genes-significant-47.png" width="672" style="display: block; margin: auto;" /><img src="figure/subsetted-condition-analysis.Rmd/generate-plot-counts-genes-significant-48.png" width="672" style="display: block; margin: auto;" /><img src="figure/subsetted-condition-analysis.Rmd/generate-plot-counts-genes-significant-49.png" width="672" style="display: block; margin: auto;" /><img src="figure/subsetted-condition-analysis.Rmd/generate-plot-counts-genes-significant-50.png" width="672" style="display: block; margin: auto;" /><img src="figure/subsetted-condition-analysis.Rmd/generate-plot-counts-genes-significant-51.png" width="672" style="display: block; margin: auto;" /><img src="figure/subsetted-condition-analysis.Rmd/generate-plot-counts-genes-significant-52.png" width="672" style="display: block; margin: auto;" /><img src="figure/subsetted-condition-analysis.Rmd/generate-plot-counts-genes-significant-53.png" width="672" style="display: block; margin: auto;" /><img src="figure/subsetted-condition-analysis.Rmd/generate-plot-counts-genes-significant-54.png" width="672" style="display: block; margin: auto;" /><img src="figure/subsetted-condition-analysis.Rmd/generate-plot-counts-genes-significant-55.png" width="672" style="display: block; margin: auto;" /></p>
+<p><img src="figure/subsetted-condition-analysis.Rmd/generate-plot-counts-genes-significant-1.png" width="672" style="display: block; margin: auto;" /></p>
+<p>
+<button type="button" class="btn btn-default btn-xs btn-workflowr btn-workflowr-fig" data-toggle="collapse" data-target="#fig-generate-plot-counts-genes-significant-1">
+Past versions of generate-plot-counts-genes-significant-1.png
+</button>
+</p>
+<div id="fig-generate-plot-counts-genes-significant-1" class="collapse">
+<div class="table-responsive">
+<table class="table table-condensed table-hover">
+<thead>
+<tr>
+<th>
+Version
+</th>
+<th>
+Author
+</th>
+<th>
+Date
+</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>
+<a href="https://github.com/uab-cgds-worthey/mecfs-dge-analysis/blob/7b22b815d3c87c292e26539c70189568d532709b/docs/figure/subsetted-condition-analysis.Rmd/generate-plot-counts-genes-significant-1.png" target="_blank">7b22b81</a>
+</td>
+<td>
+sdhutchins
+</td>
+<td>
+2024-05-17
+</td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
+<p><img src="figure/subsetted-condition-analysis.Rmd/generate-plot-counts-genes-significant-2.png" width="672" style="display: block; margin: auto;" /></p>
+<p>
+<button type="button" class="btn btn-default btn-xs btn-workflowr btn-workflowr-fig" data-toggle="collapse" data-target="#fig-generate-plot-counts-genes-significant-2">
+Past versions of generate-plot-counts-genes-significant-2.png
+</button>
+</p>
+<div id="fig-generate-plot-counts-genes-significant-2" class="collapse">
+<div class="table-responsive">
+<table class="table table-condensed table-hover">
+<thead>
+<tr>
+<th>
+Version
+</th>
+<th>
+Author
+</th>
+<th>
+Date
+</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>
+<a href="https://github.com/uab-cgds-worthey/mecfs-dge-analysis/blob/7b22b815d3c87c292e26539c70189568d532709b/docs/figure/subsetted-condition-analysis.Rmd/generate-plot-counts-genes-significant-2.png" target="_blank">7b22b81</a>
+</td>
+<td>
+sdhutchins
+</td>
+<td>
+2024-05-17
+</td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
+<p><img src="figure/subsetted-condition-analysis.Rmd/generate-plot-counts-genes-significant-3.png" width="672" style="display: block; margin: auto;" /></p>
+<p>
+<button type="button" class="btn btn-default btn-xs btn-workflowr btn-workflowr-fig" data-toggle="collapse" data-target="#fig-generate-plot-counts-genes-significant-3">
+Past versions of generate-plot-counts-genes-significant-3.png
+</button>
+</p>
+<div id="fig-generate-plot-counts-genes-significant-3" class="collapse">
+<div class="table-responsive">
+<table class="table table-condensed table-hover">
+<thead>
+<tr>
+<th>
+Version
+</th>
+<th>
+Author
+</th>
+<th>
+Date
+</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>
+<a href="https://github.com/uab-cgds-worthey/mecfs-dge-analysis/blob/7b22b815d3c87c292e26539c70189568d532709b/docs/figure/subsetted-condition-analysis.Rmd/generate-plot-counts-genes-significant-3.png" target="_blank">7b22b81</a>
+</td>
+<td>
+sdhutchins
+</td>
+<td>
+2024-05-17
+</td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
+<p><img src="figure/subsetted-condition-analysis.Rmd/generate-plot-counts-genes-significant-4.png" width="672" style="display: block; margin: auto;" /></p>
+<p>
+<button type="button" class="btn btn-default btn-xs btn-workflowr btn-workflowr-fig" data-toggle="collapse" data-target="#fig-generate-plot-counts-genes-significant-4">
+Past versions of generate-plot-counts-genes-significant-4.png
+</button>
+</p>
+<div id="fig-generate-plot-counts-genes-significant-4" class="collapse">
+<div class="table-responsive">
+<table class="table table-condensed table-hover">
+<thead>
+<tr>
+<th>
+Version
+</th>
+<th>
+Author
+</th>
+<th>
+Date
+</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>
+<a href="https://github.com/uab-cgds-worthey/mecfs-dge-analysis/blob/7b22b815d3c87c292e26539c70189568d532709b/docs/figure/subsetted-condition-analysis.Rmd/generate-plot-counts-genes-significant-4.png" target="_blank">7b22b81</a>
+</td>
+<td>
+sdhutchins
+</td>
+<td>
+2024-05-17
+</td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
+<p><img src="figure/subsetted-condition-analysis.Rmd/generate-plot-counts-genes-significant-5.png" width="672" style="display: block; margin: auto;" /></p>
+<p>
+<button type="button" class="btn btn-default btn-xs btn-workflowr btn-workflowr-fig" data-toggle="collapse" data-target="#fig-generate-plot-counts-genes-significant-5">
+Past versions of generate-plot-counts-genes-significant-5.png
+</button>
+</p>
+<div id="fig-generate-plot-counts-genes-significant-5" class="collapse">
+<div class="table-responsive">
+<table class="table table-condensed table-hover">
+<thead>
+<tr>
+<th>
+Version
+</th>
+<th>
+Author
+</th>
+<th>
+Date
+</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>
+<a href="https://github.com/uab-cgds-worthey/mecfs-dge-analysis/blob/7b22b815d3c87c292e26539c70189568d532709b/docs/figure/subsetted-condition-analysis.Rmd/generate-plot-counts-genes-significant-5.png" target="_blank">7b22b81</a>
+</td>
+<td>
+sdhutchins
+</td>
+<td>
+2024-05-17
+</td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
+<p><img src="figure/subsetted-condition-analysis.Rmd/generate-plot-counts-genes-significant-6.png" width="672" style="display: block; margin: auto;" /></p>
+<p>
+<button type="button" class="btn btn-default btn-xs btn-workflowr btn-workflowr-fig" data-toggle="collapse" data-target="#fig-generate-plot-counts-genes-significant-6">
+Past versions of generate-plot-counts-genes-significant-6.png
+</button>
+</p>
+<div id="fig-generate-plot-counts-genes-significant-6" class="collapse">
+<div class="table-responsive">
+<table class="table table-condensed table-hover">
+<thead>
+<tr>
+<th>
+Version
+</th>
+<th>
+Author
+</th>
+<th>
+Date
+</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>
+<a href="https://github.com/uab-cgds-worthey/mecfs-dge-analysis/blob/7b22b815d3c87c292e26539c70189568d532709b/docs/figure/subsetted-condition-analysis.Rmd/generate-plot-counts-genes-significant-6.png" target="_blank">7b22b81</a>
+</td>
+<td>
+sdhutchins
+</td>
+<td>
+2024-05-17
+</td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
+<p><img src="figure/subsetted-condition-analysis.Rmd/generate-plot-counts-genes-significant-7.png" width="672" style="display: block; margin: auto;" /></p>
+<p>
+<button type="button" class="btn btn-default btn-xs btn-workflowr btn-workflowr-fig" data-toggle="collapse" data-target="#fig-generate-plot-counts-genes-significant-7">
+Past versions of generate-plot-counts-genes-significant-7.png
+</button>
+</p>
+<div id="fig-generate-plot-counts-genes-significant-7" class="collapse">
+<div class="table-responsive">
+<table class="table table-condensed table-hover">
+<thead>
+<tr>
+<th>
+Version
+</th>
+<th>
+Author
+</th>
+<th>
+Date
+</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>
+<a href="https://github.com/uab-cgds-worthey/mecfs-dge-analysis/blob/7b22b815d3c87c292e26539c70189568d532709b/docs/figure/subsetted-condition-analysis.Rmd/generate-plot-counts-genes-significant-7.png" target="_blank">7b22b81</a>
+</td>
+<td>
+sdhutchins
+</td>
+<td>
+2024-05-17
+</td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
+<p><img src="figure/subsetted-condition-analysis.Rmd/generate-plot-counts-genes-significant-8.png" width="672" style="display: block; margin: auto;" /></p>
+<p>
+<button type="button" class="btn btn-default btn-xs btn-workflowr btn-workflowr-fig" data-toggle="collapse" data-target="#fig-generate-plot-counts-genes-significant-8">
+Past versions of generate-plot-counts-genes-significant-8.png
+</button>
+</p>
+<div id="fig-generate-plot-counts-genes-significant-8" class="collapse">
+<div class="table-responsive">
+<table class="table table-condensed table-hover">
+<thead>
+<tr>
+<th>
+Version
+</th>
+<th>
+Author
+</th>
+<th>
+Date
+</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>
+<a href="https://github.com/uab-cgds-worthey/mecfs-dge-analysis/blob/7b22b815d3c87c292e26539c70189568d532709b/docs/figure/subsetted-condition-analysis.Rmd/generate-plot-counts-genes-significant-8.png" target="_blank">7b22b81</a>
+</td>
+<td>
+sdhutchins
+</td>
+<td>
+2024-05-17
+</td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
+<p><img src="figure/subsetted-condition-analysis.Rmd/generate-plot-counts-genes-significant-9.png" width="672" style="display: block; margin: auto;" /></p>
+<p>
+<button type="button" class="btn btn-default btn-xs btn-workflowr btn-workflowr-fig" data-toggle="collapse" data-target="#fig-generate-plot-counts-genes-significant-9">
+Past versions of generate-plot-counts-genes-significant-9.png
+</button>
+</p>
+<div id="fig-generate-plot-counts-genes-significant-9" class="collapse">
+<div class="table-responsive">
+<table class="table table-condensed table-hover">
+<thead>
+<tr>
+<th>
+Version
+</th>
+<th>
+Author
+</th>
+<th>
+Date
+</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>
+<a href="https://github.com/uab-cgds-worthey/mecfs-dge-analysis/blob/7b22b815d3c87c292e26539c70189568d532709b/docs/figure/subsetted-condition-analysis.Rmd/generate-plot-counts-genes-significant-9.png" target="_blank">7b22b81</a>
+</td>
+<td>
+sdhutchins
+</td>
+<td>
+2024-05-17
+</td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
+<p><img src="figure/subsetted-condition-analysis.Rmd/generate-plot-counts-genes-significant-10.png" width="672" style="display: block; margin: auto;" /></p>
+<p>
+<button type="button" class="btn btn-default btn-xs btn-workflowr btn-workflowr-fig" data-toggle="collapse" data-target="#fig-generate-plot-counts-genes-significant-10">
+Past versions of generate-plot-counts-genes-significant-10.png
+</button>
+</p>
+<div id="fig-generate-plot-counts-genes-significant-10"
+class="collapse">
+<div class="table-responsive">
+<table class="table table-condensed table-hover">
+<thead>
+<tr>
+<th>
+Version
+</th>
+<th>
+Author
+</th>
+<th>
+Date
+</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>
+<a href="https://github.com/uab-cgds-worthey/mecfs-dge-analysis/blob/7b22b815d3c87c292e26539c70189568d532709b/docs/figure/subsetted-condition-analysis.Rmd/generate-plot-counts-genes-significant-10.png" target="_blank">7b22b81</a>
+</td>
+<td>
+sdhutchins
+</td>
+<td>
+2024-05-17
+</td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
+<p><img src="figure/subsetted-condition-analysis.Rmd/generate-plot-counts-genes-significant-11.png" width="672" style="display: block; margin: auto;" /></p>
+<p>
+<button type="button" class="btn btn-default btn-xs btn-workflowr btn-workflowr-fig" data-toggle="collapse" data-target="#fig-generate-plot-counts-genes-significant-11">
+Past versions of generate-plot-counts-genes-significant-11.png
+</button>
+</p>
+<div id="fig-generate-plot-counts-genes-significant-11"
+class="collapse">
+<div class="table-responsive">
+<table class="table table-condensed table-hover">
+<thead>
+<tr>
+<th>
+Version
+</th>
+<th>
+Author
+</th>
+<th>
+Date
+</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>
+<a href="https://github.com/uab-cgds-worthey/mecfs-dge-analysis/blob/7b22b815d3c87c292e26539c70189568d532709b/docs/figure/subsetted-condition-analysis.Rmd/generate-plot-counts-genes-significant-11.png" target="_blank">7b22b81</a>
+</td>
+<td>
+sdhutchins
+</td>
+<td>
+2024-05-17
+</td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
+<p><img src="figure/subsetted-condition-analysis.Rmd/generate-plot-counts-genes-significant-12.png" width="672" style="display: block; margin: auto;" /></p>
+<p>
+<button type="button" class="btn btn-default btn-xs btn-workflowr btn-workflowr-fig" data-toggle="collapse" data-target="#fig-generate-plot-counts-genes-significant-12">
+Past versions of generate-plot-counts-genes-significant-12.png
+</button>
+</p>
+<div id="fig-generate-plot-counts-genes-significant-12"
+class="collapse">
+<div class="table-responsive">
+<table class="table table-condensed table-hover">
+<thead>
+<tr>
+<th>
+Version
+</th>
+<th>
+Author
+</th>
+<th>
+Date
+</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>
+<a href="https://github.com/uab-cgds-worthey/mecfs-dge-analysis/blob/7b22b815d3c87c292e26539c70189568d532709b/docs/figure/subsetted-condition-analysis.Rmd/generate-plot-counts-genes-significant-12.png" target="_blank">7b22b81</a>
+</td>
+<td>
+sdhutchins
+</td>
+<td>
+2024-05-17
+</td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
+<p><img src="figure/subsetted-condition-analysis.Rmd/generate-plot-counts-genes-significant-13.png" width="672" style="display: block; margin: auto;" /></p>
+<p>
+<button type="button" class="btn btn-default btn-xs btn-workflowr btn-workflowr-fig" data-toggle="collapse" data-target="#fig-generate-plot-counts-genes-significant-13">
+Past versions of generate-plot-counts-genes-significant-13.png
+</button>
+</p>
+<div id="fig-generate-plot-counts-genes-significant-13"
+class="collapse">
+<div class="table-responsive">
+<table class="table table-condensed table-hover">
+<thead>
+<tr>
+<th>
+Version
+</th>
+<th>
+Author
+</th>
+<th>
+Date
+</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>
+<a href="https://github.com/uab-cgds-worthey/mecfs-dge-analysis/blob/7b22b815d3c87c292e26539c70189568d532709b/docs/figure/subsetted-condition-analysis.Rmd/generate-plot-counts-genes-significant-13.png" target="_blank">7b22b81</a>
+</td>
+<td>
+sdhutchins
+</td>
+<td>
+2024-05-17
+</td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
+<p><img src="figure/subsetted-condition-analysis.Rmd/generate-plot-counts-genes-significant-14.png" width="672" style="display: block; margin: auto;" /></p>
+<p>
+<button type="button" class="btn btn-default btn-xs btn-workflowr btn-workflowr-fig" data-toggle="collapse" data-target="#fig-generate-plot-counts-genes-significant-14">
+Past versions of generate-plot-counts-genes-significant-14.png
+</button>
+</p>
+<div id="fig-generate-plot-counts-genes-significant-14"
+class="collapse">
+<div class="table-responsive">
+<table class="table table-condensed table-hover">
+<thead>
+<tr>
+<th>
+Version
+</th>
+<th>
+Author
+</th>
+<th>
+Date
+</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>
+<a href="https://github.com/uab-cgds-worthey/mecfs-dge-analysis/blob/7b22b815d3c87c292e26539c70189568d532709b/docs/figure/subsetted-condition-analysis.Rmd/generate-plot-counts-genes-significant-14.png" target="_blank">7b22b81</a>
+</td>
+<td>
+sdhutchins
+</td>
+<td>
+2024-05-17
+</td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
+<p><img src="figure/subsetted-condition-analysis.Rmd/generate-plot-counts-genes-significant-15.png" width="672" style="display: block; margin: auto;" /></p>
+<p>
+<button type="button" class="btn btn-default btn-xs btn-workflowr btn-workflowr-fig" data-toggle="collapse" data-target="#fig-generate-plot-counts-genes-significant-15">
+Past versions of generate-plot-counts-genes-significant-15.png
+</button>
+</p>
+<div id="fig-generate-plot-counts-genes-significant-15"
+class="collapse">
+<div class="table-responsive">
+<table class="table table-condensed table-hover">
+<thead>
+<tr>
+<th>
+Version
+</th>
+<th>
+Author
+</th>
+<th>
+Date
+</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>
+<a href="https://github.com/uab-cgds-worthey/mecfs-dge-analysis/blob/7b22b815d3c87c292e26539c70189568d532709b/docs/figure/subsetted-condition-analysis.Rmd/generate-plot-counts-genes-significant-15.png" target="_blank">7b22b81</a>
+</td>
+<td>
+sdhutchins
+</td>
+<td>
+2024-05-17
+</td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
+<p><img src="figure/subsetted-condition-analysis.Rmd/generate-plot-counts-genes-significant-16.png" width="672" style="display: block; margin: auto;" /></p>
+<p>
+<button type="button" class="btn btn-default btn-xs btn-workflowr btn-workflowr-fig" data-toggle="collapse" data-target="#fig-generate-plot-counts-genes-significant-16">
+Past versions of generate-plot-counts-genes-significant-16.png
+</button>
+</p>
+<div id="fig-generate-plot-counts-genes-significant-16"
+class="collapse">
+<div class="table-responsive">
+<table class="table table-condensed table-hover">
+<thead>
+<tr>
+<th>
+Version
+</th>
+<th>
+Author
+</th>
+<th>
+Date
+</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>
+<a href="https://github.com/uab-cgds-worthey/mecfs-dge-analysis/blob/7b22b815d3c87c292e26539c70189568d532709b/docs/figure/subsetted-condition-analysis.Rmd/generate-plot-counts-genes-significant-16.png" target="_blank">7b22b81</a>
+</td>
+<td>
+sdhutchins
+</td>
+<td>
+2024-05-17
+</td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
+<p><img src="figure/subsetted-condition-analysis.Rmd/generate-plot-counts-genes-significant-17.png" width="672" style="display: block; margin: auto;" /></p>
+<p>
+<button type="button" class="btn btn-default btn-xs btn-workflowr btn-workflowr-fig" data-toggle="collapse" data-target="#fig-generate-plot-counts-genes-significant-17">
+Past versions of generate-plot-counts-genes-significant-17.png
+</button>
+</p>
+<div id="fig-generate-plot-counts-genes-significant-17"
+class="collapse">
+<div class="table-responsive">
+<table class="table table-condensed table-hover">
+<thead>
+<tr>
+<th>
+Version
+</th>
+<th>
+Author
+</th>
+<th>
+Date
+</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>
+<a href="https://github.com/uab-cgds-worthey/mecfs-dge-analysis/blob/7b22b815d3c87c292e26539c70189568d532709b/docs/figure/subsetted-condition-analysis.Rmd/generate-plot-counts-genes-significant-17.png" target="_blank">7b22b81</a>
+</td>
+<td>
+sdhutchins
+</td>
+<td>
+2024-05-17
+</td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
+<p><img src="figure/subsetted-condition-analysis.Rmd/generate-plot-counts-genes-significant-18.png" width="672" style="display: block; margin: auto;" /></p>
+<p>
+<button type="button" class="btn btn-default btn-xs btn-workflowr btn-workflowr-fig" data-toggle="collapse" data-target="#fig-generate-plot-counts-genes-significant-18">
+Past versions of generate-plot-counts-genes-significant-18.png
+</button>
+</p>
+<div id="fig-generate-plot-counts-genes-significant-18"
+class="collapse">
+<div class="table-responsive">
+<table class="table table-condensed table-hover">
+<thead>
+<tr>
+<th>
+Version
+</th>
+<th>
+Author
+</th>
+<th>
+Date
+</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>
+<a href="https://github.com/uab-cgds-worthey/mecfs-dge-analysis/blob/7b22b815d3c87c292e26539c70189568d532709b/docs/figure/subsetted-condition-analysis.Rmd/generate-plot-counts-genes-significant-18.png" target="_blank">7b22b81</a>
+</td>
+<td>
+sdhutchins
+</td>
+<td>
+2024-05-17
+</td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
+<p><img src="figure/subsetted-condition-analysis.Rmd/generate-plot-counts-genes-significant-19.png" width="672" style="display: block; margin: auto;" /></p>
+<p>
+<button type="button" class="btn btn-default btn-xs btn-workflowr btn-workflowr-fig" data-toggle="collapse" data-target="#fig-generate-plot-counts-genes-significant-19">
+Past versions of generate-plot-counts-genes-significant-19.png
+</button>
+</p>
+<div id="fig-generate-plot-counts-genes-significant-19"
+class="collapse">
+<div class="table-responsive">
+<table class="table table-condensed table-hover">
+<thead>
+<tr>
+<th>
+Version
+</th>
+<th>
+Author
+</th>
+<th>
+Date
+</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>
+<a href="https://github.com/uab-cgds-worthey/mecfs-dge-analysis/blob/7b22b815d3c87c292e26539c70189568d532709b/docs/figure/subsetted-condition-analysis.Rmd/generate-plot-counts-genes-significant-19.png" target="_blank">7b22b81</a>
+</td>
+<td>
+sdhutchins
+</td>
+<td>
+2024-05-17
+</td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
+<p><img src="figure/subsetted-condition-analysis.Rmd/generate-plot-counts-genes-significant-20.png" width="672" style="display: block; margin: auto;" /></p>
+<p>
+<button type="button" class="btn btn-default btn-xs btn-workflowr btn-workflowr-fig" data-toggle="collapse" data-target="#fig-generate-plot-counts-genes-significant-20">
+Past versions of generate-plot-counts-genes-significant-20.png
+</button>
+</p>
+<div id="fig-generate-plot-counts-genes-significant-20"
+class="collapse">
+<div class="table-responsive">
+<table class="table table-condensed table-hover">
+<thead>
+<tr>
+<th>
+Version
+</th>
+<th>
+Author
+</th>
+<th>
+Date
+</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>
+<a href="https://github.com/uab-cgds-worthey/mecfs-dge-analysis/blob/7b22b815d3c87c292e26539c70189568d532709b/docs/figure/subsetted-condition-analysis.Rmd/generate-plot-counts-genes-significant-20.png" target="_blank">7b22b81</a>
+</td>
+<td>
+sdhutchins
+</td>
+<td>
+2024-05-17
+</td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
+<p><img src="figure/subsetted-condition-analysis.Rmd/generate-plot-counts-genes-significant-21.png" width="672" style="display: block; margin: auto;" /></p>
+<p>
+<button type="button" class="btn btn-default btn-xs btn-workflowr btn-workflowr-fig" data-toggle="collapse" data-target="#fig-generate-plot-counts-genes-significant-21">
+Past versions of generate-plot-counts-genes-significant-21.png
+</button>
+</p>
+<div id="fig-generate-plot-counts-genes-significant-21"
+class="collapse">
+<div class="table-responsive">
+<table class="table table-condensed table-hover">
+<thead>
+<tr>
+<th>
+Version
+</th>
+<th>
+Author
+</th>
+<th>
+Date
+</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>
+<a href="https://github.com/uab-cgds-worthey/mecfs-dge-analysis/blob/7b22b815d3c87c292e26539c70189568d532709b/docs/figure/subsetted-condition-analysis.Rmd/generate-plot-counts-genes-significant-21.png" target="_blank">7b22b81</a>
+</td>
+<td>
+sdhutchins
+</td>
+<td>
+2024-05-17
+</td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
+<p><img src="figure/subsetted-condition-analysis.Rmd/generate-plot-counts-genes-significant-22.png" width="672" style="display: block; margin: auto;" /></p>
+<p>
+<button type="button" class="btn btn-default btn-xs btn-workflowr btn-workflowr-fig" data-toggle="collapse" data-target="#fig-generate-plot-counts-genes-significant-22">
+Past versions of generate-plot-counts-genes-significant-22.png
+</button>
+</p>
+<div id="fig-generate-plot-counts-genes-significant-22"
+class="collapse">
+<div class="table-responsive">
+<table class="table table-condensed table-hover">
+<thead>
+<tr>
+<th>
+Version
+</th>
+<th>
+Author
+</th>
+<th>
+Date
+</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>
+<a href="https://github.com/uab-cgds-worthey/mecfs-dge-analysis/blob/7b22b815d3c87c292e26539c70189568d532709b/docs/figure/subsetted-condition-analysis.Rmd/generate-plot-counts-genes-significant-22.png" target="_blank">7b22b81</a>
+</td>
+<td>
+sdhutchins
+</td>
+<td>
+2024-05-17
+</td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
+<p><img src="figure/subsetted-condition-analysis.Rmd/generate-plot-counts-genes-significant-23.png" width="672" style="display: block; margin: auto;" /></p>
+<p>
+<button type="button" class="btn btn-default btn-xs btn-workflowr btn-workflowr-fig" data-toggle="collapse" data-target="#fig-generate-plot-counts-genes-significant-23">
+Past versions of generate-plot-counts-genes-significant-23.png
+</button>
+</p>
+<div id="fig-generate-plot-counts-genes-significant-23"
+class="collapse">
+<div class="table-responsive">
+<table class="table table-condensed table-hover">
+<thead>
+<tr>
+<th>
+Version
+</th>
+<th>
+Author
+</th>
+<th>
+Date
+</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>
+<a href="https://github.com/uab-cgds-worthey/mecfs-dge-analysis/blob/7b22b815d3c87c292e26539c70189568d532709b/docs/figure/subsetted-condition-analysis.Rmd/generate-plot-counts-genes-significant-23.png" target="_blank">7b22b81</a>
+</td>
+<td>
+sdhutchins
+</td>
+<td>
+2024-05-17
+</td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
+<p><img src="figure/subsetted-condition-analysis.Rmd/generate-plot-counts-genes-significant-24.png" width="672" style="display: block; margin: auto;" /></p>
+<p>
+<button type="button" class="btn btn-default btn-xs btn-workflowr btn-workflowr-fig" data-toggle="collapse" data-target="#fig-generate-plot-counts-genes-significant-24">
+Past versions of generate-plot-counts-genes-significant-24.png
+</button>
+</p>
+<div id="fig-generate-plot-counts-genes-significant-24"
+class="collapse">
+<div class="table-responsive">
+<table class="table table-condensed table-hover">
+<thead>
+<tr>
+<th>
+Version
+</th>
+<th>
+Author
+</th>
+<th>
+Date
+</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>
+<a href="https://github.com/uab-cgds-worthey/mecfs-dge-analysis/blob/7b22b815d3c87c292e26539c70189568d532709b/docs/figure/subsetted-condition-analysis.Rmd/generate-plot-counts-genes-significant-24.png" target="_blank">7b22b81</a>
+</td>
+<td>
+sdhutchins
+</td>
+<td>
+2024-05-17
+</td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
+<p><img src="figure/subsetted-condition-analysis.Rmd/generate-plot-counts-genes-significant-25.png" width="672" style="display: block; margin: auto;" /></p>
+<p>
+<button type="button" class="btn btn-default btn-xs btn-workflowr btn-workflowr-fig" data-toggle="collapse" data-target="#fig-generate-plot-counts-genes-significant-25">
+Past versions of generate-plot-counts-genes-significant-25.png
+</button>
+</p>
+<div id="fig-generate-plot-counts-genes-significant-25"
+class="collapse">
+<div class="table-responsive">
+<table class="table table-condensed table-hover">
+<thead>
+<tr>
+<th>
+Version
+</th>
+<th>
+Author
+</th>
+<th>
+Date
+</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>
+<a href="https://github.com/uab-cgds-worthey/mecfs-dge-analysis/blob/7b22b815d3c87c292e26539c70189568d532709b/docs/figure/subsetted-condition-analysis.Rmd/generate-plot-counts-genes-significant-25.png" target="_blank">7b22b81</a>
+</td>
+<td>
+sdhutchins
+</td>
+<td>
+2024-05-17
+</td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
+<p><img src="figure/subsetted-condition-analysis.Rmd/generate-plot-counts-genes-significant-26.png" width="672" style="display: block; margin: auto;" /></p>
+<p>
+<button type="button" class="btn btn-default btn-xs btn-workflowr btn-workflowr-fig" data-toggle="collapse" data-target="#fig-generate-plot-counts-genes-significant-26">
+Past versions of generate-plot-counts-genes-significant-26.png
+</button>
+</p>
+<div id="fig-generate-plot-counts-genes-significant-26"
+class="collapse">
+<div class="table-responsive">
+<table class="table table-condensed table-hover">
+<thead>
+<tr>
+<th>
+Version
+</th>
+<th>
+Author
+</th>
+<th>
+Date
+</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>
+<a href="https://github.com/uab-cgds-worthey/mecfs-dge-analysis/blob/7b22b815d3c87c292e26539c70189568d532709b/docs/figure/subsetted-condition-analysis.Rmd/generate-plot-counts-genes-significant-26.png" target="_blank">7b22b81</a>
+</td>
+<td>
+sdhutchins
+</td>
+<td>
+2024-05-17
+</td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
+<p><img src="figure/subsetted-condition-analysis.Rmd/generate-plot-counts-genes-significant-27.png" width="672" style="display: block; margin: auto;" /></p>
+<p>
+<button type="button" class="btn btn-default btn-xs btn-workflowr btn-workflowr-fig" data-toggle="collapse" data-target="#fig-generate-plot-counts-genes-significant-27">
+Past versions of generate-plot-counts-genes-significant-27.png
+</button>
+</p>
+<div id="fig-generate-plot-counts-genes-significant-27"
+class="collapse">
+<div class="table-responsive">
+<table class="table table-condensed table-hover">
+<thead>
+<tr>
+<th>
+Version
+</th>
+<th>
+Author
+</th>
+<th>
+Date
+</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>
+<a href="https://github.com/uab-cgds-worthey/mecfs-dge-analysis/blob/7b22b815d3c87c292e26539c70189568d532709b/docs/figure/subsetted-condition-analysis.Rmd/generate-plot-counts-genes-significant-27.png" target="_blank">7b22b81</a>
+</td>
+<td>
+sdhutchins
+</td>
+<td>
+2024-05-17
+</td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
+<p><img src="figure/subsetted-condition-analysis.Rmd/generate-plot-counts-genes-significant-28.png" width="672" style="display: block; margin: auto;" /></p>
+<p>
+<button type="button" class="btn btn-default btn-xs btn-workflowr btn-workflowr-fig" data-toggle="collapse" data-target="#fig-generate-plot-counts-genes-significant-28">
+Past versions of generate-plot-counts-genes-significant-28.png
+</button>
+</p>
+<div id="fig-generate-plot-counts-genes-significant-28"
+class="collapse">
+<div class="table-responsive">
+<table class="table table-condensed table-hover">
+<thead>
+<tr>
+<th>
+Version
+</th>
+<th>
+Author
+</th>
+<th>
+Date
+</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>
+<a href="https://github.com/uab-cgds-worthey/mecfs-dge-analysis/blob/7b22b815d3c87c292e26539c70189568d532709b/docs/figure/subsetted-condition-analysis.Rmd/generate-plot-counts-genes-significant-28.png" target="_blank">7b22b81</a>
+</td>
+<td>
+sdhutchins
+</td>
+<td>
+2024-05-17
+</td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
+<p><img src="figure/subsetted-condition-analysis.Rmd/generate-plot-counts-genes-significant-29.png" width="672" style="display: block; margin: auto;" /></p>
+<p>
+<button type="button" class="btn btn-default btn-xs btn-workflowr btn-workflowr-fig" data-toggle="collapse" data-target="#fig-generate-plot-counts-genes-significant-29">
+Past versions of generate-plot-counts-genes-significant-29.png
+</button>
+</p>
+<div id="fig-generate-plot-counts-genes-significant-29"
+class="collapse">
+<div class="table-responsive">
+<table class="table table-condensed table-hover">
+<thead>
+<tr>
+<th>
+Version
+</th>
+<th>
+Author
+</th>
+<th>
+Date
+</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>
+<a href="https://github.com/uab-cgds-worthey/mecfs-dge-analysis/blob/7b22b815d3c87c292e26539c70189568d532709b/docs/figure/subsetted-condition-analysis.Rmd/generate-plot-counts-genes-significant-29.png" target="_blank">7b22b81</a>
+</td>
+<td>
+sdhutchins
+</td>
+<td>
+2024-05-17
+</td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
+<p><img src="figure/subsetted-condition-analysis.Rmd/generate-plot-counts-genes-significant-30.png" width="672" style="display: block; margin: auto;" /></p>
+<p>
+<button type="button" class="btn btn-default btn-xs btn-workflowr btn-workflowr-fig" data-toggle="collapse" data-target="#fig-generate-plot-counts-genes-significant-30">
+Past versions of generate-plot-counts-genes-significant-30.png
+</button>
+</p>
+<div id="fig-generate-plot-counts-genes-significant-30"
+class="collapse">
+<div class="table-responsive">
+<table class="table table-condensed table-hover">
+<thead>
+<tr>
+<th>
+Version
+</th>
+<th>
+Author
+</th>
+<th>
+Date
+</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>
+<a href="https://github.com/uab-cgds-worthey/mecfs-dge-analysis/blob/7b22b815d3c87c292e26539c70189568d532709b/docs/figure/subsetted-condition-analysis.Rmd/generate-plot-counts-genes-significant-30.png" target="_blank">7b22b81</a>
+</td>
+<td>
+sdhutchins
+</td>
+<td>
+2024-05-17
+</td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
+<p><img src="figure/subsetted-condition-analysis.Rmd/generate-plot-counts-genes-significant-31.png" width="672" style="display: block; margin: auto;" /></p>
+<p>
+<button type="button" class="btn btn-default btn-xs btn-workflowr btn-workflowr-fig" data-toggle="collapse" data-target="#fig-generate-plot-counts-genes-significant-31">
+Past versions of generate-plot-counts-genes-significant-31.png
+</button>
+</p>
+<div id="fig-generate-plot-counts-genes-significant-31"
+class="collapse">
+<div class="table-responsive">
+<table class="table table-condensed table-hover">
+<thead>
+<tr>
+<th>
+Version
+</th>
+<th>
+Author
+</th>
+<th>
+Date
+</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>
+<a href="https://github.com/uab-cgds-worthey/mecfs-dge-analysis/blob/7b22b815d3c87c292e26539c70189568d532709b/docs/figure/subsetted-condition-analysis.Rmd/generate-plot-counts-genes-significant-31.png" target="_blank">7b22b81</a>
+</td>
+<td>
+sdhutchins
+</td>
+<td>
+2024-05-17
+</td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
+<p><img src="figure/subsetted-condition-analysis.Rmd/generate-plot-counts-genes-significant-32.png" width="672" style="display: block; margin: auto;" /></p>
+<p>
+<button type="button" class="btn btn-default btn-xs btn-workflowr btn-workflowr-fig" data-toggle="collapse" data-target="#fig-generate-plot-counts-genes-significant-32">
+Past versions of generate-plot-counts-genes-significant-32.png
+</button>
+</p>
+<div id="fig-generate-plot-counts-genes-significant-32"
+class="collapse">
+<div class="table-responsive">
+<table class="table table-condensed table-hover">
+<thead>
+<tr>
+<th>
+Version
+</th>
+<th>
+Author
+</th>
+<th>
+Date
+</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>
+<a href="https://github.com/uab-cgds-worthey/mecfs-dge-analysis/blob/7b22b815d3c87c292e26539c70189568d532709b/docs/figure/subsetted-condition-analysis.Rmd/generate-plot-counts-genes-significant-32.png" target="_blank">7b22b81</a>
+</td>
+<td>
+sdhutchins
+</td>
+<td>
+2024-05-17
+</td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
+<p><img src="figure/subsetted-condition-analysis.Rmd/generate-plot-counts-genes-significant-33.png" width="672" style="display: block; margin: auto;" /></p>
+<p>
+<button type="button" class="btn btn-default btn-xs btn-workflowr btn-workflowr-fig" data-toggle="collapse" data-target="#fig-generate-plot-counts-genes-significant-33">
+Past versions of generate-plot-counts-genes-significant-33.png
+</button>
+</p>
+<div id="fig-generate-plot-counts-genes-significant-33"
+class="collapse">
+<div class="table-responsive">
+<table class="table table-condensed table-hover">
+<thead>
+<tr>
+<th>
+Version
+</th>
+<th>
+Author
+</th>
+<th>
+Date
+</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>
+<a href="https://github.com/uab-cgds-worthey/mecfs-dge-analysis/blob/7b22b815d3c87c292e26539c70189568d532709b/docs/figure/subsetted-condition-analysis.Rmd/generate-plot-counts-genes-significant-33.png" target="_blank">7b22b81</a>
+</td>
+<td>
+sdhutchins
+</td>
+<td>
+2024-05-17
+</td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
+<p><img src="figure/subsetted-condition-analysis.Rmd/generate-plot-counts-genes-significant-34.png" width="672" style="display: block; margin: auto;" /></p>
+<p>
+<button type="button" class="btn btn-default btn-xs btn-workflowr btn-workflowr-fig" data-toggle="collapse" data-target="#fig-generate-plot-counts-genes-significant-34">
+Past versions of generate-plot-counts-genes-significant-34.png
+</button>
+</p>
+<div id="fig-generate-plot-counts-genes-significant-34"
+class="collapse">
+<div class="table-responsive">
+<table class="table table-condensed table-hover">
+<thead>
+<tr>
+<th>
+Version
+</th>
+<th>
+Author
+</th>
+<th>
+Date
+</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>
+<a href="https://github.com/uab-cgds-worthey/mecfs-dge-analysis/blob/7b22b815d3c87c292e26539c70189568d532709b/docs/figure/subsetted-condition-analysis.Rmd/generate-plot-counts-genes-significant-34.png" target="_blank">7b22b81</a>
+</td>
+<td>
+sdhutchins
+</td>
+<td>
+2024-05-17
+</td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
+<p><img src="figure/subsetted-condition-analysis.Rmd/generate-plot-counts-genes-significant-35.png" width="672" style="display: block; margin: auto;" /></p>
+<p>
+<button type="button" class="btn btn-default btn-xs btn-workflowr btn-workflowr-fig" data-toggle="collapse" data-target="#fig-generate-plot-counts-genes-significant-35">
+Past versions of generate-plot-counts-genes-significant-35.png
+</button>
+</p>
+<div id="fig-generate-plot-counts-genes-significant-35"
+class="collapse">
+<div class="table-responsive">
+<table class="table table-condensed table-hover">
+<thead>
+<tr>
+<th>
+Version
+</th>
+<th>
+Author
+</th>
+<th>
+Date
+</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>
+<a href="https://github.com/uab-cgds-worthey/mecfs-dge-analysis/blob/7b22b815d3c87c292e26539c70189568d532709b/docs/figure/subsetted-condition-analysis.Rmd/generate-plot-counts-genes-significant-35.png" target="_blank">7b22b81</a>
+</td>
+<td>
+sdhutchins
+</td>
+<td>
+2024-05-17
+</td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
+<p><img src="figure/subsetted-condition-analysis.Rmd/generate-plot-counts-genes-significant-36.png" width="672" style="display: block; margin: auto;" /></p>
+<p>
+<button type="button" class="btn btn-default btn-xs btn-workflowr btn-workflowr-fig" data-toggle="collapse" data-target="#fig-generate-plot-counts-genes-significant-36">
+Past versions of generate-plot-counts-genes-significant-36.png
+</button>
+</p>
+<div id="fig-generate-plot-counts-genes-significant-36"
+class="collapse">
+<div class="table-responsive">
+<table class="table table-condensed table-hover">
+<thead>
+<tr>
+<th>
+Version
+</th>
+<th>
+Author
+</th>
+<th>
+Date
+</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>
+<a href="https://github.com/uab-cgds-worthey/mecfs-dge-analysis/blob/7b22b815d3c87c292e26539c70189568d532709b/docs/figure/subsetted-condition-analysis.Rmd/generate-plot-counts-genes-significant-36.png" target="_blank">7b22b81</a>
+</td>
+<td>
+sdhutchins
+</td>
+<td>
+2024-05-17
+</td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
+<p><img src="figure/subsetted-condition-analysis.Rmd/generate-plot-counts-genes-significant-37.png" width="672" style="display: block; margin: auto;" /></p>
+<p>
+<button type="button" class="btn btn-default btn-xs btn-workflowr btn-workflowr-fig" data-toggle="collapse" data-target="#fig-generate-plot-counts-genes-significant-37">
+Past versions of generate-plot-counts-genes-significant-37.png
+</button>
+</p>
+<div id="fig-generate-plot-counts-genes-significant-37"
+class="collapse">
+<div class="table-responsive">
+<table class="table table-condensed table-hover">
+<thead>
+<tr>
+<th>
+Version
+</th>
+<th>
+Author
+</th>
+<th>
+Date
+</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>
+<a href="https://github.com/uab-cgds-worthey/mecfs-dge-analysis/blob/7b22b815d3c87c292e26539c70189568d532709b/docs/figure/subsetted-condition-analysis.Rmd/generate-plot-counts-genes-significant-37.png" target="_blank">7b22b81</a>
+</td>
+<td>
+sdhutchins
+</td>
+<td>
+2024-05-17
+</td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
+<p><img src="figure/subsetted-condition-analysis.Rmd/generate-plot-counts-genes-significant-38.png" width="672" style="display: block; margin: auto;" /></p>
+<p>
+<button type="button" class="btn btn-default btn-xs btn-workflowr btn-workflowr-fig" data-toggle="collapse" data-target="#fig-generate-plot-counts-genes-significant-38">
+Past versions of generate-plot-counts-genes-significant-38.png
+</button>
+</p>
+<div id="fig-generate-plot-counts-genes-significant-38"
+class="collapse">
+<div class="table-responsive">
+<table class="table table-condensed table-hover">
+<thead>
+<tr>
+<th>
+Version
+</th>
+<th>
+Author
+</th>
+<th>
+Date
+</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>
+<a href="https://github.com/uab-cgds-worthey/mecfs-dge-analysis/blob/7b22b815d3c87c292e26539c70189568d532709b/docs/figure/subsetted-condition-analysis.Rmd/generate-plot-counts-genes-significant-38.png" target="_blank">7b22b81</a>
+</td>
+<td>
+sdhutchins
+</td>
+<td>
+2024-05-17
+</td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
+<p><img src="figure/subsetted-condition-analysis.Rmd/generate-plot-counts-genes-significant-39.png" width="672" style="display: block; margin: auto;" /></p>
+<p>
+<button type="button" class="btn btn-default btn-xs btn-workflowr btn-workflowr-fig" data-toggle="collapse" data-target="#fig-generate-plot-counts-genes-significant-39">
+Past versions of generate-plot-counts-genes-significant-39.png
+</button>
+</p>
+<div id="fig-generate-plot-counts-genes-significant-39"
+class="collapse">
+<div class="table-responsive">
+<table class="table table-condensed table-hover">
+<thead>
+<tr>
+<th>
+Version
+</th>
+<th>
+Author
+</th>
+<th>
+Date
+</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>
+<a href="https://github.com/uab-cgds-worthey/mecfs-dge-analysis/blob/7b22b815d3c87c292e26539c70189568d532709b/docs/figure/subsetted-condition-analysis.Rmd/generate-plot-counts-genes-significant-39.png" target="_blank">7b22b81</a>
+</td>
+<td>
+sdhutchins
+</td>
+<td>
+2024-05-17
+</td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
+<p><img src="figure/subsetted-condition-analysis.Rmd/generate-plot-counts-genes-significant-40.png" width="672" style="display: block; margin: auto;" /></p>
+<p>
+<button type="button" class="btn btn-default btn-xs btn-workflowr btn-workflowr-fig" data-toggle="collapse" data-target="#fig-generate-plot-counts-genes-significant-40">
+Past versions of generate-plot-counts-genes-significant-40.png
+</button>
+</p>
+<div id="fig-generate-plot-counts-genes-significant-40"
+class="collapse">
+<div class="table-responsive">
+<table class="table table-condensed table-hover">
+<thead>
+<tr>
+<th>
+Version
+</th>
+<th>
+Author
+</th>
+<th>
+Date
+</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>
+<a href="https://github.com/uab-cgds-worthey/mecfs-dge-analysis/blob/7b22b815d3c87c292e26539c70189568d532709b/docs/figure/subsetted-condition-analysis.Rmd/generate-plot-counts-genes-significant-40.png" target="_blank">7b22b81</a>
+</td>
+<td>
+sdhutchins
+</td>
+<td>
+2024-05-17
+</td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
+<p><img src="figure/subsetted-condition-analysis.Rmd/generate-plot-counts-genes-significant-41.png" width="672" style="display: block; margin: auto;" /></p>
+<p>
+<button type="button" class="btn btn-default btn-xs btn-workflowr btn-workflowr-fig" data-toggle="collapse" data-target="#fig-generate-plot-counts-genes-significant-41">
+Past versions of generate-plot-counts-genes-significant-41.png
+</button>
+</p>
+<div id="fig-generate-plot-counts-genes-significant-41"
+class="collapse">
+<div class="table-responsive">
+<table class="table table-condensed table-hover">
+<thead>
+<tr>
+<th>
+Version
+</th>
+<th>
+Author
+</th>
+<th>
+Date
+</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>
+<a href="https://github.com/uab-cgds-worthey/mecfs-dge-analysis/blob/7b22b815d3c87c292e26539c70189568d532709b/docs/figure/subsetted-condition-analysis.Rmd/generate-plot-counts-genes-significant-41.png" target="_blank">7b22b81</a>
+</td>
+<td>
+sdhutchins
+</td>
+<td>
+2024-05-17
+</td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
+<p><img src="figure/subsetted-condition-analysis.Rmd/generate-plot-counts-genes-significant-42.png" width="672" style="display: block; margin: auto;" /></p>
+<p>
+<button type="button" class="btn btn-default btn-xs btn-workflowr btn-workflowr-fig" data-toggle="collapse" data-target="#fig-generate-plot-counts-genes-significant-42">
+Past versions of generate-plot-counts-genes-significant-42.png
+</button>
+</p>
+<div id="fig-generate-plot-counts-genes-significant-42"
+class="collapse">
+<div class="table-responsive">
+<table class="table table-condensed table-hover">
+<thead>
+<tr>
+<th>
+Version
+</th>
+<th>
+Author
+</th>
+<th>
+Date
+</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>
+<a href="https://github.com/uab-cgds-worthey/mecfs-dge-analysis/blob/7b22b815d3c87c292e26539c70189568d532709b/docs/figure/subsetted-condition-analysis.Rmd/generate-plot-counts-genes-significant-42.png" target="_blank">7b22b81</a>
+</td>
+<td>
+sdhutchins
+</td>
+<td>
+2024-05-17
+</td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
+<p><img src="figure/subsetted-condition-analysis.Rmd/generate-plot-counts-genes-significant-43.png" width="672" style="display: block; margin: auto;" /></p>
+<p>
+<button type="button" class="btn btn-default btn-xs btn-workflowr btn-workflowr-fig" data-toggle="collapse" data-target="#fig-generate-plot-counts-genes-significant-43">
+Past versions of generate-plot-counts-genes-significant-43.png
+</button>
+</p>
+<div id="fig-generate-plot-counts-genes-significant-43"
+class="collapse">
+<div class="table-responsive">
+<table class="table table-condensed table-hover">
+<thead>
+<tr>
+<th>
+Version
+</th>
+<th>
+Author
+</th>
+<th>
+Date
+</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>
+<a href="https://github.com/uab-cgds-worthey/mecfs-dge-analysis/blob/7b22b815d3c87c292e26539c70189568d532709b/docs/figure/subsetted-condition-analysis.Rmd/generate-plot-counts-genes-significant-43.png" target="_blank">7b22b81</a>
+</td>
+<td>
+sdhutchins
+</td>
+<td>
+2024-05-17
+</td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
+<p><img src="figure/subsetted-condition-analysis.Rmd/generate-plot-counts-genes-significant-44.png" width="672" style="display: block; margin: auto;" /></p>
+<p>
+<button type="button" class="btn btn-default btn-xs btn-workflowr btn-workflowr-fig" data-toggle="collapse" data-target="#fig-generate-plot-counts-genes-significant-44">
+Past versions of generate-plot-counts-genes-significant-44.png
+</button>
+</p>
+<div id="fig-generate-plot-counts-genes-significant-44"
+class="collapse">
+<div class="table-responsive">
+<table class="table table-condensed table-hover">
+<thead>
+<tr>
+<th>
+Version
+</th>
+<th>
+Author
+</th>
+<th>
+Date
+</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>
+<a href="https://github.com/uab-cgds-worthey/mecfs-dge-analysis/blob/7b22b815d3c87c292e26539c70189568d532709b/docs/figure/subsetted-condition-analysis.Rmd/generate-plot-counts-genes-significant-44.png" target="_blank">7b22b81</a>
+</td>
+<td>
+sdhutchins
+</td>
+<td>
+2024-05-17
+</td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
+<p><img src="figure/subsetted-condition-analysis.Rmd/generate-plot-counts-genes-significant-45.png" width="672" style="display: block; margin: auto;" /></p>
+<p>
+<button type="button" class="btn btn-default btn-xs btn-workflowr btn-workflowr-fig" data-toggle="collapse" data-target="#fig-generate-plot-counts-genes-significant-45">
+Past versions of generate-plot-counts-genes-significant-45.png
+</button>
+</p>
+<div id="fig-generate-plot-counts-genes-significant-45"
+class="collapse">
+<div class="table-responsive">
+<table class="table table-condensed table-hover">
+<thead>
+<tr>
+<th>
+Version
+</th>
+<th>
+Author
+</th>
+<th>
+Date
+</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>
+<a href="https://github.com/uab-cgds-worthey/mecfs-dge-analysis/blob/7b22b815d3c87c292e26539c70189568d532709b/docs/figure/subsetted-condition-analysis.Rmd/generate-plot-counts-genes-significant-45.png" target="_blank">7b22b81</a>
+</td>
+<td>
+sdhutchins
+</td>
+<td>
+2024-05-17
+</td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
+<p><img src="figure/subsetted-condition-analysis.Rmd/generate-plot-counts-genes-significant-46.png" width="672" style="display: block; margin: auto;" /></p>
+<p>
+<button type="button" class="btn btn-default btn-xs btn-workflowr btn-workflowr-fig" data-toggle="collapse" data-target="#fig-generate-plot-counts-genes-significant-46">
+Past versions of generate-plot-counts-genes-significant-46.png
+</button>
+</p>
+<div id="fig-generate-plot-counts-genes-significant-46"
+class="collapse">
+<div class="table-responsive">
+<table class="table table-condensed table-hover">
+<thead>
+<tr>
+<th>
+Version
+</th>
+<th>
+Author
+</th>
+<th>
+Date
+</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>
+<a href="https://github.com/uab-cgds-worthey/mecfs-dge-analysis/blob/7b22b815d3c87c292e26539c70189568d532709b/docs/figure/subsetted-condition-analysis.Rmd/generate-plot-counts-genes-significant-46.png" target="_blank">7b22b81</a>
+</td>
+<td>
+sdhutchins
+</td>
+<td>
+2024-05-17
+</td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
+<p><img src="figure/subsetted-condition-analysis.Rmd/generate-plot-counts-genes-significant-47.png" width="672" style="display: block; margin: auto;" /></p>
+<p>
+<button type="button" class="btn btn-default btn-xs btn-workflowr btn-workflowr-fig" data-toggle="collapse" data-target="#fig-generate-plot-counts-genes-significant-47">
+Past versions of generate-plot-counts-genes-significant-47.png
+</button>
+</p>
+<div id="fig-generate-plot-counts-genes-significant-47"
+class="collapse">
+<div class="table-responsive">
+<table class="table table-condensed table-hover">
+<thead>
+<tr>
+<th>
+Version
+</th>
+<th>
+Author
+</th>
+<th>
+Date
+</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>
+<a href="https://github.com/uab-cgds-worthey/mecfs-dge-analysis/blob/7b22b815d3c87c292e26539c70189568d532709b/docs/figure/subsetted-condition-analysis.Rmd/generate-plot-counts-genes-significant-47.png" target="_blank">7b22b81</a>
+</td>
+<td>
+sdhutchins
+</td>
+<td>
+2024-05-17
+</td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
+<p><img src="figure/subsetted-condition-analysis.Rmd/generate-plot-counts-genes-significant-48.png" width="672" style="display: block; margin: auto;" /></p>
+<p>
+<button type="button" class="btn btn-default btn-xs btn-workflowr btn-workflowr-fig" data-toggle="collapse" data-target="#fig-generate-plot-counts-genes-significant-48">
+Past versions of generate-plot-counts-genes-significant-48.png
+</button>
+</p>
+<div id="fig-generate-plot-counts-genes-significant-48"
+class="collapse">
+<div class="table-responsive">
+<table class="table table-condensed table-hover">
+<thead>
+<tr>
+<th>
+Version
+</th>
+<th>
+Author
+</th>
+<th>
+Date
+</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>
+<a href="https://github.com/uab-cgds-worthey/mecfs-dge-analysis/blob/7b22b815d3c87c292e26539c70189568d532709b/docs/figure/subsetted-condition-analysis.Rmd/generate-plot-counts-genes-significant-48.png" target="_blank">7b22b81</a>
+</td>
+<td>
+sdhutchins
+</td>
+<td>
+2024-05-17
+</td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
+<p><img src="figure/subsetted-condition-analysis.Rmd/generate-plot-counts-genes-significant-49.png" width="672" style="display: block; margin: auto;" /></p>
+<p>
+<button type="button" class="btn btn-default btn-xs btn-workflowr btn-workflowr-fig" data-toggle="collapse" data-target="#fig-generate-plot-counts-genes-significant-49">
+Past versions of generate-plot-counts-genes-significant-49.png
+</button>
+</p>
+<div id="fig-generate-plot-counts-genes-significant-49"
+class="collapse">
+<div class="table-responsive">
+<table class="table table-condensed table-hover">
+<thead>
+<tr>
+<th>
+Version
+</th>
+<th>
+Author
+</th>
+<th>
+Date
+</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>
+<a href="https://github.com/uab-cgds-worthey/mecfs-dge-analysis/blob/7b22b815d3c87c292e26539c70189568d532709b/docs/figure/subsetted-condition-analysis.Rmd/generate-plot-counts-genes-significant-49.png" target="_blank">7b22b81</a>
+</td>
+<td>
+sdhutchins
+</td>
+<td>
+2024-05-17
+</td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
+<p><img src="figure/subsetted-condition-analysis.Rmd/generate-plot-counts-genes-significant-50.png" width="672" style="display: block; margin: auto;" /></p>
+<p>
+<button type="button" class="btn btn-default btn-xs btn-workflowr btn-workflowr-fig" data-toggle="collapse" data-target="#fig-generate-plot-counts-genes-significant-50">
+Past versions of generate-plot-counts-genes-significant-50.png
+</button>
+</p>
+<div id="fig-generate-plot-counts-genes-significant-50"
+class="collapse">
+<div class="table-responsive">
+<table class="table table-condensed table-hover">
+<thead>
+<tr>
+<th>
+Version
+</th>
+<th>
+Author
+</th>
+<th>
+Date
+</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>
+<a href="https://github.com/uab-cgds-worthey/mecfs-dge-analysis/blob/7b22b815d3c87c292e26539c70189568d532709b/docs/figure/subsetted-condition-analysis.Rmd/generate-plot-counts-genes-significant-50.png" target="_blank">7b22b81</a>
+</td>
+<td>
+sdhutchins
+</td>
+<td>
+2024-05-17
+</td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
 </div>
 <div id="combined-heatmap-of-degs-and-patient-genes"
 class="section level2">
