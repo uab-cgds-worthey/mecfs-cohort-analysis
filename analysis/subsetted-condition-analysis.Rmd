@@ -114,7 +114,7 @@ dds <- DESeqDataSetFromMatrix(
 )
 
 # Pre-filtering: Keep only rows that have at least 10 reads total
-keep <- rowSums(counts(dds)) >= 10
+keep <- rowSums(counts(dds)) >= 50
 dds <- dds[keep, ]
 
 # Remove samples from family's with multiple samples
