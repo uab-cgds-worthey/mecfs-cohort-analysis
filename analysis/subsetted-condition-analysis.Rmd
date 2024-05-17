@@ -65,6 +65,10 @@ for the project which is hosted on Box. This also ensures data is properly order
 ```{r, import data}
 counts <- read_tsv("data/star-salmon/salmon.merged.gene_counts_length_scaled.tsv")
 
+# Remove RNU genes
+#genestoremove <- c('RNU1-1', 'RNU1-3', 'RNVU1-18')
+#counts <- counts[!counts$gene_name %in% genestoremove,]
+
 # Import variants of interest
 genes_of_interest <- read_csv("data/Prioritized_Genes_From_WGS_2024_04_25.csv")
 genes_of_interest <- unique(genes_of_interest$Genes)
@@ -128,10 +132,6 @@ dds <- dds[, kept_fam_members]
 
 # Run DESeq function
 dds <- DESeq(dds)
-
-# Remove RNU genes
-genestoremove <- c('RNU1-1',' RNU1-3', 'RNVU1-18')
-dds <- dds[setdiff(rownames(dds), genestoremove),]
 
 # Normalize gene counts for differences in seq. depth/global differences
 counts_norm <- counts(dds, normalized = TRUE)
@@ -1069,6 +1069,32 @@ dotplot(xx)
 for (ensembl_id in filtered_by_interest$Ensembl_ID) {
   d <- plotCounts(dds, gene = ensembl_id, intgroup = "Affected", returnData = TRUE)
   gene_name <- filtered_by_interest$gene_name[filtered_by_interest$Ensembl_ID == ensembl_id]
+  ggplot_box <- ggboxplot(d,
+    x = "Affected", y = "count", add = "jitter",
+    color = "Affected", palette = c("red", "navy"),
+    title = gene_name
+  ) +
+    geom_text_repel(aes(label = rownames(d))) +
+    scale_color_manual(
+      name = "Affected Status",
+      labels = c("Unaffected", "Affected"),
+      values = c("red", "navy")
+    )
+  print(ggplot_box) # Ensure each plot is printed during the loop
+  ggsave(
+    filename = paste0(gene_name, "-subsetted-plot-counts.png"),
+    path = "output/batch-correction-limma/plot-counts",
+    plot = ggplot_box, dpi = 450
+  )
+}
+```
+
+
+```{r, generate-plot-counts-genes-significant}
+# For loop for plot counts
+for (ensembl_id in res_aff_vs_unaff_df_genename_1$Ensembl_ID) {
+  d <- plotCounts(dds, gene = ensembl_id, intgroup = "Affected", returnData = TRUE)
+  gene_name <- res_aff_vs_unaff_df_genename_1$gene_name[res_aff_vs_unaff_df_genename_1$Ensembl_ID == ensembl_id]
   ggplot_box <- ggboxplot(d,
     x = "Affected", y = "count", add = "jitter",
     color = "Affected", palette = c("red", "navy"),
