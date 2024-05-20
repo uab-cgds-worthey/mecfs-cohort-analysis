@@ -1,0 +1,3 @@
+"Term","Overlap","P.value","Adjusted.P.value","Old.P.value","Old.Adjusted.P.value","Odds.Ratio","Combined.Score","Genes"
+"retinitis pigmentosa","1/51",0.119987608922091,0.239975217844182,0,0,8.12244897959184,17.2225711551973,"FSCN2"
+"deafness","1/111",0.243168553227101,0.243168553227101,0,0,3.6808905380334,5.20478084558139,"TMC1"

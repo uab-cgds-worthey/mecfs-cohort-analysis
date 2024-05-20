@@ -1,0 +1,6 @@
+"Term","Overlap","P.value","Adjusted.P.value","Old.P.value","Old.Adjusted.P.value","Odds.Ratio","Combined.Score","Genes"
+"prion pathway","1/18",0.0440744949316927,0.220372474658463,0,0,23.9291716686675,74.7038591145848,"GFAP"
+"ion channels and their functional role in vascular endothelium","1/45",0.106639187352935,0.221900853808682,0,0,9.23283858998145,20.665901611884,"KCNQ5"
+"mtor signaling pathway","1/57",0.133140512285209,0.221900853808682,0,0,7.25,14.6185391319657,"PIK3R3"
+"t cell receptor signaling pathway","1/123",0.265693266376988,0.283960903877272,0,0,3.31682837069254,4.39616667672928,"PIK3R3"
+"insulin signaling pathway","1/133",0.283960903877272,0.283960903877272,0,0,3.06400742115028,3.85733627834156,"PIK3R3"

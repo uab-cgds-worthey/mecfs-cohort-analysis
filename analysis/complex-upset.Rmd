@@ -21,20 +21,20 @@ library(biomaRt)
 library(ggthemes)
 library(ggpubr)
 
-movies = as.data.frame(ggplot2movies::movies)
-genres = colnames(movies)[18:24]
-movies[genres] = movies[genres] == 1
-movies[movies$mpaa == '', 'mpaa'] = NA
-movies = na.omit(movies)
-upset(movies, genres, name='genre', width_ratio=0.1)
+movies <- as.data.frame(ggplot2movies::movies)
+genres <- colnames(movies)[18:24]
+movies[genres] <- movies[genres] == 1
+movies[movies$mpaa == "", "mpaa"] <- NA
+movies <- na.omit(movies)
+upset(movies, genres, name = "genre", width_ratio = 0.1)
 ```
 
 ```{r, degs}
 load("output/condition-analysis.RData")
-samples = colnames(counts)
+samples <- colnames(counts)
 df <- filtered_counts
-df[samples] = df[samples] > 10
-df = na.omit(df)
-upset(df, samples, name='sample', width_ratio=0.1)
+df[samples] <- df[samples] > 10
+df <- na.omit(df)
+upset(df, samples, name = "sample", width_ratio = 0.1)
 ggsave("output/bysample_upset.png", scale = 1, width = 18, height = 12, units = "in")
 ```

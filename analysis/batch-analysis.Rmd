@@ -79,7 +79,7 @@ sample_metadata$Sex <- factor(sample_metadata$Sex)
 
 # Account for Family later but batch is accounted for
 # Account for another factor seems to be an issue.
-dds_batch <- DESeqDataSetFromMatrix(countData = round(counts), colData = sample_metadata, design = ~ Batch)
+dds_batch <- DESeqDataSetFromMatrix(countData = round(counts), colData = sample_metadata, design = ~Batch)
 
 # Pre-filtering: Keep only rows that have at least 10 reads total
 keep <- rowSums(counts(dds_batch)) >= 10

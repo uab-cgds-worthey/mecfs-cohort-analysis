@@ -14,7 +14,7 @@ editor_options:
 knitr::opts_chunk$set(echo = TRUE, warning = FALSE, message = FALSE)
 ```
 
-# DGE Analysis Setup {.tabset}
+# DGE Analysis Setup
 
 Ensure you have all necessary libraries installed and load the helper code.
 
@@ -99,14 +99,16 @@ sample_metadata$Affected <- factor(sample_metadata$Affected)
 sample_metadata$Batch <- factor(sample_metadata$Batch)
 sample_metadata$Sex <- factor(sample_metadata$Sex)
 sample_metadata$Ancestry <- factor(sample_metadata$Ancestry)
-#sample_metadata$Disease <- factor(sample_metadata$Disease)
+# sample_metadata$Disease <- factor(sample_metadata$Disease)
 sample_metadata$SubCategory <- factor(sample_metadata$SubCategory)
 sample_metadata$CombinedCategory <- factor(sample_metadata$CombinedCategory)
 
 # Account for Family later but batch is accounted for
 # Accounting for another factor seems to be an issue.
-dds <- DESeqDataSetFromMatrix(countData = round(counts), colData = sample_metadata, 
-                              design = ~ Batch + Affected)
+dds <- DESeqDataSetFromMatrix(
+  countData = round(counts), colData = sample_metadata,
+  design = ~ Batch + Affected
+)
 
 # Pre-filtering: Keep only rows that have at least 10 reads total
 keep <- rowSums(counts(dds)) >= 10
@@ -197,11 +199,11 @@ percent_var_all <- round(100 * attr(pca_data_all, "percentVar"))
 
 ggplot(pca_data_all, aes(PC1, PC2)) +
   geom_point(aes(colour = Affected, fill = Sex, shape = Batch), size = 4) +
-    scale_shape_manual(values = c(21, 22, 23) )+
-  scale_fill_manual(values = c("white","gray"))+
-  scale_color_manual(values=c("blue","red"))+
+  scale_shape_manual(values = c(21, 22, 23)) +
+  scale_fill_manual(values = c("white", "gray")) +
+  scale_color_manual(values = c("blue", "red")) +
   geom_text(aes(label = name),
-    data = subset(pca_data_all, PC2 < -18 | PC1 < -30 ),
+    data = subset(pca_data_all, PC2 < -18 | PC1 < -30),
     vjust = -1, hjust = 0.5, size = 2.5
   ) +
   xlab(paste0("PC1: ", percent_var_all[1], "% variance")) +
@@ -215,10 +217,10 @@ percent_var_all <- round(100 * attr(pca_data_all, "percentVar"))
 
 ggplot(pca_data_all, aes(PC1, PC2)) +
   geom_point(aes(colour = CombinedCategory, fill = Sex, shape = Affected), size = 4) +
-    scale_shape_manual(values = c(21, 22, 23) )+
-  scale_fill_manual(values = c("white","gray"))+
+  scale_shape_manual(values = c(21, 22, 23)) +
+  scale_fill_manual(values = c("white", "gray")) +
   geom_text(aes(label = name),
-    data = subset(pca_data_all, PC2 < -18 | PC1 < -30 ),
+    data = subset(pca_data_all, PC2 < -18 | PC1 < -30),
     vjust = -1, hjust = 0.5, size = 2.5
   ) +
   xlab(paste0("PC1: ", percent_var_all[1], "% variance")) +
@@ -227,14 +229,14 @@ ggplot(pca_data_all, aes(PC1, PC2)) +
 ```
 
 ```{r, principal-components-analysis-all-affected}
-pca_data<- plotPCA(vsd_limma, intgroup = c("Sex", "Affected"), returnData = TRUE)
-percent_var<- round(100 * attr(pca_data, "percentVar"))
+pca_data <- plotPCA(vsd_limma, intgroup = c("Sex", "Affected"), returnData = TRUE)
+percent_var <- round(100 * attr(pca_data, "percentVar"))
 
 ggplot(pca_data, aes(PC1, PC2)) +
   geom_point(aes(shape = Sex, colour = Affected), size = 4) +
-   scale_color_manual(values=c("blue","red")) +
+  scale_color_manual(values = c("blue", "red")) +
   geom_text(aes(label = name),
-    data = subset(pca_data, PC2 < -15 | PC1 > 25 | PC1 < -40 ),
+    data = subset(pca_data, PC2 < -15 | PC1 > 25 | PC1 < -40),
     vjust = -1, hjust = 0.5, size = 2.5
   ) +
   xlab(paste0("PC1: ", percent_var[1], "% variance")) +
@@ -248,10 +250,12 @@ percent_var_all <- round(100 * attr(pca_data_all, "percentVar"))
 
 ggplot(pca_data_all, aes(PC1, PC2)) +
   geom_point(aes(colour = CombinedCategory), size = 4) +
-  scale_colour_manual(values = c("#B3DE69","#FFFFB3","#BEBADA","#FB8072","#80B1D3",
-                               "#FCCDE5","#8DD3C7","#000000"))+
+  scale_colour_manual(values = c(
+    "#B3DE69", "#FFFFB3", "#BEBADA", "#FB8072", "#80B1D3",
+    "#FCCDE5", "#8DD3C7", "#000000"
+  )) +
   geom_text(aes(label = name),
-    data = subset(pca_data_all, PC2 < -10 | PC1 < -20 | PC1 > 40 ),
+    data = subset(pca_data_all, PC2 < -10 | PC1 < -20 | PC1 > 40),
     vjust = -1, hjust = 0.5, size = 2.5
   ) +
   xlab(paste0("PC1: ", percent_var_all[1], "% variance")) +
@@ -265,12 +269,14 @@ percent_var_anc <- round(100 * attr(pca_data_anc, "percentVar"))
 
 ggplot(pca_data_anc, aes(PC1, PC2)) +
   geom_point(aes(colour = Affected, fill = Ancestry, shape = Batch), size = 4) +
-    scale_shape_manual(values = c(21, 22, 23) )+
-  scale_fill_manual(values = c("#B3DE69","#FFFFB3","#BEBADA","#FB8072","#80B1D3",
-                               "#FCCDE5","#D9D9D9","#FDB462","#8DD3C7","#000000"))+
-  scale_color_manual(values=c("blue","red"))+
+  scale_shape_manual(values = c(21, 22, 23)) +
+  scale_fill_manual(values = c(
+    "#B3DE69", "#FFFFB3", "#BEBADA", "#FB8072", "#80B1D3",
+    "#FCCDE5", "#D9D9D9", "#FDB462", "#8DD3C7", "#000000"
+  )) +
+  scale_color_manual(values = c("blue", "red")) +
   geom_text(aes(label = name),
-    data = subset(pca_data_anc, Ancestry == "Black" ),
+    data = subset(pca_data_anc, Ancestry == "Black"),
     vjust = -1, hjust = 0.5, size = 2.5
   ) +
   xlab(paste0("PC1: ", percent_var_anc[1], "% variance")) +
@@ -314,40 +320,39 @@ category_colors <- c(
 )
 
 combined_category_colors <- c(
-  "Transporter-Metabolism" = "#E41A1C",  # Dark green
-  "Metabolism" = "#377EB8",              # Dark orange
-  "Metabolism-Immune" = "#4DAF4A",       # Light purple
-  "Immune-Transporter" = "#984EA3",      # Magenta
-  "Transporter" = "#FF7F00",             # Light green
-  "Cytoskeletal" = "#FFFF33",            # Mustard yellow
-  "Transporter-Immune-Metabolism" = "#F781BF",  # Brown
-  "NA" = "#000000"                       # Dark grey
+  "Transporter-Metabolism" = "#E41A1C", # Dark green
+  "Metabolism" = "#377EB8", # Dark orange
+  "Metabolism-Immune" = "#4DAF4A", # Light purple
+  "Immune-Transporter" = "#984EA3", # Magenta
+  "Transporter" = "#FF7F00", # Light green
+  "Cytoskeletal" = "#FFFF33", # Mustard yellow
+  "Transporter-Immune-Metabolism" = "#F781BF", # Brown
+  "NA" = "#000000" # Dark grey
 )
 
 
 # Specify colors
-ann_colors = list(
-    Batch = c(B1 = "purple", B2 = "firebrick", B3 ="yellow"),
-    Affected = c(Yes = "green", No = "navy"),
-    Disease = disease_colors,
-    SubCategory = category_colors,
-    CombinedCategory = combined_category_colors
+ann_colors <- list(
+  Batch = c(B1 = "purple", B2 = "firebrick", B3 = "yellow"),
+  Affected = c(Yes = "green", No = "navy"),
+  Disease = disease_colors,
+  SubCategory = category_colors,
+  CombinedCategory = combined_category_colors
 )
 
-ann_colors2 = list(
-    Batch = c(B1 = "purple", B2 = "firebrick", B3 ="yellow"),
-    Affected = c(Yes = "green", No = "navy"),
-    SubCategory = category_colors,
-    Disease = disease_colors,
-    CombinedCategory = combined_category_colors
-
+ann_colors2 <- list(
+  Batch = c(B1 = "purple", B2 = "firebrick", B3 = "yellow"),
+  Affected = c(Yes = "green", No = "navy"),
+  SubCategory = category_colors,
+  Disease = disease_colors,
+  CombinedCategory = combined_category_colors
 )
 
 all_genes <- order(-rowVars(assay(vsd_limma_female)))
 mat <- assay(vsd_limma_female)[all_genes, ]
 mat <- mat - rowMeans(mat)
 df <- as.data.frame(colData(vsd)[, c("Batch", "Affected", "Disease Group")])
-#pheatmap(mat, annotation_col = df, annotation_colors = ann_colors, fontsize = 5)
+# pheatmap(mat, annotation_col = df, annotation_colors = ann_colors, fontsize = 5)
 ```
 
 
@@ -445,16 +450,20 @@ pheatmap(mat_100_all, annotation_col = df_100_all, annotation_colors = ann_color
 
 ```{r}
 res_aff_vs_unaff <- results(dds_female, contrast = c("Affected", "Yes", "No"))
-res_aff_vs_unaff_df <- process_and_save_results(res_aff_vs_unaff, 
-                                                "output/res_aff_vs_unaff.csv")
+res_aff_vs_unaff_df <- process_and_save_results(
+  res_aff_vs_unaff,
+  "output/res_aff_vs_unaff.csv"
+)
 res_aff_vs_unaff_df <- arrange(res_aff_vs_unaff_df, padj)
 res_aff_vs_unaff_df_05 <- subset(res_aff_vs_unaff_df, padj < 0.05)
 
 summary(res_aff_vs_unaff)
 
 res_aff_vs_unaff_m <- results(dds, contrast = c("Affected", "Yes", "No"))
-res_aff_vs_unaff_df_m <- process_and_save_results(res_aff_vs_unaff_m, 
-                                                "output/res_aff_vs_unaff_m.csv")
+res_aff_vs_unaff_df_m <- process_and_save_results(
+  res_aff_vs_unaff_m,
+  "output/res_aff_vs_unaff_m.csv"
+)
 res_aff_vs_unaff_df_m <- arrange(res_aff_vs_unaff_df_m, padj)
 res_aff_vs_unaff_df_05_m <- subset(res_aff_vs_unaff_df_m, padj < 0.05)
 res_aff_vs_unaff_df_1_m <- subset(res_aff_vs_unaff_df_m, padj < 0.05)
@@ -526,7 +535,9 @@ rownames(topgenes_aff_vs_unaff_05_m) <- new_row_names_m
 
 topgenes_aff_vs_unaff_05_m <- topgenes_aff_vs_unaff_05_m[order(row.names(topgenes_aff_vs_unaff_05_m)), ]
 
-df_m <- df <- colData(vsd_limma) %>% as.data.frame() %>% dplyr::select(CombinedCategory)
+df_m <- df <- colData(vsd_limma) %>%
+  as.data.frame() %>%
+  dplyr::select(CombinedCategory)
 pheatmap(topgenes_aff_vs_unaff_05_m, annotation_col = df_m, annotation_colors = ann_colors2, fontsize = 5)
 ```
 
@@ -548,7 +559,9 @@ rownames(topgenes_aff_vs_unaff_05_m) <- new_row_names_m
 
 topgenes_aff_vs_unaff_05_m <- topgenes_aff_vs_unaff_05_m[order(row.names(topgenes_aff_vs_unaff_05_m)), ]
 
-df_m <- df <- colData(vsd_limma) %>% as.data.frame() %>% dplyr::select(Affected, SubCategory, CombinedCategory)
+df_m <- df <- colData(vsd_limma) %>%
+  as.data.frame() %>%
+  dplyr::select(Affected, SubCategory, CombinedCategory)
 pheatmap(topgenes_aff_vs_unaff_05_m, annotation_col = df_m, annotation_colors = ann_colors2, fontsize = 5)
 ```
 
@@ -657,7 +670,7 @@ new_row_names_m <- ensembl_to_gene_m[current_ensembl_ids_m]
 # Set the new row names for the matrix 'mat'
 rownames(topgenes_aff_vs_unaff_05_m) <- new_row_names_m
 
-#topgenes_aff_vs_unaff_05_m <- topgenes_aff_vs_unaff_05_m[order(row.names(topgenes_aff_vs_unaff_05_m)), ]
+# topgenes_aff_vs_unaff_05_m <- topgenes_aff_vs_unaff_05_m[order(row.names(topgenes_aff_vs_unaff_05_m)), ]
 
 df_m <- as.data.frame(colData(vsd_limma)[, c("Affected", "CombinedCategory")])
 pheatmap(topgenes_aff_vs_unaff_05_m, annotation_col = df_m, annotation_colors = ann_colors2, fontsize = 3.75)
@@ -679,7 +692,7 @@ new_row_names_m <- ensembl_to_gene_m[current_ensembl_ids_m]
 # Set the new row names for the matrix 'mat'
 rownames(topgenes_aff_vs_unaff_05_m) <- new_row_names_m
 
-#topgenes_aff_vs_unaff_05_m <- topgenes_aff_vs_unaff_05_m[order(row.names(topgenes_aff_vs_unaff_05_m)), ]
+# topgenes_aff_vs_unaff_05_m <- topgenes_aff_vs_unaff_05_m[order(row.names(topgenes_aff_vs_unaff_05_m)), ]
 
 df_m <- as.data.frame(colData(vsd_limma)[, c("Affected", "SubCategory", "CombinedCategory")])
 pheatmap(topgenes_aff_vs_unaff_05_m, annotation_col = df_m, annotation_colors = ann_colors2, fontsize = 3.75)
@@ -725,7 +738,7 @@ library(mygene)
 genes <- res_aff_vs_unaff_df_genename_05$gene_name
 my_gene_data <- queryMany(genes, scopes = "symbol", fields = c("symbol", "name", "summary", species = "human"))
 my_gene_data_unique <- as.data.frame(my_gene_data) %>% dplyr::distinct(query, .keep_all = TRUE)
-#paged_table(my_gene_data, options = list(rows.print = 15))
+# paged_table(my_gene_data, options = list(rows.print = 15))
 ```
 
 ```{r, maplot-all-samples}
@@ -753,7 +766,9 @@ significant_data <- maplot$data %>%
 # Combine DataFrames based on matching 'query' in my_gene_data_unique to 'gene' in significant_data
 combined_data <- inner_join(my_gene_data_unique, significant_data, by = c("query" = "name"))
 
-combined_data <- combined_data %>% dplyr::select(-notfound, -X_id, -X_score) %>% rename(gene = query)
+combined_data <- combined_data %>%
+  dplyr::select(-notfound, -X_id, -X_score) %>%
+  rename(gene = query)
 
 paged_table(as.data.frame(significant_data), options = list(rows.print = 30))
 # Save significant genes
@@ -817,17 +832,17 @@ pheatmap(mat3, annotation_col = df_m, annotation_colors = ann_colors2, fontsize 
 ## Enrichment analysis
 
 ```{r, gostplot}
-#res <- gost(query = significant_data$name, organism = "hsapiens", significant = FALSE) # should significant be true or false?
+# res <- gost(query = significant_data$name, organism = "hsapiens", significant = FALSE) # should significant be true or false?
 
-#gostplot(res, capped = FALSE, interactive = TRUE)
+# gostplot(res, capped = FALSE, interactive = TRUE)
 ```
 
 ```{r, enrichgo}
 # #res <- gost(query = significant_data$name, organism = "hsapiens", significant = FALSE) # should significant be true or false?
-# 
+#
 # #gostplot(res, capped = FALSE, interactive = TRUE)
 # # Get entrez id
-# 
+#
 # Your existing code for obtaining geneList with Ensembl IDs
 rownames(res_aff_vs_unaff_df) <- gsub("\\..*", "", rownames(res_aff_vs_unaff_df))
 geneList <- res_aff_vs_unaff_df$log2FoldChange
@@ -837,12 +852,12 @@ names(geneList) <- rownames(res_aff_vs_unaff_df)
 ensembl <- useMart("ensembl", dataset = "hsapiens_gene_ensembl")
 
 # Convert all Ensembl IDs in geneList to Entrez IDs
-attributes <- c('ensembl_gene_id', 'entrezgene_id')
-filters <- 'ensembl_gene_id'
+attributes <- c("ensembl_gene_id", "entrezgene_id")
+filters <- "ensembl_gene_id"
 results <- getBM(attributes = attributes, filters = filters, values = names(geneList), mart = ensembl)
 
 # Remove rows with NA or empty Entrez IDs
-results <- results[!is.na(results$entrezgene_id) & results$entrezgene_id != "",]
+results <- results[!is.na(results$entrezgene_id) & results$entrezgene_id != "", ]
 
 # Create a new geneList with Entrez IDs
 geneList_entrez <- geneList[results$ensembl_gene_id]
@@ -851,49 +866,55 @@ names(geneList_entrez) <- results$entrezgene_id
 # Filter genes with abs(log2FoldChange) > 2
 gene_entrez <- names(geneList_entrez)[abs(geneList_entrez) > 2]
 # Run enrichGO with Entrez IDs
-ego_cc <- enrichGO(gene       = gene_entrez,
-                universe      = names(geneList_entrez),
-                OrgDb         = org.Hs.eg.db,
-                ont           = "CC",
-                pAdjustMethod = "BH",
-                pvalueCutoff  = 0.01,
-                qvalueCutoff  = 0.05,
-                readable      = TRUE)
+ego_cc <- enrichGO(
+  gene = gene_entrez,
+  universe = names(geneList_entrez),
+  OrgDb = org.Hs.eg.db,
+  ont = "CC",
+  pAdjustMethod = "BH",
+  pvalueCutoff = 0.01,
+  qvalueCutoff = 0.05,
+  readable = TRUE
+)
 
 # Plot results
-barplot(ego_cc, showCategory=10) + ggthemes::theme_clean()
+barplot(ego_cc, showCategory = 10) + ggthemes::theme_clean()
 
 
-ego_bp <- enrichGO(gene       = gene_entrez,
-                universe      = names(geneList_entrez),
-                OrgDb         = org.Hs.eg.db,
-                ont           = "BP",
-                pAdjustMethod = "BH",
-                pvalueCutoff  = 0.01,
-                qvalueCutoff  = 0.05,
-                readable      = TRUE)
-
-# Plot results
-barplot(ego_bp, showCategory=10) + ggthemes::theme_clean()
-
-
-ego_mf <- enrichGO(gene       = gene_entrez,
-                universe      = names(geneList_entrez),
-                OrgDb         = org.Hs.eg.db,
-                ont           = "MF",
-                pAdjustMethod = "BH",
-                pvalueCutoff  = 0.01,
-                qvalueCutoff  = 0.05,
-                readable      = TRUE)
+ego_bp <- enrichGO(
+  gene = gene_entrez,
+  universe = names(geneList_entrez),
+  OrgDb = org.Hs.eg.db,
+  ont = "BP",
+  pAdjustMethod = "BH",
+  pvalueCutoff = 0.01,
+  qvalueCutoff = 0.05,
+  readable = TRUE
+)
 
 # Plot results
-barplot(ego_mf, showCategory=10) + ggthemes::theme_clean()
+barplot(ego_bp, showCategory = 10) + ggthemes::theme_clean()
+
+
+ego_mf <- enrichGO(
+  gene = gene_entrez,
+  universe = names(geneList_entrez),
+  OrgDb = org.Hs.eg.db,
+  ont = "MF",
+  pAdjustMethod = "BH",
+  pvalueCutoff = 0.01,
+  qvalueCutoff = 0.05,
+  readable = TRUE
+)
+
+# Plot results
+barplot(ego_mf, showCategory = 10) + ggthemes::theme_clean()
 ```
 
 ```{r, enrichplot}
 # top_genes_df <- res_aff_vs_unaff_df[order(-abs(res_aff_vs_unaff_df$log2FoldChange)), ]
 # top_20_genes <- rownames(top_genes_df)[1:20]
-# 
+#
 # # Enriched via DisGeNet
 # edo <- enrichDGN(gene_entrez)
 # barplot(edo, showCategory=20)
@@ -907,13 +928,15 @@ barplot(ego_mf, showCategory=10) + ggthemes::theme_clean()
 ```{r, generate-plot-counts-genes-interest}
 # For loop for plot counts
 for (ensembl_id in filtered_by_interest$Ensembl_ID) {
-    d <- plotCounts(dds, gene=ensembl_id, intgroup="Affected", returnData=TRUE)
-    gene_name <- filtered_by_interest$gene_name[filtered_by_interest$Ensembl_ID == ensembl_id]
-    ggplot_box <- ggboxplot(d, x="Affected", y="count", add = "jitter", color = "Affected", palette = c("navy", "red"), title = gene_name) + geom_text_repel(aes(label = rownames(d)))
-    print(ggplot_box) # Ensure each plot is printed during the loop
-    ggsave(filename = paste0(gene_name, "-plot-counts.png"), 
-           path = "output/batch-correction-limma/plot-counts",
-           plot = ggplot_box, dpi = 450)
+  d <- plotCounts(dds, gene = ensembl_id, intgroup = "Affected", returnData = TRUE)
+  gene_name <- filtered_by_interest$gene_name[filtered_by_interest$Ensembl_ID == ensembl_id]
+  ggplot_box <- ggboxplot(d, x = "Affected", y = "count", add = "jitter", color = "Affected", palette = c("navy", "red"), title = gene_name) + geom_text_repel(aes(label = rownames(d)))
+  print(ggplot_box) # Ensure each plot is printed during the loop
+  ggsave(
+    filename = paste0(gene_name, "-plot-counts.png"),
+    path = "output/batch-correction-limma/plot-counts",
+    plot = ggplot_box, dpi = 450
+  )
 }
 ```
 
