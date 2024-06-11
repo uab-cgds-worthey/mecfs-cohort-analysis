@@ -1,5 +1,5 @@
 ---
-title: "Differential Gene Expression (DGE) Analysis"
+title: "Subsetted Differential Gene Expression (DGE) Analysis"
 output:
   workflowr::wflow_html:
     toc: true
@@ -24,11 +24,17 @@ Use the below code to install these packages:
 
 ```
 # Install packages from CRAN
-install.packages(c("tidyverse", "RColorBrewer", "pheatmap", "gprofiler2", "plotly", "ggupset"))
+install.packages(c("tidyverse", "RColorBrewer", "pheatmap", "gprofiler2", "plotly", "ggupset", 
+                   "data.table", "lubridate", "reshape2", "viridis", "scales", "cowplot", 
+                   "patchwork", "ggrepel", "ggpubr", "forcats", "readxl", "openxlsx", 
+                   "rmarkdown"))
 
 # Install packages from Bioconductor
 install.packages("BiocManager")
-BiocManager::install(c("DESeq2", "genefilter", "limma", "biomaRt", "mygene"))
+BiocManager::install(c("DESeq2", "genefilter", "limma", "biomaRt", "mygene", 
+                       "edgeR", "ComplexHeatmap", "clusterProfiler", "AnnotationDbi", 
+                       "pathview", "org.Hs.eg.db", "ReactomePA", "DOSE", "enrichR", 
+                       "STRINGdb"))
 ```
 
 ```{r, load libraries, warning = FALSE, message = FALSE}
@@ -41,15 +47,16 @@ library(limma) # Available via Bioconductor
 library(gprofiler2) # Available via CRAN
 library(biomaRt) # Available via Bioconductor
 library(plotly) # Available via CRAN
-library(ggpubr)
-library(rmarkdown)
-library(ggupset)
-library(clusterProfiler)
-library(DOSE)
+library(ggpubr) # Available via CRAN
+library(rmarkdown) # Available via CRAN
+library(clusterProfiler) # Available via Bioconductor
 library(org.Hs.eg.db) # Available via Bioconductor
-library(UpSetR)
-library(ggrepel)
-library(ReactomePA)
+library(ggrepel) # Available via CRAN
+library(ReactomePA) # Available via Bioconductor
+library(mygene) # Available via Bioconductor
+library(DOSE) # Available via Bioconductor
+library(enrichR) # Available via Bioconductor
+library(STRINGdb) # Available via Bioconductor
 ```
 
 ```{r, include=FALSE}
@@ -104,7 +111,7 @@ sample_metadata$Batch <- factor(sample_metadata$Batch)
 sample_metadata$Sex <- factor(sample_metadata$Sex)
 sample_metadata$Ancestry <- factor(sample_metadata$Ancestry)
 sample_metadata$SubCategory <- factor(sample_metadata$SubCategory)
-sample_metadata$CombinedCategory <- factor(sample_metadata$CombinedCategory)
+sample_metadata$Category <- factor(sample_metadata$Category)
 
 # Account for Family later but batch is accounted for
 # Accounting for another factor seems to be an issue.
@@ -203,12 +210,12 @@ ggplot(pca_data_all, aes(PC1, PC2)) +
 
 ```{r, principal-components-analysis-combocategory-all}
 pca_data_all <- plotPCA(vsd_limma, intgroup = c("Affected", "Sex", 
-                                                "CombinedCategory"),
+                                                "Category"),
                         returnData = TRUE)
 percent_var_all <- round(100 * attr(pca_data_all, "percentVar"))
 
 ggplot(pca_data_all, aes(PC1, PC2)) +
-  geom_point(aes(colour = CombinedCategory, fill = Sex, shape = Affected), size = 4) +
+  geom_point(aes(colour = Category, fill = Sex, shape = Affected), size = 4) +
   scale_shape_manual(values = c(21, 22, 23)) +
   scale_fill_manual(values = c("white", "gray")) +
   geom_text(aes(label = name), vjust = -1, hjust = 0.65, size = 5) +
@@ -241,12 +248,12 @@ ggplot(pca_data, aes(PC1, PC2)) +
 ```
 
 ```{r, principal-components-analysis-subsetted-category}
-pca_data_all <- plotPCA(vsd_limma, intgroup = c("CombinedCategory"), 
+pca_data_all <- plotPCA(vsd_limma, intgroup = c("Category"), 
                         returnData = TRUE)
 percent_var_all <- round(100 * attr(pca_data_all, "percentVar"))
 
 ggplot(pca_data_all, aes(PC1, PC2)) +
-  geom_point(aes(colour = CombinedCategory), size = 5) +
+  geom_point(aes(colour = Category), size = 5) +
   scale_colour_manual(
     values = c(
       "#B3DE69", "#FFFFB3", "#BEBADA", "#FB8072", "#80B1D3",
@@ -281,13 +288,13 @@ category_colors <- c(
 )
 
 combined_category_colors <- c(
-  "Transporter-Metabolism" = "#E41A1C", # Dark green
-  "Metabolism" = "#377EB8", # Dark orange
-  "Metabolism-Immune" = "#4DAF4A", # Light purple
-  "Immune-Transporter" = "#984EA3", # Magenta
-  "Transporter" = "#FF7F00", # Light green
-  "Cytoskeletal" = "#FFFF33", # Mustard yellow
-  "Transporter-Immune-Metabolism" = "#F781BF", # Brown
+  "E" = "#E41A1C", # Dark green
+  "C-I" = "#377EB8", # Dark orange
+  "E-I" = "#4DAF4A", # Light purple
+  "C" = "#984EA3", # Magenta
+  "I" = "#FF7F00", # Light green
+  "C-E" = "#FFFF33", # Mustard yellow
+  "S" = "#F781BF", # Brown
   "Unaffected" = "#000000" # Dark grey
 )
 
@@ -297,14 +304,14 @@ ann_colors <- list(
   Batch = c(B1 = "purple", B2 = "firebrick", B3 = "yellow"),
   Affected = c(Affected = "green", Unaffected = "navy"),
   SubCategory = category_colors,
-  CombinedCategory = combined_category_colors
+  Category = combined_category_colors
 )
 
 ann_colors2 <- list(
   Batch = c(B1 = "purple", B2 = "firebrick", B3 = "yellow"),
   Affected = c(Affected = "green", Unaffected = "navy"),
   SubCategory = category_colors,
-  CombinedCategory = combined_category_colors
+  Category = combined_category_colors
 )
 ```
 
@@ -314,7 +321,7 @@ This is a heatmap of the top 50 genes with the highest variance across samples
 top_var_genes <- head(order(-rowVars(assay(vsd_limma))), 50)
 mat <- assay(vsd_limma)[top_var_genes, ]
 mat <- mat - rowMeans(mat)
-df <- as.data.frame(colData(vsd_limma)[, c("Batch", "Affected", "CombinedCategory")])
+df <- as.data.frame(colData(vsd_limma)[, c("Batch", "Affected", "Category")])
 
 ensembl_to_gene <- setNames(gene_info$gene_name, gene_info$Ensembl_ID)
 
@@ -340,7 +347,7 @@ top_var_genes_all <- head(order(-rowVars(assay(vsd_limma))), 50)
 mat_all <- assay(vsd_limma)[top_var_genes_all, ]
 mat_all <- mat_all - rowMeans(mat_all)
 df_all <- as.data.frame(colData(vsd_limma)[, c("Batch", "Affected", "SubCategory")])
-df_affcat <- as.data.frame(colData(vsd_limma)[, c("Affected", "CombinedCategory")])
+df_affcat <- as.data.frame(colData(vsd_limma)[, c("Affected", "Category")])
 
 ensembl_to_gene <- setNames(gene_info$gene_name, gene_info$Ensembl_ID)
 
@@ -415,7 +422,7 @@ rownames(topgenes_aff_vs_unaff_05_sub) <- new_row_names_sub
 
 topgenes_aff_vs_unaff_05_sub <- topgenes_aff_vs_unaff_05_sub[order(row.names(topgenes_aff_vs_unaff_05_sub)), ]
 
-df_sub <- as.data.frame(colData(vsd_limma)[, c("Affected", "CombinedCategory")])
+df_sub <- as.data.frame(colData(vsd_limma)[, c("Affected", "Category")])
 pheatmap(topgenes_aff_vs_unaff_05_sub, annotation_col = df_sub, annotation_colors = ann_colors2, fontsize = 5, angle_col = c("0"))
 ```
 
@@ -437,7 +444,7 @@ rownames(topgenes_aff_vs_unaff_05_sub) <- new_row_names_sub
 
 topgenes_aff_vs_unaff_05_sub <- topgenes_aff_vs_unaff_05_sub[order(row.names(topgenes_aff_vs_unaff_05_sub)), ]
 
-df_sub <- as.data.frame(colData(vsd_limma)[, c("Affected", "SubCategory", "CombinedCategory")])
+df_sub <- as.data.frame(colData(vsd_limma)[, c("Affected", "SubCategory", "Category")])
 pheatmap(topgenes_aff_vs_unaff_05_sub, annotation_col = df_sub, annotation_colors = ann_colors2, fontsize = 5, angle_col = 0)
 ```
 
@@ -462,7 +469,7 @@ topgenes_aff_vs_unaff_05_sub <- topgenes_aff_vs_unaff_05_sub[order(row.names(top
 
 df_sub <- df <- colData(vsd_limma) %>%
   as.data.frame() %>%
-  dplyr::select(CombinedCategory)
+  dplyr::select(Category)
 pheatmap(topgenes_aff_vs_unaff_05_sub, annotation_col = df_sub, annotation_colors = ann_colors2, fontsize = 5, angle_col = 0)
 ```
 
@@ -486,7 +493,7 @@ topgenes_aff_vs_unaff_05_sub <- topgenes_aff_vs_unaff_05_sub[order(row.names(top
 
 df_sub <- df <- colData(vsd_limma) %>%
   as.data.frame() %>%
-  dplyr::select(Affected, SubCategory, CombinedCategory)
+  dplyr::select(Affected, SubCategory, Category)
 pheatmap(topgenes_aff_vs_unaff_05_sub,
   annotation_col = df_sub,
   annotation_colors = ann_colors2, fontsize = 5, angle_col = 0
@@ -514,7 +521,7 @@ topgenes_aff_vs_unaff_05_sub <- topgenes_aff_vs_unaff_05_sub[order(row.names(top
 
 df_sub <- df <- colData(vsd_limma) %>%
   as.data.frame() %>%
-  dplyr::select(CombinedCategory)
+  dplyr::select(Category)
 pheatmap(topgenes_aff_vs_unaff_05_sub, annotation_col = df_sub, annotation_colors = ann_colors2, fontsize = 5, angle_col = 0)
 ```
 
@@ -539,7 +546,7 @@ topgenes_aff_vs_unaff_05_sub <- topgenes_aff_vs_unaff_05_sub[order(row.names(top
 
 df_sub <- df <- colData(vsd_limma) %>%
   as.data.frame() %>%
-  dplyr::select(Affected, SubCategory, CombinedCategory)
+  dplyr::select(Affected, SubCategory, Category)
 pheatmap(topgenes_aff_vs_unaff_05_sub, annotation_col = df_sub, annotation_colors = ann_colors2, fontsize = 5, angle_col = 0)
 ```
 
@@ -561,7 +568,7 @@ rownames(topgenes_aff_vs_unaff_05_sub) <- new_row_names_sub
 
 topgenes_aff_vs_unaff_05_sub <- topgenes_aff_vs_unaff_05_sub[order(row.names(topgenes_aff_vs_unaff_05_sub)), ]
 
-df_sub <- as.data.frame(colData(vsd_limma)[, c("Affected", "CombinedCategory")])
+df_sub <- as.data.frame(colData(vsd_limma)[, c("Affected", "Category")])
 pheatmap(topgenes_aff_vs_unaff_05_sub,
   annotation_col = df_sub,
   annotation_colors = ann_colors2, fontsize = 4, angle_col = 0
@@ -586,7 +593,7 @@ rownames(topgenes_aff_vs_unaff_05_sub) <- new_row_names_sub
 
 topgenes_aff_vs_unaff_05_sub <- topgenes_aff_vs_unaff_05_sub[order(row.names(topgenes_aff_vs_unaff_05_sub)), ]
 
-df_sub <- as.data.frame(colData(vsd_limma)[, c("Affected", "SubCategory", "CombinedCategory")])
+df_sub <- as.data.frame(colData(vsd_limma)[, c("Affected", "SubCategory", "Category")])
 pheatmap(topgenes_aff_vs_unaff_05_sub, annotation_col = df_sub, annotation_colors = ann_colors2, fontsize = 4, angle_col = 0)
 ```
 
@@ -608,7 +615,7 @@ rownames(topgenes_aff_vs_unaff_05_sub) <- new_row_names_sub
 
 topgenes_aff_vs_unaff_05_sub <- topgenes_aff_vs_unaff_05_sub[order(row.names(topgenes_aff_vs_unaff_05_sub)), ]
 
-df_sub <- as.data.frame(colData(vsd_limma)[, c("Affected", "CombinedCategory")])
+df_sub <- as.data.frame(colData(vsd_limma)[, c("Affected", "Category")])
 pheatmap(topgenes_aff_vs_unaff_05_sub, annotation_col = df_sub, annotation_colors = ann_colors2, fontsize = 4, angle_col = 0)
 ```
 
@@ -630,7 +637,7 @@ rownames(topgenes_aff_vs_unaff_05_sub) <- new_row_names_sub
 
 topgenes_aff_vs_unaff_05_sub <- topgenes_aff_vs_unaff_05_sub[order(row.names(topgenes_aff_vs_unaff_05_sub)), ]
 
-df_sub <- as.data.frame(colData(vsd_limma)[, c("Affected", "SubCategory", "CombinedCategory")])
+df_sub <- as.data.frame(colData(vsd_limma)[, c("Affected", "SubCategory", "Category")])
 pheatmap(topgenes_aff_vs_unaff_05_sub, annotation_col = df_sub, annotation_colors = ann_colors2, fontsize = 2.25, angle_col = 0)
 ```
 
@@ -652,7 +659,7 @@ rownames(topgenes_aff_vs_unaff_05_sub) <- new_row_names_sub
 
 # topgenes_aff_vs_unaff_05_sub <- topgenes_aff_vs_unaff_05_sub[order(row.names(topgenes_aff_vs_unaff_05_sub)), ]
 
-df_sub <- as.data.frame(colData(vsd_limma)[, c("Affected", "CombinedCategory")])
+df_sub <- as.data.frame(colData(vsd_limma)[, c("Affected", "Category")])
 pheatmap(topgenes_aff_vs_unaff_05_sub, annotation_col = df_sub, annotation_colors = ann_colors2, fontsize = 3.75, angle_col = 0)
 ```
 
@@ -674,7 +681,7 @@ rownames(topgenes_aff_vs_unaff_05_sub) <- new_row_names_sub
 
 # topgenes_aff_vs_unaff_05_sub <- topgenes_aff_vs_unaff_05_sub[order(row.names(topgenes_aff_vs_unaff_05_sub)), ]
 
-df_sub <- as.data.frame(colData(vsd_limma)[, c("Affected", "SubCategory", "CombinedCategory")])
+df_sub <- as.data.frame(colData(vsd_limma)[, c("Affected", "SubCategory", "Category")])
 pheatmap(topgenes_aff_vs_unaff_05_sub, annotation_col = df_sub, annotation_colors = ann_colors2, fontsize = 3.75, angle_col = 0)
 ```
 
@@ -697,7 +704,7 @@ rownames(topgenes_aff_vs_unaff_05_sub) <- new_row_names_sub
 
 # topgenes_aff_vs_unaff_05_sub <- topgenes_aff_vs_unaff_05_sub[order(row.names(topgenes_aff_vs_unaff_05_sub)), ]
 
-df_sub <- as.data.frame(colData(vsd_limma)[, c("Affected", "CombinedCategory")])
+df_sub <- as.data.frame(colData(vsd_limma)[, c("Affected", "Category")])
 pheatmap(topgenes_aff_vs_unaff_05_sub, annotation_col = df_sub, annotation_colors = ann_colors2, fontsize = 3.5, angle_col = 0)
 ```
 
@@ -719,7 +726,7 @@ rownames(topgenes_aff_vs_unaff_05_sub) <- new_row_names_sub
 
 # topgenes_aff_vs_unaff_05_sub <- topgenes_aff_vs_unaff_05_sub[order(row.names(topgenes_aff_vs_unaff_05_sub)), ]
 
-df_sub <- as.data.frame(colData(vsd_limma)[, c("Affected", "SubCategory", "CombinedCategory")])
+df_sub <- as.data.frame(colData(vsd_limma)[, c("Affected", "SubCategory", "Category")])
 pheatmap(topgenes_aff_vs_unaff_05_sub, annotation_col = df_sub, annotation_colors = ann_colors2, fontsize = 3.5, angle_col = 0)
 ```
 
@@ -747,8 +754,6 @@ write.csv(res_aff_vs_unaff_df_genename_1, file = "output/res_aff_vs_unaff_df_sub
 Below is a table of information about the top genes.
 
 ```{r, padj-gene-info-subsetted}
-library(mygene)
-
 genes <- res_aff_vs_unaff_df_genename_05$gene_name
 my_gene_data <- queryMany(genes, scopes = "symbol", fields = c("symbol", "name", "summary", species = "human"))
 my_gene_data_unique <- as.data.frame(my_gene_data) %>% dplyr::distinct(query, .keep_all = TRUE)
@@ -828,7 +833,7 @@ Below is a heatmap highlighting the expression of our genes of interest across b
 ```{r, heatmap-genes-interest-subsetted, out.width = "1200px"}
 mat3 <- assay(vsd_limma)[filtered_by_interest$Ensembl_ID, ]
 rownames(mat3) <- gene_info$gene_name[match(filtered_by_interest$Ensembl_ID, gene_info$Ensembl_ID)]
-df_sub <- as.data.frame(colData(vsd_limma)[, c("Affected", "CombinedCategory")])
+df_sub <- as.data.frame(colData(vsd_limma)[, c("Affected", "Category")])
 pheatmap(mat3, annotation_col = df_sub, annotation_colors = ann_colors2, fontsize = 4, angle_col = 0)
 ```
 
@@ -912,19 +917,19 @@ dotplot(ego_cc, showCategory = 10, title = "Overrepresented Cellular Components"
 ```
 
 ```{r, enrichgo-bp}
-ego_bp <- enrichGO(
-  gene = gene_entrez,
-  universe = names(geneList_entrez),
-  OrgDb = org.Hs.eg.db,
-  ont = "BP",
-  pAdjustMethod = "BH",
-  pvalueCutoff = 0.01,
-  qvalueCutoff = 0.05,
-  readable = TRUE
-)
-
-# Plot results
-dotplot(ego_bp, showCategory = 10, title = "Overrepresented Biological Processes") + ggthemes::theme_clean()
+# ego_bp <- enrichGO(
+#   gene = gene_entrez,
+#   universe = names(geneList_entrez),
+#   OrgDb = org.Hs.eg.db,
+#   ont = "BP",
+#   pAdjustMethod = "BH",
+#   pvalueCutoff = 0.01,
+#   qvalueCutoff = 0.05,
+#   readable = TRUE
+# )
+# 
+# # Plot results
+# dotplot(ego_bp, showCategory = 10, title = "Overrepresented Biological Processes") + ggthemes::theme_clean()
 ```
 
 ```{r, enrichgo-mf}
@@ -945,7 +950,6 @@ dotplot(ego_mf, showCategory = 10, title = "Overrepresented Molecular Functions"
 
 
 ```{r, dose-plot}
-library(DOSE)
 gl <- geneList_entrez[abs(geneList_entrez) > 2]
 gl <- na.omit(gl)
 gl_sorted <- sort(gl, decreasing = TRUE)
@@ -987,7 +991,6 @@ dotplot(y, showCategory = 10, title = "Reactome Pathway Over-representation Anal
 
 
 ```{r, stringdb-network-significant}
-library(STRINGdb)
 string_db <- STRINGdb$new(version = "11.5", species = 9606, score_threshold = 100, network_type = "full", input_directory = "")
 
 mapped_degs <- string_db$map(significant_data, "name", removeUnmappedRows = TRUE)
@@ -1000,7 +1003,6 @@ string_db$plot_network(hits, payload_id = payload_id)
 ```
 
 ```{r, stringdb-network-combined}
-library(STRINGdb)
 string_db <- STRINGdb$new(version = "11.5", species = 9606, score_threshold = 200, network_type = "full", input_directory = "")
 
 significant_data_copy <- significant_data %>% 
@@ -1026,7 +1028,6 @@ write.csv(combined_enrichment, enrich_file_name, row.names = FALSE)
 
 
 ```{r, enrichr-analysis}
-library(enrichR)
 listEnrichrSites()
 setEnrichrSite("Enrichr") # Human genes
 dbs <- listEnrichrDbs()
@@ -1062,7 +1063,7 @@ xx <- compareCluster(cluster, fun="enrichPathway", pvalueCutoff=0.05)
 dotplot(xx)
 ```
 
-## Plot Counts
+## Genes of Interest Plot Counts
 
 ```{r, generate-plot-counts-genes-interest-subsetted}
 # For loop for plot counts
@@ -1089,6 +1090,7 @@ for (ensembl_id in filtered_by_interest$Ensembl_ID) {
 }
 ```
 
+## Significant Genes Plot Counts
 
 ```{r, generate-plot-counts-genes-significant}
 # For loop for plot counts
@@ -1120,7 +1122,7 @@ for (ensembl_id in res_aff_vs_unaff_df_genename_1$Ensembl_ID) {
 ```{r, combined-heatmap-genes-interest-subsetted, out.width = "1200px"}
 mat3 <- assay(vsd_limma)[filtered_by_interest$Ensembl_ID, ]
 rownames(mat3) <- gene_info$gene_name[match(filtered_by_interest$Ensembl_ID, gene_info$Ensembl_ID)]
-df_sub <- as.data.frame(colData(vsd_limma)[, c("Affected", "CombinedCategory")])
+df_sub <- as.data.frame(colData(vsd_limma)[, c("Affected", "Category")])
 pheatmap(mat3, annotation_col = df_sub, annotation_colors = ann_colors2, fontsize = 4, angle_col = 0)
 ```
 
