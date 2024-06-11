@@ -10,7 +10,7 @@ Myalgic Encephalomyelitis/Chronic Fatigue Syndrome (ME/CFS) is a chronic and deb
 
 This project has been created using the `workflowr` template.
 
-The analysis and associated code is modified from [Dr.Gurpreet Kaur's]() example: https://github.com/uab-cgds-worthey/bulk_rna-seq_dge
+The analysis and associated code is modified from [Dr.Gurpreet Kaur's](https://github.com/gurpreet-bioinfo) example: https://github.com/uab-cgds-worthey/bulk_rna-seq_dge
 
 Analysis Rmarkdown files are located in the `analysis` folder.
 
@@ -19,15 +19,15 @@ To rerun the entire workflow, clone this repository and run the below in your R 
 ### Cloning this repository
 
 ```bash
-git clone
-cd 
+git clone https://github.com/uab-cgds-worthey/mecfs-dge-analysis.git
+cd mecfs-dge-analysis/
 ```
 
 ### Restoring the Environment
 
 Open this project in RStudio. Upon opening, renv should automatically install.
 
-If renv does not install automatically, run ```install.packages('renv')``` and 
+If `renv` does not install automatically, run ```install.packages('renv')``` and 
 proceed with the instructions below.
 
 ```r
