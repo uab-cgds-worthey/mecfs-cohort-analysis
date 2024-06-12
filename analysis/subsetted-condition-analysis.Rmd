@@ -1066,11 +1066,53 @@ dotplot(xx)
 ## Genes of Interest Plot Counts
 
 ```{r, generate-plot-counts-genes-interest-subsetted}
-# For loop for plot counts
+# Create an empty list to store the results for each gene
+gene_results_list <- list()
+
+# Loop through each gene to calculate and plot counts
 for (ensembl_id in filtered_by_interest$Ensembl_ID) {
   d <- plotCounts(dds, gene = ensembl_id, intgroup = "Affected", returnData = TRUE)
   gene_name <- filtered_by_interest$gene_name[filtered_by_interest$Ensembl_ID == ensembl_id]
-  ggplot_box <- ggboxplot(d,
+  
+  # Calculate the average counts by condition
+  avg_counts_by_condition <- d %>%
+    group_by(Affected) %>%
+    summarise(avg_count = mean(count))
+  
+  # Create a temporary dataframe to store results for this gene
+  temp_gene_df <- data.frame(
+    Patient = rownames(d),
+    stringsAsFactors = FALSE
+  )
+  
+  # Loop through each row (patient) to determine regulation status
+  regulation_status <- sapply(1:nrow(d), function(i) {
+    patient_count <- d$count[i]
+    condition <- d$Affected[i]
+    avg_count <- avg_counts_by_condition$avg_count[avg_counts_by_condition$Affected == condition]
+    
+    # Determine regulation status with 25% threshold
+    if (patient_count > 1.25 * avg_count) {
+      return("Upregulated")
+    } else if (patient_count < 0.75 * avg_count) {
+      return("Downregulated")
+    } else {
+      return("Neutral")
+    }
+  })
+  
+  # Add the regulation status to the temporary dataframe
+  temp_gene_df[[gene_name]] <- regulation_status
+  
+  # Merge the temporary dataframe with the results list
+  if (length(gene_results_list) == 0) {
+    gene_results_list[[1]] <- temp_gene_df
+  } else {
+    gene_results_list[[1]] <- merge(gene_results_list[[1]], temp_gene_df, by = "Patient", all = TRUE)
+  }
+  
+  # Generate the boxplot
+  gene_plot <- ggboxplot(d,
     x = "Affected", y = "count", add = "jitter",
     color = "Affected", palette = c("red", "navy"),
     title = gene_name
@@ -1081,22 +1123,70 @@ for (ensembl_id in filtered_by_interest$Ensembl_ID) {
       labels = c("Unaffected", "Affected"),
       values = c("red", "navy")
     )
-  print(ggplot_box) # Ensure each plot is printed during the loop
+  print(gene_plot) # Ensure each plot is printed during the loop
   ggsave(
     filename = paste0(gene_name, "-subsetted-plot-counts.png"),
     path = "output/batch-correction-limma/plot-counts",
-    plot = ggplot_box, dpi = 450
+    plot = gene_plot, dpi = 450
   )
 }
+
+# Convert the list to a dataframe
+gene_results_df <- gene_results_list[[1]]
+
+file_name <- "output/genes_of_interest_plot_counts_signals.csv"
+write.csv(gene_results_df, file_name, row.names = FALSE)
 ```
 
 ## Significant Genes Plot Counts
 
 ```{r, generate-plot-counts-genes-significant}
-# For loop for plot counts
+# Create an empty list to store the results for each gene
+results_list <- list()
+
+# Loop through each gene to calculate and plot counts
 for (ensembl_id in res_aff_vs_unaff_df_genename_1$Ensembl_ID) {
   d <- plotCounts(dds, gene = ensembl_id, intgroup = "Affected", returnData = TRUE)
   gene_name <- res_aff_vs_unaff_df_genename_1$gene_name[res_aff_vs_unaff_df_genename_1$Ensembl_ID == ensembl_id]
+  
+  # Calculate the average counts by condition
+  avg_counts <- d %>%
+    group_by(Affected) %>%
+    summarise(avg_count = mean(count))
+  
+  # Create a temporary dataframe to store results for this gene
+  temp_df <- data.frame(
+    Patient = rownames(d),
+    stringsAsFactors = FALSE
+  )
+  
+  # Loop through each row (patient) to determine regulation status
+  regulation_status <- sapply(1:nrow(d), function(i) {
+    patient_count <- d$count[i]
+    condition <- d$Affected[i]
+    avg_count <- avg_counts$avg_count[avg_counts$Affected == condition]
+    
+    # Determine regulation status
+    if (patient_count > 1.25 * avg_count) {
+      return("Upregulated")
+    } else if (patient_count < 0.75 * avg_count) {
+      return("Downregulated")
+    } else {
+      return("Neutral")
+    }
+  })
+  
+  # Add the regulation status to the temporary dataframe
+  temp_df[[gene_name]] <- regulation_status
+  
+  # Merge the temporary dataframe with the results list
+  if (length(results_list) == 0) {
+    results_list[[1]] <- temp_df
+  } else {
+    results_list[[1]] <- merge(results_list[[1]], temp_df, by = "Patient", all = TRUE)
+  }
+  
+  # Generate the boxplot
   ggplot_box <- ggboxplot(d,
     x = "Affected", y = "count", add = "jitter",
     color = "Affected", palette = c("red", "navy"),
@@ -1115,6 +1205,12 @@ for (ensembl_id in res_aff_vs_unaff_df_genename_1$Ensembl_ID) {
     plot = ggplot_box, dpi = 450
   )
 }
+
+# Convert the list to a dataframe
+results_df <- results_list[[1]]
+
+file_name <- "output/significant_plot_counts_signals.csv"
+write.csv(results_df, file_name, row.names = FALSE)
 ```
 
 ## Combined Heatmap of DEGs and Patient Genes
