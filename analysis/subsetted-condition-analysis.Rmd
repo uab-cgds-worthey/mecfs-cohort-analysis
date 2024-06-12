@@ -1074,10 +1074,16 @@ for (ensembl_id in filtered_by_interest$Ensembl_ID) {
   d <- plotCounts(dds, gene = ensembl_id, intgroup = "Affected", returnData = TRUE)
   gene_name <- filtered_by_interest$gene_name[filtered_by_interest$Ensembl_ID == ensembl_id]
   
-  # Calculate the average counts by condition
-  avg_counts_by_condition <- d %>%
+  # Calculate the mean and standard deviation of counts within each condition
+  d_stats <- d %>%
     group_by(Affected) %>%
-    summarise(avg_count = mean(count))
+    summarise(
+      mean_count = mean(count),
+      sd_count = sd(count)
+    )
+  
+  # Merge statistics back with the data
+  d <- merge(d, d_stats, by = "Affected")
   
   # Create a temporary dataframe to store results for this gene
   temp_gene_df <- data.frame(
@@ -1085,16 +1091,14 @@ for (ensembl_id in filtered_by_interest$Ensembl_ID) {
     stringsAsFactors = FALSE
   )
   
-  # Loop through each row (patient) to determine regulation status
+  # Calculate Z-scores and determine regulation status
   regulation_status <- sapply(1:nrow(d), function(i) {
-    patient_count <- d$count[i]
-    condition <- d$Affected[i]
-    avg_count <- avg_counts_by_condition$avg_count[avg_counts_by_condition$Affected == condition]
+    z_score <- (d$count[i] - d$mean_count[i]) / d$sd_count[i]
     
-    # Determine regulation status with 25% threshold
-    if (patient_count > 1.25 * avg_count) {
+    # Determine regulation status based on Z-score
+    if (z_score > 1) {
       return("Upregulated")
-    } else if (patient_count < 0.75 * avg_count) {
+    } else if (z_score < -1) {
       return("Downregulated")
     } else {
       return("Neutral")
@@ -1149,10 +1153,16 @@ for (ensembl_id in res_aff_vs_unaff_df_genename_1$Ensembl_ID) {
   d <- plotCounts(dds, gene = ensembl_id, intgroup = "Affected", returnData = TRUE)
   gene_name <- res_aff_vs_unaff_df_genename_1$gene_name[res_aff_vs_unaff_df_genename_1$Ensembl_ID == ensembl_id]
   
-  # Calculate the average counts by condition
-  avg_counts <- d %>%
+  # Calculate the mean and standard deviation of counts within each condition
+  d_stats <- d %>%
     group_by(Affected) %>%
-    summarise(avg_count = mean(count))
+    summarise(
+      mean_count = mean(count),
+      sd_count = sd(count)
+    )
+  
+  # Merge statistics back with the data
+  d <- merge(d, d_stats, by = "Affected")
   
   # Create a temporary dataframe to store results for this gene
   temp_df <- data.frame(
@@ -1160,16 +1170,20 @@ for (ensembl_id in res_aff_vs_unaff_df_genename_1$Ensembl_ID) {
     stringsAsFactors = FALSE
   )
   
-  # Loop through each row (patient) to determine regulation status
+  # Calculate Z-scores and determine regulation status
   regulation_status <- sapply(1:nrow(d), function(i) {
-    patient_count <- d$count[i]
-    condition <- d$Affected[i]
-    avg_count <- avg_counts$avg_count[avg_counts$Affected == condition]
+    if (is.na(d$sd_count[i]) || d$sd_count[i] == 0) {
+      return("Neutral")
+    }
     
-    # Determine regulation status
-    if (patient_count > 1.25 * avg_count) {
+    z_score <- (d$count[i] - d$mean_count[i]) / d$sd_count[i]
+    
+    # Determine regulation status based on Z-score
+    if (is.na(z_score)) {
+      return("Neutral")
+    } else if (z_score > 1) {
       return("Upregulated")
-    } else if (patient_count < 0.75 * avg_count) {
+    } else if (z_score < -1) {
       return("Downregulated")
     } else {
       return("Neutral")
