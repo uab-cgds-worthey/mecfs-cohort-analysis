@@ -415,7 +415,7 @@ class="glyphicon glyphicon-ok text-success" aria-hidden="true"></span>
 <div class="tab-content">
 <div id="summary" class="tab-pane fade in active">
 <p>
-<strong>Last updated:</strong> 2024-06-11
+<strong>Last updated:</strong> 2024-06-12
 </p>
 <p>
 <strong>Checks:</strong> <span
@@ -546,15 +546,15 @@ project makes it easier to run your code on other machines.</p>
 <div class="panel panel-default">
 <div class="panel-heading">
 <p class="panel-title">
-<a data-toggle="collapse" data-parent="#workflowr-checks" href="#strongRepositoryversionstrongahrefhttpsgithubcomuabcgdswortheymecfsdgeanalysistree895934e71fbb8120e445730ac650c646a5c6fd8atargetblank895934ea">
+<a data-toggle="collapse" data-parent="#workflowr-checks" href="#strongRepositoryversionstrongahrefhttpsgithubcomuabcgdswortheymecfsdgeanalysistreea40ee827ee9727b8a377dcffeaecd286a7b18b3btargetblanka40ee82a">
 <span class="glyphicon glyphicon-ok text-success"
 aria-hidden="true"></span> <strong>Repository version:</strong>
-<a href="https://github.com/uab-cgds-worthey/mecfs-dge-analysis/tree/895934e71fbb8120e445730ac650c646a5c6fd8a" target="_blank">895934e</a>
+<a href="https://github.com/uab-cgds-worthey/mecfs-dge-analysis/tree/a40ee827ee9727b8a377dcffeaecd286a7b18b3b" target="_blank">a40ee82</a>
 </a>
 </p>
 </div>
 <div
-id="strongRepositoryversionstrongahrefhttpsgithubcomuabcgdswortheymecfsdgeanalysistree895934e71fbb8120e445730ac650c646a5c6fd8atargetblank895934ea"
+id="strongRepositoryversionstrongahrefhttpsgithubcomuabcgdswortheymecfsdgeanalysistreea40ee827ee9727b8a377dcffeaecd286a7b18b3btargetblanka40ee82a"
 class="panel-collapse collapse">
 <div class="panel-body">
 <p>
@@ -564,7 +564,7 @@ reproducibility.
 </p>
 <p>
 The results in this page were generated with repository version
-<a href="https://github.com/uab-cgds-worthey/mecfs-dge-analysis/tree/895934e71fbb8120e445730ac650c646a5c6fd8a" target="_blank">895934e</a>.
+<a href="https://github.com/uab-cgds-worthey/mecfs-dge-analysis/tree/a40ee827ee9727b8a377dcffeaecd286a7b18b3b" target="_blank">a40ee82</a>.
 See the <em>Past versions</em> tab to see a history of the changes made
 to the R Markdown and HTML files.
 </p>
@@ -583,6 +583,7 @@ Ignored files:
     Ignored:    .Rhistory
     Ignored:    .Rproj.user/
     Ignored:    analysis/.DS_Store
+    Ignored:    analysis/figure/
     Ignored:    data/.DS_Store
     Ignored:    omnipathr-log/
     Ignored:    output/.DS_Store
@@ -593,6 +594,10 @@ Ignored files:
     Ignored:    renv/.DS_Store
     Ignored:    renv/library/
     Ignored:    renv/staging/
+
+Untracked files:
+    Untracked:  output/genes_of_interest_plot_counts_signals.csv
+    Untracked:  output/significant_plot_counts_signals.csv
 
 Unstaged changes:
     Modified:   output/res_aff_vs_unaff_df_sub_genename.csv
@@ -647,6 +652,40 @@ Message
 </tr>
 </thead>
 <tbody>
+<tr>
+<td>
+Rmd
+</td>
+<td>
+<a href="https://github.com/uab-cgds-worthey/mecfs-dge-analysis/blob/a40ee827ee9727b8a377dcffeaecd286a7b18b3b/analysis/subsetted-condition-analysis.Rmd" target="_blank">a40ee82</a>
+</td>
+<td>
+sdhutchins
+</td>
+<td>
+2024-06-12
+</td>
+<td>
+Use zscore.
+</td>
+</tr>
+<tr>
+<td>
+html
+</td>
+<td>
+<a href="https://rawcdn.githack.com/uab-cgds-worthey/mecfs-dge-analysis/bf99332d26fc47cde27acf6ed303aa5d536ac180/docs/subsetted-condition-analysis.html" target="_blank">bf99332</a>
+</td>
+<td>
+sdhutchins
+</td>
+<td>
+2024-06-11
+</td>
+<td>
+Build site.
+</td>
+</tr>
 <tr>
 <td>
 Rmd
@@ -4801,10 +4840,16 @@ for (ensembl_id in filtered_by_interest$Ensembl_ID) {
   d &lt;- plotCounts(dds, gene = ensembl_id, intgroup = &quot;Affected&quot;, returnData = TRUE)
   gene_name &lt;- filtered_by_interest$gene_name[filtered_by_interest$Ensembl_ID == ensembl_id]
   
-  # Calculate the average counts by condition
-  avg_counts_by_condition &lt;- d %&gt;%
+  # Calculate the mean and standard deviation of counts within each condition
+  d_stats &lt;- d %&gt;%
     group_by(Affected) %&gt;%
-    summarise(avg_count = mean(count))
+    summarise(
+      mean_count = mean(count),
+      sd_count = sd(count)
+    )
+  
+  # Merge statistics back with the data
+  d &lt;- merge(d, d_stats, by = &quot;Affected&quot;)
   
   # Create a temporary dataframe to store results for this gene
   temp_gene_df &lt;- data.frame(
@@ -4812,16 +4857,14 @@ for (ensembl_id in filtered_by_interest$Ensembl_ID) {
     stringsAsFactors = FALSE
   )
   
-  # Loop through each row (patient) to determine regulation status
+  # Calculate Z-scores and determine regulation status
   regulation_status &lt;- sapply(1:nrow(d), function(i) {
-    patient_count &lt;- d$count[i]
-    condition &lt;- d$Affected[i]
-    avg_count &lt;- avg_counts_by_condition$avg_count[avg_counts_by_condition$Affected == condition]
+    z_score &lt;- (d$count[i] - d$mean_count[i]) / d$sd_count[i]
     
-    # Determine regulation status with 25% threshold
-    if (patient_count &gt; 1.25 * avg_count) {
+    # Determine regulation status based on Z-score
+    if (z_score &gt; 1) {
       return(&quot;Upregulated&quot;)
-    } else if (patient_count &lt; 0.75 * avg_count) {
+    } else if (z_score &lt; -1) {
       return(&quot;Downregulated&quot;)
     } else {
       return(&quot;Neutral&quot;)
@@ -8653,10 +8696,16 @@ for (ensembl_id in res_aff_vs_unaff_df_genename_1$Ensembl_ID) {
   d &lt;- plotCounts(dds, gene = ensembl_id, intgroup = &quot;Affected&quot;, returnData = TRUE)
   gene_name &lt;- res_aff_vs_unaff_df_genename_1$gene_name[res_aff_vs_unaff_df_genename_1$Ensembl_ID == ensembl_id]
   
-  # Calculate the average counts by condition
-  avg_counts &lt;- d %&gt;%
+  # Calculate the mean and standard deviation of counts within each condition
+  d_stats &lt;- d %&gt;%
     group_by(Affected) %&gt;%
-    summarise(avg_count = mean(count))
+    summarise(
+      mean_count = mean(count),
+      sd_count = sd(count)
+    )
+  
+  # Merge statistics back with the data
+  d &lt;- merge(d, d_stats, by = &quot;Affected&quot;)
   
   # Create a temporary dataframe to store results for this gene
   temp_df &lt;- data.frame(
@@ -8664,16 +8713,20 @@ for (ensembl_id in res_aff_vs_unaff_df_genename_1$Ensembl_ID) {
     stringsAsFactors = FALSE
   )
   
-  # Loop through each row (patient) to determine regulation status
+  # Calculate Z-scores and determine regulation status
   regulation_status &lt;- sapply(1:nrow(d), function(i) {
-    patient_count &lt;- d$count[i]
-    condition &lt;- d$Affected[i]
-    avg_count &lt;- avg_counts$avg_count[avg_counts$Affected == condition]
+    if (is.na(d$sd_count[i]) || d$sd_count[i] == 0) {
+      return(&quot;Neutral&quot;)
+    }
     
-    # Determine regulation status
-    if (patient_count &gt; 1.25 * avg_count) {
+    z_score &lt;- (d$count[i] - d$mean_count[i]) / d$sd_count[i]
+    
+    # Determine regulation status based on Z-score
+    if (is.na(z_score)) {
+      return(&quot;Neutral&quot;)
+    } else if (z_score &gt; 1) {
       return(&quot;Upregulated&quot;)
-    } else if (patient_count &lt; 0.75 * avg_count) {
+    } else if (z_score &lt; -1) {
       return(&quot;Downregulated&quot;)
     } else {
       return(&quot;Neutral&quot;)
