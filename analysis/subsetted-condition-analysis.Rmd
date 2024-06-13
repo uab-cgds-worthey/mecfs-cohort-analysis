@@ -284,7 +284,7 @@ category_colors <- c(
   "Neurologic disorder" = "#D9D9D9",
   "Myasthenic disorder" = "#FDB462",
   "Neuropathy" = "#8DD3C7",
-  "Unaffected" = "#001111"
+  "Unaffected" = "darkgrey"
 )
 
 combined_category_colors <- c(
@@ -295,7 +295,7 @@ combined_category_colors <- c(
   "I" = "#FF7F00", # Light green
   "C-E" = "#FFFF33", # Mustard yellow
   "S" = "#F781BF", # Brown
-  "Unaffected" = "#000000" # Dark grey
+  "Unaffected" = "darkgray" # Dark grey
 )
 
 
@@ -500,34 +500,45 @@ pheatmap(topgenes_aff_vs_unaff_05_sub,
 )
 ```
 
+## Heatmap of Significant Genes
 
-```{r, significant-genes-deseq-subsetted, out.height="570px", out.width ="800px"}
-topgenes_byensemblid_sub <- head(rownames(res_aff_vs_unaff_df_sub), 55)
+
+```{r, significant-genes-deseq-subsetted, out.height="800px", out.width ="1200px"}
+# Assuming 'res_aff_vs_unaff_df_sub' has a column 'padj' for adjusted p-values or 'pvalue' for p-values
+# Ensure the row names of 'res_aff_vs_unaff_df_sub' are Ensembl IDs
+res_aff_vs_unaff_df_sub <- res_aff_vs_unaff_df_sub[order(res_aff_vs_unaff_df_sub$padj), ]
+
+# Get the top 50 most significant genes based on adjusted p-values
+topgenes_byensemblid_sub <- head(rownames(res_aff_vs_unaff_df_sub), 50)
+
+# Extract the corresponding subset of the data matrix
 topgenes_aff_vs_unaff_05_sub <- assay(vsd_limma)[topgenes_byensemblid_sub, ]
+
+# Normalize by subtracting the row means
 topgenes_aff_vs_unaff_05_sub <- topgenes_aff_vs_unaff_05_sub - rowMeans(topgenes_aff_vs_unaff_05_sub)
 
+# Map Ensembl IDs to gene names
 ensembl_to_gene_sub <- setNames(gene_info$gene_name, gene_info$Ensembl_ID)
-
-# Get the current row names of the matrix 'mat'
 current_ensembl_ids_sub <- rownames(topgenes_aff_vs_unaff_05_sub)
-
-# Find the corresponding gene names for the Ensembl IDs
 new_row_names_sub <- ensembl_to_gene_sub[current_ensembl_ids_sub]
-
-# Set the new row names for the matrix 'mat'
 rownames(topgenes_aff_vs_unaff_05_sub) <- new_row_names_sub
 
-topgenes_aff_vs_unaff_05_sub <- topgenes_aff_vs_unaff_05_sub[order(row.names(topgenes_aff_vs_unaff_05_sub)), ]
+# Order the matrix based on significance (most significant to least significant)
+topgenes_aff_vs_unaff_05_sub <- topgenes_aff_vs_unaff_05_sub[order(res_aff_vs_unaff_df_sub$padj[topgenes_byensemblid_sub]), ]
 
 df_sub <- df <- colData(vsd_limma) %>%
   as.data.frame() %>%
   dplyr::select(Category)
-pheatmap(topgenes_aff_vs_unaff_05_sub, annotation_col = df_sub, annotation_colors = ann_colors2, fontsize = 5, angle_col = 0)
+
+ComplexHeatmap::pheatmap(topgenes_aff_vs_unaff_05_sub, color = colorRampPalette(rev(brewer.pal(n = 9, name =
+  "RdYlBu")))(50), annotation_col = df_sub, annotation_colors = ann_colors2, fontsize = 6, angle_col = c("0"), cellheight = 10, cellwidth = 24, border_color = "black", heatmap_legend_param = list(
+        title = ""
+    ))
 ```
 
 
 ```{r, significant-genes-deseq-subsetted-subcategory, out.height="570px", out.width ="800px"}
-topgenes_byensemblid_sub <- head(rownames(res_aff_vs_unaff_df_sub), 55)
+topgenes_byensemblid_sub <- head(rownames(res_aff_vs_unaff_df_sub), 50)
 topgenes_aff_vs_unaff_05_sub <- assay(vsd_limma)[topgenes_byensemblid_sub, ]
 topgenes_aff_vs_unaff_05_sub <- topgenes_aff_vs_unaff_05_sub - rowMeans(topgenes_aff_vs_unaff_05_sub)
 
