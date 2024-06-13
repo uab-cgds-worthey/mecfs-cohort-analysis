@@ -415,7 +415,7 @@ class="glyphicon glyphicon-ok text-success" aria-hidden="true"></span>
 <div class="tab-content">
 <div id="summary" class="tab-pane fade in active">
 <p>
-<strong>Last updated:</strong> 2024-06-12
+<strong>Last updated:</strong> 2024-06-13
 </p>
 <p>
 <strong>Checks:</strong> <span
@@ -546,15 +546,15 @@ project makes it easier to run your code on other machines.</p>
 <div class="panel panel-default">
 <div class="panel-heading">
 <p class="panel-title">
-<a data-toggle="collapse" data-parent="#workflowr-checks" href="#strongRepositoryversionstrongahrefhttpsgithubcomuabcgdswortheymecfsdgeanalysistreea40ee827ee9727b8a377dcffeaecd286a7b18b3btargetblanka40ee82a">
+<a data-toggle="collapse" data-parent="#workflowr-checks" href="#strongRepositoryversionstrongahrefhttpsgithubcomuabcgdswortheymecfsdgeanalysistreec44c0c1366d42d0455e128a116ea710e26431c85targetblankc44c0c1a">
 <span class="glyphicon glyphicon-ok text-success"
 aria-hidden="true"></span> <strong>Repository version:</strong>
-<a href="https://github.com/uab-cgds-worthey/mecfs-dge-analysis/tree/a40ee827ee9727b8a377dcffeaecd286a7b18b3b" target="_blank">a40ee82</a>
+<a href="https://github.com/uab-cgds-worthey/mecfs-dge-analysis/tree/c44c0c1366d42d0455e128a116ea710e26431c85" target="_blank">c44c0c1</a>
 </a>
 </p>
 </div>
 <div
-id="strongRepositoryversionstrongahrefhttpsgithubcomuabcgdswortheymecfsdgeanalysistreea40ee827ee9727b8a377dcffeaecd286a7b18b3btargetblanka40ee82a"
+id="strongRepositoryversionstrongahrefhttpsgithubcomuabcgdswortheymecfsdgeanalysistreec44c0c1366d42d0455e128a116ea710e26431c85targetblankc44c0c1a"
 class="panel-collapse collapse">
 <div class="panel-body">
 <p>
@@ -564,7 +564,7 @@ reproducibility.
 </p>
 <p>
 The results in this page were generated with repository version
-<a href="https://github.com/uab-cgds-worthey/mecfs-dge-analysis/tree/a40ee827ee9727b8a377dcffeaecd286a7b18b3b" target="_blank">a40ee82</a>.
+<a href="https://github.com/uab-cgds-worthey/mecfs-dge-analysis/tree/c44c0c1366d42d0455e128a116ea710e26431c85" target="_blank">c44c0c1</a>.
 See the <em>Past versions</em> tab to see a history of the changes made
 to the R Markdown and HTML files.
 </p>
@@ -583,7 +583,6 @@ Ignored files:
     Ignored:    .Rhistory
     Ignored:    .Rproj.user/
     Ignored:    analysis/.DS_Store
-    Ignored:    analysis/figure/
     Ignored:    data/.DS_Store
     Ignored:    omnipathr-log/
     Ignored:    output/.DS_Store
@@ -652,6 +651,40 @@ Message
 </tr>
 </thead>
 <tbody>
+<tr>
+<td>
+Rmd
+</td>
+<td>
+<a href="https://github.com/uab-cgds-worthey/mecfs-dge-analysis/blob/c44c0c1366d42d0455e128a116ea710e26431c85/analysis/subsetted-condition-analysis.Rmd" target="_blank">c44c0c1</a>
+</td>
+<td>
+sdhutchins
+</td>
+<td>
+2024-06-13
+</td>
+<td>
+Tweak heatmap.
+</td>
+</tr>
+<tr>
+<td>
+html
+</td>
+<td>
+<a href="https://rawcdn.githack.com/uab-cgds-worthey/mecfs-dge-analysis/750876f84fc2e2510ffef676fe0d598f0c09d1dc/docs/subsetted-condition-analysis.html" target="_blank">750876f</a>
+</td>
+<td>
+sdhutchins
+</td>
+<td>
+2024-06-12
+</td>
+<td>
+Build site.
+</td>
+</tr>
 <tr>
 <td>
 Rmd
@@ -1735,7 +1768,7 @@ category_colors &lt;- c(
   &quot;Neurologic disorder&quot; = &quot;#D9D9D9&quot;,
   &quot;Myasthenic disorder&quot; = &quot;#FDB462&quot;,
   &quot;Neuropathy&quot; = &quot;#8DD3C7&quot;,
-  &quot;Unaffected&quot; = &quot;#001111&quot;
+  &quot;Unaffected&quot; = &quot;darkgrey&quot;
 )
 
 combined_category_colors &lt;- c(
@@ -1746,7 +1779,7 @@ combined_category_colors &lt;- c(
   &quot;I&quot; = &quot;#FF7F00&quot;, # Light green
   &quot;C-E&quot; = &quot;#FFFF33&quot;, # Mustard yellow
   &quot;S&quot; = &quot;#F781BF&quot;, # Brown
-  &quot;Unaffected&quot; = &quot;#000000&quot; # Dark grey
+  &quot;Unaffected&quot; = &quot;darkgray&quot; # Dark grey
 )
 
 
@@ -2473,28 +2506,41 @@ sdhutchins
 </table>
 </div>
 </div>
-<pre class="r"><code>topgenes_byensemblid_sub &lt;- head(rownames(res_aff_vs_unaff_df_sub), 55)
+</div>
+</div>
+<div id="heatmap-of-significant-genes" class="section level2">
+<h2>Heatmap of Significant Genes</h2>
+<pre class="r"><code># Assuming &#39;res_aff_vs_unaff_df_sub&#39; has a column &#39;padj&#39; for adjusted p-values or &#39;pvalue&#39; for p-values
+# Ensure the row names of &#39;res_aff_vs_unaff_df_sub&#39; are Ensembl IDs
+res_aff_vs_unaff_df_sub &lt;- res_aff_vs_unaff_df_sub[order(res_aff_vs_unaff_df_sub$padj), ]
+
+# Get the top 50 most significant genes based on adjusted p-values
+topgenes_byensemblid_sub &lt;- head(rownames(res_aff_vs_unaff_df_sub), 50)
+
+# Extract the corresponding subset of the data matrix
 topgenes_aff_vs_unaff_05_sub &lt;- assay(vsd_limma)[topgenes_byensemblid_sub, ]
+
+# Normalize by subtracting the row means
 topgenes_aff_vs_unaff_05_sub &lt;- topgenes_aff_vs_unaff_05_sub - rowMeans(topgenes_aff_vs_unaff_05_sub)
 
+# Map Ensembl IDs to gene names
 ensembl_to_gene_sub &lt;- setNames(gene_info$gene_name, gene_info$Ensembl_ID)
-
-# Get the current row names of the matrix &#39;mat&#39;
 current_ensembl_ids_sub &lt;- rownames(topgenes_aff_vs_unaff_05_sub)
-
-# Find the corresponding gene names for the Ensembl IDs
 new_row_names_sub &lt;- ensembl_to_gene_sub[current_ensembl_ids_sub]
-
-# Set the new row names for the matrix &#39;mat&#39;
 rownames(topgenes_aff_vs_unaff_05_sub) &lt;- new_row_names_sub
 
-topgenes_aff_vs_unaff_05_sub &lt;- topgenes_aff_vs_unaff_05_sub[order(row.names(topgenes_aff_vs_unaff_05_sub)), ]
+# Order the matrix based on significance (most significant to least significant)
+topgenes_aff_vs_unaff_05_sub &lt;- topgenes_aff_vs_unaff_05_sub[order(res_aff_vs_unaff_df_sub$padj[topgenes_byensemblid_sub]), ]
 
 df_sub &lt;- df &lt;- colData(vsd_limma) %&gt;%
   as.data.frame() %&gt;%
   dplyr::select(Category)
-pheatmap(topgenes_aff_vs_unaff_05_sub, annotation_col = df_sub, annotation_colors = ann_colors2, fontsize = 5, angle_col = 0)</code></pre>
-<p><img src="figure/subsetted-condition-analysis.Rmd/significant-genes-deseq-subsetted-1.png" width="800px" height="570px" style="display: block; margin: auto;" /></p>
+
+ComplexHeatmap::pheatmap(topgenes_aff_vs_unaff_05_sub, color = colorRampPalette(rev(brewer.pal(n = 9, name =
+  &quot;RdYlBu&quot;)))(50), annotation_col = df_sub, annotation_colors = ann_colors2, fontsize = 6, angle_col = c(&quot;0&quot;), cellheight = 10, cellwidth = 24, border_color = &quot;black&quot;, heatmap_legend_param = list(
+        title = &quot;&quot;
+    ))</code></pre>
+<p><img src="figure/subsetted-condition-analysis.Rmd/significant-genes-deseq-subsetted-1.png" width="1200px" height="800px" style="display: block; margin: auto;" /></p>
 <p>
 <button type="button" class="btn btn-default btn-xs btn-workflowr btn-workflowr-fig" data-toggle="collapse" data-target="#fig-significant-genes-deseq-subsetted-1">
 Past versions of significant-genes-deseq-subsetted-1.png
@@ -2565,7 +2611,7 @@ sdhutchins
 </table>
 </div>
 </div>
-<pre class="r"><code>topgenes_byensemblid_sub &lt;- head(rownames(res_aff_vs_unaff_df_sub), 55)
+<pre class="r"><code>topgenes_byensemblid_sub &lt;- head(rownames(res_aff_vs_unaff_df_sub), 50)
 topgenes_aff_vs_unaff_05_sub &lt;- assay(vsd_limma)[topgenes_byensemblid_sub, ]
 topgenes_aff_vs_unaff_05_sub &lt;- topgenes_aff_vs_unaff_05_sub - rowMeans(topgenes_aff_vs_unaff_05_sub)
 
@@ -3581,7 +3627,6 @@ write.csv(significant_data, file = &quot;output/res_aff_vs_unaff_significant_sub
 
 # Save significant genes
 write.csv(combined_data, file = &quot;output/res_aff_vs_unaff_significant_subsetted_mygene.csv&quot;, row.names = FALSE)</code></pre>
-</div>
 </div>
 <div id="expression-of-candidate-genes" class="section level2">
 <h2>Expression of Candidate Genes</h2>
@@ -4926,6 +4971,17 @@ Date
 <tbody>
 <tr>
 <td>
+<a href="https://github.com/uab-cgds-worthey/mecfs-dge-analysis/blob/750876f84fc2e2510ffef676fe0d598f0c09d1dc/docs/figure/subsetted-condition-analysis.Rmd/generate-plot-counts-genes-interest-subsetted-1.png" target="_blank">750876f</a>
+</td>
+<td>
+sdhutchins
+</td>
+<td>
+2024-06-12
+</td>
+</tr>
+<tr>
+<td>
 <a href="https://github.com/uab-cgds-worthey/mecfs-dge-analysis/blob/a2982931336d32ec27f6ad11c28a6200f8150378/docs/figure/subsetted-condition-analysis.Rmd/generate-plot-counts-genes-interest-subsetted-1.png" target="_blank">a298293</a>
 </td>
 <td>
@@ -5029,6 +5085,17 @@ Date
 </tr>
 </thead>
 <tbody>
+<tr>
+<td>
+<a href="https://github.com/uab-cgds-worthey/mecfs-dge-analysis/blob/750876f84fc2e2510ffef676fe0d598f0c09d1dc/docs/figure/subsetted-condition-analysis.Rmd/generate-plot-counts-genes-interest-subsetted-2.png" target="_blank">750876f</a>
+</td>
+<td>
+sdhutchins
+</td>
+<td>
+2024-06-12
+</td>
+</tr>
 <tr>
 <td>
 <a href="https://github.com/uab-cgds-worthey/mecfs-dge-analysis/blob/a2982931336d32ec27f6ad11c28a6200f8150378/docs/figure/subsetted-condition-analysis.Rmd/generate-plot-counts-genes-interest-subsetted-2.png" target="_blank">a298293</a>
@@ -5136,6 +5203,17 @@ Date
 <tbody>
 <tr>
 <td>
+<a href="https://github.com/uab-cgds-worthey/mecfs-dge-analysis/blob/750876f84fc2e2510ffef676fe0d598f0c09d1dc/docs/figure/subsetted-condition-analysis.Rmd/generate-plot-counts-genes-interest-subsetted-3.png" target="_blank">750876f</a>
+</td>
+<td>
+sdhutchins
+</td>
+<td>
+2024-06-12
+</td>
+</tr>
+<tr>
+<td>
 <a href="https://github.com/uab-cgds-worthey/mecfs-dge-analysis/blob/a2982931336d32ec27f6ad11c28a6200f8150378/docs/figure/subsetted-condition-analysis.Rmd/generate-plot-counts-genes-interest-subsetted-3.png" target="_blank">a298293</a>
 </td>
 <td>
@@ -5239,6 +5317,17 @@ Date
 </tr>
 </thead>
 <tbody>
+<tr>
+<td>
+<a href="https://github.com/uab-cgds-worthey/mecfs-dge-analysis/blob/750876f84fc2e2510ffef676fe0d598f0c09d1dc/docs/figure/subsetted-condition-analysis.Rmd/generate-plot-counts-genes-interest-subsetted-4.png" target="_blank">750876f</a>
+</td>
+<td>
+sdhutchins
+</td>
+<td>
+2024-06-12
+</td>
+</tr>
 <tr>
 <td>
 <a href="https://github.com/uab-cgds-worthey/mecfs-dge-analysis/blob/a2982931336d32ec27f6ad11c28a6200f8150378/docs/figure/subsetted-condition-analysis.Rmd/generate-plot-counts-genes-interest-subsetted-4.png" target="_blank">a298293</a>
@@ -5346,6 +5435,17 @@ Date
 <tbody>
 <tr>
 <td>
+<a href="https://github.com/uab-cgds-worthey/mecfs-dge-analysis/blob/750876f84fc2e2510ffef676fe0d598f0c09d1dc/docs/figure/subsetted-condition-analysis.Rmd/generate-plot-counts-genes-interest-subsetted-5.png" target="_blank">750876f</a>
+</td>
+<td>
+sdhutchins
+</td>
+<td>
+2024-06-12
+</td>
+</tr>
+<tr>
+<td>
 <a href="https://github.com/uab-cgds-worthey/mecfs-dge-analysis/blob/a2982931336d32ec27f6ad11c28a6200f8150378/docs/figure/subsetted-condition-analysis.Rmd/generate-plot-counts-genes-interest-subsetted-5.png" target="_blank">a298293</a>
 </td>
 <td>
@@ -5449,6 +5549,17 @@ Date
 </tr>
 </thead>
 <tbody>
+<tr>
+<td>
+<a href="https://github.com/uab-cgds-worthey/mecfs-dge-analysis/blob/750876f84fc2e2510ffef676fe0d598f0c09d1dc/docs/figure/subsetted-condition-analysis.Rmd/generate-plot-counts-genes-interest-subsetted-6.png" target="_blank">750876f</a>
+</td>
+<td>
+sdhutchins
+</td>
+<td>
+2024-06-12
+</td>
+</tr>
 <tr>
 <td>
 <a href="https://github.com/uab-cgds-worthey/mecfs-dge-analysis/blob/a2982931336d32ec27f6ad11c28a6200f8150378/docs/figure/subsetted-condition-analysis.Rmd/generate-plot-counts-genes-interest-subsetted-6.png" target="_blank">a298293</a>
@@ -5556,6 +5667,17 @@ Date
 <tbody>
 <tr>
 <td>
+<a href="https://github.com/uab-cgds-worthey/mecfs-dge-analysis/blob/750876f84fc2e2510ffef676fe0d598f0c09d1dc/docs/figure/subsetted-condition-analysis.Rmd/generate-plot-counts-genes-interest-subsetted-7.png" target="_blank">750876f</a>
+</td>
+<td>
+sdhutchins
+</td>
+<td>
+2024-06-12
+</td>
+</tr>
+<tr>
+<td>
 <a href="https://github.com/uab-cgds-worthey/mecfs-dge-analysis/blob/a2982931336d32ec27f6ad11c28a6200f8150378/docs/figure/subsetted-condition-analysis.Rmd/generate-plot-counts-genes-interest-subsetted-7.png" target="_blank">a298293</a>
 </td>
 <td>
@@ -5659,6 +5781,17 @@ Date
 </tr>
 </thead>
 <tbody>
+<tr>
+<td>
+<a href="https://github.com/uab-cgds-worthey/mecfs-dge-analysis/blob/750876f84fc2e2510ffef676fe0d598f0c09d1dc/docs/figure/subsetted-condition-analysis.Rmd/generate-plot-counts-genes-interest-subsetted-8.png" target="_blank">750876f</a>
+</td>
+<td>
+sdhutchins
+</td>
+<td>
+2024-06-12
+</td>
+</tr>
 <tr>
 <td>
 <a href="https://github.com/uab-cgds-worthey/mecfs-dge-analysis/blob/a2982931336d32ec27f6ad11c28a6200f8150378/docs/figure/subsetted-condition-analysis.Rmd/generate-plot-counts-genes-interest-subsetted-8.png" target="_blank">a298293</a>
@@ -5766,6 +5899,17 @@ Date
 <tbody>
 <tr>
 <td>
+<a href="https://github.com/uab-cgds-worthey/mecfs-dge-analysis/blob/750876f84fc2e2510ffef676fe0d598f0c09d1dc/docs/figure/subsetted-condition-analysis.Rmd/generate-plot-counts-genes-interest-subsetted-9.png" target="_blank">750876f</a>
+</td>
+<td>
+sdhutchins
+</td>
+<td>
+2024-06-12
+</td>
+</tr>
+<tr>
+<td>
 <a href="https://github.com/uab-cgds-worthey/mecfs-dge-analysis/blob/a2982931336d32ec27f6ad11c28a6200f8150378/docs/figure/subsetted-condition-analysis.Rmd/generate-plot-counts-genes-interest-subsetted-9.png" target="_blank">a298293</a>
 </td>
 <td>
@@ -5869,6 +6013,17 @@ Date
 </tr>
 </thead>
 <tbody>
+<tr>
+<td>
+<a href="https://github.com/uab-cgds-worthey/mecfs-dge-analysis/blob/750876f84fc2e2510ffef676fe0d598f0c09d1dc/docs/figure/subsetted-condition-analysis.Rmd/generate-plot-counts-genes-interest-subsetted-10.png" target="_blank">750876f</a>
+</td>
+<td>
+sdhutchins
+</td>
+<td>
+2024-06-12
+</td>
+</tr>
 <tr>
 <td>
 <a href="https://github.com/uab-cgds-worthey/mecfs-dge-analysis/blob/a2982931336d32ec27f6ad11c28a6200f8150378/docs/figure/subsetted-condition-analysis.Rmd/generate-plot-counts-genes-interest-subsetted-10.png" target="_blank">a298293</a>
@@ -5976,6 +6131,17 @@ Date
 <tbody>
 <tr>
 <td>
+<a href="https://github.com/uab-cgds-worthey/mecfs-dge-analysis/blob/750876f84fc2e2510ffef676fe0d598f0c09d1dc/docs/figure/subsetted-condition-analysis.Rmd/generate-plot-counts-genes-interest-subsetted-11.png" target="_blank">750876f</a>
+</td>
+<td>
+sdhutchins
+</td>
+<td>
+2024-06-12
+</td>
+</tr>
+<tr>
+<td>
 <a href="https://github.com/uab-cgds-worthey/mecfs-dge-analysis/blob/a2982931336d32ec27f6ad11c28a6200f8150378/docs/figure/subsetted-condition-analysis.Rmd/generate-plot-counts-genes-interest-subsetted-11.png" target="_blank">a298293</a>
 </td>
 <td>
@@ -6079,6 +6245,17 @@ Date
 </tr>
 </thead>
 <tbody>
+<tr>
+<td>
+<a href="https://github.com/uab-cgds-worthey/mecfs-dge-analysis/blob/750876f84fc2e2510ffef676fe0d598f0c09d1dc/docs/figure/subsetted-condition-analysis.Rmd/generate-plot-counts-genes-interest-subsetted-12.png" target="_blank">750876f</a>
+</td>
+<td>
+sdhutchins
+</td>
+<td>
+2024-06-12
+</td>
+</tr>
 <tr>
 <td>
 <a href="https://github.com/uab-cgds-worthey/mecfs-dge-analysis/blob/a2982931336d32ec27f6ad11c28a6200f8150378/docs/figure/subsetted-condition-analysis.Rmd/generate-plot-counts-genes-interest-subsetted-12.png" target="_blank">a298293</a>
@@ -6186,6 +6363,17 @@ Date
 <tbody>
 <tr>
 <td>
+<a href="https://github.com/uab-cgds-worthey/mecfs-dge-analysis/blob/750876f84fc2e2510ffef676fe0d598f0c09d1dc/docs/figure/subsetted-condition-analysis.Rmd/generate-plot-counts-genes-interest-subsetted-13.png" target="_blank">750876f</a>
+</td>
+<td>
+sdhutchins
+</td>
+<td>
+2024-06-12
+</td>
+</tr>
+<tr>
+<td>
 <a href="https://github.com/uab-cgds-worthey/mecfs-dge-analysis/blob/a2982931336d32ec27f6ad11c28a6200f8150378/docs/figure/subsetted-condition-analysis.Rmd/generate-plot-counts-genes-interest-subsetted-13.png" target="_blank">a298293</a>
 </td>
 <td>
@@ -6289,6 +6477,17 @@ Date
 </tr>
 </thead>
 <tbody>
+<tr>
+<td>
+<a href="https://github.com/uab-cgds-worthey/mecfs-dge-analysis/blob/750876f84fc2e2510ffef676fe0d598f0c09d1dc/docs/figure/subsetted-condition-analysis.Rmd/generate-plot-counts-genes-interest-subsetted-14.png" target="_blank">750876f</a>
+</td>
+<td>
+sdhutchins
+</td>
+<td>
+2024-06-12
+</td>
+</tr>
 <tr>
 <td>
 <a href="https://github.com/uab-cgds-worthey/mecfs-dge-analysis/blob/a2982931336d32ec27f6ad11c28a6200f8150378/docs/figure/subsetted-condition-analysis.Rmd/generate-plot-counts-genes-interest-subsetted-14.png" target="_blank">a298293</a>
@@ -6396,6 +6595,17 @@ Date
 <tbody>
 <tr>
 <td>
+<a href="https://github.com/uab-cgds-worthey/mecfs-dge-analysis/blob/750876f84fc2e2510ffef676fe0d598f0c09d1dc/docs/figure/subsetted-condition-analysis.Rmd/generate-plot-counts-genes-interest-subsetted-15.png" target="_blank">750876f</a>
+</td>
+<td>
+sdhutchins
+</td>
+<td>
+2024-06-12
+</td>
+</tr>
+<tr>
+<td>
 <a href="https://github.com/uab-cgds-worthey/mecfs-dge-analysis/blob/a2982931336d32ec27f6ad11c28a6200f8150378/docs/figure/subsetted-condition-analysis.Rmd/generate-plot-counts-genes-interest-subsetted-15.png" target="_blank">a298293</a>
 </td>
 <td>
@@ -6499,6 +6709,17 @@ Date
 </tr>
 </thead>
 <tbody>
+<tr>
+<td>
+<a href="https://github.com/uab-cgds-worthey/mecfs-dge-analysis/blob/750876f84fc2e2510ffef676fe0d598f0c09d1dc/docs/figure/subsetted-condition-analysis.Rmd/generate-plot-counts-genes-interest-subsetted-16.png" target="_blank">750876f</a>
+</td>
+<td>
+sdhutchins
+</td>
+<td>
+2024-06-12
+</td>
+</tr>
 <tr>
 <td>
 <a href="https://github.com/uab-cgds-worthey/mecfs-dge-analysis/blob/a2982931336d32ec27f6ad11c28a6200f8150378/docs/figure/subsetted-condition-analysis.Rmd/generate-plot-counts-genes-interest-subsetted-16.png" target="_blank">a298293</a>
@@ -6606,6 +6827,17 @@ Date
 <tbody>
 <tr>
 <td>
+<a href="https://github.com/uab-cgds-worthey/mecfs-dge-analysis/blob/750876f84fc2e2510ffef676fe0d598f0c09d1dc/docs/figure/subsetted-condition-analysis.Rmd/generate-plot-counts-genes-interest-subsetted-17.png" target="_blank">750876f</a>
+</td>
+<td>
+sdhutchins
+</td>
+<td>
+2024-06-12
+</td>
+</tr>
+<tr>
+<td>
 <a href="https://github.com/uab-cgds-worthey/mecfs-dge-analysis/blob/a2982931336d32ec27f6ad11c28a6200f8150378/docs/figure/subsetted-condition-analysis.Rmd/generate-plot-counts-genes-interest-subsetted-17.png" target="_blank">a298293</a>
 </td>
 <td>
@@ -6709,6 +6941,17 @@ Date
 </tr>
 </thead>
 <tbody>
+<tr>
+<td>
+<a href="https://github.com/uab-cgds-worthey/mecfs-dge-analysis/blob/750876f84fc2e2510ffef676fe0d598f0c09d1dc/docs/figure/subsetted-condition-analysis.Rmd/generate-plot-counts-genes-interest-subsetted-18.png" target="_blank">750876f</a>
+</td>
+<td>
+sdhutchins
+</td>
+<td>
+2024-06-12
+</td>
+</tr>
 <tr>
 <td>
 <a href="https://github.com/uab-cgds-worthey/mecfs-dge-analysis/blob/a2982931336d32ec27f6ad11c28a6200f8150378/docs/figure/subsetted-condition-analysis.Rmd/generate-plot-counts-genes-interest-subsetted-18.png" target="_blank">a298293</a>
@@ -6816,6 +7059,17 @@ Date
 <tbody>
 <tr>
 <td>
+<a href="https://github.com/uab-cgds-worthey/mecfs-dge-analysis/blob/750876f84fc2e2510ffef676fe0d598f0c09d1dc/docs/figure/subsetted-condition-analysis.Rmd/generate-plot-counts-genes-interest-subsetted-19.png" target="_blank">750876f</a>
+</td>
+<td>
+sdhutchins
+</td>
+<td>
+2024-06-12
+</td>
+</tr>
+<tr>
+<td>
 <a href="https://github.com/uab-cgds-worthey/mecfs-dge-analysis/blob/a2982931336d32ec27f6ad11c28a6200f8150378/docs/figure/subsetted-condition-analysis.Rmd/generate-plot-counts-genes-interest-subsetted-19.png" target="_blank">a298293</a>
 </td>
 <td>
@@ -6919,6 +7173,17 @@ Date
 </tr>
 </thead>
 <tbody>
+<tr>
+<td>
+<a href="https://github.com/uab-cgds-worthey/mecfs-dge-analysis/blob/750876f84fc2e2510ffef676fe0d598f0c09d1dc/docs/figure/subsetted-condition-analysis.Rmd/generate-plot-counts-genes-interest-subsetted-20.png" target="_blank">750876f</a>
+</td>
+<td>
+sdhutchins
+</td>
+<td>
+2024-06-12
+</td>
+</tr>
 <tr>
 <td>
 <a href="https://github.com/uab-cgds-worthey/mecfs-dge-analysis/blob/a2982931336d32ec27f6ad11c28a6200f8150378/docs/figure/subsetted-condition-analysis.Rmd/generate-plot-counts-genes-interest-subsetted-20.png" target="_blank">a298293</a>
@@ -7026,6 +7291,17 @@ Date
 <tbody>
 <tr>
 <td>
+<a href="https://github.com/uab-cgds-worthey/mecfs-dge-analysis/blob/750876f84fc2e2510ffef676fe0d598f0c09d1dc/docs/figure/subsetted-condition-analysis.Rmd/generate-plot-counts-genes-interest-subsetted-21.png" target="_blank">750876f</a>
+</td>
+<td>
+sdhutchins
+</td>
+<td>
+2024-06-12
+</td>
+</tr>
+<tr>
+<td>
 <a href="https://github.com/uab-cgds-worthey/mecfs-dge-analysis/blob/a2982931336d32ec27f6ad11c28a6200f8150378/docs/figure/subsetted-condition-analysis.Rmd/generate-plot-counts-genes-interest-subsetted-21.png" target="_blank">a298293</a>
 </td>
 <td>
@@ -7129,6 +7405,17 @@ Date
 </tr>
 </thead>
 <tbody>
+<tr>
+<td>
+<a href="https://github.com/uab-cgds-worthey/mecfs-dge-analysis/blob/750876f84fc2e2510ffef676fe0d598f0c09d1dc/docs/figure/subsetted-condition-analysis.Rmd/generate-plot-counts-genes-interest-subsetted-22.png" target="_blank">750876f</a>
+</td>
+<td>
+sdhutchins
+</td>
+<td>
+2024-06-12
+</td>
+</tr>
 <tr>
 <td>
 <a href="https://github.com/uab-cgds-worthey/mecfs-dge-analysis/blob/a2982931336d32ec27f6ad11c28a6200f8150378/docs/figure/subsetted-condition-analysis.Rmd/generate-plot-counts-genes-interest-subsetted-22.png" target="_blank">a298293</a>
@@ -7236,6 +7523,17 @@ Date
 <tbody>
 <tr>
 <td>
+<a href="https://github.com/uab-cgds-worthey/mecfs-dge-analysis/blob/750876f84fc2e2510ffef676fe0d598f0c09d1dc/docs/figure/subsetted-condition-analysis.Rmd/generate-plot-counts-genes-interest-subsetted-23.png" target="_blank">750876f</a>
+</td>
+<td>
+sdhutchins
+</td>
+<td>
+2024-06-12
+</td>
+</tr>
+<tr>
+<td>
 <a href="https://github.com/uab-cgds-worthey/mecfs-dge-analysis/blob/a2982931336d32ec27f6ad11c28a6200f8150378/docs/figure/subsetted-condition-analysis.Rmd/generate-plot-counts-genes-interest-subsetted-23.png" target="_blank">a298293</a>
 </td>
 <td>
@@ -7339,6 +7637,17 @@ Date
 </tr>
 </thead>
 <tbody>
+<tr>
+<td>
+<a href="https://github.com/uab-cgds-worthey/mecfs-dge-analysis/blob/750876f84fc2e2510ffef676fe0d598f0c09d1dc/docs/figure/subsetted-condition-analysis.Rmd/generate-plot-counts-genes-interest-subsetted-24.png" target="_blank">750876f</a>
+</td>
+<td>
+sdhutchins
+</td>
+<td>
+2024-06-12
+</td>
+</tr>
 <tr>
 <td>
 <a href="https://github.com/uab-cgds-worthey/mecfs-dge-analysis/blob/a2982931336d32ec27f6ad11c28a6200f8150378/docs/figure/subsetted-condition-analysis.Rmd/generate-plot-counts-genes-interest-subsetted-24.png" target="_blank">a298293</a>
@@ -7446,6 +7755,17 @@ Date
 <tbody>
 <tr>
 <td>
+<a href="https://github.com/uab-cgds-worthey/mecfs-dge-analysis/blob/750876f84fc2e2510ffef676fe0d598f0c09d1dc/docs/figure/subsetted-condition-analysis.Rmd/generate-plot-counts-genes-interest-subsetted-25.png" target="_blank">750876f</a>
+</td>
+<td>
+sdhutchins
+</td>
+<td>
+2024-06-12
+</td>
+</tr>
+<tr>
+<td>
 <a href="https://github.com/uab-cgds-worthey/mecfs-dge-analysis/blob/a2982931336d32ec27f6ad11c28a6200f8150378/docs/figure/subsetted-condition-analysis.Rmd/generate-plot-counts-genes-interest-subsetted-25.png" target="_blank">a298293</a>
 </td>
 <td>
@@ -7549,6 +7869,17 @@ Date
 </tr>
 </thead>
 <tbody>
+<tr>
+<td>
+<a href="https://github.com/uab-cgds-worthey/mecfs-dge-analysis/blob/750876f84fc2e2510ffef676fe0d598f0c09d1dc/docs/figure/subsetted-condition-analysis.Rmd/generate-plot-counts-genes-interest-subsetted-26.png" target="_blank">750876f</a>
+</td>
+<td>
+sdhutchins
+</td>
+<td>
+2024-06-12
+</td>
+</tr>
 <tr>
 <td>
 <a href="https://github.com/uab-cgds-worthey/mecfs-dge-analysis/blob/a2982931336d32ec27f6ad11c28a6200f8150378/docs/figure/subsetted-condition-analysis.Rmd/generate-plot-counts-genes-interest-subsetted-26.png" target="_blank">a298293</a>
@@ -7656,6 +7987,17 @@ Date
 <tbody>
 <tr>
 <td>
+<a href="https://github.com/uab-cgds-worthey/mecfs-dge-analysis/blob/750876f84fc2e2510ffef676fe0d598f0c09d1dc/docs/figure/subsetted-condition-analysis.Rmd/generate-plot-counts-genes-interest-subsetted-27.png" target="_blank">750876f</a>
+</td>
+<td>
+sdhutchins
+</td>
+<td>
+2024-06-12
+</td>
+</tr>
+<tr>
+<td>
 <a href="https://github.com/uab-cgds-worthey/mecfs-dge-analysis/blob/a2982931336d32ec27f6ad11c28a6200f8150378/docs/figure/subsetted-condition-analysis.Rmd/generate-plot-counts-genes-interest-subsetted-27.png" target="_blank">a298293</a>
 </td>
 <td>
@@ -7759,6 +8101,17 @@ Date
 </tr>
 </thead>
 <tbody>
+<tr>
+<td>
+<a href="https://github.com/uab-cgds-worthey/mecfs-dge-analysis/blob/750876f84fc2e2510ffef676fe0d598f0c09d1dc/docs/figure/subsetted-condition-analysis.Rmd/generate-plot-counts-genes-interest-subsetted-28.png" target="_blank">750876f</a>
+</td>
+<td>
+sdhutchins
+</td>
+<td>
+2024-06-12
+</td>
+</tr>
 <tr>
 <td>
 <a href="https://github.com/uab-cgds-worthey/mecfs-dge-analysis/blob/a2982931336d32ec27f6ad11c28a6200f8150378/docs/figure/subsetted-condition-analysis.Rmd/generate-plot-counts-genes-interest-subsetted-28.png" target="_blank">a298293</a>
@@ -7866,6 +8219,17 @@ Date
 <tbody>
 <tr>
 <td>
+<a href="https://github.com/uab-cgds-worthey/mecfs-dge-analysis/blob/750876f84fc2e2510ffef676fe0d598f0c09d1dc/docs/figure/subsetted-condition-analysis.Rmd/generate-plot-counts-genes-interest-subsetted-29.png" target="_blank">750876f</a>
+</td>
+<td>
+sdhutchins
+</td>
+<td>
+2024-06-12
+</td>
+</tr>
+<tr>
+<td>
 <a href="https://github.com/uab-cgds-worthey/mecfs-dge-analysis/blob/a2982931336d32ec27f6ad11c28a6200f8150378/docs/figure/subsetted-condition-analysis.Rmd/generate-plot-counts-genes-interest-subsetted-29.png" target="_blank">a298293</a>
 </td>
 <td>
@@ -7969,6 +8333,17 @@ Date
 </tr>
 </thead>
 <tbody>
+<tr>
+<td>
+<a href="https://github.com/uab-cgds-worthey/mecfs-dge-analysis/blob/750876f84fc2e2510ffef676fe0d598f0c09d1dc/docs/figure/subsetted-condition-analysis.Rmd/generate-plot-counts-genes-interest-subsetted-30.png" target="_blank">750876f</a>
+</td>
+<td>
+sdhutchins
+</td>
+<td>
+2024-06-12
+</td>
+</tr>
 <tr>
 <td>
 <a href="https://github.com/uab-cgds-worthey/mecfs-dge-analysis/blob/a2982931336d32ec27f6ad11c28a6200f8150378/docs/figure/subsetted-condition-analysis.Rmd/generate-plot-counts-genes-interest-subsetted-30.png" target="_blank">a298293</a>
@@ -8076,6 +8451,17 @@ Date
 <tbody>
 <tr>
 <td>
+<a href="https://github.com/uab-cgds-worthey/mecfs-dge-analysis/blob/750876f84fc2e2510ffef676fe0d598f0c09d1dc/docs/figure/subsetted-condition-analysis.Rmd/generate-plot-counts-genes-interest-subsetted-31.png" target="_blank">750876f</a>
+</td>
+<td>
+sdhutchins
+</td>
+<td>
+2024-06-12
+</td>
+</tr>
+<tr>
+<td>
 <a href="https://github.com/uab-cgds-worthey/mecfs-dge-analysis/blob/a2982931336d32ec27f6ad11c28a6200f8150378/docs/figure/subsetted-condition-analysis.Rmd/generate-plot-counts-genes-interest-subsetted-31.png" target="_blank">a298293</a>
 </td>
 <td>
@@ -8179,6 +8565,17 @@ Date
 </tr>
 </thead>
 <tbody>
+<tr>
+<td>
+<a href="https://github.com/uab-cgds-worthey/mecfs-dge-analysis/blob/750876f84fc2e2510ffef676fe0d598f0c09d1dc/docs/figure/subsetted-condition-analysis.Rmd/generate-plot-counts-genes-interest-subsetted-32.png" target="_blank">750876f</a>
+</td>
+<td>
+sdhutchins
+</td>
+<td>
+2024-06-12
+</td>
+</tr>
 <tr>
 <td>
 <a href="https://github.com/uab-cgds-worthey/mecfs-dge-analysis/blob/a2982931336d32ec27f6ad11c28a6200f8150378/docs/figure/subsetted-condition-analysis.Rmd/generate-plot-counts-genes-interest-subsetted-32.png" target="_blank">a298293</a>
@@ -8286,6 +8683,17 @@ Date
 <tbody>
 <tr>
 <td>
+<a href="https://github.com/uab-cgds-worthey/mecfs-dge-analysis/blob/750876f84fc2e2510ffef676fe0d598f0c09d1dc/docs/figure/subsetted-condition-analysis.Rmd/generate-plot-counts-genes-interest-subsetted-33.png" target="_blank">750876f</a>
+</td>
+<td>
+sdhutchins
+</td>
+<td>
+2024-06-12
+</td>
+</tr>
+<tr>
+<td>
 <a href="https://github.com/uab-cgds-worthey/mecfs-dge-analysis/blob/a2982931336d32ec27f6ad11c28a6200f8150378/docs/figure/subsetted-condition-analysis.Rmd/generate-plot-counts-genes-interest-subsetted-33.png" target="_blank">a298293</a>
 </td>
 <td>
@@ -8389,6 +8797,17 @@ Date
 </tr>
 </thead>
 <tbody>
+<tr>
+<td>
+<a href="https://github.com/uab-cgds-worthey/mecfs-dge-analysis/blob/750876f84fc2e2510ffef676fe0d598f0c09d1dc/docs/figure/subsetted-condition-analysis.Rmd/generate-plot-counts-genes-interest-subsetted-34.png" target="_blank">750876f</a>
+</td>
+<td>
+sdhutchins
+</td>
+<td>
+2024-06-12
+</td>
+</tr>
 <tr>
 <td>
 <a href="https://github.com/uab-cgds-worthey/mecfs-dge-analysis/blob/a2982931336d32ec27f6ad11c28a6200f8150378/docs/figure/subsetted-condition-analysis.Rmd/generate-plot-counts-genes-interest-subsetted-34.png" target="_blank">a298293</a>
@@ -8496,6 +8915,17 @@ Date
 <tbody>
 <tr>
 <td>
+<a href="https://github.com/uab-cgds-worthey/mecfs-dge-analysis/blob/750876f84fc2e2510ffef676fe0d598f0c09d1dc/docs/figure/subsetted-condition-analysis.Rmd/generate-plot-counts-genes-interest-subsetted-35.png" target="_blank">750876f</a>
+</td>
+<td>
+sdhutchins
+</td>
+<td>
+2024-06-12
+</td>
+</tr>
+<tr>
+<td>
 <a href="https://github.com/uab-cgds-worthey/mecfs-dge-analysis/blob/a2982931336d32ec27f6ad11c28a6200f8150378/docs/figure/subsetted-condition-analysis.Rmd/generate-plot-counts-genes-interest-subsetted-35.png" target="_blank">a298293</a>
 </td>
 <td>
@@ -8599,6 +9029,17 @@ Date
 </tr>
 </thead>
 <tbody>
+<tr>
+<td>
+<a href="https://github.com/uab-cgds-worthey/mecfs-dge-analysis/blob/750876f84fc2e2510ffef676fe0d598f0c09d1dc/docs/figure/subsetted-condition-analysis.Rmd/generate-plot-counts-genes-interest-subsetted-36.png" target="_blank">750876f</a>
+</td>
+<td>
+sdhutchins
+</td>
+<td>
+2024-06-12
+</td>
+</tr>
 <tr>
 <td>
 <a href="https://github.com/uab-cgds-worthey/mecfs-dge-analysis/blob/a2982931336d32ec27f6ad11c28a6200f8150378/docs/figure/subsetted-condition-analysis.Rmd/generate-plot-counts-genes-interest-subsetted-36.png" target="_blank">a298293</a>
@@ -8787,6 +9228,17 @@ Date
 <tbody>
 <tr>
 <td>
+<a href="https://github.com/uab-cgds-worthey/mecfs-dge-analysis/blob/750876f84fc2e2510ffef676fe0d598f0c09d1dc/docs/figure/subsetted-condition-analysis.Rmd/generate-plot-counts-genes-significant-1.png" target="_blank">750876f</a>
+</td>
+<td>
+sdhutchins
+</td>
+<td>
+2024-06-12
+</td>
+</tr>
+<tr>
+<td>
 <a href="https://github.com/uab-cgds-worthey/mecfs-dge-analysis/blob/a2982931336d32ec27f6ad11c28a6200f8150378/docs/figure/subsetted-condition-analysis.Rmd/generate-plot-counts-genes-significant-1.png" target="_blank">a298293</a>
 </td>
 <td>
@@ -8834,6 +9286,17 @@ Date
 </tr>
 </thead>
 <tbody>
+<tr>
+<td>
+<a href="https://github.com/uab-cgds-worthey/mecfs-dge-analysis/blob/750876f84fc2e2510ffef676fe0d598f0c09d1dc/docs/figure/subsetted-condition-analysis.Rmd/generate-plot-counts-genes-significant-2.png" target="_blank">750876f</a>
+</td>
+<td>
+sdhutchins
+</td>
+<td>
+2024-06-12
+</td>
+</tr>
 <tr>
 <td>
 <a href="https://github.com/uab-cgds-worthey/mecfs-dge-analysis/blob/a2982931336d32ec27f6ad11c28a6200f8150378/docs/figure/subsetted-condition-analysis.Rmd/generate-plot-counts-genes-significant-2.png" target="_blank">a298293</a>
@@ -8885,6 +9348,17 @@ Date
 <tbody>
 <tr>
 <td>
+<a href="https://github.com/uab-cgds-worthey/mecfs-dge-analysis/blob/750876f84fc2e2510ffef676fe0d598f0c09d1dc/docs/figure/subsetted-condition-analysis.Rmd/generate-plot-counts-genes-significant-3.png" target="_blank">750876f</a>
+</td>
+<td>
+sdhutchins
+</td>
+<td>
+2024-06-12
+</td>
+</tr>
+<tr>
+<td>
 <a href="https://github.com/uab-cgds-worthey/mecfs-dge-analysis/blob/a2982931336d32ec27f6ad11c28a6200f8150378/docs/figure/subsetted-condition-analysis.Rmd/generate-plot-counts-genes-significant-3.png" target="_blank">a298293</a>
 </td>
 <td>
@@ -8932,6 +9406,17 @@ Date
 </tr>
 </thead>
 <tbody>
+<tr>
+<td>
+<a href="https://github.com/uab-cgds-worthey/mecfs-dge-analysis/blob/750876f84fc2e2510ffef676fe0d598f0c09d1dc/docs/figure/subsetted-condition-analysis.Rmd/generate-plot-counts-genes-significant-4.png" target="_blank">750876f</a>
+</td>
+<td>
+sdhutchins
+</td>
+<td>
+2024-06-12
+</td>
+</tr>
 <tr>
 <td>
 <a href="https://github.com/uab-cgds-worthey/mecfs-dge-analysis/blob/a2982931336d32ec27f6ad11c28a6200f8150378/docs/figure/subsetted-condition-analysis.Rmd/generate-plot-counts-genes-significant-4.png" target="_blank">a298293</a>
@@ -8983,6 +9468,17 @@ Date
 <tbody>
 <tr>
 <td>
+<a href="https://github.com/uab-cgds-worthey/mecfs-dge-analysis/blob/750876f84fc2e2510ffef676fe0d598f0c09d1dc/docs/figure/subsetted-condition-analysis.Rmd/generate-plot-counts-genes-significant-5.png" target="_blank">750876f</a>
+</td>
+<td>
+sdhutchins
+</td>
+<td>
+2024-06-12
+</td>
+</tr>
+<tr>
+<td>
 <a href="https://github.com/uab-cgds-worthey/mecfs-dge-analysis/blob/a2982931336d32ec27f6ad11c28a6200f8150378/docs/figure/subsetted-condition-analysis.Rmd/generate-plot-counts-genes-significant-5.png" target="_blank">a298293</a>
 </td>
 <td>
@@ -9030,6 +9526,17 @@ Date
 </tr>
 </thead>
 <tbody>
+<tr>
+<td>
+<a href="https://github.com/uab-cgds-worthey/mecfs-dge-analysis/blob/750876f84fc2e2510ffef676fe0d598f0c09d1dc/docs/figure/subsetted-condition-analysis.Rmd/generate-plot-counts-genes-significant-6.png" target="_blank">750876f</a>
+</td>
+<td>
+sdhutchins
+</td>
+<td>
+2024-06-12
+</td>
+</tr>
 <tr>
 <td>
 <a href="https://github.com/uab-cgds-worthey/mecfs-dge-analysis/blob/a2982931336d32ec27f6ad11c28a6200f8150378/docs/figure/subsetted-condition-analysis.Rmd/generate-plot-counts-genes-significant-6.png" target="_blank">a298293</a>
@@ -9081,6 +9588,17 @@ Date
 <tbody>
 <tr>
 <td>
+<a href="https://github.com/uab-cgds-worthey/mecfs-dge-analysis/blob/750876f84fc2e2510ffef676fe0d598f0c09d1dc/docs/figure/subsetted-condition-analysis.Rmd/generate-plot-counts-genes-significant-7.png" target="_blank">750876f</a>
+</td>
+<td>
+sdhutchins
+</td>
+<td>
+2024-06-12
+</td>
+</tr>
+<tr>
+<td>
 <a href="https://github.com/uab-cgds-worthey/mecfs-dge-analysis/blob/a2982931336d32ec27f6ad11c28a6200f8150378/docs/figure/subsetted-condition-analysis.Rmd/generate-plot-counts-genes-significant-7.png" target="_blank">a298293</a>
 </td>
 <td>
@@ -9130,6 +9648,17 @@ Date
 <tbody>
 <tr>
 <td>
+<a href="https://github.com/uab-cgds-worthey/mecfs-dge-analysis/blob/750876f84fc2e2510ffef676fe0d598f0c09d1dc/docs/figure/subsetted-condition-analysis.Rmd/generate-plot-counts-genes-significant-8.png" target="_blank">750876f</a>
+</td>
+<td>
+sdhutchins
+</td>
+<td>
+2024-06-12
+</td>
+</tr>
+<tr>
+<td>
 <a href="https://github.com/uab-cgds-worthey/mecfs-dge-analysis/blob/a2982931336d32ec27f6ad11c28a6200f8150378/docs/figure/subsetted-condition-analysis.Rmd/generate-plot-counts-genes-significant-8.png" target="_blank">a298293</a>
 </td>
 <td>
@@ -9177,6 +9706,17 @@ Date
 </tr>
 </thead>
 <tbody>
+<tr>
+<td>
+<a href="https://github.com/uab-cgds-worthey/mecfs-dge-analysis/blob/750876f84fc2e2510ffef676fe0d598f0c09d1dc/docs/figure/subsetted-condition-analysis.Rmd/generate-plot-counts-genes-significant-9.png" target="_blank">750876f</a>
+</td>
+<td>
+sdhutchins
+</td>
+<td>
+2024-06-12
+</td>
+</tr>
 <tr>
 <td>
 <a href="https://github.com/uab-cgds-worthey/mecfs-dge-analysis/blob/a2982931336d32ec27f6ad11c28a6200f8150378/docs/figure/subsetted-condition-analysis.Rmd/generate-plot-counts-genes-significant-9.png" target="_blank">a298293</a>
@@ -9229,6 +9769,17 @@ Date
 <tbody>
 <tr>
 <td>
+<a href="https://github.com/uab-cgds-worthey/mecfs-dge-analysis/blob/750876f84fc2e2510ffef676fe0d598f0c09d1dc/docs/figure/subsetted-condition-analysis.Rmd/generate-plot-counts-genes-significant-10.png" target="_blank">750876f</a>
+</td>
+<td>
+sdhutchins
+</td>
+<td>
+2024-06-12
+</td>
+</tr>
+<tr>
+<td>
 <a href="https://github.com/uab-cgds-worthey/mecfs-dge-analysis/blob/a2982931336d32ec27f6ad11c28a6200f8150378/docs/figure/subsetted-condition-analysis.Rmd/generate-plot-counts-genes-significant-10.png" target="_blank">a298293</a>
 </td>
 <td>
@@ -9277,6 +9828,17 @@ Date
 </tr>
 </thead>
 <tbody>
+<tr>
+<td>
+<a href="https://github.com/uab-cgds-worthey/mecfs-dge-analysis/blob/750876f84fc2e2510ffef676fe0d598f0c09d1dc/docs/figure/subsetted-condition-analysis.Rmd/generate-plot-counts-genes-significant-11.png" target="_blank">750876f</a>
+</td>
+<td>
+sdhutchins
+</td>
+<td>
+2024-06-12
+</td>
+</tr>
 <tr>
 <td>
 <a href="https://github.com/uab-cgds-worthey/mecfs-dge-analysis/blob/a2982931336d32ec27f6ad11c28a6200f8150378/docs/figure/subsetted-condition-analysis.Rmd/generate-plot-counts-genes-significant-11.png" target="_blank">a298293</a>
@@ -9329,6 +9891,17 @@ Date
 <tbody>
 <tr>
 <td>
+<a href="https://github.com/uab-cgds-worthey/mecfs-dge-analysis/blob/750876f84fc2e2510ffef676fe0d598f0c09d1dc/docs/figure/subsetted-condition-analysis.Rmd/generate-plot-counts-genes-significant-12.png" target="_blank">750876f</a>
+</td>
+<td>
+sdhutchins
+</td>
+<td>
+2024-06-12
+</td>
+</tr>
+<tr>
+<td>
 <a href="https://github.com/uab-cgds-worthey/mecfs-dge-analysis/blob/a2982931336d32ec27f6ad11c28a6200f8150378/docs/figure/subsetted-condition-analysis.Rmd/generate-plot-counts-genes-significant-12.png" target="_blank">a298293</a>
 </td>
 <td>
@@ -9377,6 +9950,17 @@ Date
 </tr>
 </thead>
 <tbody>
+<tr>
+<td>
+<a href="https://github.com/uab-cgds-worthey/mecfs-dge-analysis/blob/750876f84fc2e2510ffef676fe0d598f0c09d1dc/docs/figure/subsetted-condition-analysis.Rmd/generate-plot-counts-genes-significant-13.png" target="_blank">750876f</a>
+</td>
+<td>
+sdhutchins
+</td>
+<td>
+2024-06-12
+</td>
+</tr>
 <tr>
 <td>
 <a href="https://github.com/uab-cgds-worthey/mecfs-dge-analysis/blob/a2982931336d32ec27f6ad11c28a6200f8150378/docs/figure/subsetted-condition-analysis.Rmd/generate-plot-counts-genes-significant-13.png" target="_blank">a298293</a>
@@ -9429,6 +10013,17 @@ Date
 <tbody>
 <tr>
 <td>
+<a href="https://github.com/uab-cgds-worthey/mecfs-dge-analysis/blob/750876f84fc2e2510ffef676fe0d598f0c09d1dc/docs/figure/subsetted-condition-analysis.Rmd/generate-plot-counts-genes-significant-14.png" target="_blank">750876f</a>
+</td>
+<td>
+sdhutchins
+</td>
+<td>
+2024-06-12
+</td>
+</tr>
+<tr>
+<td>
 <a href="https://github.com/uab-cgds-worthey/mecfs-dge-analysis/blob/a2982931336d32ec27f6ad11c28a6200f8150378/docs/figure/subsetted-condition-analysis.Rmd/generate-plot-counts-genes-significant-14.png" target="_blank">a298293</a>
 </td>
 <td>
@@ -9477,6 +10072,17 @@ Date
 </tr>
 </thead>
 <tbody>
+<tr>
+<td>
+<a href="https://github.com/uab-cgds-worthey/mecfs-dge-analysis/blob/750876f84fc2e2510ffef676fe0d598f0c09d1dc/docs/figure/subsetted-condition-analysis.Rmd/generate-plot-counts-genes-significant-15.png" target="_blank">750876f</a>
+</td>
+<td>
+sdhutchins
+</td>
+<td>
+2024-06-12
+</td>
+</tr>
 <tr>
 <td>
 <a href="https://github.com/uab-cgds-worthey/mecfs-dge-analysis/blob/a2982931336d32ec27f6ad11c28a6200f8150378/docs/figure/subsetted-condition-analysis.Rmd/generate-plot-counts-genes-significant-15.png" target="_blank">a298293</a>
@@ -9529,6 +10135,17 @@ Date
 <tbody>
 <tr>
 <td>
+<a href="https://github.com/uab-cgds-worthey/mecfs-dge-analysis/blob/750876f84fc2e2510ffef676fe0d598f0c09d1dc/docs/figure/subsetted-condition-analysis.Rmd/generate-plot-counts-genes-significant-16.png" target="_blank">750876f</a>
+</td>
+<td>
+sdhutchins
+</td>
+<td>
+2024-06-12
+</td>
+</tr>
+<tr>
+<td>
 <a href="https://github.com/uab-cgds-worthey/mecfs-dge-analysis/blob/a2982931336d32ec27f6ad11c28a6200f8150378/docs/figure/subsetted-condition-analysis.Rmd/generate-plot-counts-genes-significant-16.png" target="_blank">a298293</a>
 </td>
 <td>
@@ -9577,6 +10194,17 @@ Date
 </tr>
 </thead>
 <tbody>
+<tr>
+<td>
+<a href="https://github.com/uab-cgds-worthey/mecfs-dge-analysis/blob/750876f84fc2e2510ffef676fe0d598f0c09d1dc/docs/figure/subsetted-condition-analysis.Rmd/generate-plot-counts-genes-significant-17.png" target="_blank">750876f</a>
+</td>
+<td>
+sdhutchins
+</td>
+<td>
+2024-06-12
+</td>
+</tr>
 <tr>
 <td>
 <a href="https://github.com/uab-cgds-worthey/mecfs-dge-analysis/blob/a2982931336d32ec27f6ad11c28a6200f8150378/docs/figure/subsetted-condition-analysis.Rmd/generate-plot-counts-genes-significant-17.png" target="_blank">a298293</a>
@@ -9629,6 +10257,17 @@ Date
 <tbody>
 <tr>
 <td>
+<a href="https://github.com/uab-cgds-worthey/mecfs-dge-analysis/blob/750876f84fc2e2510ffef676fe0d598f0c09d1dc/docs/figure/subsetted-condition-analysis.Rmd/generate-plot-counts-genes-significant-18.png" target="_blank">750876f</a>
+</td>
+<td>
+sdhutchins
+</td>
+<td>
+2024-06-12
+</td>
+</tr>
+<tr>
+<td>
 <a href="https://github.com/uab-cgds-worthey/mecfs-dge-analysis/blob/a2982931336d32ec27f6ad11c28a6200f8150378/docs/figure/subsetted-condition-analysis.Rmd/generate-plot-counts-genes-significant-18.png" target="_blank">a298293</a>
 </td>
 <td>
@@ -9677,6 +10316,17 @@ Date
 </tr>
 </thead>
 <tbody>
+<tr>
+<td>
+<a href="https://github.com/uab-cgds-worthey/mecfs-dge-analysis/blob/750876f84fc2e2510ffef676fe0d598f0c09d1dc/docs/figure/subsetted-condition-analysis.Rmd/generate-plot-counts-genes-significant-19.png" target="_blank">750876f</a>
+</td>
+<td>
+sdhutchins
+</td>
+<td>
+2024-06-12
+</td>
+</tr>
 <tr>
 <td>
 <a href="https://github.com/uab-cgds-worthey/mecfs-dge-analysis/blob/a2982931336d32ec27f6ad11c28a6200f8150378/docs/figure/subsetted-condition-analysis.Rmd/generate-plot-counts-genes-significant-19.png" target="_blank">a298293</a>
@@ -9729,6 +10379,17 @@ Date
 <tbody>
 <tr>
 <td>
+<a href="https://github.com/uab-cgds-worthey/mecfs-dge-analysis/blob/750876f84fc2e2510ffef676fe0d598f0c09d1dc/docs/figure/subsetted-condition-analysis.Rmd/generate-plot-counts-genes-significant-20.png" target="_blank">750876f</a>
+</td>
+<td>
+sdhutchins
+</td>
+<td>
+2024-06-12
+</td>
+</tr>
+<tr>
+<td>
 <a href="https://github.com/uab-cgds-worthey/mecfs-dge-analysis/blob/a2982931336d32ec27f6ad11c28a6200f8150378/docs/figure/subsetted-condition-analysis.Rmd/generate-plot-counts-genes-significant-20.png" target="_blank">a298293</a>
 </td>
 <td>
@@ -9777,6 +10438,17 @@ Date
 </tr>
 </thead>
 <tbody>
+<tr>
+<td>
+<a href="https://github.com/uab-cgds-worthey/mecfs-dge-analysis/blob/750876f84fc2e2510ffef676fe0d598f0c09d1dc/docs/figure/subsetted-condition-analysis.Rmd/generate-plot-counts-genes-significant-21.png" target="_blank">750876f</a>
+</td>
+<td>
+sdhutchins
+</td>
+<td>
+2024-06-12
+</td>
+</tr>
 <tr>
 <td>
 <a href="https://github.com/uab-cgds-worthey/mecfs-dge-analysis/blob/a2982931336d32ec27f6ad11c28a6200f8150378/docs/figure/subsetted-condition-analysis.Rmd/generate-plot-counts-genes-significant-21.png" target="_blank">a298293</a>
@@ -9829,6 +10501,17 @@ Date
 <tbody>
 <tr>
 <td>
+<a href="https://github.com/uab-cgds-worthey/mecfs-dge-analysis/blob/750876f84fc2e2510ffef676fe0d598f0c09d1dc/docs/figure/subsetted-condition-analysis.Rmd/generate-plot-counts-genes-significant-22.png" target="_blank">750876f</a>
+</td>
+<td>
+sdhutchins
+</td>
+<td>
+2024-06-12
+</td>
+</tr>
+<tr>
+<td>
 <a href="https://github.com/uab-cgds-worthey/mecfs-dge-analysis/blob/a2982931336d32ec27f6ad11c28a6200f8150378/docs/figure/subsetted-condition-analysis.Rmd/generate-plot-counts-genes-significant-22.png" target="_blank">a298293</a>
 </td>
 <td>
@@ -9877,6 +10560,17 @@ Date
 </tr>
 </thead>
 <tbody>
+<tr>
+<td>
+<a href="https://github.com/uab-cgds-worthey/mecfs-dge-analysis/blob/750876f84fc2e2510ffef676fe0d598f0c09d1dc/docs/figure/subsetted-condition-analysis.Rmd/generate-plot-counts-genes-significant-23.png" target="_blank">750876f</a>
+</td>
+<td>
+sdhutchins
+</td>
+<td>
+2024-06-12
+</td>
+</tr>
 <tr>
 <td>
 <a href="https://github.com/uab-cgds-worthey/mecfs-dge-analysis/blob/a2982931336d32ec27f6ad11c28a6200f8150378/docs/figure/subsetted-condition-analysis.Rmd/generate-plot-counts-genes-significant-23.png" target="_blank">a298293</a>
@@ -9929,6 +10623,17 @@ Date
 <tbody>
 <tr>
 <td>
+<a href="https://github.com/uab-cgds-worthey/mecfs-dge-analysis/blob/750876f84fc2e2510ffef676fe0d598f0c09d1dc/docs/figure/subsetted-condition-analysis.Rmd/generate-plot-counts-genes-significant-24.png" target="_blank">750876f</a>
+</td>
+<td>
+sdhutchins
+</td>
+<td>
+2024-06-12
+</td>
+</tr>
+<tr>
+<td>
 <a href="https://github.com/uab-cgds-worthey/mecfs-dge-analysis/blob/a2982931336d32ec27f6ad11c28a6200f8150378/docs/figure/subsetted-condition-analysis.Rmd/generate-plot-counts-genes-significant-24.png" target="_blank">a298293</a>
 </td>
 <td>
@@ -9977,6 +10682,17 @@ Date
 </tr>
 </thead>
 <tbody>
+<tr>
+<td>
+<a href="https://github.com/uab-cgds-worthey/mecfs-dge-analysis/blob/750876f84fc2e2510ffef676fe0d598f0c09d1dc/docs/figure/subsetted-condition-analysis.Rmd/generate-plot-counts-genes-significant-25.png" target="_blank">750876f</a>
+</td>
+<td>
+sdhutchins
+</td>
+<td>
+2024-06-12
+</td>
+</tr>
 <tr>
 <td>
 <a href="https://github.com/uab-cgds-worthey/mecfs-dge-analysis/blob/a2982931336d32ec27f6ad11c28a6200f8150378/docs/figure/subsetted-condition-analysis.Rmd/generate-plot-counts-genes-significant-25.png" target="_blank">a298293</a>
@@ -10029,6 +10745,17 @@ Date
 <tbody>
 <tr>
 <td>
+<a href="https://github.com/uab-cgds-worthey/mecfs-dge-analysis/blob/750876f84fc2e2510ffef676fe0d598f0c09d1dc/docs/figure/subsetted-condition-analysis.Rmd/generate-plot-counts-genes-significant-26.png" target="_blank">750876f</a>
+</td>
+<td>
+sdhutchins
+</td>
+<td>
+2024-06-12
+</td>
+</tr>
+<tr>
+<td>
 <a href="https://github.com/uab-cgds-worthey/mecfs-dge-analysis/blob/a2982931336d32ec27f6ad11c28a6200f8150378/docs/figure/subsetted-condition-analysis.Rmd/generate-plot-counts-genes-significant-26.png" target="_blank">a298293</a>
 </td>
 <td>
@@ -10077,6 +10804,17 @@ Date
 </tr>
 </thead>
 <tbody>
+<tr>
+<td>
+<a href="https://github.com/uab-cgds-worthey/mecfs-dge-analysis/blob/750876f84fc2e2510ffef676fe0d598f0c09d1dc/docs/figure/subsetted-condition-analysis.Rmd/generate-plot-counts-genes-significant-27.png" target="_blank">750876f</a>
+</td>
+<td>
+sdhutchins
+</td>
+<td>
+2024-06-12
+</td>
+</tr>
 <tr>
 <td>
 <a href="https://github.com/uab-cgds-worthey/mecfs-dge-analysis/blob/a2982931336d32ec27f6ad11c28a6200f8150378/docs/figure/subsetted-condition-analysis.Rmd/generate-plot-counts-genes-significant-27.png" target="_blank">a298293</a>
@@ -10129,6 +10867,17 @@ Date
 <tbody>
 <tr>
 <td>
+<a href="https://github.com/uab-cgds-worthey/mecfs-dge-analysis/blob/750876f84fc2e2510ffef676fe0d598f0c09d1dc/docs/figure/subsetted-condition-analysis.Rmd/generate-plot-counts-genes-significant-28.png" target="_blank">750876f</a>
+</td>
+<td>
+sdhutchins
+</td>
+<td>
+2024-06-12
+</td>
+</tr>
+<tr>
+<td>
 <a href="https://github.com/uab-cgds-worthey/mecfs-dge-analysis/blob/a2982931336d32ec27f6ad11c28a6200f8150378/docs/figure/subsetted-condition-analysis.Rmd/generate-plot-counts-genes-significant-28.png" target="_blank">a298293</a>
 </td>
 <td>
@@ -10177,6 +10926,17 @@ Date
 </tr>
 </thead>
 <tbody>
+<tr>
+<td>
+<a href="https://github.com/uab-cgds-worthey/mecfs-dge-analysis/blob/750876f84fc2e2510ffef676fe0d598f0c09d1dc/docs/figure/subsetted-condition-analysis.Rmd/generate-plot-counts-genes-significant-29.png" target="_blank">750876f</a>
+</td>
+<td>
+sdhutchins
+</td>
+<td>
+2024-06-12
+</td>
+</tr>
 <tr>
 <td>
 <a href="https://github.com/uab-cgds-worthey/mecfs-dge-analysis/blob/a2982931336d32ec27f6ad11c28a6200f8150378/docs/figure/subsetted-condition-analysis.Rmd/generate-plot-counts-genes-significant-29.png" target="_blank">a298293</a>
@@ -10229,6 +10989,17 @@ Date
 <tbody>
 <tr>
 <td>
+<a href="https://github.com/uab-cgds-worthey/mecfs-dge-analysis/blob/750876f84fc2e2510ffef676fe0d598f0c09d1dc/docs/figure/subsetted-condition-analysis.Rmd/generate-plot-counts-genes-significant-30.png" target="_blank">750876f</a>
+</td>
+<td>
+sdhutchins
+</td>
+<td>
+2024-06-12
+</td>
+</tr>
+<tr>
+<td>
 <a href="https://github.com/uab-cgds-worthey/mecfs-dge-analysis/blob/a2982931336d32ec27f6ad11c28a6200f8150378/docs/figure/subsetted-condition-analysis.Rmd/generate-plot-counts-genes-significant-30.png" target="_blank">a298293</a>
 </td>
 <td>
@@ -10277,6 +11048,17 @@ Date
 </tr>
 </thead>
 <tbody>
+<tr>
+<td>
+<a href="https://github.com/uab-cgds-worthey/mecfs-dge-analysis/blob/750876f84fc2e2510ffef676fe0d598f0c09d1dc/docs/figure/subsetted-condition-analysis.Rmd/generate-plot-counts-genes-significant-31.png" target="_blank">750876f</a>
+</td>
+<td>
+sdhutchins
+</td>
+<td>
+2024-06-12
+</td>
+</tr>
 <tr>
 <td>
 <a href="https://github.com/uab-cgds-worthey/mecfs-dge-analysis/blob/a2982931336d32ec27f6ad11c28a6200f8150378/docs/figure/subsetted-condition-analysis.Rmd/generate-plot-counts-genes-significant-31.png" target="_blank">a298293</a>
@@ -10329,6 +11111,17 @@ Date
 <tbody>
 <tr>
 <td>
+<a href="https://github.com/uab-cgds-worthey/mecfs-dge-analysis/blob/750876f84fc2e2510ffef676fe0d598f0c09d1dc/docs/figure/subsetted-condition-analysis.Rmd/generate-plot-counts-genes-significant-32.png" target="_blank">750876f</a>
+</td>
+<td>
+sdhutchins
+</td>
+<td>
+2024-06-12
+</td>
+</tr>
+<tr>
+<td>
 <a href="https://github.com/uab-cgds-worthey/mecfs-dge-analysis/blob/a2982931336d32ec27f6ad11c28a6200f8150378/docs/figure/subsetted-condition-analysis.Rmd/generate-plot-counts-genes-significant-32.png" target="_blank">a298293</a>
 </td>
 <td>
@@ -10377,6 +11170,17 @@ Date
 </tr>
 </thead>
 <tbody>
+<tr>
+<td>
+<a href="https://github.com/uab-cgds-worthey/mecfs-dge-analysis/blob/750876f84fc2e2510ffef676fe0d598f0c09d1dc/docs/figure/subsetted-condition-analysis.Rmd/generate-plot-counts-genes-significant-33.png" target="_blank">750876f</a>
+</td>
+<td>
+sdhutchins
+</td>
+<td>
+2024-06-12
+</td>
+</tr>
 <tr>
 <td>
 <a href="https://github.com/uab-cgds-worthey/mecfs-dge-analysis/blob/a2982931336d32ec27f6ad11c28a6200f8150378/docs/figure/subsetted-condition-analysis.Rmd/generate-plot-counts-genes-significant-33.png" target="_blank">a298293</a>
@@ -10429,6 +11233,17 @@ Date
 <tbody>
 <tr>
 <td>
+<a href="https://github.com/uab-cgds-worthey/mecfs-dge-analysis/blob/750876f84fc2e2510ffef676fe0d598f0c09d1dc/docs/figure/subsetted-condition-analysis.Rmd/generate-plot-counts-genes-significant-34.png" target="_blank">750876f</a>
+</td>
+<td>
+sdhutchins
+</td>
+<td>
+2024-06-12
+</td>
+</tr>
+<tr>
+<td>
 <a href="https://github.com/uab-cgds-worthey/mecfs-dge-analysis/blob/a2982931336d32ec27f6ad11c28a6200f8150378/docs/figure/subsetted-condition-analysis.Rmd/generate-plot-counts-genes-significant-34.png" target="_blank">a298293</a>
 </td>
 <td>
@@ -10477,6 +11292,17 @@ Date
 </tr>
 </thead>
 <tbody>
+<tr>
+<td>
+<a href="https://github.com/uab-cgds-worthey/mecfs-dge-analysis/blob/750876f84fc2e2510ffef676fe0d598f0c09d1dc/docs/figure/subsetted-condition-analysis.Rmd/generate-plot-counts-genes-significant-35.png" target="_blank">750876f</a>
+</td>
+<td>
+sdhutchins
+</td>
+<td>
+2024-06-12
+</td>
+</tr>
 <tr>
 <td>
 <a href="https://github.com/uab-cgds-worthey/mecfs-dge-analysis/blob/a2982931336d32ec27f6ad11c28a6200f8150378/docs/figure/subsetted-condition-analysis.Rmd/generate-plot-counts-genes-significant-35.png" target="_blank">a298293</a>
@@ -10529,6 +11355,17 @@ Date
 <tbody>
 <tr>
 <td>
+<a href="https://github.com/uab-cgds-worthey/mecfs-dge-analysis/blob/750876f84fc2e2510ffef676fe0d598f0c09d1dc/docs/figure/subsetted-condition-analysis.Rmd/generate-plot-counts-genes-significant-36.png" target="_blank">750876f</a>
+</td>
+<td>
+sdhutchins
+</td>
+<td>
+2024-06-12
+</td>
+</tr>
+<tr>
+<td>
 <a href="https://github.com/uab-cgds-worthey/mecfs-dge-analysis/blob/a2982931336d32ec27f6ad11c28a6200f8150378/docs/figure/subsetted-condition-analysis.Rmd/generate-plot-counts-genes-significant-36.png" target="_blank">a298293</a>
 </td>
 <td>
@@ -10577,6 +11414,17 @@ Date
 </tr>
 </thead>
 <tbody>
+<tr>
+<td>
+<a href="https://github.com/uab-cgds-worthey/mecfs-dge-analysis/blob/750876f84fc2e2510ffef676fe0d598f0c09d1dc/docs/figure/subsetted-condition-analysis.Rmd/generate-plot-counts-genes-significant-37.png" target="_blank">750876f</a>
+</td>
+<td>
+sdhutchins
+</td>
+<td>
+2024-06-12
+</td>
+</tr>
 <tr>
 <td>
 <a href="https://github.com/uab-cgds-worthey/mecfs-dge-analysis/blob/a2982931336d32ec27f6ad11c28a6200f8150378/docs/figure/subsetted-condition-analysis.Rmd/generate-plot-counts-genes-significant-37.png" target="_blank">a298293</a>
@@ -10629,6 +11477,17 @@ Date
 <tbody>
 <tr>
 <td>
+<a href="https://github.com/uab-cgds-worthey/mecfs-dge-analysis/blob/750876f84fc2e2510ffef676fe0d598f0c09d1dc/docs/figure/subsetted-condition-analysis.Rmd/generate-plot-counts-genes-significant-38.png" target="_blank">750876f</a>
+</td>
+<td>
+sdhutchins
+</td>
+<td>
+2024-06-12
+</td>
+</tr>
+<tr>
+<td>
 <a href="https://github.com/uab-cgds-worthey/mecfs-dge-analysis/blob/a2982931336d32ec27f6ad11c28a6200f8150378/docs/figure/subsetted-condition-analysis.Rmd/generate-plot-counts-genes-significant-38.png" target="_blank">a298293</a>
 </td>
 <td>
@@ -10677,6 +11536,17 @@ Date
 </tr>
 </thead>
 <tbody>
+<tr>
+<td>
+<a href="https://github.com/uab-cgds-worthey/mecfs-dge-analysis/blob/750876f84fc2e2510ffef676fe0d598f0c09d1dc/docs/figure/subsetted-condition-analysis.Rmd/generate-plot-counts-genes-significant-39.png" target="_blank">750876f</a>
+</td>
+<td>
+sdhutchins
+</td>
+<td>
+2024-06-12
+</td>
+</tr>
 <tr>
 <td>
 <a href="https://github.com/uab-cgds-worthey/mecfs-dge-analysis/blob/a2982931336d32ec27f6ad11c28a6200f8150378/docs/figure/subsetted-condition-analysis.Rmd/generate-plot-counts-genes-significant-39.png" target="_blank">a298293</a>
@@ -10729,6 +11599,17 @@ Date
 <tbody>
 <tr>
 <td>
+<a href="https://github.com/uab-cgds-worthey/mecfs-dge-analysis/blob/750876f84fc2e2510ffef676fe0d598f0c09d1dc/docs/figure/subsetted-condition-analysis.Rmd/generate-plot-counts-genes-significant-40.png" target="_blank">750876f</a>
+</td>
+<td>
+sdhutchins
+</td>
+<td>
+2024-06-12
+</td>
+</tr>
+<tr>
+<td>
 <a href="https://github.com/uab-cgds-worthey/mecfs-dge-analysis/blob/a2982931336d32ec27f6ad11c28a6200f8150378/docs/figure/subsetted-condition-analysis.Rmd/generate-plot-counts-genes-significant-40.png" target="_blank">a298293</a>
 </td>
 <td>
@@ -10777,6 +11658,17 @@ Date
 </tr>
 </thead>
 <tbody>
+<tr>
+<td>
+<a href="https://github.com/uab-cgds-worthey/mecfs-dge-analysis/blob/750876f84fc2e2510ffef676fe0d598f0c09d1dc/docs/figure/subsetted-condition-analysis.Rmd/generate-plot-counts-genes-significant-41.png" target="_blank">750876f</a>
+</td>
+<td>
+sdhutchins
+</td>
+<td>
+2024-06-12
+</td>
+</tr>
 <tr>
 <td>
 <a href="https://github.com/uab-cgds-worthey/mecfs-dge-analysis/blob/a2982931336d32ec27f6ad11c28a6200f8150378/docs/figure/subsetted-condition-analysis.Rmd/generate-plot-counts-genes-significant-41.png" target="_blank">a298293</a>
@@ -10829,6 +11721,17 @@ Date
 <tbody>
 <tr>
 <td>
+<a href="https://github.com/uab-cgds-worthey/mecfs-dge-analysis/blob/750876f84fc2e2510ffef676fe0d598f0c09d1dc/docs/figure/subsetted-condition-analysis.Rmd/generate-plot-counts-genes-significant-42.png" target="_blank">750876f</a>
+</td>
+<td>
+sdhutchins
+</td>
+<td>
+2024-06-12
+</td>
+</tr>
+<tr>
+<td>
 <a href="https://github.com/uab-cgds-worthey/mecfs-dge-analysis/blob/a2982931336d32ec27f6ad11c28a6200f8150378/docs/figure/subsetted-condition-analysis.Rmd/generate-plot-counts-genes-significant-42.png" target="_blank">a298293</a>
 </td>
 <td>
@@ -10877,6 +11780,17 @@ Date
 </tr>
 </thead>
 <tbody>
+<tr>
+<td>
+<a href="https://github.com/uab-cgds-worthey/mecfs-dge-analysis/blob/750876f84fc2e2510ffef676fe0d598f0c09d1dc/docs/figure/subsetted-condition-analysis.Rmd/generate-plot-counts-genes-significant-43.png" target="_blank">750876f</a>
+</td>
+<td>
+sdhutchins
+</td>
+<td>
+2024-06-12
+</td>
+</tr>
 <tr>
 <td>
 <a href="https://github.com/uab-cgds-worthey/mecfs-dge-analysis/blob/a2982931336d32ec27f6ad11c28a6200f8150378/docs/figure/subsetted-condition-analysis.Rmd/generate-plot-counts-genes-significant-43.png" target="_blank">a298293</a>
@@ -10929,6 +11843,17 @@ Date
 <tbody>
 <tr>
 <td>
+<a href="https://github.com/uab-cgds-worthey/mecfs-dge-analysis/blob/750876f84fc2e2510ffef676fe0d598f0c09d1dc/docs/figure/subsetted-condition-analysis.Rmd/generate-plot-counts-genes-significant-44.png" target="_blank">750876f</a>
+</td>
+<td>
+sdhutchins
+</td>
+<td>
+2024-06-12
+</td>
+</tr>
+<tr>
+<td>
 <a href="https://github.com/uab-cgds-worthey/mecfs-dge-analysis/blob/a2982931336d32ec27f6ad11c28a6200f8150378/docs/figure/subsetted-condition-analysis.Rmd/generate-plot-counts-genes-significant-44.png" target="_blank">a298293</a>
 </td>
 <td>
@@ -10977,6 +11902,17 @@ Date
 </tr>
 </thead>
 <tbody>
+<tr>
+<td>
+<a href="https://github.com/uab-cgds-worthey/mecfs-dge-analysis/blob/750876f84fc2e2510ffef676fe0d598f0c09d1dc/docs/figure/subsetted-condition-analysis.Rmd/generate-plot-counts-genes-significant-45.png" target="_blank">750876f</a>
+</td>
+<td>
+sdhutchins
+</td>
+<td>
+2024-06-12
+</td>
+</tr>
 <tr>
 <td>
 <a href="https://github.com/uab-cgds-worthey/mecfs-dge-analysis/blob/a2982931336d32ec27f6ad11c28a6200f8150378/docs/figure/subsetted-condition-analysis.Rmd/generate-plot-counts-genes-significant-45.png" target="_blank">a298293</a>
@@ -11029,6 +11965,17 @@ Date
 <tbody>
 <tr>
 <td>
+<a href="https://github.com/uab-cgds-worthey/mecfs-dge-analysis/blob/750876f84fc2e2510ffef676fe0d598f0c09d1dc/docs/figure/subsetted-condition-analysis.Rmd/generate-plot-counts-genes-significant-46.png" target="_blank">750876f</a>
+</td>
+<td>
+sdhutchins
+</td>
+<td>
+2024-06-12
+</td>
+</tr>
+<tr>
+<td>
 <a href="https://github.com/uab-cgds-worthey/mecfs-dge-analysis/blob/a2982931336d32ec27f6ad11c28a6200f8150378/docs/figure/subsetted-condition-analysis.Rmd/generate-plot-counts-genes-significant-46.png" target="_blank">a298293</a>
 </td>
 <td>
@@ -11077,6 +12024,17 @@ Date
 </tr>
 </thead>
 <tbody>
+<tr>
+<td>
+<a href="https://github.com/uab-cgds-worthey/mecfs-dge-analysis/blob/750876f84fc2e2510ffef676fe0d598f0c09d1dc/docs/figure/subsetted-condition-analysis.Rmd/generate-plot-counts-genes-significant-47.png" target="_blank">750876f</a>
+</td>
+<td>
+sdhutchins
+</td>
+<td>
+2024-06-12
+</td>
+</tr>
 <tr>
 <td>
 <a href="https://github.com/uab-cgds-worthey/mecfs-dge-analysis/blob/a2982931336d32ec27f6ad11c28a6200f8150378/docs/figure/subsetted-condition-analysis.Rmd/generate-plot-counts-genes-significant-47.png" target="_blank">a298293</a>
@@ -11129,6 +12087,17 @@ Date
 <tbody>
 <tr>
 <td>
+<a href="https://github.com/uab-cgds-worthey/mecfs-dge-analysis/blob/750876f84fc2e2510ffef676fe0d598f0c09d1dc/docs/figure/subsetted-condition-analysis.Rmd/generate-plot-counts-genes-significant-48.png" target="_blank">750876f</a>
+</td>
+<td>
+sdhutchins
+</td>
+<td>
+2024-06-12
+</td>
+</tr>
+<tr>
+<td>
 <a href="https://github.com/uab-cgds-worthey/mecfs-dge-analysis/blob/a2982931336d32ec27f6ad11c28a6200f8150378/docs/figure/subsetted-condition-analysis.Rmd/generate-plot-counts-genes-significant-48.png" target="_blank">a298293</a>
 </td>
 <td>
@@ -11179,6 +12148,17 @@ Date
 <tbody>
 <tr>
 <td>
+<a href="https://github.com/uab-cgds-worthey/mecfs-dge-analysis/blob/750876f84fc2e2510ffef676fe0d598f0c09d1dc/docs/figure/subsetted-condition-analysis.Rmd/generate-plot-counts-genes-significant-49.png" target="_blank">750876f</a>
+</td>
+<td>
+sdhutchins
+</td>
+<td>
+2024-06-12
+</td>
+</tr>
+<tr>
+<td>
 <a href="https://github.com/uab-cgds-worthey/mecfs-dge-analysis/blob/a2982931336d32ec27f6ad11c28a6200f8150378/docs/figure/subsetted-condition-analysis.Rmd/generate-plot-counts-genes-significant-49.png" target="_blank">a298293</a>
 </td>
 <td>
@@ -11227,6 +12207,17 @@ Date
 </tr>
 </thead>
 <tbody>
+<tr>
+<td>
+<a href="https://github.com/uab-cgds-worthey/mecfs-dge-analysis/blob/750876f84fc2e2510ffef676fe0d598f0c09d1dc/docs/figure/subsetted-condition-analysis.Rmd/generate-plot-counts-genes-significant-50.png" target="_blank">750876f</a>
+</td>
+<td>
+sdhutchins
+</td>
+<td>
+2024-06-12
+</td>
+</tr>
 <tr>
 <td>
 <a href="https://github.com/uab-cgds-worthey/mecfs-dge-analysis/blob/a2982931336d32ec27f6ad11c28a6200f8150378/docs/figure/subsetted-condition-analysis.Rmd/generate-plot-counts-genes-significant-50.png" target="_blank">a298293</a>
