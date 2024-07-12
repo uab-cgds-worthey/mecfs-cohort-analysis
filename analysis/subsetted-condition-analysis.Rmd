@@ -57,6 +57,8 @@ library(mygene) # Available via Bioconductor
 library(DOSE) # Available via Bioconductor
 library(enrichR) # Available via Bioconductor
 library(STRINGdb) # Available via Bioconductor
+library(EnhancedVolcano)
+library(ComplexHeatmap)
 ```
 
 ```{r, include=FALSE}
@@ -80,6 +82,7 @@ counts <- read_tsv("data/star-salmon/salmon.merged.gene_counts_length_scaled.tsv
 genes_of_interest <- read_csv("data/Prioritized_Genes_From_WGS_2024_04_25.csv")
 genes_of_interest <- unique(genes_of_interest$Genes)
 genes_of_interest <- genes_of_interest[!is.na(genes_of_interest)]
+genes_of_interest <- c(genes_of_interest, "UBF1")
 
 # Use first column (gene_id) for row names
 counts <- data.frame(counts, row.names = 1)
@@ -447,7 +450,7 @@ rownames(topgenes_aff_vs_unaff_05_sub) <- new_row_names_sub
 topgenes_aff_vs_unaff_05_sub <- topgenes_aff_vs_unaff_05_sub[order(row.names(topgenes_aff_vs_unaff_05_sub)), ]
 
 df_sub <- as.data.frame(colData(vsd_limma)[, c("Affected", "SubCategory", "Category")])
-pheatmap(topgenes_aff_vs_unaff_05_sub, annotation_col = df_sub, annotation_colors = ann_colors2, fontsize = 5, angle_col = 0)
+pheatmap(topgenes_aff_vs_unaff_05_sub, annotation_col = df_sub, annotation_colors = ann_colors2, fontsize = 5, angle_col = c("0"))
 ```
 
 
@@ -472,7 +475,7 @@ topgenes_aff_vs_unaff_05_sub <- topgenes_aff_vs_unaff_05_sub[order(row.names(top
 df_sub <- df <- colData(vsd_limma) %>%
   as.data.frame() %>%
   dplyr::select(Category)
-pheatmap(topgenes_aff_vs_unaff_05_sub, annotation_col = df_sub, annotation_colors = ann_colors2, fontsize = 5, angle_col = 0)
+pheatmap(topgenes_aff_vs_unaff_05_sub, annotation_col = df_sub, annotation_colors = ann_colors2, fontsize = 5, angle_col = c("0"))
 ```
 
 ```{r, top-50-genes-deseq-subsetted-subcategory, out.height="570px", out.width ="800px"}
@@ -498,14 +501,14 @@ df_sub <- df <- colData(vsd_limma) %>%
   dplyr::select(Affected, SubCategory, Category)
 pheatmap(topgenes_aff_vs_unaff_05_sub,
   annotation_col = df_sub,
-  annotation_colors = ann_colors2, fontsize = 5, angle_col = 0
+  annotation_colors = ann_colors2, fontsize = 5, angle_col =c("0")
 )
 ```
 
 ## Heatmap of Significant Genes
 
 
-```{r, significant-genes-deseq-subsetted, out.height="800px", out.width ="1200px"}
+```{r, significant-genes-deseq-subsetted, out.height="1000px", out.width ="1200px"}
 # Assuming 'res_aff_vs_unaff_df_sub' has a column 'padj' for adjusted p-values or 'pvalue' for p-values
 # Ensure the row names of 'res_aff_vs_unaff_df_sub' are Ensembl IDs
 res_aff_vs_unaff_df_sub <- res_aff_vs_unaff_df_sub[order(res_aff_vs_unaff_df_sub$padj), ]
@@ -532,10 +535,13 @@ df_sub <- df <- colData(vsd_limma) %>%
   as.data.frame() %>%
   dplyr::select(Category)
 
-ComplexHeatmap::pheatmap(topgenes_aff_vs_unaff_05_sub, color = colorRampPalette(rev(brewer.pal(n = 9, name =
+png("output/Supplemental Figure 3 - Significant DEGs.png",width=12,height=10,units="in",res=1200)
+
+draw(ComplexHeatmap::pheatmap(topgenes_aff_vs_unaff_05_sub, color = colorRampPalette(rev(brewer.pal(n = 9, name =
   "RdYlBu")))(50), annotation_col = df_sub, annotation_colors = ann_colors2, fontsize = 6, angle_col = c("0"), cellheight = 10, cellwidth = 24, border_color = "black", heatmap_legend_param = list(
         title = ""
-    ))
+    )))
+dev.off()
 ```
 
 ```{r, significant-genes-deseq-subsetted-lfc1, out.height="800px", out.width ="1200px"}
@@ -594,7 +600,7 @@ topgenes_aff_vs_unaff_05_sub <- topgenes_aff_vs_unaff_05_sub[order(row.names(top
 df_sub <- df <- colData(vsd_limma) %>%
   as.data.frame() %>%
   dplyr::select(Affected, SubCategory, Category)
-pheatmap(topgenes_aff_vs_unaff_05_sub, annotation_col = df_sub, annotation_colors = ann_colors2, fontsize = 5, angle_col = 0)
+pheatmap(topgenes_aff_vs_unaff_05_sub, annotation_col = df_sub, annotation_colors = ann_colors2, fontsize = 5, angle_col = c("0"))
 ```
 
 ```{r, significant-genes-deseq-subsetted-subcategory-lfc1, out.height="570px", out.width ="800px"}
@@ -618,7 +624,7 @@ topgenes_aff_vs_unaff_05_sub <- topgenes_aff_vs_unaff_05_sub[order(row.names(top
 df_sub <- df <- colData(vsd_limma) %>%
   as.data.frame() %>%
   dplyr::select(Affected, SubCategory, Category)
-pheatmap(topgenes_aff_vs_unaff_05_sub, annotation_col = df_sub, annotation_colors = ann_colors2, fontsize = 5, angle_col = 0)
+pheatmap(topgenes_aff_vs_unaff_05_sub, annotation_col = df_sub, annotation_colors = ann_colors2, fontsize = 5, angle_col = c("0"))
 ```
 
 
@@ -643,7 +649,7 @@ topgenes_aff_vs_unaff_05_sub <- topgenes_aff_vs_unaff_05_sub[order(row.names(top
 df_sub <- as.data.frame(colData(vsd_limma)[, c("Affected", "Category")])
 pheatmap(topgenes_aff_vs_unaff_05_sub,
   annotation_col = df_sub,
-  annotation_colors = ann_colors2, fontsize = 4, angle_col = 0
+  annotation_colors = ann_colors2, fontsize = 4, angle_col = c("0")
 )
 ```
 
@@ -666,7 +672,7 @@ rownames(topgenes_aff_vs_unaff_05_sub) <- new_row_names_sub
 topgenes_aff_vs_unaff_05_sub <- topgenes_aff_vs_unaff_05_sub[order(row.names(topgenes_aff_vs_unaff_05_sub)), ]
 
 df_sub <- as.data.frame(colData(vsd_limma)[, c("Affected", "SubCategory", "Category")])
-pheatmap(topgenes_aff_vs_unaff_05_sub, annotation_col = df_sub, annotation_colors = ann_colors2, fontsize = 4, angle_col = 0)
+pheatmap(topgenes_aff_vs_unaff_05_sub, annotation_col = df_sub, annotation_colors = ann_colors2, fontsize = 4, angle_col = c("0"))
 ```
 
 ```{r, top-200-genes-deseq-subsetted, out.height="570px", out.width ="800px"}
@@ -688,7 +694,7 @@ rownames(topgenes_aff_vs_unaff_05_sub) <- new_row_names_sub
 topgenes_aff_vs_unaff_05_sub <- topgenes_aff_vs_unaff_05_sub[order(row.names(topgenes_aff_vs_unaff_05_sub)), ]
 
 df_sub <- as.data.frame(colData(vsd_limma)[, c("Affected", "Category")])
-pheatmap(topgenes_aff_vs_unaff_05_sub, annotation_col = df_sub, annotation_colors = ann_colors2, fontsize = 4, angle_col = 0)
+pheatmap(topgenes_aff_vs_unaff_05_sub, annotation_col = df_sub, annotation_colors = ann_colors2, fontsize = 4, angle_col = c("0"))
 ```
 
 ```{r, top-200-genes-deseq-subsetted-subcategory, out.height="570px", out.width ="800px"}
@@ -710,7 +716,7 @@ rownames(topgenes_aff_vs_unaff_05_sub) <- new_row_names_sub
 topgenes_aff_vs_unaff_05_sub <- topgenes_aff_vs_unaff_05_sub[order(row.names(topgenes_aff_vs_unaff_05_sub)), ]
 
 df_sub <- as.data.frame(colData(vsd_limma)[, c("Affected", "SubCategory", "Category")])
-pheatmap(topgenes_aff_vs_unaff_05_sub, annotation_col = df_sub, annotation_colors = ann_colors2, fontsize = 2.25, angle_col = 0)
+pheatmap(topgenes_aff_vs_unaff_05_sub, annotation_col = df_sub, annotation_colors = ann_colors2, fontsize = 2.25, angle_col = c("0"))
 ```
 
 ```{r, top-125-genes-deseq-all-subsetted, out.height="570px", out.width ="800px"}
@@ -732,7 +738,7 @@ rownames(topgenes_aff_vs_unaff_05_sub) <- new_row_names_sub
 # topgenes_aff_vs_unaff_05_sub <- topgenes_aff_vs_unaff_05_sub[order(row.names(topgenes_aff_vs_unaff_05_sub)), ]
 
 df_sub <- as.data.frame(colData(vsd_limma)[, c("Affected", "Category")])
-pheatmap(topgenes_aff_vs_unaff_05_sub, annotation_col = df_sub, annotation_colors = ann_colors2, fontsize = 3.75, angle_col = 0)
+pheatmap(topgenes_aff_vs_unaff_05_sub, annotation_col = df_sub, annotation_colors = ann_colors2, fontsize = 3.75, angle_col = c("0"))
 ```
 
 ```{r, top-125-genes-deseq-all-subsetted-subcategory, out.height="570px", out.width ="800px"}
@@ -754,7 +760,7 @@ rownames(topgenes_aff_vs_unaff_05_sub) <- new_row_names_sub
 # topgenes_aff_vs_unaff_05_sub <- topgenes_aff_vs_unaff_05_sub[order(row.names(topgenes_aff_vs_unaff_05_sub)), ]
 
 df_sub <- as.data.frame(colData(vsd_limma)[, c("Affected", "SubCategory", "Category")])
-pheatmap(topgenes_aff_vs_unaff_05_sub, annotation_col = df_sub, annotation_colors = ann_colors2, fontsize = 3.75, angle_col = 0)
+pheatmap(topgenes_aff_vs_unaff_05_sub, annotation_col = df_sub, annotation_colors = ann_colors2, fontsize = 3.75, angle_col = c("0"))
 ```
 
 
@@ -777,8 +783,10 @@ rownames(topgenes_aff_vs_unaff_05_sub) <- new_row_names_sub
 # topgenes_aff_vs_unaff_05_sub <- topgenes_aff_vs_unaff_05_sub[order(row.names(topgenes_aff_vs_unaff_05_sub)), ]
 
 df_sub <- as.data.frame(colData(vsd_limma)[, c("Affected", "Category")])
-pheatmap(topgenes_aff_vs_unaff_05_sub, annotation_col = df_sub, annotation_colors = ann_colors2, fontsize = 3.5, angle_col = 0)
+pheatmap(topgenes_aff_vs_unaff_05_sub, annotation_col = df_sub, annotation_colors = ann_colors2, fontsize = 3.5, angle_col = c("0"))
 ```
+
+
 
 ```{r, top-150-genes-deseq-subsetted-subcategory, out.height="570px", out.width ="800px"}
 topgenes_byensemblid_sub <- head(rownames(res_aff_vs_unaff_df_sub), 150)
@@ -799,7 +807,7 @@ rownames(topgenes_aff_vs_unaff_05_sub) <- new_row_names_sub
 # topgenes_aff_vs_unaff_05_sub <- topgenes_aff_vs_unaff_05_sub[order(row.names(topgenes_aff_vs_unaff_05_sub)), ]
 
 df_sub <- as.data.frame(colData(vsd_limma)[, c("Affected", "SubCategory", "Category")])
-pheatmap(topgenes_aff_vs_unaff_05_sub, annotation_col = df_sub, annotation_colors = ann_colors2, fontsize = 3.5, angle_col = 0)
+pheatmap(topgenes_aff_vs_unaff_05_sub, annotation_col = df_sub, annotation_colors = ann_colors2, fontsize = 3.5, angle_col = c("0"))
 ```
 
 
@@ -812,6 +820,31 @@ res_aff_vs_unaff_df_sub_genename <- res_aff_vs_unaff_df_sub_genename[, c(dim(res
 res_aff_vs_unaff_df_sub_genename <- res_aff_vs_unaff_df_sub_genename[order(res_aff_vs_unaff_df_sub_genename[, "padj"]), ]
 write.csv(res_aff_vs_unaff_df_sub_genename, file = "output/res_aff_vs_unaff_df_sub_genename.csv")
 ```
+
+## Volcano Plot
+```{r, volcano-plot, out.height="1000px", out.width ="1200px"}
+EnhancedVolcano(res_aff_vs_unaff_df_sub_genename,
+  lab = res_aff_vs_unaff_df_sub_genename$gene_name,
+  x = 'log2FoldChange',
+  y = 'padj',
+  selectLab = c('SLC4A10','SNTG2','TMEM37','KCNQ5','DEFA1'),
+  xlab = bquote(~Log[2]~ 'fold change'),
+  pCutoff = .1,
+  FCcutoff = 1.0,
+  pointSize = 2.0,
+  labSize = 4.0,
+  labCol = 'black',
+  labFace = 'bold',
+  boxedLabels = TRUE,
+  colAlpha = 4/5,
+  legendPosition = 'right',
+  legendLabSize = 14,
+  legendIconSize = 4.0,
+  drawConnectors = TRUE,
+  widthConnectors = 1.0,
+  colConnectors = 'black')
+```
+
 
 ```{r, significant-with-genename-padj-lfc}
 res_aff_vs_unaff_df_genename_05 <- subset(res_aff_vs_unaff_df_sub_genename, padj < 0.05)
@@ -915,7 +948,7 @@ Below is a heatmap highlighting the expression of our genes of interest across b
 mat3 <- assay(vsd_limma)[filtered_by_interest$Ensembl_ID, ]
 rownames(mat3) <- gene_info$gene_name[match(filtered_by_interest$Ensembl_ID, gene_info$Ensembl_ID)]
 df_sub <- as.data.frame(colData(vsd_limma)[, c("Affected", "Category")])
-pheatmap(mat3, annotation_col = df_sub, annotation_colors = ann_colors2, fontsize = 4, angle_col = 0)
+pheatmap(mat3, annotation_col = df_sub, annotation_colors = ann_colors2, fontsize = 4, angle_col = c("0"))
 ```
 
 ## Enrichment analysis
@@ -1205,7 +1238,7 @@ for (ensembl_id in filtered_by_interest$Ensembl_ID) {
     geom_text_repel(aes(label = rownames(d))) +
     scale_color_manual(
       name = "Affected Status",
-      labels = c("Unaffected", "Affected"),
+      labels = c("Affected", "Unaffected"),
       values = c("red", "navy")
     )
   print(gene_plot) # Ensure each plot is printed during the loop
@@ -1290,7 +1323,7 @@ for (ensembl_id in res_aff_vs_unaff_df_genename_1$Ensembl_ID) {
     geom_text_repel(aes(label = rownames(d))) +
     scale_color_manual(
       name = "Affected Status",
-      labels = c("Unaffected", "Affected"),
+      labels = c("Affected", "Unaffected"),
       values = c("red", "navy")
     )
   print(ggplot_box) # Ensure each plot is printed during the loop
@@ -1314,7 +1347,7 @@ write.csv(results_df, file_name, row.names = FALSE)
 mat3 <- assay(vsd_limma)[filtered_by_interest$Ensembl_ID, ]
 rownames(mat3) <- gene_info$gene_name[match(filtered_by_interest$Ensembl_ID, gene_info$Ensembl_ID)]
 df_sub <- as.data.frame(colData(vsd_limma)[, c("Affected", "Category")])
-pheatmap(mat3, annotation_col = df_sub, annotation_colors = ann_colors2, fontsize = 4, angle_col = 0)
+pheatmap(mat3, annotation_col = df_sub, annotation_colors = ann_colors2, fontsize = 4, angle_col = c("0"))
 ```
 
 ### Save data
