@@ -1186,6 +1186,7 @@ gene_results_list <- list()
 # Loop through each gene to calculate and plot counts
 for (ensembl_id in filtered_by_interest$Ensembl_ID) {
   d <- plotCounts(dds, gene = ensembl_id, intgroup = "Affected", returnData = TRUE)
+  dp <- plotCounts(dds, gene = ensembl_id, intgroup = "Affected", returnData = TRUE)
   gene_name <- filtered_by_interest$gene_name[filtered_by_interest$Ensembl_ID == ensembl_id]
   
   # Calculate the mean and standard deviation of counts within each condition
@@ -1230,12 +1231,12 @@ for (ensembl_id in filtered_by_interest$Ensembl_ID) {
   }
   
   # Generate the boxplot
-  gene_plot <- ggboxplot(d,
+  gene_plot <- ggboxplot(dp,
     x = "Affected", y = "count", add = "jitter",
     color = "Affected", palette = c("red", "navy"),
     title = gene_name
   ) +
-    geom_text_repel(aes(label = rownames(d))) +
+    geom_text_repel(aes(label = rownames(dp))) +
     scale_color_manual(
       name = "Affected Status",
       labels = c("Affected", "Unaffected"),
@@ -1264,6 +1265,7 @@ results_list <- list()
 
 # Loop through each gene to calculate and plot counts
 for (ensembl_id in res_aff_vs_unaff_df_genename_1$Ensembl_ID) {
+  dp <- plotCounts(dds, gene = ensembl_id, intgroup = "Affected", returnData = TRUE)
   d <- plotCounts(dds, gene = ensembl_id, intgroup = "Affected", returnData = TRUE)
   gene_name <- res_aff_vs_unaff_df_genename_1$gene_name[res_aff_vs_unaff_df_genename_1$Ensembl_ID == ensembl_id]
   
@@ -1315,12 +1317,12 @@ for (ensembl_id in res_aff_vs_unaff_df_genename_1$Ensembl_ID) {
   }
   
   # Generate the boxplot
-  ggplot_box <- ggboxplot(d,
+  ggplot_box <- ggboxplot(dp,
     x = "Affected", y = "count", add = "jitter",
     color = "Affected", palette = c("red", "navy"),
     title = gene_name
   ) +
-    geom_text_repel(aes(label = rownames(d))) +
+    geom_text_repel(aes(label = rownames(dp))) +
     scale_color_manual(
       name = "Affected Status",
       labels = c("Affected", "Unaffected"),
