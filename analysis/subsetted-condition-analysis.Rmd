@@ -401,6 +401,8 @@ res_aff_vs_unaff_df_sub <- arrange(res_aff_vs_unaff_df_sub, padj)
 res_aff_vs_unaff_df_05_sub <- subset(res_aff_vs_unaff_df_sub, padj < 0.05)
 res_aff_vs_unaff_df_1_sub <- subset(res_aff_vs_unaff_df_sub, padj < 0.1)
 
+res_aff_vs_unaff_df_padj1_lfc1_sub <- subset(res_aff_vs_unaff_df_1_sub, log2FoldChange >= 1 | log2FoldChange <= -1)
+
 summary(res_aff_vs_unaff_sub)
 ```
 
@@ -536,6 +538,40 @@ ComplexHeatmap::pheatmap(topgenes_aff_vs_unaff_05_sub, color = colorRampPalette(
     ))
 ```
 
+```{r, significant-genes-deseq-subsetted-lfc1, out.height="800px", out.width ="1200px"}
+# Assuming 'res_aff_vs_unaff_df_sub' has a column 'padj' for adjusted p-values or 'pvalue' for p-values
+# Ensure the row names of 'res_aff_vs_unaff_df_sub' are Ensembl IDs
+res_aff_vs_unaff_df_sub <- res_aff_vs_unaff_df_sub[order(res_aff_vs_unaff_df_sub$padj), ]
+
+# Get the most significant genes based on adjusted p-values and log2foldchange of 1
+topgenes_byensemblid_sub <- rownames(res_aff_vs_unaff_df_padj1_lfc1_sub)
+
+
+# Extract the corresponding subset of the data matrix
+topgenes_aff_vs_unaff_05_sub <- assay(vsd_limma)[topgenes_byensemblid_sub, ]
+
+# Normalize by subtracting the row means
+topgenes_aff_vs_unaff_05_sub <- topgenes_aff_vs_unaff_05_sub - rowMeans(topgenes_aff_vs_unaff_05_sub)
+
+# Map Ensembl IDs to gene names
+ensembl_to_gene_sub <- setNames(gene_info$gene_name, gene_info$Ensembl_ID)
+current_ensembl_ids_sub <- rownames(topgenes_aff_vs_unaff_05_sub)
+new_row_names_sub <- ensembl_to_gene_sub[current_ensembl_ids_sub]
+rownames(topgenes_aff_vs_unaff_05_sub) <- new_row_names_sub
+
+# Order the matrix based on significance (most significant to least significant)
+topgenes_aff_vs_unaff_05_sub <- topgenes_aff_vs_unaff_05_sub[order(res_aff_vs_unaff_df_sub$padj[topgenes_byensemblid_sub]), ]
+
+df_sub <- df <- colData(vsd_limma) %>%
+  as.data.frame() %>%
+  dplyr::select(Category)
+
+ComplexHeatmap::pheatmap(topgenes_aff_vs_unaff_05_sub, color = colorRampPalette(rev(brewer.pal(n = 9, name =
+  "RdYlBu")))(50), annotation_col = df_sub, annotation_colors = ann_colors2, fontsize = 7, angle_col = c("0"), cellheight = 10, cellwidth = 24, border_color = "black", heatmap_legend_param = list(
+        title = ""
+    ))
+```
+
 
 ```{r, significant-genes-deseq-subsetted-subcategory, out.height="570px", out.width ="800px"}
 topgenes_byensemblid_sub <- head(rownames(res_aff_vs_unaff_df_sub), 50)
@@ -560,6 +596,31 @@ df_sub <- df <- colData(vsd_limma) %>%
   dplyr::select(Affected, SubCategory, Category)
 pheatmap(topgenes_aff_vs_unaff_05_sub, annotation_col = df_sub, annotation_colors = ann_colors2, fontsize = 5, angle_col = 0)
 ```
+
+```{r, significant-genes-deseq-subsetted-subcategory-lfc1, out.height="570px", out.width ="800px"}
+topgenes_byensemblid_sub <- rownames(res_aff_vs_unaff_df_padj1_lfc1_sub)
+topgenes_aff_vs_unaff_05_sub <- assay(vsd_limma)[topgenes_byensemblid_sub, ]
+topgenes_aff_vs_unaff_05_sub <- topgenes_aff_vs_unaff_05_sub - rowMeans(topgenes_aff_vs_unaff_05_sub)
+
+ensembl_to_gene_sub <- setNames(gene_info$gene_name, gene_info$Ensembl_ID)
+
+# Get the current row names of the matrix 'mat'
+current_ensembl_ids_sub <- rownames(topgenes_aff_vs_unaff_05_sub)
+
+# Find the corresponding gene names for the Ensembl IDs
+new_row_names_sub <- ensembl_to_gene_sub[current_ensembl_ids_sub]
+
+# Set the new row names for the matrix 'mat'
+rownames(topgenes_aff_vs_unaff_05_sub) <- new_row_names_sub
+
+topgenes_aff_vs_unaff_05_sub <- topgenes_aff_vs_unaff_05_sub[order(row.names(topgenes_aff_vs_unaff_05_sub)), ]
+
+df_sub <- df <- colData(vsd_limma) %>%
+  as.data.frame() %>%
+  dplyr::select(Affected, SubCategory, Category)
+pheatmap(topgenes_aff_vs_unaff_05_sub, annotation_col = df_sub, annotation_colors = ann_colors2, fontsize = 5, angle_col = 0)
+```
+
 
 ```{r, top-75-genes-deseq-subsetted, out.height="570px", out.width ="800px"}
 topgenes_byensemblid_sub <- head(rownames(res_aff_vs_unaff_df_sub), 75)
@@ -752,14 +813,23 @@ res_aff_vs_unaff_df_sub_genename <- res_aff_vs_unaff_df_sub_genename[order(res_a
 write.csv(res_aff_vs_unaff_df_sub_genename, file = "output/res_aff_vs_unaff_df_sub_genename.csv")
 ```
 
-```{r, top50-with-genename-padj}
+```{r, significant-with-genename-padj-lfc}
 res_aff_vs_unaff_df_genename_05 <- subset(res_aff_vs_unaff_df_sub_genename, padj < 0.05)
 res_aff_vs_unaff_df_genename_05 <- res_aff_vs_unaff_df_genename_05[order(res_aff_vs_unaff_df_genename_05$padj), ]
 write.csv(res_aff_vs_unaff_df_genename_05, file = "output/res_aff_vs_unaff_df_sub_genename_05.csv")
 
+res_aff_vs_unaff_df_genename_padj05_lfc1 <- subset(res_aff_vs_unaff_df_genename_05, log2FoldChange >= 1 | log2FoldChange <= -1)
+res_aff_vs_unaff_df_genename_padj05_lfc1 <- res_aff_vs_unaff_df_genename_padj05_lfc1[order(res_aff_vs_unaff_df_genename_padj05_lfc1$padj), ]
+write.csv(res_aff_vs_unaff_df_genename_padj05_lfc1, file = "output/res_aff_vs_unaff_df_sub_genename_padj05_lfc1.csv")
+
+
 res_aff_vs_unaff_df_genename_1 <- subset(res_aff_vs_unaff_df_sub_genename, padj < 0.1)
 res_aff_vs_unaff_df_genename_1 <- res_aff_vs_unaff_df_genename_1[order(res_aff_vs_unaff_df_genename_1$padj), ]
 write.csv(res_aff_vs_unaff_df_genename_1, file = "output/res_aff_vs_unaff_df_sub_genename_padj1.csv")
+
+res_aff_vs_unaff_df_genename_padj1_lfc1 <- subset(res_aff_vs_unaff_df_genename_1, log2FoldChange >= 1 | log2FoldChange <= -1)
+res_aff_vs_unaff_df_genename_padj1_lfc1 <- res_aff_vs_unaff_df_genename_padj1_lfc1[order(res_aff_vs_unaff_df_genename_padj1_lfc1$padj), ]
+write.csv(res_aff_vs_unaff_df_genename_padj1_lfc1, file = "output/res_aff_vs_unaff_df_sub_genename_padj1_lfc1.csv")
 ```
 
 Below is a table of information about the top genes.
