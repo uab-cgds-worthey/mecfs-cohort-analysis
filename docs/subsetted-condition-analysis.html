@@ -546,15 +546,15 @@ project makes it easier to run your code on other machines.</p>
 <div class="panel panel-default">
 <div class="panel-heading">
 <p class="panel-title">
-<a data-toggle="collapse" data-parent="#workflowr-checks" href="#strongRepositoryversionstrongahrefhttpsgithubcomuabcgdswortheymecfsdgeanalysistree9d512aba1495c88d92471e14a3976b438c4a9906targetblank9d512aba">
+<a data-toggle="collapse" data-parent="#workflowr-checks" href="#strongRepositoryversionstrongahrefhttpsgithubcomuabcgdswortheymecfsdgeanalysistreedcd14e9b2c885cc2791f0f1ce3d12a85340548fctargetblankdcd14e9a">
 <span class="glyphicon glyphicon-ok text-success"
 aria-hidden="true"></span> <strong>Repository version:</strong>
-<a href="https://github.com/uab-cgds-worthey/mecfs-dge-analysis/tree/9d512aba1495c88d92471e14a3976b438c4a9906" target="_blank">9d512ab</a>
+<a href="https://github.com/uab-cgds-worthey/mecfs-dge-analysis/tree/dcd14e9b2c885cc2791f0f1ce3d12a85340548fc" target="_blank">dcd14e9</a>
 </a>
 </p>
 </div>
 <div
-id="strongRepositoryversionstrongahrefhttpsgithubcomuabcgdswortheymecfsdgeanalysistree9d512aba1495c88d92471e14a3976b438c4a9906targetblank9d512aba"
+id="strongRepositoryversionstrongahrefhttpsgithubcomuabcgdswortheymecfsdgeanalysistreedcd14e9b2c885cc2791f0f1ce3d12a85340548fctargetblankdcd14e9a"
 class="panel-collapse collapse">
 <div class="panel-body">
 <p>
@@ -564,7 +564,7 @@ reproducibility.
 </p>
 <p>
 The results in this page were generated with repository version
-<a href="https://github.com/uab-cgds-worthey/mecfs-dge-analysis/tree/9d512aba1495c88d92471e14a3976b438c4a9906" target="_blank">9d512ab</a>.
+<a href="https://github.com/uab-cgds-worthey/mecfs-dge-analysis/tree/dcd14e9b2c885cc2791f0f1ce3d12a85340548fc" target="_blank">dcd14e9</a>.
 See the <em>Past versions</em> tab to see a history of the changes made
 to the R Markdown and HTML files.
 </p>
@@ -583,6 +583,7 @@ Ignored files:
     Ignored:    .Rhistory
     Ignored:    .Rproj.user/
     Ignored:    analysis/.DS_Store
+    Ignored:    analysis/figure/
     Ignored:    omnipathr-log/
     Ignored:    output/.DS_Store
     Ignored:    output/batch-correction-limma/
@@ -594,6 +595,8 @@ Ignored files:
     Ignored:    renv/staging/
 
 Untracked files:
+    Untracked:  Supplemental Figure3 - Significant DEGs - FINAL.png
+    Untracked:  output/Supplemental Figure 3 - Significant DEGs.png
     Untracked:  output/genes_of_interest_plot_counts_signals.csv
     Untracked:  output/res_aff_vs_unaff_df_sub_genename_padj05_lfc1.csv
     Untracked:  output/res_aff_vs_unaff_df_sub_genename_padj1_lfc1.csv
@@ -652,6 +655,40 @@ Message
 </tr>
 </thead>
 <tbody>
+<tr>
+<td>
+Rmd
+</td>
+<td>
+<a href="https://github.com/uab-cgds-worthey/mecfs-dge-analysis/blob/dcd14e9b2c885cc2791f0f1ce3d12a85340548fc/analysis/subsetted-condition-analysis.Rmd" target="_blank">dcd14e9</a>
+</td>
+<td>
+sdhutchins
+</td>
+<td>
+2024-07-12
+</td>
+<td>
+Add EnhancedVolcano.
+</td>
+</tr>
+<tr>
+<td>
+html
+</td>
+<td>
+<a href="https://rawcdn.githack.com/uab-cgds-worthey/mecfs-dge-analysis/7cddce9f127c259906ee54e5b8d276697382a9cc/docs/subsetted-condition-analysis.html" target="_blank">7cddce9</a>
+</td>
+<td>
+sdhutchins
+</td>
+<td>
+2024-07-12
+</td>
+<td>
+Build site.
+</td>
+</tr>
 <tr>
 <td>
 Rmd
@@ -1311,7 +1348,9 @@ library(ReactomePA) # Available via Bioconductor
 library(mygene) # Available via Bioconductor
 library(DOSE) # Available via Bioconductor
 library(enrichR) # Available via Bioconductor
-library(STRINGdb) # Available via Bioconductor</code></pre>
+library(STRINGdb) # Available via Bioconductor
+library(EnhancedVolcano)
+library(ComplexHeatmap)</code></pre>
 <div id="data-import" class="section level2">
 <h2>Data Import</h2>
 <p>We will be importing counts data from the star-salmon pipeline and
@@ -1327,6 +1366,7 @@ data is properly ordered by sample id.</p>
 genes_of_interest &lt;- read_csv(&quot;data/Prioritized_Genes_From_WGS_2024_04_25.csv&quot;)
 genes_of_interest &lt;- unique(genes_of_interest$Genes)
 genes_of_interest &lt;- genes_of_interest[!is.na(genes_of_interest)]
+genes_of_interest &lt;- c(genes_of_interest, &quot;UBF1&quot;)
 
 # Use first column (gene_id) for row names
 counts &lt;- data.frame(counts, row.names = 1)
@@ -2315,7 +2355,7 @@ rownames(topgenes_aff_vs_unaff_05_sub) &lt;- new_row_names_sub
 topgenes_aff_vs_unaff_05_sub &lt;- topgenes_aff_vs_unaff_05_sub[order(row.names(topgenes_aff_vs_unaff_05_sub)), ]
 
 df_sub &lt;- as.data.frame(colData(vsd_limma)[, c(&quot;Affected&quot;, &quot;SubCategory&quot;, &quot;Category&quot;)])
-pheatmap(topgenes_aff_vs_unaff_05_sub, annotation_col = df_sub, annotation_colors = ann_colors2, fontsize = 5, angle_col = 0)</code></pre>
+pheatmap(topgenes_aff_vs_unaff_05_sub, annotation_col = df_sub, annotation_colors = ann_colors2, fontsize = 5, angle_col = c(&quot;0&quot;))</code></pre>
 <p><img src="figure/subsetted-condition-analysis.Rmd/top-100-genes-deseq-subsetted-subcategory-1.png" width="800px" height="570px" style="display: block; margin: auto;" /></p>
 <p>
 <button type="button" class="btn btn-default btn-xs btn-workflowr btn-workflowr-fig" data-toggle="collapse" data-target="#fig-top-100-genes-deseq-subsetted-subcategory-1">
@@ -2430,7 +2470,7 @@ topgenes_aff_vs_unaff_05_sub &lt;- topgenes_aff_vs_unaff_05_sub[order(row.names(
 df_sub &lt;- df &lt;- colData(vsd_limma) %&gt;%
   as.data.frame() %&gt;%
   dplyr::select(Category)
-pheatmap(topgenes_aff_vs_unaff_05_sub, annotation_col = df_sub, annotation_colors = ann_colors2, fontsize = 5, angle_col = 0)</code></pre>
+pheatmap(topgenes_aff_vs_unaff_05_sub, annotation_col = df_sub, annotation_colors = ann_colors2, fontsize = 5, angle_col = c(&quot;0&quot;))</code></pre>
 <p><img src="figure/subsetted-condition-analysis.Rmd/top-50-genes-deseq-subsetted-1.png" width="800px" height="570px" style="display: block; margin: auto;" /></p>
 <p>
 <button type="button" class="btn btn-default btn-xs btn-workflowr btn-workflowr-fig" data-toggle="collapse" data-target="#fig-top-50-genes-deseq-subsetted-1">
@@ -2546,7 +2586,7 @@ df_sub &lt;- df &lt;- colData(vsd_limma) %&gt;%
   dplyr::select(Affected, SubCategory, Category)
 pheatmap(topgenes_aff_vs_unaff_05_sub,
   annotation_col = df_sub,
-  annotation_colors = ann_colors2, fontsize = 5, angle_col = 0
+  annotation_colors = ann_colors2, fontsize = 5, angle_col =c(&quot;0&quot;)
 )</code></pre>
 <p><img src="figure/subsetted-condition-analysis.Rmd/top-50-genes-deseq-subsetted-subcategory-1.png" width="800px" height="570px" style="display: block; margin: auto;" /></p>
 <p>
@@ -2661,92 +2701,15 @@ df_sub &lt;- df &lt;- colData(vsd_limma) %&gt;%
   as.data.frame() %&gt;%
   dplyr::select(Category)
 
-ComplexHeatmap::pheatmap(topgenes_aff_vs_unaff_05_sub, color = colorRampPalette(rev(brewer.pal(n = 9, name =
+png(&quot;output/Supplemental Figure 3 - Significant DEGs.png&quot;,width=12,height=10,units=&quot;in&quot;,res=1200)
+
+draw(ComplexHeatmap::pheatmap(topgenes_aff_vs_unaff_05_sub, color = colorRampPalette(rev(brewer.pal(n = 9, name =
   &quot;RdYlBu&quot;)))(50), annotation_col = df_sub, annotation_colors = ann_colors2, fontsize = 6, angle_col = c(&quot;0&quot;), cellheight = 10, cellwidth = 24, border_color = &quot;black&quot;, heatmap_legend_param = list(
         title = &quot;&quot;
-    ))</code></pre>
-<p><img src="figure/subsetted-condition-analysis.Rmd/significant-genes-deseq-subsetted-1.png" width="1200px" height="800px" style="display: block; margin: auto;" /></p>
-<p>
-<button type="button" class="btn btn-default btn-xs btn-workflowr btn-workflowr-fig" data-toggle="collapse" data-target="#fig-significant-genes-deseq-subsetted-1">
-Past versions of significant-genes-deseq-subsetted-1.png
-</button>
-</p>
-<div id="fig-significant-genes-deseq-subsetted-1" class="collapse">
-<div class="table-responsive">
-<table class="table table-condensed table-hover">
-<thead>
-<tr>
-<th>
-Version
-</th>
-<th>
-Author
-</th>
-<th>
-Date
-</th>
-</tr>
-</thead>
-<tbody>
-<tr>
-<td>
-<a href="https://github.com/uab-cgds-worthey/mecfs-dge-analysis/blob/7fbf9eaab7f1d022aa502b765c211b6829f4cea6/docs/figure/subsetted-condition-analysis.Rmd/significant-genes-deseq-subsetted-1.png" target="_blank">7fbf9ea</a>
-</td>
-<td>
-sdhutchins
-</td>
-<td>
-2024-06-13
-</td>
-</tr>
-<tr>
-<td>
-<a href="https://github.com/uab-cgds-worthey/mecfs-dge-analysis/blob/026c202cb36c644c80ab523b62e8eea3b3b9b65d/docs/figure/subsetted-condition-analysis.Rmd/significant-genes-deseq-subsetted-1.png" target="_blank">026c202</a>
-</td>
-<td>
-sdhutchins
-</td>
-<td>
-2024-06-11
-</td>
-</tr>
-<tr>
-<td>
-<a href="https://github.com/uab-cgds-worthey/mecfs-dge-analysis/blob/a2982931336d32ec27f6ad11c28a6200f8150378/docs/figure/subsetted-condition-analysis.Rmd/significant-genes-deseq-subsetted-1.png" target="_blank">a298293</a>
-</td>
-<td>
-sdhutchins
-</td>
-<td>
-2024-05-17
-</td>
-</tr>
-<tr>
-<td>
-<a href="https://github.com/uab-cgds-worthey/mecfs-dge-analysis/blob/1e45c538be682f70f8cf14eb896190323e8f4ae3/docs/figure/subsetted-condition-analysis.Rmd/significant-genes-deseq-subsetted-1.png" target="_blank">1e45c53</a>
-</td>
-<td>
-sdhutchins
-</td>
-<td>
-2024-04-09
-</td>
-</tr>
-<tr>
-<td>
-<a href="https://github.com/uab-cgds-worthey/mecfs-dge-analysis/blob/0c1afe675909d44abf1ef5bb02024ad4d53078aa/docs/figure/subsetted-condition-analysis.Rmd/significant-genes-deseq-subsetted-1.png" target="_blank">0c1afe6</a>
-</td>
-<td>
-sdhutchins
-</td>
-<td>
-2024-03-13
-</td>
-</tr>
-</tbody>
-</table>
-</div>
-</div>
+    )))
+dev.off()</code></pre>
+<pre><code>quartz_off_screen 
+                2 </code></pre>
 <pre class="r"><code># Assuming &#39;res_aff_vs_unaff_df_sub&#39; has a column &#39;padj&#39; for adjusted p-values or &#39;pvalue&#39; for p-values
 # Ensure the row names of &#39;res_aff_vs_unaff_df_sub&#39; are Ensembl IDs
 res_aff_vs_unaff_df_sub &lt;- res_aff_vs_unaff_df_sub[order(res_aff_vs_unaff_df_sub$padj), ]
@@ -2779,6 +2742,43 @@ ComplexHeatmap::pheatmap(topgenes_aff_vs_unaff_05_sub, color = colorRampPalette(
         title = &quot;&quot;
     ))</code></pre>
 <p><img src="figure/subsetted-condition-analysis.Rmd/significant-genes-deseq-subsetted-lfc1-1.png" width="1200px" height="800px" style="display: block; margin: auto;" /></p>
+<p>
+<button type="button" class="btn btn-default btn-xs btn-workflowr btn-workflowr-fig" data-toggle="collapse" data-target="#fig-significant-genes-deseq-subsetted-lfc1-1">
+Past versions of significant-genes-deseq-subsetted-lfc1-1.png
+</button>
+</p>
+<div id="fig-significant-genes-deseq-subsetted-lfc1-1" class="collapse">
+<div class="table-responsive">
+<table class="table table-condensed table-hover">
+<thead>
+<tr>
+<th>
+Version
+</th>
+<th>
+Author
+</th>
+<th>
+Date
+</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>
+<a href="https://github.com/uab-cgds-worthey/mecfs-dge-analysis/blob/7cddce9f127c259906ee54e5b8d276697382a9cc/docs/figure/subsetted-condition-analysis.Rmd/significant-genes-deseq-subsetted-lfc1-1.png" target="_blank">7cddce9</a>
+</td>
+<td>
+sdhutchins
+</td>
+<td>
+2024-07-12
+</td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
 <pre class="r"><code>topgenes_byensemblid_sub &lt;- head(rownames(res_aff_vs_unaff_df_sub), 50)
 topgenes_aff_vs_unaff_05_sub &lt;- assay(vsd_limma)[topgenes_byensemblid_sub, ]
 topgenes_aff_vs_unaff_05_sub &lt;- topgenes_aff_vs_unaff_05_sub - rowMeans(topgenes_aff_vs_unaff_05_sub)
@@ -2799,7 +2799,7 @@ topgenes_aff_vs_unaff_05_sub &lt;- topgenes_aff_vs_unaff_05_sub[order(row.names(
 df_sub &lt;- df &lt;- colData(vsd_limma) %&gt;%
   as.data.frame() %&gt;%
   dplyr::select(Affected, SubCategory, Category)
-pheatmap(topgenes_aff_vs_unaff_05_sub, annotation_col = df_sub, annotation_colors = ann_colors2, fontsize = 5, angle_col = 0)</code></pre>
+pheatmap(topgenes_aff_vs_unaff_05_sub, annotation_col = df_sub, annotation_colors = ann_colors2, fontsize = 5, angle_col = c(&quot;0&quot;))</code></pre>
 <p><img src="figure/subsetted-condition-analysis.Rmd/significant-genes-deseq-subsetted-subcategory-1.png" width="800px" height="570px" style="display: block; margin: auto;" /></p>
 <p>
 <button type="button" class="btn btn-default btn-xs btn-workflowr btn-workflowr-fig" data-toggle="collapse" data-target="#fig-significant-genes-deseq-subsetted-subcategory-1">
@@ -2914,8 +2914,47 @@ topgenes_aff_vs_unaff_05_sub &lt;- topgenes_aff_vs_unaff_05_sub[order(row.names(
 df_sub &lt;- df &lt;- colData(vsd_limma) %&gt;%
   as.data.frame() %&gt;%
   dplyr::select(Affected, SubCategory, Category)
-pheatmap(topgenes_aff_vs_unaff_05_sub, annotation_col = df_sub, annotation_colors = ann_colors2, fontsize = 5, angle_col = 0)</code></pre>
+pheatmap(topgenes_aff_vs_unaff_05_sub, annotation_col = df_sub, annotation_colors = ann_colors2, fontsize = 5, angle_col = c(&quot;0&quot;))</code></pre>
 <p><img src="figure/subsetted-condition-analysis.Rmd/significant-genes-deseq-subsetted-subcategory-lfc1-1.png" width="800px" height="570px" style="display: block; margin: auto;" /></p>
+<p>
+<button type="button" class="btn btn-default btn-xs btn-workflowr btn-workflowr-fig" data-toggle="collapse" data-target="#fig-significant-genes-deseq-subsetted-subcategory-lfc1-1">
+Past versions of
+significant-genes-deseq-subsetted-subcategory-lfc1-1.png
+</button>
+</p>
+<div id="fig-significant-genes-deseq-subsetted-subcategory-lfc1-1"
+class="collapse">
+<div class="table-responsive">
+<table class="table table-condensed table-hover">
+<thead>
+<tr>
+<th>
+Version
+</th>
+<th>
+Author
+</th>
+<th>
+Date
+</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>
+<a href="https://github.com/uab-cgds-worthey/mecfs-dge-analysis/blob/7cddce9f127c259906ee54e5b8d276697382a9cc/docs/figure/subsetted-condition-analysis.Rmd/significant-genes-deseq-subsetted-subcategory-lfc1-1.png" target="_blank">7cddce9</a>
+</td>
+<td>
+sdhutchins
+</td>
+<td>
+2024-07-12
+</td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
 <pre class="r"><code>topgenes_byensemblid_sub &lt;- head(rownames(res_aff_vs_unaff_df_sub), 75)
 topgenes_aff_vs_unaff_05_sub &lt;- assay(vsd_limma)[topgenes_byensemblid_sub, ]
 topgenes_aff_vs_unaff_05_sub &lt;- topgenes_aff_vs_unaff_05_sub - rowMeans(topgenes_aff_vs_unaff_05_sub)
@@ -2936,7 +2975,7 @@ topgenes_aff_vs_unaff_05_sub &lt;- topgenes_aff_vs_unaff_05_sub[order(row.names(
 df_sub &lt;- as.data.frame(colData(vsd_limma)[, c(&quot;Affected&quot;, &quot;Category&quot;)])
 pheatmap(topgenes_aff_vs_unaff_05_sub,
   annotation_col = df_sub,
-  annotation_colors = ann_colors2, fontsize = 4, angle_col = 0
+  annotation_colors = ann_colors2, fontsize = 4, angle_col = c(&quot;0&quot;)
 )</code></pre>
 <p><img src="figure/subsetted-condition-analysis.Rmd/top-75-genes-deseq-subsetted-1.png" width="800px" height="570px" style="display: block; margin: auto;" /></p>
 <p>
@@ -3049,7 +3088,7 @@ rownames(topgenes_aff_vs_unaff_05_sub) &lt;- new_row_names_sub
 topgenes_aff_vs_unaff_05_sub &lt;- topgenes_aff_vs_unaff_05_sub[order(row.names(topgenes_aff_vs_unaff_05_sub)), ]
 
 df_sub &lt;- as.data.frame(colData(vsd_limma)[, c(&quot;Affected&quot;, &quot;SubCategory&quot;, &quot;Category&quot;)])
-pheatmap(topgenes_aff_vs_unaff_05_sub, annotation_col = df_sub, annotation_colors = ann_colors2, fontsize = 4, angle_col = 0)</code></pre>
+pheatmap(topgenes_aff_vs_unaff_05_sub, annotation_col = df_sub, annotation_colors = ann_colors2, fontsize = 4, angle_col = c(&quot;0&quot;))</code></pre>
 <p><img src="figure/subsetted-condition-analysis.Rmd/top-75-genes-deseq-subsetted-subcategory-1.png" width="800px" height="570px" style="display: block; margin: auto;" /></p>
 <p>
 <button type="button" class="btn btn-default btn-xs btn-workflowr btn-workflowr-fig" data-toggle="collapse" data-target="#fig-top-75-genes-deseq-subsetted-subcategory-1">
@@ -3162,7 +3201,7 @@ rownames(topgenes_aff_vs_unaff_05_sub) &lt;- new_row_names_sub
 topgenes_aff_vs_unaff_05_sub &lt;- topgenes_aff_vs_unaff_05_sub[order(row.names(topgenes_aff_vs_unaff_05_sub)), ]
 
 df_sub &lt;- as.data.frame(colData(vsd_limma)[, c(&quot;Affected&quot;, &quot;Category&quot;)])
-pheatmap(topgenes_aff_vs_unaff_05_sub, annotation_col = df_sub, annotation_colors = ann_colors2, fontsize = 4, angle_col = 0)</code></pre>
+pheatmap(topgenes_aff_vs_unaff_05_sub, annotation_col = df_sub, annotation_colors = ann_colors2, fontsize = 4, angle_col = c(&quot;0&quot;))</code></pre>
 <p><img src="figure/subsetted-condition-analysis.Rmd/top-200-genes-deseq-subsetted-1.png" width="800px" height="570px" style="display: block; margin: auto;" /></p>
 <p>
 <button type="button" class="btn btn-default btn-xs btn-workflowr btn-workflowr-fig" data-toggle="collapse" data-target="#fig-top-200-genes-deseq-subsetted-1">
@@ -3285,7 +3324,7 @@ rownames(topgenes_aff_vs_unaff_05_sub) &lt;- new_row_names_sub
 topgenes_aff_vs_unaff_05_sub &lt;- topgenes_aff_vs_unaff_05_sub[order(row.names(topgenes_aff_vs_unaff_05_sub)), ]
 
 df_sub &lt;- as.data.frame(colData(vsd_limma)[, c(&quot;Affected&quot;, &quot;SubCategory&quot;, &quot;Category&quot;)])
-pheatmap(topgenes_aff_vs_unaff_05_sub, annotation_col = df_sub, annotation_colors = ann_colors2, fontsize = 2.25, angle_col = 0)</code></pre>
+pheatmap(topgenes_aff_vs_unaff_05_sub, annotation_col = df_sub, annotation_colors = ann_colors2, fontsize = 2.25, angle_col = c(&quot;0&quot;))</code></pre>
 <p><img src="figure/subsetted-condition-analysis.Rmd/top-200-genes-deseq-subsetted-subcategory-1.png" width="800px" height="570px" style="display: block; margin: auto;" /></p>
 <p>
 <button type="button" class="btn btn-default btn-xs btn-workflowr btn-workflowr-fig" data-toggle="collapse" data-target="#fig-top-200-genes-deseq-subsetted-subcategory-1">
@@ -3398,7 +3437,7 @@ rownames(topgenes_aff_vs_unaff_05_sub) &lt;- new_row_names_sub
 # topgenes_aff_vs_unaff_05_sub &lt;- topgenes_aff_vs_unaff_05_sub[order(row.names(topgenes_aff_vs_unaff_05_sub)), ]
 
 df_sub &lt;- as.data.frame(colData(vsd_limma)[, c(&quot;Affected&quot;, &quot;Category&quot;)])
-pheatmap(topgenes_aff_vs_unaff_05_sub, annotation_col = df_sub, annotation_colors = ann_colors2, fontsize = 3.75, angle_col = 0)</code></pre>
+pheatmap(topgenes_aff_vs_unaff_05_sub, annotation_col = df_sub, annotation_colors = ann_colors2, fontsize = 3.75, angle_col = c(&quot;0&quot;))</code></pre>
 <p><img src="figure/subsetted-condition-analysis.Rmd/top-125-genes-deseq-all-subsetted-1.png" width="800px" height="570px" style="display: block; margin: auto;" /></p>
 <p>
 <button type="button" class="btn btn-default btn-xs btn-workflowr btn-workflowr-fig" data-toggle="collapse" data-target="#fig-top-125-genes-deseq-all-subsetted-1">
@@ -3488,7 +3527,7 @@ rownames(topgenes_aff_vs_unaff_05_sub) &lt;- new_row_names_sub
 # topgenes_aff_vs_unaff_05_sub &lt;- topgenes_aff_vs_unaff_05_sub[order(row.names(topgenes_aff_vs_unaff_05_sub)), ]
 
 df_sub &lt;- as.data.frame(colData(vsd_limma)[, c(&quot;Affected&quot;, &quot;SubCategory&quot;, &quot;Category&quot;)])
-pheatmap(topgenes_aff_vs_unaff_05_sub, annotation_col = df_sub, annotation_colors = ann_colors2, fontsize = 3.75, angle_col = 0)</code></pre>
+pheatmap(topgenes_aff_vs_unaff_05_sub, annotation_col = df_sub, annotation_colors = ann_colors2, fontsize = 3.75, angle_col = c(&quot;0&quot;))</code></pre>
 <p><img src="figure/subsetted-condition-analysis.Rmd/top-125-genes-deseq-all-subsetted-subcategory-1.png" width="800px" height="570px" style="display: block; margin: auto;" /></p>
 <p>
 <button type="button" class="btn btn-default btn-xs btn-workflowr btn-workflowr-fig" data-toggle="collapse" data-target="#fig-top-125-genes-deseq-all-subsetted-subcategory-1">
@@ -3579,7 +3618,7 @@ rownames(topgenes_aff_vs_unaff_05_sub) &lt;- new_row_names_sub
 # topgenes_aff_vs_unaff_05_sub &lt;- topgenes_aff_vs_unaff_05_sub[order(row.names(topgenes_aff_vs_unaff_05_sub)), ]
 
 df_sub &lt;- as.data.frame(colData(vsd_limma)[, c(&quot;Affected&quot;, &quot;Category&quot;)])
-pheatmap(topgenes_aff_vs_unaff_05_sub, annotation_col = df_sub, annotation_colors = ann_colors2, fontsize = 3.5, angle_col = 0)</code></pre>
+pheatmap(topgenes_aff_vs_unaff_05_sub, annotation_col = df_sub, annotation_colors = ann_colors2, fontsize = 3.5, angle_col = c(&quot;0&quot;))</code></pre>
 <p><img src="figure/subsetted-condition-analysis.Rmd/top-150-genes-deseq-all-subsetted-1.png" width="800px" height="570px" style="display: block; margin: auto;" /></p>
 <p>
 <button type="button" class="btn btn-default btn-xs btn-workflowr btn-workflowr-fig" data-toggle="collapse" data-target="#fig-top-150-genes-deseq-all-subsetted-1">
@@ -3691,7 +3730,7 @@ rownames(topgenes_aff_vs_unaff_05_sub) &lt;- new_row_names_sub
 # topgenes_aff_vs_unaff_05_sub &lt;- topgenes_aff_vs_unaff_05_sub[order(row.names(topgenes_aff_vs_unaff_05_sub)), ]
 
 df_sub &lt;- as.data.frame(colData(vsd_limma)[, c(&quot;Affected&quot;, &quot;SubCategory&quot;, &quot;Category&quot;)])
-pheatmap(topgenes_aff_vs_unaff_05_sub, annotation_col = df_sub, annotation_colors = ann_colors2, fontsize = 3.5, angle_col = 0)</code></pre>
+pheatmap(topgenes_aff_vs_unaff_05_sub, annotation_col = df_sub, annotation_colors = ann_colors2, fontsize = 3.5, angle_col = c(&quot;0&quot;))</code></pre>
 <p><img src="figure/subsetted-condition-analysis.Rmd/top-150-genes-deseq-subsetted-subcategory-1.png" width="800px" height="570px" style="display: block; margin: auto;" /></p>
 <p>
 <button type="button" class="btn btn-default btn-xs btn-workflowr btn-workflowr-fig" data-toggle="collapse" data-target="#fig-top-150-genes-deseq-subsetted-subcategory-1">
@@ -3793,6 +3832,30 @@ res_aff_vs_unaff_df_sub_genename &lt;- merge(x = res_aff_vs_unaff_df_sub_genenam
 res_aff_vs_unaff_df_sub_genename &lt;- res_aff_vs_unaff_df_sub_genename[, c(dim(res_aff_vs_unaff_df_sub_genename)[2], 1:dim(res_aff_vs_unaff_df_sub_genename)[2] - 1)]
 res_aff_vs_unaff_df_sub_genename &lt;- res_aff_vs_unaff_df_sub_genename[order(res_aff_vs_unaff_df_sub_genename[, &quot;padj&quot;]), ]
 write.csv(res_aff_vs_unaff_df_sub_genename, file = &quot;output/res_aff_vs_unaff_df_sub_genename.csv&quot;)</code></pre>
+</div>
+<div id="volcano-plot" class="section level2">
+<h2>Volcano Plot</h2>
+<pre class="r"><code>EnhancedVolcano(res_aff_vs_unaff_df_sub_genename,
+  lab = res_aff_vs_unaff_df_sub_genename$gene_name,
+  x = &#39;log2FoldChange&#39;,
+  y = &#39;padj&#39;,
+  selectLab = c(&#39;SLC4A10&#39;,&#39;SNTG2&#39;,&#39;TMEM37&#39;,&#39;KCNQ5&#39;,&#39;DEFA1&#39;),
+  xlab = bquote(~Log[2]~ &#39;fold change&#39;),
+  pCutoff = .1,
+  FCcutoff = 1.0,
+  pointSize = 2.0,
+  labSize = 4.0,
+  labCol = &#39;black&#39;,
+  labFace = &#39;bold&#39;,
+  boxedLabels = TRUE,
+  colAlpha = 4/5,
+  legendPosition = &#39;right&#39;,
+  legendLabSize = 14,
+  legendIconSize = 4.0,
+  drawConnectors = TRUE,
+  widthConnectors = 1.0,
+  colConnectors = &#39;black&#39;)</code></pre>
+<p><img src="figure/subsetted-condition-analysis.Rmd/volcano-plot-1.png" width="1200px" height="1000px" style="display: block; margin: auto;" /></p>
 <pre class="r"><code>res_aff_vs_unaff_df_genename_05 &lt;- subset(res_aff_vs_unaff_df_sub_genename, padj &lt; 0.05)
 res_aff_vs_unaff_df_genename_05 &lt;- res_aff_vs_unaff_df_genename_05[order(res_aff_vs_unaff_df_genename_05$padj), ]
 write.csv(res_aff_vs_unaff_df_genename_05, file = &quot;output/res_aff_vs_unaff_df_sub_genename_05.csv&quot;)
@@ -3967,7 +4030,7 @@ interest across batch, disease group, and affected status.</p>
 <pre class="r"><code>mat3 &lt;- assay(vsd_limma)[filtered_by_interest$Ensembl_ID, ]
 rownames(mat3) &lt;- gene_info$gene_name[match(filtered_by_interest$Ensembl_ID, gene_info$Ensembl_ID)]
 df_sub &lt;- as.data.frame(colData(vsd_limma)[, c(&quot;Affected&quot;, &quot;Category&quot;)])
-pheatmap(mat3, annotation_col = df_sub, annotation_colors = ann_colors2, fontsize = 4, angle_col = 0)</code></pre>
+pheatmap(mat3, annotation_col = df_sub, annotation_colors = ann_colors2, fontsize = 4, angle_col = c(&quot;0&quot;))</code></pre>
 <p><img src="figure/subsetted-condition-analysis.Rmd/heatmap-genes-interest-subsetted-1.png" width="1200px" style="display: block; margin: auto;" /></p>
 <p>
 <button type="button" class="btn btn-default btn-xs btn-workflowr btn-workflowr-fig" data-toggle="collapse" data-target="#fig-heatmap-genes-interest-subsetted-1">
@@ -5097,6 +5160,17 @@ Date
 <tbody>
 <tr>
 <td>
+<a href="https://github.com/uab-cgds-worthey/mecfs-dge-analysis/blob/7cddce9f127c259906ee54e5b8d276697382a9cc/docs/figure/subsetted-condition-analysis.Rmd/compare-clusters-enrich-kegg-1.png" target="_blank">7cddce9</a>
+</td>
+<td>
+sdhutchins
+</td>
+<td>
+2024-07-12
+</td>
+</tr>
+<tr>
+<td>
 <a href="https://github.com/uab-cgds-worthey/mecfs-dge-analysis/blob/026c202cb36c644c80ab523b62e8eea3b3b9b65d/docs/figure/subsetted-condition-analysis.Rmd/compare-clusters-enrich-kegg-1.png" target="_blank">026c202</a>
 </td>
 <td>
@@ -5244,7 +5318,7 @@ for (ensembl_id in filtered_by_interest$Ensembl_ID) {
     geom_text_repel(aes(label = rownames(d))) +
     scale_color_manual(
       name = &quot;Affected Status&quot;,
-      labels = c(&quot;Unaffected&quot;, &quot;Affected&quot;),
+      labels = c(&quot;Affected&quot;, &quot;Unaffected&quot;),
       values = c(&quot;red&quot;, &quot;navy&quot;)
     )
   print(gene_plot) # Ensure each plot is printed during the loop
@@ -9502,7 +9576,7 @@ for (ensembl_id in res_aff_vs_unaff_df_genename_1$Ensembl_ID) {
     geom_text_repel(aes(label = rownames(d))) +
     scale_color_manual(
       name = &quot;Affected Status&quot;,
-      labels = c(&quot;Unaffected&quot;, &quot;Affected&quot;),
+      labels = c(&quot;Affected&quot;, &quot;Unaffected&quot;),
       values = c(&quot;red&quot;, &quot;navy&quot;)
     )
   print(ggplot_box) # Ensure each plot is printed during the loop
@@ -12565,7 +12639,7 @@ class="section level2">
 <pre class="r"><code>mat3 &lt;- assay(vsd_limma)[filtered_by_interest$Ensembl_ID, ]
 rownames(mat3) &lt;- gene_info$gene_name[match(filtered_by_interest$Ensembl_ID, gene_info$Ensembl_ID)]
 df_sub &lt;- as.data.frame(colData(vsd_limma)[, c(&quot;Affected&quot;, &quot;Category&quot;)])
-pheatmap(mat3, annotation_col = df_sub, annotation_colors = ann_colors2, fontsize = 4, angle_col = 0)</code></pre>
+pheatmap(mat3, annotation_col = df_sub, annotation_colors = ann_colors2, fontsize = 4, angle_col = c(&quot;0&quot;))</code></pre>
 <p><img src="figure/subsetted-condition-analysis.Rmd/combined-heatmap-genes-interest-subsetted-1.png" width="1200px" style="display: block; margin: auto;" /></p>
 <p>
 <button type="button" class="btn btn-default btn-xs btn-workflowr btn-workflowr-fig" data-toggle="collapse" data-target="#fig-combined-heatmap-genes-interest-subsetted-1">
@@ -12665,31 +12739,32 @@ time zone: America/Chicago
 tzcode source: internal
 
 attached base packages:
-[1] stats4    stats     graphics  grDevices datasets  utils     methods  
-[8] base     
+[1] grid      stats4    stats     graphics  grDevices datasets  utils    
+[8] methods   base     
 
 other attached packages:
- [1] STRINGdb_2.16.4             enrichR_3.2                
- [3] DOSE_3.30.1                 mygene_1.40.0              
- [5] txdbmaker_1.0.0             GenomicFeatures_1.56.0     
- [7] ReactomePA_1.48.0           ggrepel_0.9.5              
- [9] org.Hs.eg.db_3.19.1         AnnotationDbi_1.66.0       
-[11] clusterProfiler_4.12.0      rmarkdown_2.27             
-[13] ggpubr_0.6.0                plotly_4.10.4              
-[15] biomaRt_2.60.0              gprofiler2_0.2.3           
-[17] limma_3.60.2                genefilter_1.86.0          
-[19] pheatmap_1.0.12             RColorBrewer_1.1-3         
-[21] DESeq2_1.44.0               SummarizedExperiment_1.34.0
-[23] Biobase_2.64.0              MatrixGenerics_1.16.0      
-[25] matrixStats_1.3.0           GenomicRanges_1.56.0       
-[27] GenomeInfoDb_1.40.1         IRanges_2.38.0             
-[29] S4Vectors_0.42.0            BiocGenerics_0.50.0        
-[31] lubridate_1.9.3             forcats_1.0.0              
-[33] stringr_1.5.1               dplyr_1.1.4                
-[35] purrr_1.0.2                 readr_2.1.5                
-[37] tidyr_1.3.1                 tibble_3.2.1               
-[39] ggplot2_3.5.1               tidyverse_2.0.0            
-[41] workflowr_1.7.1            
+ [1] ComplexHeatmap_2.20.0       EnhancedVolcano_1.22.0     
+ [3] STRINGdb_2.16.4             enrichR_3.2                
+ [5] DOSE_3.30.1                 mygene_1.40.0              
+ [7] txdbmaker_1.0.1             GenomicFeatures_1.56.0     
+ [9] ReactomePA_1.48.0           ggrepel_0.9.5              
+[11] org.Hs.eg.db_3.19.1         AnnotationDbi_1.66.0       
+[13] clusterProfiler_4.12.0      rmarkdown_2.27             
+[15] ggpubr_0.6.0                plotly_4.10.4              
+[17] biomaRt_2.60.1              gprofiler2_0.2.3           
+[19] limma_3.60.3                genefilter_1.86.0          
+[21] pheatmap_1.0.12             RColorBrewer_1.1-3         
+[23] DESeq2_1.44.0               SummarizedExperiment_1.34.0
+[25] Biobase_2.64.0              MatrixGenerics_1.16.0      
+[27] matrixStats_1.3.0           GenomicRanges_1.56.1       
+[29] GenomeInfoDb_1.40.1         IRanges_2.38.1             
+[31] S4Vectors_0.42.1            BiocGenerics_0.50.0        
+[33] lubridate_1.9.3             forcats_1.0.0              
+[35] stringr_1.5.1               dplyr_1.1.4                
+[37] purrr_1.0.2                 readr_2.1.5                
+[39] tidyr_1.3.1                 tibble_3.2.1               
+[41] ggplot2_3.5.1               tidyverse_2.0.0            
+[43] workflowr_1.7.1            
 
 loaded via a namespace (and not attached):
   [1] fs_1.6.4                 bitops_1.0-7             enrichplot_1.24.0       
@@ -12697,7 +12772,7 @@ loaded via a namespace (and not attached):
   [7] tools_4.4.0              backports_1.5.0          utf8_1.2.4              
  [10] R6_2.5.1                 lazyeval_0.2.2           GetoptLong_1.0.5        
  [13] withr_3.0.0              graphite_1.50.0          prettyunits_1.2.0       
- [16] gridExtra_2.3            textshaping_0.4.0        cli_3.6.2               
+ [16] gridExtra_2.3            textshaping_0.4.0        cli_3.6.3               
  [19] scatterpie_0.2.3         labeling_0.4.3           sass_0.4.9              
  [22] systemfonts_1.1.0        Rsamtools_2.20.0         yulab.utils_0.1.4       
  [25] gson_0.1.0               foreign_0.8-86           WriteXLS_6.6.0          
@@ -12706,54 +12781,53 @@ loaded via a namespace (and not attached):
  [34] BiocIO_1.14.0            vroom_1.6.5              gtools_3.9.5            
  [37] car_3.1-2                GO.db_3.19.1             Matrix_1.7-0            
  [40] fansi_1.0.6              abind_1.4-5              lifecycle_1.0.4         
- [43] whisker_0.4.1            yaml_2.3.8               carData_3.0-5           
+ [43] whisker_0.4.1            yaml_2.3.9               carData_3.0-5           
  [46] gplots_3.1.3.1           qvalue_2.36.0            SparseArray_1.4.8       
- [49] BiocFileCache_2.12.0     grid_4.4.0               blob_1.2.4              
- [52] promises_1.3.0           crayon_1.5.2             lattice_0.22-6          
- [55] cowplot_1.1.3            annotate_1.82.0          KEGGREST_1.44.0         
- [58] ComplexHeatmap_2.16.0    pillar_1.9.0             knitr_1.47              
- [61] fgsea_1.30.0             rjson_0.2.21             codetools_0.2-20        
- [64] fastmatch_1.1-4          glue_1.7.0               getPass_0.2-4           
- [67] ggfun_0.1.5              data.table_1.15.4        vctrs_0.6.5             
- [70] png_0.1-8                treeio_1.28.0            gtable_0.3.5            
- [73] gsubfn_0.7               cachem_1.1.0             xfun_0.44               
- [76] S4Arrays_1.4.1           tidygraph_1.3.1          survival_3.5-8          
- [79] iterators_1.0.14         statmod_1.5.0            nlme_3.1-164            
- [82] ggtree_3.12.0            bit64_4.0.5              progress_1.2.3          
- [85] filelock_1.0.3           rprojroot_2.0.4          bslib_0.7.0             
- [88] KernSmooth_2.23-22       rpart_4.1.23             colorspace_2.1-0        
- [91] DBI_1.2.3                Hmisc_5.1-3              nnet_7.3-19             
- [94] tidyselect_1.2.1         processx_3.8.4           chron_2.3-61            
- [97] bit_4.0.5                compiler_4.4.0           curl_5.2.1              
-[100] git2r_0.33.0             httr2_1.0.1              graph_1.82.0            
-[103] htmlTable_2.4.2          xml2_1.3.6               DelayedArray_0.30.1     
-[106] shadowtext_0.1.3         rtracklayer_1.64.0       caTools_1.18.2          
-[109] checkmate_2.3.1          scales_1.3.0             callr_3.7.6             
-[112] rappdirs_0.3.3           digest_0.6.35            XVector_0.44.0          
-[115] htmltools_0.5.8.1        pkgconfig_2.0.3          base64enc_0.1-3         
-[118] highr_0.11               dbplyr_2.5.0             fastmap_1.2.0           
-[121] GlobalOptions_0.1.2      ggthemes_5.1.0           rlang_1.1.4             
-[124] htmlwidgets_1.6.4        UCSC.utils_1.0.0         farver_2.1.2            
-[127] jquerylib_0.1.4          jsonlite_1.8.8           BiocParallel_1.38.0     
-[130] GOSemSim_2.30.0          RCurl_1.98-1.14          magrittr_2.0.3          
-[133] Formula_1.2-5            GenomeInfoDbData_1.2.12  ggplotify_0.1.2         
-[136] patchwork_1.2.0          munsell_0.5.1            Rcpp_1.0.12             
-[139] proto_1.0.0              ape_5.8                  viridis_0.6.5           
-[142] sqldf_0.4-11             stringi_1.8.4            ggraph_2.2.1            
-[145] zlibbioc_1.50.0          MASS_7.3-60.2            plyr_1.8.9              
-[148] parallel_4.4.0           Biostrings_2.72.1        graphlayouts_1.1.1      
-[151] splines_4.4.0            hash_2.2.6.3             circlize_0.4.16         
-[154] hms_1.1.3                locfit_1.5-9.9           ps_1.7.6                
-[157] igraph_2.0.3             ggsignif_0.6.4           reshape2_1.4.4          
-[160] XML_3.99-0.16.1          evaluate_0.24.0          renv_1.0.7              
-[163] BiocManager_1.30.23      foreach_1.5.2            tzdb_0.4.0              
-[166] tweenr_2.0.3             httpuv_1.6.15            polyclip_1.10-6         
-[169] clue_0.3-65              ggforce_0.4.2            broom_1.0.6             
-[172] xtable_1.8-4             restfulr_0.0.15          reactome.db_1.88.0      
-[175] tidytree_0.4.6           rstatix_0.7.2            later_1.3.2             
-[178] ragg_1.3.2               viridisLite_0.4.2        aplot_0.2.2             
-[181] memoise_2.0.1            GenomicAlignments_1.40.0 cluster_2.1.6           
-[184] timechange_0.3.0        </code></pre>
+ [49] BiocFileCache_2.12.0     blob_1.2.4               promises_1.3.0          
+ [52] crayon_1.5.3             lattice_0.22-6           cowplot_1.1.3           
+ [55] annotate_1.82.0          KEGGREST_1.44.1          pillar_1.9.0            
+ [58] knitr_1.48               fgsea_1.30.0             rjson_0.2.21            
+ [61] codetools_0.2-20         fastmatch_1.1-4          glue_1.7.0              
+ [64] getPass_0.2-4            ggfun_0.1.5              data.table_1.15.4       
+ [67] vctrs_0.6.5              png_0.1-8                treeio_1.28.0           
+ [70] gtable_0.3.5             gsubfn_0.7               cachem_1.1.0            
+ [73] xfun_0.45                S4Arrays_1.4.1           tidygraph_1.3.1         
+ [76] survival_3.5-8           iterators_1.0.14         statmod_1.5.0           
+ [79] nlme_3.1-164             ggtree_3.12.0            bit64_4.0.5             
+ [82] progress_1.2.3           filelock_1.0.3           rprojroot_2.0.4         
+ [85] bslib_0.7.0              KernSmooth_2.23-22       rpart_4.1.23            
+ [88] colorspace_2.1-0         DBI_1.2.3                Hmisc_5.1-3             
+ [91] nnet_7.3-19              tidyselect_1.2.1         processx_3.8.4          
+ [94] chron_2.3-61             bit_4.0.5                compiler_4.4.0          
+ [97] curl_5.2.1               git2r_0.33.0             httr2_1.0.1             
+[100] graph_1.82.0             htmlTable_2.4.2          xml2_1.3.6              
+[103] DelayedArray_0.30.1      shadowtext_0.1.3         rtracklayer_1.64.0      
+[106] caTools_1.18.2           checkmate_2.3.1          scales_1.3.0            
+[109] callr_3.7.6              rappdirs_0.3.3           digest_0.6.36           
+[112] XVector_0.44.0           htmltools_0.5.8.1        pkgconfig_2.0.3         
+[115] base64enc_0.1-3          highr_0.11               dbplyr_2.5.0            
+[118] fastmap_1.2.0            ggthemes_5.1.0           GlobalOptions_0.1.2     
+[121] rlang_1.1.4              htmlwidgets_1.6.4        UCSC.utils_1.0.0        
+[124] farver_2.1.2             jquerylib_0.1.4          jsonlite_1.8.8          
+[127] BiocParallel_1.38.0      GOSemSim_2.30.0          RCurl_1.98-1.16         
+[130] magrittr_2.0.3           Formula_1.2-5            GenomeInfoDbData_1.2.12 
+[133] ggplotify_0.1.2          patchwork_1.2.0          munsell_0.5.1           
+[136] Rcpp_1.0.12              proto_1.0.0              ape_5.8                 
+[139] viridis_0.6.5            sqldf_0.4-11             stringi_1.8.4           
+[142] ggraph_2.2.1             zlibbioc_1.50.0          MASS_7.3-60.2           
+[145] plyr_1.8.9               parallel_4.4.0           Biostrings_2.72.1       
+[148] graphlayouts_1.1.1       splines_4.4.0            hash_2.2.6.3            
+[151] circlize_0.4.16          hms_1.1.3                locfit_1.5-9.10         
+[154] ps_1.7.7                 igraph_2.0.3             ggsignif_0.6.4          
+[157] reshape2_1.4.4           XML_3.99-0.17            evaluate_0.24.0         
+[160] renv_1.0.7               BiocManager_1.30.23      foreach_1.5.2           
+[163] tzdb_0.4.0               tweenr_2.0.3             httpuv_1.6.15           
+[166] polyclip_1.10-6          clue_0.3-65              ggforce_0.4.2           
+[169] broom_1.0.6              xtable_1.8-4             restfulr_0.0.15         
+[172] reactome.db_1.88.0       tidytree_0.4.6           rstatix_0.7.2           
+[175] later_1.3.2              ragg_1.3.2               viridisLite_0.4.2       
+[178] aplot_0.2.3              memoise_2.0.1            GenomicAlignments_1.40.0
+[181] cluster_2.1.6            timechange_0.3.0        </code></pre>
 </div>
 </div>
 </div>
