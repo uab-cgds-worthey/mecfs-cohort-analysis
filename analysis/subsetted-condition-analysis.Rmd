@@ -1245,7 +1245,7 @@ for (ensembl_id in filtered_by_interest$Ensembl_ID) {
   print(gene_plot) # Ensure each plot is printed during the loop
   ggsave(
     filename = paste0(gene_name, "-subsetted-plot-counts.png"),
-    path = "output/batch-correction-limma/plot-counts",
+    path = "output/batch-correction-limma/plot-counts/genes-of-interest",
     plot = gene_plot, dpi = 450
   )
 }
@@ -1263,8 +1263,11 @@ write.csv(gene_results_df, file_name, row.names = FALSE)
 # Create an empty list to store the results for each gene
 results_list <- list()
 
+# Create an empty dataframe to store all counts data for plotting
+all_counts <- data.frame()
+
 # Loop through each gene to calculate and plot counts
-for (ensembl_id in res_aff_vs_unaff_df_genename_1$Ensembl_ID) {
+for (ensembl_id in res_aff_vs_unaff_df_genename_05$Ensembl_ID) {
   dp <- plotCounts(dds, gene = ensembl_id, intgroup = "Affected", returnData = TRUE)
   d <- plotCounts(dds, gene = ensembl_id, intgroup = "Affected", returnData = TRUE)
   gene_name <- res_aff_vs_unaff_df_genename_1$gene_name[res_aff_vs_unaff_df_genename_1$Ensembl_ID == ensembl_id]
@@ -1316,6 +1319,14 @@ for (ensembl_id in res_aff_vs_unaff_df_genename_1$Ensembl_ID) {
     results_list[[1]] <- merge(results_list[[1]], temp_df, by = "Patient", all = TRUE)
   }
   
+  # Add the gene name to the dp dataframe
+  dp$Gene <- gene_name
+  dp$Ensembl_ID <- ensembl_id
+  dp$SampleID <- rownames(dp)
+  
+  # Combine dp with all_counts dataframe
+  all_counts <- rbind(all_counts, dp)
+  
   # Generate the boxplot
   ggplot_box <- ggboxplot(dp,
     x = "Affected", y = "count", add = "jitter",
@@ -1331,10 +1342,29 @@ for (ensembl_id in res_aff_vs_unaff_df_genename_1$Ensembl_ID) {
   print(ggplot_box) # Ensure each plot is printed during the loop
   ggsave(
     filename = paste0(gene_name, "-subsetted-plot-counts.png"),
-    path = "output/batch-correction-limma/plot-counts",
+    path = "output/batch-correction-limma/plot-counts/padj-05",
     plot = ggplot_box, dpi = 450
   )
 }
+
+# Create the faceted plot
+faceted_plot <- ggplot(all_counts, aes(x = Affected, y = count, color = Affected)) +
+  geom_boxplot() +
+  geom_jitter(width = 0.2, size = 1.25) + # Adjust size of the dots
+  geom_text_repel(aes(label = SampleID), size = 2) + # Add labels to the dots
+  facet_wrap(~ Gene, scales = "free_y") +
+  theme_bw() +
+  labs(title = "Gene Expression Counts by Affected Status", x = "Affected Status", y = "Count") +
+  scale_color_manual(values = c("red", "navy"))
+
+faceted_plot
+
+# Save the faceted plot
+ggsave(
+  filename = "faceted_significant_degs_plot_counts.png",
+  path = "output/batch-correction-limma/plot-counts/padj-05",
+  plot = faceted_plot, dpi = 1200
+)
 
 # Convert the list to a dataframe
 results_df <- results_list[[1]]
