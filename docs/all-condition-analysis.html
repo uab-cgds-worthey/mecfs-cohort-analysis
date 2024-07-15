@@ -1,0 +1,2429 @@
+<!DOCTYPE html>
+
+<html>
+
+<head>
+
+<meta charset="utf-8" />
+<meta name="generator" content="pandoc" />
+<meta http-equiv="X-UA-Compatible" content="IE=EDGE" />
+
+
+
+
+<title>Differential Gene Expression (DGE) Analysis</title>
+
+<script src="site_libs/header-attrs-2.27/header-attrs.js"></script>
+<script src="site_libs/jquery-3.6.0/jquery-3.6.0.min.js"></script>
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<link href="site_libs/bootstrap-3.3.5/css/journal.min.css" rel="stylesheet" />
+<script src="site_libs/bootstrap-3.3.5/js/bootstrap.min.js"></script>
+<script src="site_libs/bootstrap-3.3.5/shim/html5shiv.min.js"></script>
+<script src="site_libs/bootstrap-3.3.5/shim/respond.min.js"></script>
+<style>h1 {font-size: 34px;}
+       h1.title {font-size: 38px;}
+       h2 {font-size: 30px;}
+       h3 {font-size: 24px;}
+       h4 {font-size: 18px;}
+       h5 {font-size: 16px;}
+       h6 {font-size: 12px;}
+       code {color: inherit; background-color: rgba(0, 0, 0, 0.04);}
+       pre:not([class]) { background-color: white }</style>
+<script src="site_libs/jqueryui-1.13.2/jquery-ui.min.js"></script>
+<link href="site_libs/tocify-1.9.1/jquery.tocify.css" rel="stylesheet" />
+<script src="site_libs/tocify-1.9.1/jquery.tocify.js"></script>
+<script src="site_libs/navigation-1.1/tabsets.js"></script>
+<script src="site_libs/navigation-1.1/codefolding.js"></script>
+<link href="site_libs/highlightjs-9.12.0/textmate.css" rel="stylesheet" />
+<script src="site_libs/highlightjs-9.12.0/highlight.js"></script>
+<link href="site_libs/pagedtable-1.1/css/pagedtable.css" rel="stylesheet" />
+<script src="site_libs/pagedtable-1.1/js/pagedtable.js"></script>
+<link href="site_libs/font-awesome-6.4.2/css/all.min.css" rel="stylesheet" />
+<link href="site_libs/font-awesome-6.4.2/css/v4-shims.min.css" rel="stylesheet" />
+
+<link rel="icon" href="https://github.com/workflowr/workflowr-assets/raw/main/img/reproducible.png">
+<!-- Add a small amount of space between sections. -->
+<style type="text/css">
+div.section {
+  padding-top: 12px;
+}
+</style>
+
+
+
+<style type="text/css">
+  code{white-space: pre-wrap;}
+  span.smallcaps{font-variant: small-caps;}
+  span.underline{text-decoration: underline;}
+  div.column{display: inline-block; vertical-align: top; width: 50%;}
+  div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
+  ul.task-list{list-style: none;}
+    </style>
+
+<style type="text/css">code{white-space: pre;}</style>
+<script type="text/javascript">
+if (window.hljs) {
+  hljs.configure({languages: []});
+  hljs.initHighlightingOnLoad();
+  if (document.readyState && document.readyState === "complete") {
+    window.setTimeout(function() { hljs.initHighlighting(); }, 0);
+  }
+}
+</script>
+
+
+
+
+
+
+
+
+
+<style type = "text/css">
+.main-container {
+  max-width: 940px;
+  margin-left: auto;
+  margin-right: auto;
+}
+img {
+  max-width:100%;
+}
+.tabbed-pane {
+  padding-top: 12px;
+}
+.html-widget {
+  margin-bottom: 20px;
+}
+button.code-folding-btn:focus {
+  outline: none;
+}
+summary {
+  display: list-item;
+}
+details > summary > p:only-child {
+  display: inline;
+}
+pre code {
+  padding: 0;
+}
+</style>
+
+
+<style type="text/css">
+.dropdown-submenu {
+  position: relative;
+}
+.dropdown-submenu>.dropdown-menu {
+  top: 0;
+  left: 100%;
+  margin-top: -6px;
+  margin-left: -1px;
+  border-radius: 0 6px 6px 6px;
+}
+.dropdown-submenu:hover>.dropdown-menu {
+  display: block;
+}
+.dropdown-submenu>a:after {
+  display: block;
+  content: " ";
+  float: right;
+  width: 0;
+  height: 0;
+  border-color: transparent;
+  border-style: solid;
+  border-width: 5px 0 5px 5px;
+  border-left-color: #cccccc;
+  margin-top: 5px;
+  margin-right: -10px;
+}
+.dropdown-submenu:hover>a:after {
+  border-left-color: #adb5bd;
+}
+.dropdown-submenu.pull-left {
+  float: none;
+}
+.dropdown-submenu.pull-left>.dropdown-menu {
+  left: -100%;
+  margin-left: 10px;
+  border-radius: 6px 0 6px 6px;
+}
+</style>
+
+<script type="text/javascript">
+// manage active state of menu based on current page
+$(document).ready(function () {
+  // active menu anchor
+  href = window.location.pathname
+  href = href.substr(href.lastIndexOf('/') + 1)
+  if (href === "")
+    href = "index.html";
+  var menuAnchor = $('a[href="' + href + '"]');
+
+  // mark the anchor link active (and if it's in a dropdown, also mark that active)
+  var dropdown = menuAnchor.closest('li.dropdown');
+  if (window.bootstrap) { // Bootstrap 4+
+    menuAnchor.addClass('active');
+    dropdown.find('> .dropdown-toggle').addClass('active');
+  } else { // Bootstrap 3
+    menuAnchor.parent().addClass('active');
+    dropdown.addClass('active');
+  }
+
+  // Navbar adjustments
+  var navHeight = $(".navbar").first().height() + 15;
+  var style = document.createElement('style');
+  var pt = "padding-top: " + navHeight + "px; ";
+  var mt = "margin-top: -" + navHeight + "px; ";
+  var css = "";
+  // offset scroll position for anchor links (for fixed navbar)
+  for (var i = 1; i <= 6; i++) {
+    css += ".section h" + i + "{ " + pt + mt + "}\n";
+  }
+  style.innerHTML = "body {" + pt + "padding-bottom: 40px; }\n" + css;
+  document.head.appendChild(style);
+});
+</script>
+
+<!-- tabsets -->
+
+<style type="text/css">
+.tabset-dropdown > .nav-tabs {
+  display: inline-table;
+  max-height: 500px;
+  min-height: 44px;
+  overflow-y: auto;
+  border: 1px solid #ddd;
+  border-radius: 4px;
+}
+
+.tabset-dropdown > .nav-tabs > li.active:before, .tabset-dropdown > .nav-tabs.nav-tabs-open:before {
+  content: "\e259";
+  font-family: 'Glyphicons Halflings';
+  display: inline-block;
+  padding: 10px;
+  border-right: 1px solid #ddd;
+}
+
+.tabset-dropdown > .nav-tabs.nav-tabs-open > li.active:before {
+  content: "\e258";
+  font-family: 'Glyphicons Halflings';
+  border: none;
+}
+
+.tabset-dropdown > .nav-tabs > li.active {
+  display: block;
+}
+
+.tabset-dropdown > .nav-tabs > li > a,
+.tabset-dropdown > .nav-tabs > li > a:focus,
+.tabset-dropdown > .nav-tabs > li > a:hover {
+  border: none;
+  display: inline-block;
+  border-radius: 4px;
+  background-color: transparent;
+}
+
+.tabset-dropdown > .nav-tabs.nav-tabs-open > li {
+  display: block;
+  float: none;
+}
+
+.tabset-dropdown > .nav-tabs > li {
+  display: none;
+}
+</style>
+
+<!-- code folding -->
+<style type="text/css">
+.code-folding-btn { margin-bottom: 4px; }
+</style>
+
+
+
+<style type="text/css">
+
+#TOC {
+  margin: 25px 0px 20px 0px;
+}
+@media (max-width: 768px) {
+#TOC {
+  position: relative;
+  width: 100%;
+}
+}
+
+@media print {
+.toc-content {
+  /* see https://github.com/w3c/csswg-drafts/issues/4434 */
+  float: right;
+}
+}
+
+.toc-content {
+  padding-left: 30px;
+  padding-right: 40px;
+}
+
+div.main-container {
+  max-width: 1200px;
+}
+
+div.tocify {
+  width: 20%;
+  max-width: 260px;
+  max-height: 85%;
+}
+
+@media (min-width: 768px) and (max-width: 991px) {
+  div.tocify {
+    width: 25%;
+  }
+}
+
+@media (max-width: 767px) {
+  div.tocify {
+    width: 100%;
+    max-width: none;
+  }
+}
+
+.tocify ul, .tocify li {
+  line-height: 20px;
+}
+
+.tocify-subheader .tocify-item {
+  font-size: 0.90em;
+}
+
+.tocify .list-group-item {
+  border-radius: 0px;
+}
+
+
+</style>
+
+
+
+</head>
+
+<body>
+
+
+<div class="container-fluid main-container">
+
+
+<!-- setup 3col/9col grid for toc_float and main content  -->
+<div class="row">
+<div class="col-xs-12 col-sm-4 col-md-3">
+<div id="TOC" class="tocify">
+</div>
+</div>
+
+<div class="toc-content col-xs-12 col-sm-8 col-md-9">
+
+
+
+
+<div class="navbar navbar-default  navbar-fixed-top" role="navigation">
+  <div class="container">
+    <div class="navbar-header">
+      <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-bs-toggle="collapse" data-target="#navbar" data-bs-target="#navbar">
+        <span class="icon-bar"></span>
+        <span class="icon-bar"></span>
+        <span class="icon-bar"></span>
+      </button>
+      <a class="navbar-brand" href="index.html">mecfs-dge-analysis</a>
+    </div>
+    <div id="navbar" class="navbar-collapse collapse">
+      <ul class="nav navbar-nav">
+        <li>
+  <a href="index.html">Home</a>
+</li>
+<li>
+  <a href="background.html">Background</a>
+</li>
+<li class="dropdown">
+  <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+    Analysis
+     
+    <span class="caret"></span>
+  </a>
+  <ul class="dropdown-menu" role="menu">
+    <li>
+      <a href="condition-analysis.html">By Condition</a>
+    </li>
+    <li>
+      <a href="tier-analysis.html">By Tier</a>
+    </li>
+    <li>
+      <a href="batch-analysis.html">By Batch</a>
+    </li>
+  </ul>
+</li>
+      </ul>
+      <ul class="nav navbar-nav navbar-right">
+        <li>
+  <a href="https://github.com/uab-cgds-worthey/mecfs-dge-analysis">
+    <span class="fa fa-github"></span>
+     
+  </a>
+</li>
+      </ul>
+    </div><!--/.nav-collapse -->
+  </div><!--/.container -->
+</div><!--/.navbar -->
+
+<div id="header">
+
+<div class="btn-group pull-right float-right">
+<button type="button" class="btn btn-default btn-xs btn-secondary btn-sm dropdown-toggle" data-toggle="dropdown" data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false"><span>Code</span> <span class="caret"></span></button>
+<ul class="dropdown-menu dropdown-menu-right" style="min-width: 50px;">
+<li><a id="rmd-show-all-code" href="#">Show All Code</a></li>
+<li><a id="rmd-hide-all-code" href="#">Hide All Code</a></li>
+</ul>
+</div>
+
+
+
+<h1 class="title toc-ignore">Differential Gene Expression (DGE)
+Analysis</h1>
+
+</div>
+
+
+<p>
+<button type="button" class="btn btn-default btn-workflowr btn-workflowr-report" data-toggle="collapse" data-target="#workflowr-report">
+<span class="glyphicon glyphicon-list" aria-hidden="true"></span>
+workflowr <span class="glyphicon glyphicon-ok text-success"
+aria-hidden="true"></span>
+</button>
+</p>
+<div id="workflowr-report" class="collapse">
+<ul class="nav nav-tabs">
+<li class="active">
+<a data-toggle="tab" href="#summary">Summary</a>
+</li>
+<li>
+<a data-toggle="tab" href="#checks"> Checks <span
+class="glyphicon glyphicon-ok text-success" aria-hidden="true"></span>
+</a>
+</li>
+<li>
+<a data-toggle="tab" href="#versions">Past versions</a>
+</li>
+</ul>
+<div class="tab-content">
+<div id="summary" class="tab-pane fade in active">
+<p>
+<strong>Last updated:</strong> 2024-07-15
+</p>
+<p>
+<strong>Checks:</strong> <span
+class="glyphicon glyphicon-ok text-success" aria-hidden="true"></span> 7
+<span class="glyphicon glyphicon-exclamation-sign text-danger"
+aria-hidden="true"></span> 0
+</p>
+<p>
+<strong>Knit directory:</strong> <code>mecfs-dge-analysis/</code> <span
+class="glyphicon glyphicon-question-sign" aria-hidden="true"
+title="This is the local directory in which the code in this file was executed.">
+</span>
+</p>
+<p>
+This reproducible <a href="https://rmarkdown.rstudio.com">R Markdown</a>
+analysis was created with <a
+  href="https://github.com/workflowr/workflowr">workflowr</a> (version
+1.7.1). The <em>Checks</em> tab describes the reproducibility checks
+that were applied when the results were created. The <em>Past
+versions</em> tab lists the development history.
+</p>
+<hr>
+</div>
+<div id="checks" class="tab-pane fade">
+<div id="workflowr-checks" class="panel-group">
+<div class="panel panel-default">
+<div class="panel-heading">
+<p class="panel-title">
+<a data-toggle="collapse" data-parent="#workflowr-checks" href="#strongRMarkdownfilestronguptodate">
+<span class="glyphicon glyphicon-ok text-success"
+aria-hidden="true"></span> <strong>R Markdown file:</strong> up-to-date
+</a>
+</p>
+</div>
+<div id="strongRMarkdownfilestronguptodate"
+class="panel-collapse collapse">
+<div class="panel-body">
+<p>Great! Since the R Markdown file has been committed to the Git
+repository, you know the exact version of the code that produced these
+results.</p>
+</div>
+</div>
+</div>
+<div class="panel panel-default">
+<div class="panel-heading">
+<p class="panel-title">
+<a data-toggle="collapse" data-parent="#workflowr-checks" href="#strongEnvironmentstrongempty">
+<span class="glyphicon glyphicon-ok text-success"
+aria-hidden="true"></span> <strong>Environment:</strong> empty </a>
+</p>
+</div>
+<div id="strongEnvironmentstrongempty" class="panel-collapse collapse">
+<div class="panel-body">
+<p>Great job! The global environment was empty. Objects defined in the
+global environment can affect the analysis in your R Markdown file in
+unknown ways. For reproduciblity it’s best to always run the code in an
+empty environment.</p>
+</div>
+</div>
+</div>
+<div class="panel panel-default">
+<div class="panel-heading">
+<p class="panel-title">
+<a data-toggle="collapse" data-parent="#workflowr-checks" href="#strongSeedstrongcodesetseed20230618code">
+<span class="glyphicon glyphicon-ok text-success"
+aria-hidden="true"></span> <strong>Seed:</strong>
+<code>set.seed(20230618)</code> </a>
+</p>
+</div>
+<div id="strongSeedstrongcodesetseed20230618code"
+class="panel-collapse collapse">
+<div class="panel-body">
+<p>The command <code>set.seed(20230618)</code> was run prior to running
+the code in the R Markdown file. Setting a seed ensures that any results
+that rely on randomness, e.g. subsampling or permutations, are
+reproducible.</p>
+</div>
+</div>
+</div>
+<div class="panel panel-default">
+<div class="panel-heading">
+<p class="panel-title">
+<a data-toggle="collapse" data-parent="#workflowr-checks" href="#strongSessioninformationstrongrecorded">
+<span class="glyphicon glyphicon-ok text-success"
+aria-hidden="true"></span> <strong>Session information:</strong>
+recorded </a>
+</p>
+</div>
+<div id="strongSessioninformationstrongrecorded"
+class="panel-collapse collapse">
+<div class="panel-body">
+<p>Great job! Recording the operating system, R version, and package
+versions is critical for reproducibility.</p>
+</div>
+</div>
+</div>
+<div class="panel panel-default">
+<div class="panel-heading">
+<p class="panel-title">
+<a data-toggle="collapse" data-parent="#workflowr-checks" href="#strongCachestrongnone">
+<span class="glyphicon glyphicon-ok text-success"
+aria-hidden="true"></span> <strong>Cache:</strong> none </a>
+</p>
+</div>
+<div id="strongCachestrongnone" class="panel-collapse collapse">
+<div class="panel-body">
+<p>Nice! There were no cached chunks for this analysis, so you can be
+confident that you successfully produced the results during this
+run.</p>
+</div>
+</div>
+</div>
+<div class="panel panel-default">
+<div class="panel-heading">
+<p class="panel-title">
+<a data-toggle="collapse" data-parent="#workflowr-checks" href="#strongFilepathsstrongrelative">
+<span class="glyphicon glyphicon-ok text-success"
+aria-hidden="true"></span> <strong>File paths:</strong> relative </a>
+</p>
+</div>
+<div id="strongFilepathsstrongrelative" class="panel-collapse collapse">
+<div class="panel-body">
+<p>Great job! Using relative paths to the files within your workflowr
+project makes it easier to run your code on other machines.</p>
+</div>
+</div>
+</div>
+<div class="panel panel-default">
+<div class="panel-heading">
+<p class="panel-title">
+<a data-toggle="collapse" data-parent="#workflowr-checks" href="#strongRepositoryversionstrongahrefhttpsgithubcomuabcgdswortheymecfsdgeanalysistreef63a062618aaecafb47c3132a6ed18b708808237targetblankf63a062a">
+<span class="glyphicon glyphicon-ok text-success"
+aria-hidden="true"></span> <strong>Repository version:</strong>
+<a href="https://github.com/uab-cgds-worthey/mecfs-dge-analysis/tree/f63a062618aaecafb47c3132a6ed18b708808237" target="_blank">f63a062</a>
+</a>
+</p>
+</div>
+<div
+id="strongRepositoryversionstrongahrefhttpsgithubcomuabcgdswortheymecfsdgeanalysistreef63a062618aaecafb47c3132a6ed18b708808237targetblankf63a062a"
+class="panel-collapse collapse">
+<div class="panel-body">
+<p>
+Great! You are using Git for version control. Tracking code development
+and connecting the code version to the results is critical for
+reproducibility.
+</p>
+<p>
+The results in this page were generated with repository version
+<a href="https://github.com/uab-cgds-worthey/mecfs-dge-analysis/tree/f63a062618aaecafb47c3132a6ed18b708808237" target="_blank">f63a062</a>.
+See the <em>Past versions</em> tab to see a history of the changes made
+to the R Markdown and HTML files.
+</p>
+<p>
+Note that you need to be careful to ensure that all relevant files for
+the analysis have been committed to Git prior to generating the results
+(you can use <code>wflow_publish</code> or
+<code>wflow_git_commit</code>). workflowr only checks the R Markdown
+file, but you know if there are other scripts or data files that it
+depends on. Below is the status of the Git repository when the results
+were generated:
+</p>
+<pre><code>
+Ignored files:
+    Ignored:    .DS_Store
+    Ignored:    .Rhistory
+    Ignored:    .Rproj.user/
+    Ignored:    analysis/.DS_Store
+    Ignored:    analysis/figure/
+    Ignored:    omnipathr-log/
+    Ignored:    output/.DS_Store
+    Ignored:    output/batch-correction-limma/
+    Ignored:    output/check-controls.RData
+    Ignored:    output/condition-analysis.RData
+    Ignored:    output/subsetted-condition-analysis.RData
+    Ignored:    renv/.DS_Store
+    Ignored:    renv/library/
+    Ignored:    renv/staging/
+
+Untracked files:
+    Untracked:  output/Supplemental Figure 3 - Significant DEGs.png
+    Untracked:  output/counts_vst_all.csv
+    Untracked:  output/counts_vst_limma_all.csv
+    Untracked:  output/genes_of_interest_plot_counts_signals.csv
+    Untracked:  output/res_aff_vs_unaff_df_sub_genename_padj05_lfc1.csv
+    Untracked:  output/res_aff_vs_unaff_df_sub_genename_padj1_lfc1.csv
+    Untracked:  output/significant_plot_counts_signals.csv
+
+Unstaged changes:
+    Modified:   analysis/subsetted-condition-analysis.Rmd
+    Modified:   output/res_aff_vs_unaff_df_sub_genename.csv
+    Modified:   output/res_aff_vs_unaff_df_sub_genename_05.csv
+    Modified:   output/res_aff_vs_unaff_df_sub_genename_padj1.csv
+    Modified:   output/res_aff_vs_unaff_significant_subsetted_mygene.csv
+    Modified:   output/res_aff_vs_unaff_significant_subsetted_samples.csv
+    Modified:   output/res_aff_vs_unaff_sub.csv
+    Modified:   output/stringdb_combined_enrichment.csv
+    Modified:   renv.lock
+
+</code></pre>
+<p>
+Note that any generated files, e.g. HTML, png, CSS, etc., are not
+included in this status report because it is ok for generated content to
+have uncommitted changes.
+</p>
+</div>
+</div>
+</div>
+</div>
+<hr>
+</div>
+<div id="versions" class="tab-pane fade">
+
+<p>
+These are the previous versions of the repository in which changes were
+made to the R Markdown
+(<code>analysis/all-condition-analysis.Rmd</code>) and HTML
+(<code>docs/all-condition-analysis.html</code>) files. If you’ve
+configured a remote Git repository (see <code>?wflow_git_remote</code>),
+click on the hyperlinks in the table below to view the files as they
+were in that past version.
+</p>
+<div class="table-responsive">
+<table class="table table-condensed table-hover">
+<thead>
+<tr>
+<th>
+File
+</th>
+<th>
+Version
+</th>
+<th>
+Author
+</th>
+<th>
+Date
+</th>
+<th>
+Message
+</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>
+Rmd
+</td>
+<td>
+<a href="https://github.com/uab-cgds-worthey/mecfs-dge-analysis/blob/f63a062618aaecafb47c3132a6ed18b708808237/analysis/all-condition-analysis.Rmd" target="_blank">f63a062</a>
+</td>
+<td>
+sdhutchins
+</td>
+<td>
+2024-07-15
+</td>
+<td>
+Add analysis for all samples.
+</td>
+</tr>
+</tbody>
+</table>
+</div>
+<hr>
+</div>
+</div>
+</div>
+<div id="dge-analysis-setup" class="section level1">
+<h1>DGE Analysis Setup</h1>
+<p>Ensure you have all necessary libraries installed and load the helper
+code.</p>
+<p>At a later date, <code>renv</code> will be integrated to ensure
+reproducibility of this analysis.</p>
+<p>Use the below code to install these packages:</p>
+<pre><code># Install packages from CRAN
+install.packages(c(&quot;tidyverse&quot;, &quot;RColorBrewer&quot;, &quot;pheatmap&quot;, &quot;gprofiler2&quot;, &quot;plotly&quot;, &quot;ggupset&quot;, 
+                   &quot;data.table&quot;, &quot;lubridate&quot;, &quot;reshape2&quot;, &quot;viridis&quot;, &quot;scales&quot;, &quot;cowplot&quot;, 
+                   &quot;patchwork&quot;, &quot;ggrepel&quot;, &quot;ggpubr&quot;, &quot;forcats&quot;, &quot;readxl&quot;, &quot;openxlsx&quot;, 
+                   &quot;rmarkdown&quot;))
+
+# Install packages from Bioconductor
+install.packages(&quot;BiocManager&quot;)
+BiocManager::install(c(&quot;DESeq2&quot;, &quot;genefilter&quot;, &quot;limma&quot;, &quot;biomaRt&quot;, &quot;mygene&quot;, 
+                       &quot;edgeR&quot;, &quot;ComplexHeatmap&quot;, &quot;clusterProfiler&quot;, &quot;AnnotationDbi&quot;, 
+                       &quot;pathview&quot;, &quot;org.Hs.eg.db&quot;, &quot;ReactomePA&quot;, &quot;DOSE&quot;, &quot;enrichR&quot;, 
+                       &quot;STRINGdb&quot;))</code></pre>
+<pre class="r"><code>library(tidyverse) # Available via CRAN
+library(DESeq2) # Available via Bioconductor
+library(RColorBrewer) # Available via CRAN
+library(pheatmap) # Available via CRAN
+library(genefilter) # Available via Bioconductor
+library(limma) # Available via Bioconductor
+library(gprofiler2) # Available via CRAN
+library(biomaRt) # Available via Bioconductor
+library(plotly) # Available via CRAN
+library(ggpubr) # Available via CRAN
+library(rmarkdown) # Available via CRAN
+library(clusterProfiler) # Available via Bioconductor
+library(org.Hs.eg.db) # Available via Bioconductor
+library(ggrepel) # Available via CRAN
+library(ReactomePA) # Available via Bioconductor
+library(mygene) # Available via Bioconductor
+library(DOSE) # Available via Bioconductor
+library(enrichR) # Available via Bioconductor
+library(STRINGdb) # Available via Bioconductor
+library(EnhancedVolcano)
+library(ComplexHeatmap)</code></pre>
+<div id="data-import" class="section level2">
+<h2>Data Import</h2>
+<p>We will be importing counts data from the star-salmon pipeline and
+our metadata for the project which is hosted on Box. This also ensures
+data is properly ordered by sample id.</p>
+<pre class="r"><code>counts &lt;- read_tsv(&quot;data/star-salmon/salmon.merged.gene_counts_length_scaled.tsv&quot;)
+
+# Remove RNU genes
+#genestoremove &lt;- c(&#39;RNU1-1&#39;, &#39;RNU1-3&#39;, &#39;RNVU1-18&#39;)
+#counts &lt;- counts[!counts$gene_name %in% genestoremove,]
+
+# Import variants of interest
+genes_of_interest &lt;- read_csv(&quot;data/Prioritized_Genes_From_WGS_2024_04_25.csv&quot;)
+genes_of_interest &lt;- unique(genes_of_interest$Genes)
+genes_of_interest &lt;- genes_of_interest[!is.na(genes_of_interest)]
+
+# Add UPF1 to check expression levels
+genes_of_interest &lt;- c(genes_of_interest, &quot;UPF1&quot;)
+
+# Use first column (gene_id) for row names
+counts &lt;- data.frame(counts, row.names = 1)
+counts$Ensembl_ID &lt;- row.names(counts)
+drop &lt;- c(&quot;Ensembl_ID&quot;, &quot;gene_name&quot;)
+gene_info &lt;- counts[, drop]
+counts &lt;- counts[, !(names(counts) %in% drop)] # remove both columns
+
+# Import metadata
+sample_metadata &lt;- read_csv(&quot;data/Metadata_2024_03_14.csv&quot;)
+row.names(sample_metadata) &lt;- sample_metadata$ID
+
+# Assuming counts is your counts dataframe and sample_metadata is your metadata dataframe
+# Call the function with the appropriate column names
+counts &lt;- rename_counts_columns(counts, sample_metadata, &quot;ID&quot;, &quot;RNA_Samples_id&quot;)
+
+# Check that data is ordered properly
+sample_metadata &lt;- check_order(sample_metadata = sample_metadata, counts = counts)
+
+genes_biomart &lt;- retrieve_gene_info(values = gene_info$Ensembl_ID, filters = &quot;ensembl_gene_id_version&quot;)</code></pre>
+</div>
+<div id="deseq2-analysis" class="section level2">
+<h2>DESeq2 Analysis</h2>
+<pre class="r"><code>sample_metadata$Family &lt;- factor(sample_metadata$Family)
+sample_metadata$Affected &lt;- factor(sample_metadata$Affected)
+sample_metadata$Batch &lt;- factor(sample_metadata$Batch)
+sample_metadata$Sex &lt;- factor(sample_metadata$Sex)
+sample_metadata$Ancestry &lt;- factor(sample_metadata$Ancestry)
+sample_metadata$SubCategory &lt;- factor(sample_metadata$SubCategory)
+sample_metadata$Category &lt;- factor(sample_metadata$Category)
+
+# Account for Family later but batch is accounted for
+# Accounting for another factor seems to be an issue.
+dds &lt;- DESeqDataSetFromMatrix(
+  countData = round(counts), colData = sample_metadata,
+  design = ~ Batch + Affected
+)
+
+# Pre-filtering: Keep only rows that have at least 10 reads total
+keep &lt;- rowSums(counts(dds)) &gt;= 50
+dds &lt;- dds[keep, ]
+
+# Remove samples from family&#39;s with multiple samples
+#remove_multiple_fam &lt;- c(&quot;8&quot;, &quot;12&quot;, &quot;19&quot;, &quot;21&quot;, &quot;23&quot;, &quot;27&quot;)
+
+# Save excluded/removed samples
+# Code is commented out since this is for 1 time usage
+# excluded_samples_df &lt;- filter(sample_metadata,
+#                        ID %in% remove_multiple_fam)
+# write.csv(excluded_samples_df, &quot;data/excluded_samples_df.csv&quot;)
+
+# Create a logical vector to index the columns you want to keep
+#kept_fam_members &lt;- !(colnames(dds) %in% remove_multiple_fam)
+#dds &lt;- dds[, kept_fam_members]
+
+# Run DESeq function
+dds &lt;- DESeq(dds)
+
+# Normalize gene counts for differences in seq. depth/global differences
+counts_norm &lt;- counts(dds, normalized = TRUE)</code></pre>
+<div id="data-transformation-and-visualization" class="section level3">
+<h3>Data transformation and visualization</h3>
+<p>Perform count data transformation by variance stabilizing
+transformation (vst) on normalized counts.</p>
+<pre class="r"><code>vsd &lt;- vst(dds, blind = FALSE)</code></pre>
+</div>
+<div id="batch-correction-with-limma" class="section level3">
+<h3>Batch correction with limma</h3>
+<pre class="r"><code>counts_vst &lt;- assay(vsd)
+write.csv(counts_vst, file = &quot;output/counts_vst_all.csv&quot;)
+mm &lt;- model.matrix(~ Batch + Affected, colData(vsd))
+
+counts_vst_limma &lt;- limma::removeBatchEffect(counts_vst, batch = vsd$Batch, 
+                                             design = mm)</code></pre>
+<pre><code>Coefficients not estimable: batch1 batch2 </code></pre>
+<pre class="r"><code>write.csv(counts_vst_limma, file = &quot;output/counts_vst_limma_all.csv&quot;)
+
+vsd_limma &lt;- vsd
+assay(vsd_limma) &lt;- counts_vst_limma</code></pre>
+</div>
+<div id="sample-distances-heatmap" class="section level3">
+<h3>Sample distances heatmap</h3>
+<pre class="r"><code>sample_dists_all &lt;- dist(t(assay(vsd_limma)))
+sample_dist_matrix_all &lt;- as.matrix(sample_dists_all)
+rownames(sample_dist_matrix_all) &lt;- paste(vsd_limma$Batch, vsd_limma$Affected, 
+                                          sep = &quot; | &quot;)
+colnames(sample_dist_matrix_all) &lt;- paste(vsd_limma$ID, vsd_limma$Affected, 
+                                          sep = &quot; | &quot;)
+colors &lt;- colorRampPalette(rev(brewer.pal(9, &quot;Blues&quot;)))(255)
+
+pheatmap(sample_dist_matrix_all, clustering_distance_rows = sample_dists_all, 
+         clustering_distance_cols = sample_dists_all, col = colors)</code></pre>
+<p><img src="figure/all-condition-analysis.Rmd/sample-dist-heatmap-1.png" width="672" style="display: block; margin: auto;" /></p>
+</div>
+<div id="principal-components-analysis" class="section level3">
+<h3>Principal Components Analysis</h3>
+<p>Our below PCA shows that there does not seem to be a batch-related
+effect occurring after using limma. However, we can see that our 3 male
+samples are grouping. Given this knowledge, removing them from
+downstream analyses is the best option.</p>
+<pre class="r"><code>pca_data_all &lt;- plotPCA(vsd_limma, intgroup = c(&quot;Batch&quot;, &quot;Affected&quot;, &quot;Sex&quot;), 
+                        returnData = TRUE)
+percent_var_all &lt;- round(100 * attr(pca_data_all, &quot;percentVar&quot;))
+
+ggplot(pca_data_all, aes(PC1, PC2)) +
+  geom_point(aes(colour = Affected, fill = Sex, shape = Batch), size = 4) +
+  scale_shape_manual(values = c(21, 22, 23)) +
+  scale_fill_manual(values = c(&quot;white&quot;, &quot;gray&quot;)) +
+  scale_color_manual(values = c(&quot;blue&quot;, &quot;red&quot;)) +
+  geom_text(aes(label = name),
+    data = subset(pca_data_all, PC2 &lt; -18 | PC1 &lt; -30),
+    vjust = -1, hjust = 0.5, size = 2.5
+  ) +
+  xlab(paste0(&quot;PC1: &quot;, percent_var_all[1], &quot;% variance&quot;)) +
+  ylab(paste0(&quot;PC2: &quot;, percent_var_all[2], &quot;% variance&quot;)) +
+  coord_fixed()</code></pre>
+<p><img src="figure/all-condition-analysis.Rmd/principal-components-analysis-all-1.png" width="672" style="display: block; margin: auto;" /></p>
+<pre class="r"><code>pca_data_all &lt;- plotPCA(vsd_limma, intgroup = c(&quot;Affected&quot;, &quot;Sex&quot;, 
+                                                &quot;Category&quot;),
+                        returnData = TRUE)
+percent_var_all &lt;- round(100 * attr(pca_data_all, &quot;percentVar&quot;))
+
+ggplot(pca_data_all, aes(PC1, PC2)) +
+  geom_point(aes(colour = Category, fill = Sex, shape = Affected), size = 4) +
+  scale_shape_manual(values = c(21, 22, 23)) +
+  scale_fill_manual(values = c(&quot;white&quot;, &quot;gray&quot;)) +
+  geom_text(aes(label = name), vjust = -1, hjust = 0.65, size = 5) +
+  # geom_text_repel(aes(label = name), size = 5, vjust = -1, hjust = -0.65) +
+  xlab(paste0(&quot;PC1: &quot;, percent_var_all[1], &quot;% variance&quot;)) +
+  ylab(paste0(&quot;PC2: &quot;, percent_var_all[2], &quot;% variance&quot;)) +
+  coord_fixed()</code></pre>
+<p><img src="figure/all-condition-analysis.Rmd/principal-components-analysis-combocategory-all-1.png" width="672" style="display: block; margin: auto;" /></p>
+<pre class="r"><code>pca_data &lt;- plotPCA(vsd_limma, intgroup = c(&quot;Sex&quot;, &quot;Affected&quot;), returnData = TRUE)
+percent_var &lt;- round(100 * attr(pca_data, &quot;percentVar&quot;))
+
+ggplot(pca_data, aes(PC1, PC2)) +
+  geom_point(aes(shape = Sex, colour = Affected), size = 5) +
+  scale_color_manual(
+    values = c(&quot;blue&quot;, &quot;red&quot;),
+    name = &quot;Affected Status&quot;,
+    labels = c(&quot;Unaffected&quot;, &quot;Affected&quot;)
+  ) +
+  scale_shape_manual(
+    name = &quot;Sex&quot;,
+    labels = c(&quot;Male&quot;, &quot;Female&quot;),
+    values = c(16, 17)
+  ) + # Example shapes, change as needed
+  geom_text_repel(aes(label = name), size = 5, vjust = -2, hjust = -0.65) +
+  xlab(paste0(&quot;PC1: &quot;, percent_var[1], &quot;% variance&quot;)) +
+  ylab(paste0(&quot;PC2: &quot;, percent_var[2], &quot;% variance&quot;)) +
+  coord_fixed()</code></pre>
+<p><img src="figure/all-condition-analysis.Rmd/principal-components-analysis-all-affected-status-1.png" width="672" style="display: block; margin: auto;" /></p>
+<pre class="r"><code>pca_data_all &lt;- plotPCA(vsd_limma, intgroup = c(&quot;Category&quot;), 
+                        returnData = TRUE)
+percent_var_all &lt;- round(100 * attr(pca_data_all, &quot;percentVar&quot;))
+
+ggplot(pca_data_all, aes(PC1, PC2)) +
+  geom_point(aes(colour = Category), size = 5) +
+  scale_colour_manual(
+    values = c(
+      &quot;#B3DE69&quot;, &quot;#FFFFB3&quot;, &quot;#BEBADA&quot;, &quot;#FB8072&quot;, &quot;#80B1D3&quot;,
+      &quot;#FCCDE5&quot;, &quot;#8DD3C7&quot;, &quot;#FDB462&quot;, &quot;#000000&quot;
+    ),
+    name = &quot;Category&quot;
+  ) +
+  # geom_text(aes(label = name), vjust = -.75, hjust = -.5, size = 3) +
+  # geom_text_repel(aes(label = name), size = 5, vjust = -2, hjust = -0.65) +
+  geom_text_repel(aes(label = name), size = 3) +
+  xlab(paste0(&quot;PC1: &quot;, percent_var_all[1], &quot;% variance&quot;)) +
+  ylab(paste0(&quot;PC2: &quot;, percent_var_all[2], &quot;% variance&quot;)) +
+  ggthemes::theme_clean()</code></pre>
+<p><img src="figure/all-condition-analysis.Rmd/principal-components-analysis-all-category-1.png" width="672" style="display: block; margin: auto;" /></p>
+</div>
+<div id="heatmap-of-all-genes-top-50-top-100-genes"
+class="section level3">
+<h3>Heatmap of all genes, top 50 &amp; top 100 genes</h3>
+<pre class="r"><code># Specify annotation colors by columns
+# Use RColorBrewer::brewer.pal(n=10, name=&quot;Set1&quot;)
+category_colors &lt;- c(
+  &quot;Autoimmune disorder&quot; = &quot;#B3DE69&quot;,
+  &quot;Immunodeficiency&quot; = &quot;#FFFFB3&quot;,
+  &quot;Channelopathy&quot; = &quot;#BEBADA&quot;,
+  &quot;Inflammatory disorder&quot; = &quot;#FB8072&quot;,
+  &quot;Metabolic disorder&quot; = &quot;#80B1D3&quot;,
+  &quot;Mitochondrial disorder&quot; = &quot;#FCCDE5&quot;,
+  &quot;Neurologic disorder&quot; = &quot;#D9D9D9&quot;,
+  &quot;Myasthenic disorder&quot; = &quot;#FDB462&quot;,
+  &quot;Neuropathy&quot; = &quot;#8DD3C7&quot;,
+  &quot;Unaffected&quot; = &quot;darkgrey&quot;
+)
+
+combined_category_colors &lt;- c(
+  &quot;E&quot; = &quot;#E41A1C&quot;, # Dark green
+  &quot;C-I&quot; = &quot;#377EB8&quot;, # Dark orange
+  &quot;E-I&quot; = &quot;#4DAF4A&quot;, # Light purple
+  &quot;C&quot; = &quot;#984EA3&quot;, # Magenta
+  &quot;I&quot; = &quot;#FF7F00&quot;, # Light green
+  &quot;C-E&quot; = &quot;#FFFF33&quot;, # Mustard yellow
+  &quot;S&quot; = &quot;#F781BF&quot;, # Brown
+  &quot;C-E-I&quot; = &quot;#8DD3C7&quot;,
+  &quot;Unaffected&quot; = &quot;darkgray&quot; # Dark grey
+)
+
+
+# Specify colors
+ann_colors &lt;- list(
+  Batch = c(B1 = &quot;purple&quot;, B2 = &quot;firebrick&quot;, B3 = &quot;yellow&quot;),
+  Affected = c(Affected = &quot;green&quot;, Unaffected = &quot;navy&quot;),
+  SubCategory = category_colors,
+  Category = combined_category_colors
+)
+
+ann_colors2 &lt;- list(
+  Batch = c(B1 = &quot;purple&quot;, B2 = &quot;firebrick&quot;, B3 = &quot;yellow&quot;),
+  Affected = c(Affected = &quot;green&quot;, Unaffected = &quot;navy&quot;),
+  SubCategory = category_colors,
+  Category = combined_category_colors
+)</code></pre>
+<p>This is a heatmap of the top 50 genes with the highest variance
+across samples</p>
+<pre class="r"><code>top_var_genes &lt;- head(order(-rowVars(assay(vsd_limma))), 50)
+mat &lt;- assay(vsd_limma)[top_var_genes, ]
+mat &lt;- mat - rowMeans(mat)
+df &lt;- as.data.frame(colData(vsd_limma)[, c(&quot;Batch&quot;, &quot;Affected&quot;, &quot;Category&quot;)])
+
+ensembl_to_gene &lt;- setNames(gene_info$gene_name, gene_info$Ensembl_ID)
+
+# Get the current row names of the matrix &#39;mat&#39;
+current_ensembl_ids &lt;- rownames(mat)
+
+# Find the corresponding gene names for the Ensembl IDs
+new_row_names &lt;- ensembl_to_gene[current_ensembl_ids]
+
+# Set the new row names for the matrix &#39;mat&#39;
+rownames(mat) &lt;- new_row_names
+
+ComplexHeatmap::pheatmap(mat,
+  annotation_col = df, annotation_colors = ann_colors2,
+  fontsize = 5, angle_col = c(&quot;0&quot;)
+)</code></pre>
+<p><img src="figure/all-condition-analysis.Rmd/top50-heatmap-batch-combined-1.png" width="800px" height="570px" style="display: block; margin: auto;" /></p>
+<p>This is a heatmap of the top 50 genes with the highest variance
+across all samples.</p>
+<pre class="r"><code>top_var_genes_all &lt;- head(order(-rowVars(assay(vsd_limma))), 50)
+mat_all &lt;- assay(vsd_limma)[top_var_genes_all, ]
+mat_all &lt;- mat_all - rowMeans(mat_all)
+df_all &lt;- as.data.frame(colData(vsd_limma)[, c(&quot;Batch&quot;, &quot;Affected&quot;, &quot;SubCategory&quot;)])
+df_affcat &lt;- as.data.frame(colData(vsd_limma)[, c(&quot;Affected&quot;, &quot;Category&quot;)])
+
+ensembl_to_gene &lt;- setNames(gene_info$gene_name, gene_info$Ensembl_ID)
+
+# Get the current row names of the matrix &#39;mat&#39;
+current_ensembl_ids_all &lt;- rownames(mat_all)
+
+# Find the corresponding gene names for the Ensembl IDs
+new_row_names_all &lt;- ensembl_to_gene[current_ensembl_ids_all]
+
+# Set the new row names for the matrix &#39;mat&#39;
+rownames(mat_all) &lt;- new_row_names_all
+
+pheatmap(mat_all, annotation_col = df_all, annotation_colors = ann_colors, 
+         fontsize = 5)</code></pre>
+<p><img src="figure/all-condition-analysis.Rmd/top50-heatmap-all-1.png" width="800px" height="570px" style="display: block; margin: auto;" /></p>
+<pre class="r"><code>pheatmap(mat_all, annotation_col = df_affcat, annotation_colors = ann_colors2, 
+         fontsize = 5)</code></pre>
+<p><img src="figure/all-condition-analysis.Rmd/top50-heatmap-all-2.png" width="800px" height="570px" style="display: block; margin: auto;" /></p>
+<p>This is a heatmap of the top 100 genes with the highest variance
+across</p>
+<pre class="r"><code>top_var_genes_100_all &lt;- head(order(-rowVars(assay(vsd_limma))), 100)
+mat_100_all &lt;- assay(vsd_limma)[top_var_genes_100_all, ]
+mat_100_all &lt;- mat_100_all - rowMeans(mat_100_all)
+df_100_all &lt;- as.data.frame(colData(vsd_limma)[, c(&quot;Affected&quot;, &quot;SubCategory&quot;)])
+
+ensembl_to_gene &lt;- setNames(gene_info$gene_name, gene_info$Ensembl_ID)
+
+# Get the current row names of the matrix &#39;mat&#39;
+current_ensembl_ids_100_all &lt;- rownames(mat_100_all)
+
+# Find the corresponding gene names for the Ensembl IDs
+new_row_names_100_all &lt;- ensembl_to_gene[current_ensembl_ids_100_all]
+
+# Set the new row names for the matrix &#39;mat&#39;
+rownames(mat_100_all) &lt;- new_row_names_100_all
+
+pheatmap(mat_100_all, annotation_col = df_100_all, 
+         annotation_colors = ann_colors2, fontsize = 6)</code></pre>
+<p><img src="figure/all-condition-analysis.Rmd/top100-heatmap-all-1.png" width="1200px" style="display: block; margin: auto;" /></p>
+</div>
+<div id="comparisoncontrast-of-affected_affected_vs_unaffected"
+class="section level3">
+<h3>Comparison/Contrast of Affected_Affected_vs_Unaffected</h3>
+<pre class="r"><code>res_aff_vs_unaff_sub &lt;- results(dds, contrast = c(&quot;Affected&quot;, &quot;Affected&quot;, &quot;Unaffected&quot;))
+res_aff_vs_unaff_df_sub &lt;- process_and_save_results(
+  res_aff_vs_unaff_sub,
+  &quot;output/res_aff_vs_unaff_sub.csv&quot;
+)
+res_aff_vs_unaff_df_sub &lt;- arrange(res_aff_vs_unaff_df_sub, padj)
+res_aff_vs_unaff_df_05_sub &lt;- subset(res_aff_vs_unaff_df_sub, padj &lt; 0.05)
+res_aff_vs_unaff_df_1_sub &lt;- subset(res_aff_vs_unaff_df_sub, padj &lt; 0.1)
+
+res_aff_vs_unaff_df_padj1_lfc1_sub &lt;- subset(res_aff_vs_unaff_df_1_sub, log2FoldChange &gt;= 1 | log2FoldChange &lt;= -1)
+
+summary(res_aff_vs_unaff_sub)</code></pre>
+<pre><code>
+out of 24626 with nonzero total read count
+adjusted p-value &lt; 0.1
+LFC &gt; 0 (up)       : 34, 0.14%
+LFC &lt; 0 (down)     : 31, 0.13%
+outliers [1]       : 104, 0.42%
+low counts [2]     : 2, 0.0081%
+(mean count &lt; 0)
+[1] see &#39;cooksCutoff&#39; argument of ?results
+[2] see &#39;independentFiltering&#39; argument of ?results</code></pre>
+<pre class="r"><code>topgenes_byensemblid_sub &lt;- head(rownames(res_aff_vs_unaff_df_sub), 100)
+topgenes_aff_vs_unaff_05_sub &lt;- assay(vsd_limma)[topgenes_byensemblid_sub, ]
+topgenes_aff_vs_unaff_05_sub &lt;- topgenes_aff_vs_unaff_05_sub - rowMeans(topgenes_aff_vs_unaff_05_sub)
+
+ensembl_to_gene_sub &lt;- setNames(gene_info$gene_name, gene_info$Ensembl_ID)
+
+# Get the current row names of the matrix &#39;mat&#39;
+current_ensembl_ids_sub &lt;- rownames(topgenes_aff_vs_unaff_05_sub)
+
+# Find the corresponding gene names for the Ensembl IDs
+new_row_names_sub &lt;- ensembl_to_gene_sub[current_ensembl_ids_sub]
+
+# Set the new row names for the matrix &#39;mat&#39;
+rownames(topgenes_aff_vs_unaff_05_sub) &lt;- new_row_names_sub
+
+topgenes_aff_vs_unaff_05_sub &lt;- topgenes_aff_vs_unaff_05_sub[order(row.names(topgenes_aff_vs_unaff_05_sub)), ]
+
+df_sub &lt;- as.data.frame(colData(vsd_limma)[, c(&quot;Affected&quot;, &quot;Category&quot;)])
+pheatmap(topgenes_aff_vs_unaff_05_sub, annotation_col = df_sub, annotation_colors = ann_colors2, fontsize = 5, angle_col = c(&quot;0&quot;))</code></pre>
+<p><img src="figure/all-condition-analysis.Rmd/top-100-genes-deseq-all-1.png" width="800px" height="570px" style="display: block; margin: auto;" /></p>
+<pre class="r"><code>topgenes_byensemblid_sub &lt;- head(rownames(res_aff_vs_unaff_df_sub), 100)
+topgenes_aff_vs_unaff_05_sub &lt;- assay(vsd_limma)[topgenes_byensemblid_sub, ]
+topgenes_aff_vs_unaff_05_sub &lt;- topgenes_aff_vs_unaff_05_sub - rowMeans(topgenes_aff_vs_unaff_05_sub)
+
+ensembl_to_gene_sub &lt;- setNames(gene_info$gene_name, gene_info$Ensembl_ID)
+
+# Get the current row names of the matrix &#39;mat&#39;
+current_ensembl_ids_sub &lt;- rownames(topgenes_aff_vs_unaff_05_sub)
+
+# Find the corresponding gene names for the Ensembl IDs
+new_row_names_sub &lt;- ensembl_to_gene_sub[current_ensembl_ids_sub]
+
+# Set the new row names for the matrix &#39;mat&#39;
+rownames(topgenes_aff_vs_unaff_05_sub) &lt;- new_row_names_sub
+
+topgenes_aff_vs_unaff_05_sub &lt;- topgenes_aff_vs_unaff_05_sub[order(row.names(topgenes_aff_vs_unaff_05_sub)), ]
+
+df_sub &lt;- as.data.frame(colData(vsd_limma)[, c(&quot;Affected&quot;, &quot;SubCategory&quot;, &quot;Category&quot;)])
+pheatmap(topgenes_aff_vs_unaff_05_sub, annotation_col = df_sub, annotation_colors = ann_colors2, fontsize = 5, angle_col = c(&quot;0&quot;))</code></pre>
+<p><img src="figure/all-condition-analysis.Rmd/top-100-genes-deseq-all-subcategory-1.png" width="800px" height="570px" style="display: block; margin: auto;" /></p>
+<pre class="r"><code>topgenes_byensemblid_sub &lt;- head(rownames(res_aff_vs_unaff_df_sub), 50)
+topgenes_aff_vs_unaff_05_sub &lt;- assay(vsd_limma)[topgenes_byensemblid_sub, ]
+topgenes_aff_vs_unaff_05_sub &lt;- topgenes_aff_vs_unaff_05_sub - rowMeans(topgenes_aff_vs_unaff_05_sub)
+
+ensembl_to_gene_sub &lt;- setNames(gene_info$gene_name, gene_info$Ensembl_ID)
+
+# Get the current row names of the matrix &#39;mat&#39;
+current_ensembl_ids_sub &lt;- rownames(topgenes_aff_vs_unaff_05_sub)
+
+# Find the corresponding gene names for the Ensembl IDs
+new_row_names_sub &lt;- ensembl_to_gene_sub[current_ensembl_ids_sub]
+
+# Set the new row names for the matrix &#39;mat&#39;
+rownames(topgenes_aff_vs_unaff_05_sub) &lt;- new_row_names_sub
+
+topgenes_aff_vs_unaff_05_sub &lt;- topgenes_aff_vs_unaff_05_sub[order(row.names(topgenes_aff_vs_unaff_05_sub)), ]
+
+df_sub &lt;- df &lt;- colData(vsd_limma) %&gt;%
+  as.data.frame() %&gt;%
+  dplyr::select(Category)
+pheatmap(topgenes_aff_vs_unaff_05_sub, annotation_col = df_sub, annotation_colors = ann_colors2, fontsize = 5, angle_col = c(&quot;0&quot;))</code></pre>
+<p><img src="figure/all-condition-analysis.Rmd/top-50-genes-deseq-all-1.png" width="800px" height="570px" style="display: block; margin: auto;" /></p>
+<pre class="r"><code>topgenes_byensemblid_sub &lt;- head(rownames(res_aff_vs_unaff_df_sub), 50)
+topgenes_aff_vs_unaff_05_sub &lt;- assay(vsd_limma)[topgenes_byensemblid_sub, ]
+topgenes_aff_vs_unaff_05_sub &lt;- topgenes_aff_vs_unaff_05_sub - rowMeans(topgenes_aff_vs_unaff_05_sub)
+
+ensembl_to_gene_sub &lt;- setNames(gene_info$gene_name, gene_info$Ensembl_ID)
+
+# Get the current row names of the matrix &#39;mat&#39;
+current_ensembl_ids_sub &lt;- rownames(topgenes_aff_vs_unaff_05_sub)
+
+# Find the corresponding gene names for the Ensembl IDs
+new_row_names_sub &lt;- ensembl_to_gene_sub[current_ensembl_ids_sub]
+
+# Set the new row names for the matrix &#39;mat&#39;
+rownames(topgenes_aff_vs_unaff_05_sub) &lt;- new_row_names_sub
+
+topgenes_aff_vs_unaff_05_sub &lt;- topgenes_aff_vs_unaff_05_sub[order(row.names(topgenes_aff_vs_unaff_05_sub)), ]
+
+df_sub &lt;- df &lt;- colData(vsd_limma) %&gt;%
+  as.data.frame() %&gt;%
+  dplyr::select(Affected, SubCategory, Category)
+pheatmap(topgenes_aff_vs_unaff_05_sub,
+  annotation_col = df_sub,
+  annotation_colors = ann_colors2, fontsize = 5, angle_col =c(&quot;0&quot;)
+)</code></pre>
+<p><img src="figure/all-condition-analysis.Rmd/top-50-genes-deseq-all-subcategory-1.png" width="800px" height="570px" style="display: block; margin: auto;" /></p>
+</div>
+</div>
+<div id="heatmap-of-significant-genes" class="section level2">
+<h2>Heatmap of Significant Genes</h2>
+<pre class="r"><code># Assuming &#39;res_aff_vs_unaff_df_sub&#39; has a column &#39;padj&#39; for adjusted p-values or &#39;pvalue&#39; for p-values
+# Ensure the row names of &#39;res_aff_vs_unaff_df_sub&#39; are Ensembl IDs
+res_aff_vs_unaff_df_sub &lt;- res_aff_vs_unaff_df_sub[order(res_aff_vs_unaff_df_sub$padj), ]
+
+# Get the top 50 most significant genes based on adjusted p-values
+topgenes_byensemblid_sub &lt;- head(rownames(res_aff_vs_unaff_df_sub), 50)
+
+# Extract the corresponding subset of the data matrix
+topgenes_aff_vs_unaff_05_sub &lt;- assay(vsd_limma)[topgenes_byensemblid_sub, ]
+
+# Normalize by subtracting the row means
+topgenes_aff_vs_unaff_05_sub &lt;- topgenes_aff_vs_unaff_05_sub - rowMeans(topgenes_aff_vs_unaff_05_sub)
+
+# Map Ensembl IDs to gene names
+ensembl_to_gene_sub &lt;- setNames(gene_info$gene_name, gene_info$Ensembl_ID)
+current_ensembl_ids_sub &lt;- rownames(topgenes_aff_vs_unaff_05_sub)
+new_row_names_sub &lt;- ensembl_to_gene_sub[current_ensembl_ids_sub]
+rownames(topgenes_aff_vs_unaff_05_sub) &lt;- new_row_names_sub
+
+# Order the matrix based on significance (most significant to least significant)
+topgenes_aff_vs_unaff_05_sub &lt;- topgenes_aff_vs_unaff_05_sub[order(res_aff_vs_unaff_df_sub$padj[topgenes_byensemblid_sub]), ]
+
+df_sub &lt;- df &lt;- colData(vsd_limma) %&gt;%
+  as.data.frame() %&gt;%
+  dplyr::select(Category)
+
+png(&quot;output/Supplemental Figure 3 - Significant DEGs.png&quot;,width=12,height=10,units=&quot;in&quot;,res=1200)
+
+draw(ComplexHeatmap::pheatmap(topgenes_aff_vs_unaff_05_sub, color = colorRampPalette(rev(brewer.pal(n = 9, name =
+  &quot;RdYlBu&quot;)))(50), annotation_col = df_sub, annotation_colors = ann_colors2, fontsize = 6, angle_col = c(&quot;0&quot;), cellheight = 10, cellwidth = 24, border_color = &quot;black&quot;, heatmap_legend_param = list(
+        title = &quot;&quot;
+    )))
+dev.off()</code></pre>
+<pre><code>quartz_off_screen 
+                2 </code></pre>
+<pre class="r"><code># Assuming &#39;res_aff_vs_unaff_df_sub&#39; has a column &#39;padj&#39; for adjusted p-values or &#39;pvalue&#39; for p-values
+# Ensure the row names of &#39;res_aff_vs_unaff_df_sub&#39; are Ensembl IDs
+res_aff_vs_unaff_df_sub &lt;- res_aff_vs_unaff_df_sub[order(res_aff_vs_unaff_df_sub$padj), ]
+
+# Get the most significant genes based on adjusted p-values and log2foldchange of 1
+topgenes_byensemblid_sub &lt;- rownames(res_aff_vs_unaff_df_padj1_lfc1_sub)
+
+
+# Extract the corresponding subset of the data matrix
+topgenes_aff_vs_unaff_05_sub &lt;- assay(vsd_limma)[topgenes_byensemblid_sub, ]
+
+# Normalize by subtracting the row means
+topgenes_aff_vs_unaff_05_sub &lt;- topgenes_aff_vs_unaff_05_sub - rowMeans(topgenes_aff_vs_unaff_05_sub)
+
+# Map Ensembl IDs to gene names
+ensembl_to_gene_sub &lt;- setNames(gene_info$gene_name, gene_info$Ensembl_ID)
+current_ensembl_ids_sub &lt;- rownames(topgenes_aff_vs_unaff_05_sub)
+new_row_names_sub &lt;- ensembl_to_gene_sub[current_ensembl_ids_sub]
+rownames(topgenes_aff_vs_unaff_05_sub) &lt;- new_row_names_sub
+
+# Order the matrix based on significance (most significant to least significant)
+topgenes_aff_vs_unaff_05_sub &lt;- topgenes_aff_vs_unaff_05_sub[order(res_aff_vs_unaff_df_sub$padj[topgenes_byensemblid_sub]), ]
+
+df_sub &lt;- df &lt;- colData(vsd_limma) %&gt;%
+  as.data.frame() %&gt;%
+  dplyr::select(Category)
+
+ComplexHeatmap::pheatmap(topgenes_aff_vs_unaff_05_sub, color = colorRampPalette(rev(brewer.pal(n = 9, name =
+  &quot;RdYlBu&quot;)))(50), annotation_col = df_sub, annotation_colors = ann_colors2, fontsize = 7, angle_col = c(&quot;0&quot;), cellheight = 10, cellwidth = 24, border_color = &quot;black&quot;, heatmap_legend_param = list(
+        title = &quot;&quot;
+    ))</code></pre>
+<p><img src="figure/all-condition-analysis.Rmd/significant-genes-deseq-all-lfc1-1.png" width="1200px" height="800px" style="display: block; margin: auto;" /></p>
+<pre class="r"><code>topgenes_byensemblid_sub &lt;- head(rownames(res_aff_vs_unaff_df_sub), 50)
+topgenes_aff_vs_unaff_05_sub &lt;- assay(vsd_limma)[topgenes_byensemblid_sub, ]
+topgenes_aff_vs_unaff_05_sub &lt;- topgenes_aff_vs_unaff_05_sub - rowMeans(topgenes_aff_vs_unaff_05_sub)
+
+ensembl_to_gene_sub &lt;- setNames(gene_info$gene_name, gene_info$Ensembl_ID)
+
+# Get the current row names of the matrix &#39;mat&#39;
+current_ensembl_ids_sub &lt;- rownames(topgenes_aff_vs_unaff_05_sub)
+
+# Find the corresponding gene names for the Ensembl IDs
+new_row_names_sub &lt;- ensembl_to_gene_sub[current_ensembl_ids_sub]
+
+# Set the new row names for the matrix &#39;mat&#39;
+rownames(topgenes_aff_vs_unaff_05_sub) &lt;- new_row_names_sub
+
+topgenes_aff_vs_unaff_05_sub &lt;- topgenes_aff_vs_unaff_05_sub[order(row.names(topgenes_aff_vs_unaff_05_sub)), ]
+
+df_sub &lt;- df &lt;- colData(vsd_limma) %&gt;%
+  as.data.frame() %&gt;%
+  dplyr::select(Affected, SubCategory, Category)
+pheatmap(topgenes_aff_vs_unaff_05_sub, annotation_col = df_sub, annotation_colors = ann_colors2, fontsize = 5, angle_col = c(&quot;0&quot;))</code></pre>
+<p><img src="figure/all-condition-analysis.Rmd/significant-genes-deseq-all-subcategory-1.png" width="800px" height="570px" style="display: block; margin: auto;" /></p>
+<pre class="r"><code>topgenes_byensemblid_sub &lt;- rownames(res_aff_vs_unaff_df_padj1_lfc1_sub)
+topgenes_aff_vs_unaff_05_sub &lt;- assay(vsd_limma)[topgenes_byensemblid_sub, ]
+topgenes_aff_vs_unaff_05_sub &lt;- topgenes_aff_vs_unaff_05_sub - rowMeans(topgenes_aff_vs_unaff_05_sub)
+
+ensembl_to_gene_sub &lt;- setNames(gene_info$gene_name, gene_info$Ensembl_ID)
+
+# Get the current row names of the matrix &#39;mat&#39;
+current_ensembl_ids_sub &lt;- rownames(topgenes_aff_vs_unaff_05_sub)
+
+# Find the corresponding gene names for the Ensembl IDs
+new_row_names_sub &lt;- ensembl_to_gene_sub[current_ensembl_ids_sub]
+
+# Set the new row names for the matrix &#39;mat&#39;
+rownames(topgenes_aff_vs_unaff_05_sub) &lt;- new_row_names_sub
+
+topgenes_aff_vs_unaff_05_sub &lt;- topgenes_aff_vs_unaff_05_sub[order(row.names(topgenes_aff_vs_unaff_05_sub)), ]
+
+df_sub &lt;- df &lt;- colData(vsd_limma) %&gt;%
+  as.data.frame() %&gt;%
+  dplyr::select(Affected, SubCategory, Category)
+pheatmap(topgenes_aff_vs_unaff_05_sub, annotation_col = df_sub, annotation_colors = ann_colors2, fontsize = 5, angle_col = c(&quot;0&quot;))</code></pre>
+<p><img src="figure/all-condition-analysis.Rmd/significant-genes-deseq-all-subcategory-lfc1-1.png" width="800px" height="570px" style="display: block; margin: auto;" /></p>
+<pre class="r"><code>topgenes_byensemblid_sub &lt;- head(rownames(res_aff_vs_unaff_df_sub), 75)
+topgenes_aff_vs_unaff_05_sub &lt;- assay(vsd_limma)[topgenes_byensemblid_sub, ]
+topgenes_aff_vs_unaff_05_sub &lt;- topgenes_aff_vs_unaff_05_sub - rowMeans(topgenes_aff_vs_unaff_05_sub)
+
+ensembl_to_gene_sub &lt;- setNames(gene_info$gene_name, gene_info$Ensembl_ID)
+
+# Get the current row names of the matrix &#39;mat&#39;
+current_ensembl_ids_sub &lt;- rownames(topgenes_aff_vs_unaff_05_sub)
+
+# Find the corresponding gene names for the Ensembl IDs
+new_row_names_sub &lt;- ensembl_to_gene_sub[current_ensembl_ids_sub]
+
+# Set the new row names for the matrix &#39;mat&#39;
+rownames(topgenes_aff_vs_unaff_05_sub) &lt;- new_row_names_sub
+
+topgenes_aff_vs_unaff_05_sub &lt;- topgenes_aff_vs_unaff_05_sub[order(row.names(topgenes_aff_vs_unaff_05_sub)), ]
+
+df_sub &lt;- as.data.frame(colData(vsd_limma)[, c(&quot;Affected&quot;, &quot;Category&quot;)])
+pheatmap(topgenes_aff_vs_unaff_05_sub,
+  annotation_col = df_sub,
+  annotation_colors = ann_colors2, fontsize = 4, angle_col = c(&quot;0&quot;)
+)</code></pre>
+<p><img src="figure/all-condition-analysis.Rmd/top-75-genes-deseq-all-1.png" width="800px" height="570px" style="display: block; margin: auto;" /></p>
+<pre class="r"><code>topgenes_byensemblid_sub &lt;- head(rownames(res_aff_vs_unaff_df_sub), 75)
+topgenes_aff_vs_unaff_05_sub &lt;- assay(vsd_limma)[topgenes_byensemblid_sub, ]
+topgenes_aff_vs_unaff_05_sub &lt;- topgenes_aff_vs_unaff_05_sub - rowMeans(topgenes_aff_vs_unaff_05_sub)
+
+ensembl_to_gene_sub &lt;- setNames(gene_info$gene_name, gene_info$Ensembl_ID)
+
+# Get the current row names of the matrix &#39;mat&#39;
+current_ensembl_ids_sub &lt;- rownames(topgenes_aff_vs_unaff_05_sub)
+
+# Find the corresponding gene names for the Ensembl IDs
+new_row_names_sub &lt;- ensembl_to_gene_sub[current_ensembl_ids_sub]
+
+# Set the new row names for the matrix &#39;mat&#39;
+rownames(topgenes_aff_vs_unaff_05_sub) &lt;- new_row_names_sub
+
+topgenes_aff_vs_unaff_05_sub &lt;- topgenes_aff_vs_unaff_05_sub[order(row.names(topgenes_aff_vs_unaff_05_sub)), ]
+
+df_sub &lt;- as.data.frame(colData(vsd_limma)[, c(&quot;Affected&quot;, &quot;SubCategory&quot;, &quot;Category&quot;)])
+pheatmap(topgenes_aff_vs_unaff_05_sub, annotation_col = df_sub, annotation_colors = ann_colors2, fontsize = 4, angle_col = c(&quot;0&quot;))</code></pre>
+<p><img src="figure/all-condition-analysis.Rmd/top-75-genes-deseq-all-subcategory-1.png" width="800px" height="570px" style="display: block; margin: auto;" /></p>
+<pre class="r"><code>topgenes_byensemblid_sub &lt;- head(rownames(res_aff_vs_unaff_df_sub), 200)
+topgenes_aff_vs_unaff_05_sub &lt;- assay(vsd_limma)[topgenes_byensemblid_sub, ]
+topgenes_aff_vs_unaff_05_sub &lt;- topgenes_aff_vs_unaff_05_sub - rowMeans(topgenes_aff_vs_unaff_05_sub)
+
+ensembl_to_gene_sub &lt;- setNames(gene_info$gene_name, gene_info$Ensembl_ID)
+
+# Get the current row names of the matrix &#39;mat&#39;
+current_ensembl_ids_sub &lt;- rownames(topgenes_aff_vs_unaff_05_sub)
+
+# Find the corresponding gene names for the Ensembl IDs
+new_row_names_sub &lt;- ensembl_to_gene_sub[current_ensembl_ids_sub]
+
+# Set the new row names for the matrix &#39;mat&#39;
+rownames(topgenes_aff_vs_unaff_05_sub) &lt;- new_row_names_sub
+
+topgenes_aff_vs_unaff_05_sub &lt;- topgenes_aff_vs_unaff_05_sub[order(row.names(topgenes_aff_vs_unaff_05_sub)), ]
+
+df_sub &lt;- as.data.frame(colData(vsd_limma)[, c(&quot;Affected&quot;, &quot;Category&quot;)])
+pheatmap(topgenes_aff_vs_unaff_05_sub, annotation_col = df_sub, annotation_colors = ann_colors2, fontsize = 4, angle_col = c(&quot;0&quot;))</code></pre>
+<p><img src="figure/all-condition-analysis.Rmd/top-200-genes-deseq-all-1.png" width="800px" height="570px" style="display: block; margin: auto;" /></p>
+<pre class="r"><code>topgenes_byensemblid_sub &lt;- head(rownames(res_aff_vs_unaff_df_sub), 200)
+topgenes_aff_vs_unaff_05_sub &lt;- assay(vsd_limma)[topgenes_byensemblid_sub, ]
+topgenes_aff_vs_unaff_05_sub &lt;- topgenes_aff_vs_unaff_05_sub - rowMeans(topgenes_aff_vs_unaff_05_sub)
+
+ensembl_to_gene_sub &lt;- setNames(gene_info$gene_name, gene_info$Ensembl_ID)
+
+# Get the current row names of the matrix &#39;mat&#39;
+current_ensembl_ids_sub &lt;- rownames(topgenes_aff_vs_unaff_05_sub)
+
+# Find the corresponding gene names for the Ensembl IDs
+new_row_names_sub &lt;- ensembl_to_gene_sub[current_ensembl_ids_sub]
+
+# Set the new row names for the matrix &#39;mat&#39;
+rownames(topgenes_aff_vs_unaff_05_sub) &lt;- new_row_names_sub
+
+topgenes_aff_vs_unaff_05_sub &lt;- topgenes_aff_vs_unaff_05_sub[order(row.names(topgenes_aff_vs_unaff_05_sub)), ]
+
+df_sub &lt;- as.data.frame(colData(vsd_limma)[, c(&quot;Affected&quot;, &quot;SubCategory&quot;, &quot;Category&quot;)])
+pheatmap(topgenes_aff_vs_unaff_05_sub, annotation_col = df_sub, annotation_colors = ann_colors2, fontsize = 2.25, angle_col = c(&quot;0&quot;))</code></pre>
+<p><img src="figure/all-condition-analysis.Rmd/top-200-genes-deseq-all-subcategory-1.png" width="800px" height="570px" style="display: block; margin: auto;" /></p>
+<pre class="r"><code>topgenes_byensemblid_sub &lt;- head(rownames(res_aff_vs_unaff_df_sub), 125)
+topgenes_aff_vs_unaff_05_sub &lt;- assay(vsd_limma)[topgenes_byensemblid_sub, ]
+topgenes_aff_vs_unaff_05_sub &lt;- topgenes_aff_vs_unaff_05_sub - rowMeans(topgenes_aff_vs_unaff_05_sub)
+
+ensembl_to_gene_sub &lt;- setNames(gene_info$gene_name, gene_info$Ensembl_ID)
+
+# Get the current row names of the matrix &#39;mat&#39;
+current_ensembl_ids_sub &lt;- rownames(topgenes_aff_vs_unaff_05_sub)
+
+# Find the corresponding gene names for the Ensembl IDs
+new_row_names_sub &lt;- ensembl_to_gene_sub[current_ensembl_ids_sub]
+
+# Set the new row names for the matrix &#39;mat&#39;
+rownames(topgenes_aff_vs_unaff_05_sub) &lt;- new_row_names_sub
+
+# topgenes_aff_vs_unaff_05_sub &lt;- topgenes_aff_vs_unaff_05_sub[order(row.names(topgenes_aff_vs_unaff_05_sub)), ]
+
+df_sub &lt;- as.data.frame(colData(vsd_limma)[, c(&quot;Affected&quot;, &quot;Category&quot;)])
+pheatmap(topgenes_aff_vs_unaff_05_sub, annotation_col = df_sub, annotation_colors = ann_colors2, fontsize = 3.75, angle_col = c(&quot;0&quot;))</code></pre>
+<p><img src="figure/all-condition-analysis.Rmd/top-125-genes-deseq-all-all-1.png" width="800px" height="570px" style="display: block; margin: auto;" /></p>
+<pre class="r"><code>topgenes_byensemblid_sub &lt;- head(rownames(res_aff_vs_unaff_df_sub), 125)
+topgenes_aff_vs_unaff_05_sub &lt;- assay(vsd_limma)[topgenes_byensemblid_sub, ]
+topgenes_aff_vs_unaff_05_sub &lt;- topgenes_aff_vs_unaff_05_sub - rowMeans(topgenes_aff_vs_unaff_05_sub)
+
+ensembl_to_gene_sub &lt;- setNames(gene_info$gene_name, gene_info$Ensembl_ID)
+
+# Get the current row names of the matrix &#39;mat&#39;
+current_ensembl_ids_sub &lt;- rownames(topgenes_aff_vs_unaff_05_sub)
+
+# Find the corresponding gene names for the Ensembl IDs
+new_row_names_sub &lt;- ensembl_to_gene_sub[current_ensembl_ids_sub]
+
+# Set the new row names for the matrix &#39;mat&#39;
+rownames(topgenes_aff_vs_unaff_05_sub) &lt;- new_row_names_sub
+
+# topgenes_aff_vs_unaff_05_sub &lt;- topgenes_aff_vs_unaff_05_sub[order(row.names(topgenes_aff_vs_unaff_05_sub)), ]
+
+df_sub &lt;- as.data.frame(colData(vsd_limma)[, c(&quot;Affected&quot;, &quot;SubCategory&quot;, &quot;Category&quot;)])
+pheatmap(topgenes_aff_vs_unaff_05_sub, annotation_col = df_sub, annotation_colors = ann_colors2, fontsize = 3.75, angle_col = c(&quot;0&quot;))</code></pre>
+<p><img src="figure/all-condition-analysis.Rmd/top-125-genes-deseq-all-all-subcategory-1.png" width="800px" height="570px" style="display: block; margin: auto;" /></p>
+<pre class="r"><code>topgenes_byensemblid_sub &lt;- head(rownames(res_aff_vs_unaff_df_sub), 150)
+topgenes_aff_vs_unaff_05_sub &lt;- assay(vsd_limma)[topgenes_byensemblid_sub, ]
+topgenes_aff_vs_unaff_05_sub &lt;- topgenes_aff_vs_unaff_05_sub - rowMeans(topgenes_aff_vs_unaff_05_sub)
+
+ensembl_to_gene_sub &lt;- setNames(gene_info$gene_name, gene_info$Ensembl_ID)
+
+# Get the current row names of the matrix &#39;mat&#39;
+current_ensembl_ids_sub &lt;- rownames(topgenes_aff_vs_unaff_05_sub)
+
+# Find the corresponding gene names for the Ensembl IDs
+new_row_names_sub &lt;- ensembl_to_gene_sub[current_ensembl_ids_sub]
+
+# Set the new row names for the matrix &#39;mat&#39;
+rownames(topgenes_aff_vs_unaff_05_sub) &lt;- new_row_names_sub
+
+# topgenes_aff_vs_unaff_05_sub &lt;- topgenes_aff_vs_unaff_05_sub[order(row.names(topgenes_aff_vs_unaff_05_sub)), ]
+
+df_sub &lt;- as.data.frame(colData(vsd_limma)[, c(&quot;Affected&quot;, &quot;Category&quot;)])
+pheatmap(topgenes_aff_vs_unaff_05_sub, annotation_col = df_sub, annotation_colors = ann_colors2, fontsize = 3.5, angle_col = c(&quot;0&quot;))</code></pre>
+<p><img src="figure/all-condition-analysis.Rmd/top-150-genes-deseq-all-all-1.png" width="800px" height="570px" style="display: block; margin: auto;" /></p>
+<pre class="r"><code>topgenes_byensemblid_sub &lt;- head(rownames(res_aff_vs_unaff_df_sub), 150)
+topgenes_aff_vs_unaff_05_sub &lt;- assay(vsd_limma)[topgenes_byensemblid_sub, ]
+topgenes_aff_vs_unaff_05_sub &lt;- topgenes_aff_vs_unaff_05_sub - rowMeans(topgenes_aff_vs_unaff_05_sub)
+
+ensembl_to_gene_sub &lt;- setNames(gene_info$gene_name, gene_info$Ensembl_ID)
+
+# Get the current row names of the matrix &#39;mat&#39;
+current_ensembl_ids_sub &lt;- rownames(topgenes_aff_vs_unaff_05_sub)
+
+# Find the corresponding gene names for the Ensembl IDs
+new_row_names_sub &lt;- ensembl_to_gene_sub[current_ensembl_ids_sub]
+
+# Set the new row names for the matrix &#39;mat&#39;
+rownames(topgenes_aff_vs_unaff_05_sub) &lt;- new_row_names_sub
+
+# topgenes_aff_vs_unaff_05_sub &lt;- topgenes_aff_vs_unaff_05_sub[order(row.names(topgenes_aff_vs_unaff_05_sub)), ]
+
+df_sub &lt;- as.data.frame(colData(vsd_limma)[, c(&quot;Affected&quot;, &quot;SubCategory&quot;, &quot;Category&quot;)])
+pheatmap(topgenes_aff_vs_unaff_05_sub, annotation_col = df_sub, annotation_colors = ann_colors2, fontsize = 3.5, angle_col = c(&quot;0&quot;))</code></pre>
+<p><img src="figure/all-condition-analysis.Rmd/top-150-genes-deseq-all-subcategory-1.png" width="800px" height="570px" style="display: block; margin: auto;" /></p>
+<pre class="r"><code>gb_df &lt;- genes_biomart[, c(1, ncol(genes_biomart))]
+res_aff_vs_unaff_df_sub_genename &lt;- res_aff_vs_unaff_df_sub
+res_aff_vs_unaff_df_sub_genename$Ensembl_ID &lt;- row.names(res_aff_vs_unaff_df_sub)
+res_aff_vs_unaff_df_sub_genename &lt;- merge(x = res_aff_vs_unaff_df_sub_genename, y = gene_info, by.x = &quot;Ensembl_ID&quot;, by.y = &quot;Ensembl_ID&quot;, all.x = TRUE)
+res_aff_vs_unaff_df_sub_genename &lt;- res_aff_vs_unaff_df_sub_genename[, c(dim(res_aff_vs_unaff_df_sub_genename)[2], 1:dim(res_aff_vs_unaff_df_sub_genename)[2] - 1)]
+res_aff_vs_unaff_df_sub_genename &lt;- res_aff_vs_unaff_df_sub_genename[order(res_aff_vs_unaff_df_sub_genename[, &quot;padj&quot;]), ]
+write.csv(res_aff_vs_unaff_df_sub_genename, file = &quot;output/res_aff_vs_unaff_df_sub_genename.csv&quot;)</code></pre>
+</div>
+<div id="volcano-plot" class="section level2">
+<h2>Volcano Plot</h2>
+<pre class="r"><code>EnhancedVolcano(res_aff_vs_unaff_df_sub_genename,
+  lab = res_aff_vs_unaff_df_sub_genename$gene_name,
+  x = &#39;log2FoldChange&#39;,
+  y = &#39;padj&#39;,
+  selectLab = c(&#39;SLC4A10&#39;,&#39;SNTG2&#39;,&#39;TMEM37&#39;,&#39;KCNQ5&#39;,&#39;DEFA1&#39;),
+  xlab = bquote(~Log[2]~ &#39;fold change&#39;),
+  pCutoff = .1,
+  FCcutoff = 1.0,
+  pointSize = 2.0,
+  labSize = 4.0,
+  labCol = &#39;black&#39;,
+  labFace = &#39;bold&#39;,
+  boxedLabels = TRUE,
+  colAlpha = 4/5,
+  legendPosition = &#39;right&#39;,
+  legendLabSize = 14,
+  legendIconSize = 4.0,
+  drawConnectors = TRUE,
+  widthConnectors = 1.0,
+  colConnectors = &#39;black&#39;)</code></pre>
+<p><img src="figure/all-condition-analysis.Rmd/volcano-plot-1.png" width="1200px" height="1000px" style="display: block; margin: auto;" /></p>
+<pre class="r"><code>res_aff_vs_unaff_df_genename_05 &lt;- subset(res_aff_vs_unaff_df_sub_genename, padj &lt; 0.05)
+res_aff_vs_unaff_df_genename_05 &lt;- res_aff_vs_unaff_df_genename_05[order(res_aff_vs_unaff_df_genename_05$padj), ]
+write.csv(res_aff_vs_unaff_df_genename_05, file = &quot;output/res_aff_vs_unaff_df_sub_genename_05.csv&quot;)
+
+res_aff_vs_unaff_df_genename_padj05_lfc1 &lt;- subset(res_aff_vs_unaff_df_genename_05, log2FoldChange &gt;= 1 | log2FoldChange &lt;= -1)
+res_aff_vs_unaff_df_genename_padj05_lfc1 &lt;- res_aff_vs_unaff_df_genename_padj05_lfc1[order(res_aff_vs_unaff_df_genename_padj05_lfc1$padj), ]
+write.csv(res_aff_vs_unaff_df_genename_padj05_lfc1, file = &quot;output/res_aff_vs_unaff_df_sub_genename_padj05_lfc1.csv&quot;)
+
+
+res_aff_vs_unaff_df_genename_1 &lt;- subset(res_aff_vs_unaff_df_sub_genename, padj &lt; 0.1)
+res_aff_vs_unaff_df_genename_1 &lt;- res_aff_vs_unaff_df_genename_1[order(res_aff_vs_unaff_df_genename_1$padj), ]
+write.csv(res_aff_vs_unaff_df_genename_1, file = &quot;output/res_aff_vs_unaff_df_sub_genename_padj1.csv&quot;)
+
+res_aff_vs_unaff_df_genename_padj1_lfc1 &lt;- subset(res_aff_vs_unaff_df_genename_1, log2FoldChange &gt;= 1 | log2FoldChange &lt;= -1)
+res_aff_vs_unaff_df_genename_padj1_lfc1 &lt;- res_aff_vs_unaff_df_genename_padj1_lfc1[order(res_aff_vs_unaff_df_genename_padj1_lfc1$padj), ]
+write.csv(res_aff_vs_unaff_df_genename_padj1_lfc1, file = &quot;output/res_aff_vs_unaff_df_sub_genename_padj1_lfc1.csv&quot;)</code></pre>
+<p>Below is a table of information about the top genes.</p>
+<pre class="r"><code>genes &lt;- res_aff_vs_unaff_df_genename_05$gene_name
+my_gene_data &lt;- queryMany(genes, scopes = &quot;symbol&quot;, fields = c(&quot;symbol&quot;, &quot;name&quot;, &quot;summary&quot;, species = &quot;human&quot;))</code></pre>
+<pre><code>Finished
+Pass returnall=TRUE to return lists of duplicate or missing query terms.</code></pre>
+<pre class="r"><code>my_gene_data_unique &lt;- as.data.frame(my_gene_data) %&gt;% dplyr::distinct(query, .keep_all = TRUE)
+# paged_table(my_gene_data, options = list(rows.print = 15))</code></pre>
+<pre class="r"><code>filtered_gene_names &lt;- res_aff_vs_unaff_df_sub_genename$gene_name[!grepl(&quot;^ENS&quot;, res_aff_vs_unaff_df_sub_genename$gene_name)]
+# Select specific genes to show
+# set top = 0, then specify genes using label.select argument
+maplot &lt;- ggmaplot(res_aff_vs_unaff_df_sub,
+  main = &quot;Affected vs Unaffected MA Plot&quot;,
+  fdr = .1, fc = 1, size = 0.4, # Same used for others.
+  genenames = as.vector(res_aff_vs_unaff_df_sub_genename$gene_name),
+  ggtheme = ggplot2::theme_minimal(),
+  legend = &quot;top&quot;, top = 30,
+  label.select = c(&quot;KCNQ5&quot;),
+  font.label = c(&quot;bold&quot;, 6), label.rectangle = TRUE,
+  font.legend = &quot;bold&quot;, font.main = &quot;bold&quot;
+)
+
+maplot</code></pre>
+<p><img src="figure/all-condition-analysis.Rmd/maplot-all-samples-1.png" width="672" style="display: block; margin: auto;" /></p>
+<pre class="r"><code>significant_data &lt;- maplot$data %&gt;%
+  filter(grepl(&quot;Up|Down&quot;, sig)) %&gt;%
+  mutate(direction = ifelse(grepl(&quot;Up&quot;, sig), &quot;Up&quot;, &quot;Down&quot;)) %&gt;%
+  dplyr::select(-sig) # This removes the &#39;sig&#39; column
+
+# Combine DataFrames based on matching &#39;query&#39; in my_gene_data_unique to &#39;gene&#39; in significant_data
+combined_data &lt;- inner_join(my_gene_data_unique, significant_data, by = c(&quot;query&quot; = &quot;name&quot;))
+
+combined_data &lt;- combined_data %&gt;%
+  dplyr::select(-notfound, -X_id, -X_score) %&gt;%
+  rename(gene = query)
+
+paged_table(as.data.frame(significant_data), options = list(rows.print = 30))</code></pre>
+<div data-pagedtable="false">
+<script data-pagedtable-source type="application/json">
+{"columns":[{"label":["name"],"name":[1],"type":["chr"],"align":["left"]},{"label":["mean"],"name":[2],"type":["dbl"],"align":["right"]},{"label":["lfc"],"name":[3],"type":["dbl"],"align":["right"]},{"label":["padj"],"name":[4],"type":["dbl"],"align":["right"]},{"label":["direction"],"name":[5],"type":["chr"],"align":["left"]}],"data":[{"1":"TBC1D3F","2":"4.041703","3":"21.3703664","4":"3.869052e-09","5":"Up"},{"1":"XGY2","2":"1.431976","3":"-22.8715576","4":"3.156110e-06","5":"Down"},{"1":"F8A2","2":"5.247371","3":"23.7503748","4":"2.673675e-05","5":"Up"},{"1":"ENSG00000254732","2":"4.036603","3":"-6.5720424","4":"3.172915e-05","5":"Down"},{"1":"ENSG00000284554","2":"4.210907","3":"23.0952173","4":"4.280441e-05","5":"Up"},{"1":"ENSG00000285505","2":"3.624309","3":"22.0641048","4":"1.592662e-04","5":"Up"},{"1":"ENSG00000142539","2":"2.824428","3":"21.5149370","4":"2.501132e-04","5":"Up"},{"1":"ENSG00000259132","2":"2.771261","3":"-21.5483541","4":"2.501132e-04","5":"Down"},{"1":"ENSG00000269693","2":"3.840345","3":"-21.4606149","4":"2.501132e-04","5":"Down"},{"1":"ENSG00000289694","2":"9.294123","3":"-11.1848870","4":"2.574774e-04","5":"Down"},{"1":"RNVU1-18","2":"7.308801","3":"-9.1339860","4":"6.399916e-04","5":"Down"},{"1":"CD248","2":"7.360960","3":"1.5803865","4":"1.046794e-03","5":"Up"},{"1":"DEFA1","2":"10.168009","3":"-12.5766324","4":"1.260820e-03","5":"Down"},{"1":"ENSG00000224610","2":"4.537889","3":"2.6728853","4":"1.702497e-03","5":"Up"},{"1":"KLHL4","2":"2.051865","3":"-4.2713813","4":"2.065833e-03","5":"Down"},{"1":"IGKV6-21","2":"3.347182","3":"3.9305921","4":"2.340396e-03","5":"Up"},{"1":"KCNQ5","2":"7.868433","3":"1.3938676","4":"2.872430e-03","5":"Up"},{"1":"RNU1-3","2":"6.847738","3":"-12.8183870","4":"2.872430e-03","5":"Down"},{"1":"PIK3R3","2":"6.974378","3":"-0.9911184","4":"5.145046e-03","5":"Down"},{"1":"FSCN2","2":"5.215811","3":"1.4414099","4":"5.813991e-03","5":"Up"},{"1":"BEX1","2":"2.780012","3":"-5.3437210","4":"1.058876e-02","5":"Down"},{"1":"TIPARP-AS1","2":"2.941375","3":"-2.8310682","4":"1.058876e-02","5":"Down"},{"1":"VWA3A","2":"2.414471","3":"-4.4459432","4":"1.281925e-02","5":"Down"},{"1":"ZNF683","2":"7.729189","3":"-1.5975367","4":"1.281925e-02","5":"Down"},{"1":"ODF3","2":"2.091445","3":"5.2044227","4":"1.387907e-02","5":"Up"},{"1":"LRRN3","2":"8.396972","3":"1.5170543","4":"1.604274e-02","5":"Up"},{"1":"SNTG2","2":"4.645668","3":"1.9050488","4":"1.672099e-02","5":"Up"},{"1":"PVRIG2P","2":"2.926827","3":"17.3884595","4":"1.672099e-02","5":"Up"},{"1":"SLC4A10","2":"7.985787","3":"1.8980545","4":"2.274660e-02","5":"Up"},{"1":"TMEM37","2":"2.406720","3":"5.1291824","4":"2.274660e-02","5":"Up"},{"1":"ENSG00000273026","2":"2.305436","3":"-3.1484049","4":"2.274660e-02","5":"Down"},{"1":"FOSL1","2":"2.899481","3":"-3.4180050","4":"2.401122e-02","5":"Down"},{"1":"VMO1","2":"4.309747","3":"-2.5069916","4":"2.437171e-02","5":"Down"},{"1":"MPPED2","2":"5.242447","3":"2.0912442","4":"3.152239e-02","5":"Up"},{"1":"CDR2-DT","2":"2.031743","3":"4.1924341","4":"3.325287e-02","5":"Up"},{"1":"CBX3P2","2":"5.302242","3":"-1.1503645","4":"3.325287e-02","5":"Down"},{"1":"GRAMD4","2":"10.543411","3":"-0.5818031","4":"3.757942e-02","5":"Down"},{"1":"STEAP1B","2":"5.765401","3":"1.6199320","4":"3.799731e-02","5":"Up"},{"1":"ENSG00000265337","2":"1.943835","3":"-4.3440200","4":"3.799731e-02","5":"Down"},{"1":"IL23R","2":"5.452356","3":"1.8074772","4":"4.589158e-02","5":"Up"},{"1":"ENSG00000248664","2":"1.824320","3":"-4.0124636","4":"4.589158e-02","5":"Down"},{"1":"RNU1-1","2":"7.148364","3":"-9.0822229","4":"4.727930e-02","5":"Down"},{"1":"GIMAP3P","2":"3.812928","3":"-3.9167614","4":"4.824647e-02","5":"Down"},{"1":"ZNF69","2":"7.258620","3":"0.8030366","4":"4.824647e-02","5":"Up"},{"1":"IMPDH1P8","2":"4.449589","3":"1.2543565","4":"4.824647e-02","5":"Up"},{"1":"ENSG00000227080","2":"3.268757","3":"4.4049046","4":"5.179338e-02","5":"Up"},{"1":"LINC01395","2":"2.556394","3":"-3.2626659","4":"5.179338e-02","5":"Down"},{"1":"PDCL3P5","2":"4.177266","3":"1.7542827","4":"5.779098e-02","5":"Up"},{"1":"GFAP","2":"2.488976","3":"-3.8250847","4":"6.289897e-02","5":"Down"},{"1":"PDS5A","2":"12.011318","3":"0.3030498","4":"6.401750e-02","5":"Up"},{"1":"ENSG00000273162","2":"1.871219","3":"-3.3158523","4":"7.010304e-02","5":"Down"},{"1":"BRSK1","2":"5.170030","3":"-1.6981244","4":"7.090319e-02","5":"Down"},{"1":"MEST","2":"6.697005","3":"0.9138186","4":"7.099323e-02","5":"Up"},{"1":"CACHD1","2":"6.485758","3":"1.5419104","4":"7.099323e-02","5":"Up"},{"1":"EBF1","2":"8.457330","3":"1.3945772","4":"7.318133e-02","5":"Up"},{"1":"AZI2","2":"9.498897","3":"-0.5161157","4":"7.663002e-02","5":"Down"},{"1":"MGAT5","2":"11.819851","3":"0.3751049","4":"7.763834e-02","5":"Up"},{"1":"COLQ","2":"9.128217","3":"0.5414678","4":"8.452915e-02","5":"Up"},{"1":"RORC","2":"8.449542","3":"1.1523830","4":"8.479080e-02","5":"Up"},{"1":"CCR6","2":"9.025459","3":"0.9139606","4":"8.622018e-02","5":"Up"},{"1":"CCNI2","2":"6.420438","3":"1.2861350","4":"8.846135e-02","5":"Up"},{"1":"TCHH","2":"1.849484","3":"4.2599886","4":"9.213367e-02","5":"Up"},{"1":"RNF150","2":"2.503531","3":"-4.4200881","4":"9.213367e-02","5":"Down"},{"1":"CCDC175","2":"2.224750","3":"-4.6074958","4":"9.359151e-02","5":"Down"},{"1":"DOK6","2":"5.205966","3":"-4.6579306","4":"9.359151e-02","5":"Down"}],"options":{"columns":{"min":{},"max":[10]},"rows":{"min":[30],"max":[30]},"pages":{}}}
+  </script>
+</div>
+<pre class="r"><code># Save significant genes
+write.csv(significant_data, file = &quot;output/res_aff_vs_unaff_significant_all_samples.csv&quot;, row.names = FALSE)
+
+# Save significant genes
+write.csv(combined_data, file = &quot;output/res_aff_vs_unaff_significant_all_mygene.csv&quot;, row.names = FALSE)</code></pre>
+</div>
+<div id="expression-of-candidate-genes" class="section level2">
+<h2>Expression of Candidate Genes</h2>
+<p>Below is a table of expression of the genes identified during our WGS
+analysis.</p>
+<pre class="r"><code># Subset gene_info using genes of interest
+subset_gene_info &lt;- gene_info[gene_info$gene_name %in% genes_of_interest, ]
+
+filtered_by_interest &lt;- filter(res_aff_vs_unaff_df_sub_genename, Ensembl_ID %in% subset_gene_info$Ensembl_ID)
+
+# Filtering the dataframe by row names
+filtered_counts &lt;- counts[row.names(counts) %in% subset_gene_info$Ensembl_ID, ]
+
+# Match and update row names
+matching_indices &lt;- match(rownames(filtered_counts), subset_gene_info$Ensembl_ID)
+
+# Update row names based on matching_column values from metadata
+rownames(filtered_counts) &lt;- subset_gene_info$gene_name[matching_indices]
+
+missing_genes &lt;- setdiff(subset_gene_info$Ensembl_ID, filtered_by_interest$Ensembl_ID)
+
+corresponding_gene_names &lt;- subset_gene_info$gene_name[subset_gene_info$Ensembl_ID %in% missing_genes]
+
+missing_gene_counts &lt;- counts[row.names(counts) %in% missing_genes, ]
+
+paged_table(filtered_by_interest, options = list(rows.print = 15))</code></pre>
+<div data-pagedtable="false">
+<script data-pagedtable-source type="application/json">
+{"columns":[{"label":["gene_name"],"name":[1],"type":["chr"],"align":["left"]},{"label":["Ensembl_ID"],"name":[2],"type":["chr"],"align":["left"]},{"label":["baseMean"],"name":[3],"type":["dbl"],"align":["right"]},{"label":["log2FoldChange"],"name":[4],"type":["dbl"],"align":["right"]},{"label":["lfcSE"],"name":[5],"type":["dbl"],"align":["right"]},{"label":["stat"],"name":[6],"type":["dbl"],"align":["right"]},{"label":["pvalue"],"name":[7],"type":["dbl"],"align":["right"]},{"label":["padj"],"name":[8],"type":["dbl"],"align":["right"]}],"data":[{"1":"CR2","2":"ENSG00000117322.18","3":"238.109129","4":"1.223159847","5":"0.39585012","6":"3.08995696","7":"0.002001855","8":"0.2715062"},{"1":"ELOVL4","2":"ENSG00000118402.6","3":"51.400331","4":"1.044989542","5":"0.34658117","6":"3.01513649","7":"0.002568636","8":"0.2984547"},{"1":"CARD14","2":"ENSG00000141527.18","3":"6.269967","4":"2.452078902","5":"0.82283798","6":"2.98002642","7":"0.002882235","8":"0.3127353"},{"1":"INF2","2":"ENSG00000203485.14","3":"1977.776293","4":"0.201807793","5":"0.10818627","6":"1.86537337","7":"0.062129087","8":"0.7857399"},{"1":"RYR1","2":"ENSG00000196218.14","3":"133.192169","4":"-0.570740071","5":"0.34518210","6":"-1.65344633","7":"0.098240060","8":"0.8630480"},{"1":"LRBA","2":"ENSG00000198589.14","3":"6237.597997","4":"0.155383633","5":"0.09551455","6":"1.62680592","7":"0.103778324","8":"0.8716696"},{"1":"ENO3","2":"ENSG00000108515.18","3":"119.761184","4":"-0.303878032","5":"0.20797508","6":"-1.46112715","7":"0.143980551","8":"0.9220606"},{"1":"HAGHL","2":"ENSG00000103253.19","3":"149.862749","4":"0.239694238","5":"0.18182182","6":"1.31829196","7":"0.187405931","8":"0.9525989"},{"1":"CACNA1B","2":"ENSG00000148408.14","3":"2.473533","4":"1.037820139","5":"0.91024275","6":"1.14015755","7":"0.254220671","8":"0.9936741"},{"1":"SBF1","2":"ENSG00000100241.22","3":"9470.240410","4":"0.102632900","5":"0.09450993","6":"1.08594835","7":"0.277501846","8":"0.9973472"},{"1":"SLC4A1","2":"ENSG00000004939.16","3":"52961.787865","4":"0.204195838","5":"0.60503406","6":"0.33749478","7":"0.735743944","8":"0.9997551"},{"1":"UPF1","2":"ENSG00000005007.13","3":"7510.603013","4":"0.031382556","5":"0.16999528","6":"0.18460839","7":"0.853536205","8":"0.9997551"},{"1":"SLC12A3","2":"ENSG00000070915.10","3":"31.996154","4":"-0.057705198","5":"0.54469217","6":"-0.10594093","7":"0.915629216","8":"0.9997551"},{"1":"ACACB","2":"ENSG00000076555.16","3":"1051.278738","4":"-0.198783445","5":"0.21543691","6":"-0.92269913","7":"0.356164019","8":"0.9997551"},{"1":"NLRC4","2":"ENSG00000091106.19","3":"1337.373187","4":"-0.081933005","5":"0.21186447","6":"-0.38672366","7":"0.698960795","8":"0.9997551"},{"1":"CUBN","2":"ENSG00000107611.16","3":"676.984648","4":"-0.025859868","5":"0.20655964","6":"-0.12519323","7":"0.900370580","8":"0.9997551"},{"1":"CHRNE","2":"ENSG00000108556.10","3":"94.498771","4":"-0.031715572","5":"0.30442515","6":"-0.10418184","7":"0.917025046","8":"0.9997551"},{"1":"SIAE","2":"ENSG00000110013.13","3":"246.663911","4":"-0.220125021","5":"0.25033705","6":"-0.87931461","7":"0.379230719","8":"0.9997551"},{"1":"MADD","2":"ENSG00000110514.19","3":"3349.249844","4":"0.030121747","5":"0.10656316","6":"0.28266567","7":"0.777433135","8":"0.9997551"},{"1":"CFAP92","2":"ENSG00000114656.13","3":"638.189156","4":"0.079293674","5":"0.27679327","6":"0.28647255","7":"0.774516217","8":"0.9997551"},{"1":"ACADM","2":"ENSG00000117054.15","3":"1035.076608","4":"-0.116980012","5":"0.13620430","6":"-0.85885696","7":"0.390419437","8":"0.9997551"},{"1":"CENPF","2":"ENSG00000117724.14","3":"206.384727","4":"0.198604319","5":"0.32234009","6":"0.61613285","7":"0.537806841","8":"0.9997551"},{"1":"CHRNA10","2":"ENSG00000129749.3","3":"150.704526","4":"0.009629776","5":"0.22401069","6":"0.04298802","7":"0.965711085","8":"0.9997551"},{"1":"CACNG6","2":"ENSG00000130433.8","3":"97.777774","4":"0.243349523","5":"0.74004519","6":"0.32883062","7":"0.742283714","8":"0.9997551"},{"1":"TACO1","2":"ENSG00000136463.9","3":"329.994858","4":"0.040918460","5":"0.13990235","6":"0.29247872","7":"0.769920627","8":"0.9997551"},{"1":"SLC3A1","2":"ENSG00000138079.14","3":"10.924001","4":"-0.701982440","5":"0.75473798","6":"-0.93010086","7":"0.352318866","8":"0.9997551"},{"1":"SLC16A3","2":"ENSG00000141526.18","3":"15359.208122","4":"0.048428216","5":"0.21613921","6":"0.22406030","7":"0.822710382","8":"0.9997551"},{"1":"TRPM2","2":"ENSG00000142185.18","3":"920.545106","4":"-0.210529703","5":"0.27105767","6":"-0.77669710","7":"0.437337498","8":"0.9997551"},{"1":"NLRP12","2":"ENSG00000142405.22","3":"5809.170662","4":"0.012375368","5":"0.23337043","6":"0.05302886","7":"0.957708911","8":"0.9997551"},{"1":"SLC12A9","2":"ENSG00000146828.18","3":"9449.533648","4":"0.006426477","5":"0.17363950","6":"0.03701045","7":"0.970476670","8":"0.9997551"},{"1":"FCSK","2":"ENSG00000157353.17","3":"580.482450","4":"0.098531503","5":"0.15117463","6":"0.65177274","7":"0.514547790","8":"0.9997551"},{"1":"PGAM2","2":"ENSG00000164708.6","3":"11.213057","4":"0.225017761","5":"0.54052204","6":"0.41629710","7":"0.677192612","8":"0.9997551"},{"1":"CHRFAM7A","2":"ENSG00000166664.15","3":"50.135679","4":"-0.176274468","5":"0.53673775","6":"-0.32841824","7":"0.742595454","8":"0.9997551"},{"1":"NOD2","2":"ENSG00000167207.14","3":"2869.237004","4":"-0.185047659","5":"0.30902020","6":"-0.59882059","7":"0.549292531","8":"0.9997551"},{"1":"ACAD9","2":"ENSG00000177646.20","3":"1562.696320","4":"0.103617773","5":"0.15092961","6":"0.68653044","7":"0.492378674","8":"0.9997551"},{"1":"CLCN1","2":"ENSG00000188037.14","3":"14.319636","4":"-0.518130915","5":"0.74844627","6":"-0.69227537","7":"0.488764415","8":"0.9997551"},{"1":"TOMM7","2":"ENSG00000196683.12","3":"517.140928","4":"-0.352170028","5":"0.37111467","6":"-0.94895206","7":"0.342644997","8":"0.9997551"}],"options":{"columns":{"min":{},"max":[10]},"rows":{"min":[15],"max":[15]},"pages":{}}}
+  </script>
+</div>
+<pre class="r"><code>paged_table(filtered_counts, options = list(rows.print = 15))</code></pre>
+<div data-pagedtable="false">
+<script data-pagedtable-source type="application/json">
+{"columns":[{"label":[""],"name":["_rn_"],"type":[""],"align":["left"]},{"label":["4"],"name":[1],"type":["dbl"],"align":["right"]},{"label":["5"],"name":[2],"type":["dbl"],"align":["right"]},{"label":["6"],"name":[3],"type":["dbl"],"align":["right"]},{"label":["7"],"name":[4],"type":["dbl"],"align":["right"]},{"label":["8"],"name":[5],"type":["dbl"],"align":["right"]},{"label":["9"],"name":[6],"type":["dbl"],"align":["right"]},{"label":["10"],"name":[7],"type":["dbl"],"align":["right"]},{"label":["11"],"name":[8],"type":["dbl"],"align":["right"]},{"label":["12"],"name":[9],"type":["dbl"],"align":["right"]},{"label":["13"],"name":[10],"type":["dbl"],"align":["right"]},{"label":["14"],"name":[11],"type":["dbl"],"align":["right"]},{"label":["18"],"name":[12],"type":["dbl"],"align":["right"]},{"label":["19"],"name":[13],"type":["dbl"],"align":["right"]},{"label":["20"],"name":[14],"type":["dbl"],"align":["right"]},{"label":["21"],"name":[15],"type":["dbl"],"align":["right"]},{"label":["22"],"name":[16],"type":["dbl"],"align":["right"]},{"label":["23"],"name":[17],"type":["dbl"],"align":["right"]},{"label":["24"],"name":[18],"type":["dbl"],"align":["right"]},{"label":["25"],"name":[19],"type":["dbl"],"align":["right"]},{"label":["26"],"name":[20],"type":["dbl"],"align":["right"]},{"label":["27"],"name":[21],"type":["dbl"],"align":["right"]},{"label":["28"],"name":[22],"type":["dbl"],"align":["right"]},{"label":["10H"],"name":[23],"type":["dbl"],"align":["right"]},{"label":["11H"],"name":[24],"type":["dbl"],"align":["right"]},{"label":["13H"],"name":[25],"type":["dbl"],"align":["right"]},{"label":["25H"],"name":[26],"type":["dbl"],"align":["right"]},{"label":["26H"],"name":[27],"type":["dbl"],"align":["right"]},{"label":["28_27H"],"name":[28],"type":["dbl"],"align":["right"]},{"label":["9H"],"name":[29],"type":["dbl"],"align":["right"]}],"data":[{"1":"18413.559011","2":"37154.907565","3":"29905.467599","4":"37269.520078","5":"65123.830420","6":"70386.517387","7":"11692.927915","8":"20594.837963","9":"1.288786e+05","10":"49540.841807","11":"1.819237e+05","12":"5.524644e+04","13":"85492.280370","14":"70448.615955","15":"72095.363151","16":"5.947517e+04","17":"5859.6638755","18":"2.740718e+05","19":"8717.629476","20":"68331.154564","21":"29626.637329","22":"29494.586674","23":"2.310700e+04","24":"11006.223225","25":"46656.422138","26":"86179.317173","27":"35174.012033","28":"1.629950e+04","29":"19179.725568","_rn_":"SLC4A1"},{"1":"5563.257729","2":"5877.020102","3":"6887.251205","4":"9767.603431","5":"8292.251025","6":"7861.023541","7":"6317.570016","8":"10299.831310","9":"1.009632e+04","10":"9195.983031","11":"1.085651e+04","12":"4.118093e+03","13":"7999.245263","14":"9362.227606","15":"3755.315892","16":"4.793874e+03","17":"3300.6247886","18":"8.541597e+03","19":"6853.632787","20":"6297.229908","21":"9840.098802","22":"13991.408928","23":"7.590830e+03","24":"7899.630996","25":"9002.061714","26":"10937.041581","27":"6757.794185","28":"7.544070e+03","29":"4737.877270","_rn_":"UPF1"},{"1":"0.000000","2":"0.000000","3":"0.000000","4":"0.000000","5":"0.000000","6":"0.000000","7":"0.000000","8":"0.000000","9":"1.632462e+00","10":"1.030403","11":"0.000000e+00","12":"7.052327e+00","13":"0.000000","14":"0.000000","15":"0.000000","16":"0.000000e+00","17":"0.0000000","18":"0.000000e+00","19":"0.000000","20":"0.000000","21":"0.000000","22":"0.000000","23":"0.000000e+00","24":"0.000000","25":"1.608435","26":"0.000000","27":"0.000000","28":"0.000000e+00","29":"0.000000","_rn_":"CACNA1G"},{"1":"0.000000","2":"0.000000","3":"0.000000","4":"0.000000","5":"0.000000","6":"0.000000","7":"0.000000","8":"0.000000","9":"0.000000e+00","10":"0.000000","11":"0.000000e+00","12":"0.000000e+00","13":"0.000000","14":"0.000000","15":"0.000000","16":"0.000000e+00","17":"0.0000000","18":"0.000000e+00","19":"0.000000","20":"0.000000","21":"0.000000","22":"0.000000","23":"0.000000e+00","24":"0.000000","25":"0.000000","26":"0.000000","27":"0.000000","28":"0.000000e+00","29":"0.000000","_rn_":"C6"},{"1":"9.075933","2":"20.535213","3":"20.817857","4":"10.299503","5":"30.686296","6":"108.438888","7":"64.011776","8":"14.516938","9":"3.585940e+01","10":"21.124614","11":"2.596236e+01","12":"1.409315e+01","13":"34.199203","14":"17.582618","15":"14.001306","16":"3.173719e+01","17":"25.8651867","18":"4.952495e+00","19":"26.020176","20":"47.429881","21":"20.610677","22":"33.687060","23":"1.357002e+02","24":"11.728961","25":"37.974730","26":"0.000000","27":"27.905433","28":"5.212373e+01","29":"19.647406","_rn_":"SLC12A3"},{"1":"1062.300434","2":"818.307877","3":"689.445570","4":"710.525923","5":"1048.445092","6":"1013.525460","7":"919.501350","8":"1536.506845","9":"1.543077e+03","10":"850.968933","11":"2.138352e+03","12":"7.329152e+02","13":"989.450301","14":"1593.910012","15":"805.445488","16":"9.285314e+02","17":"823.8140420","18":"8.607010e+02","19":"808.836044","20":"671.581926","21":"861.653799","22":"1626.712005","23":"1.626308e+03","24":"1418.557829","25":"1162.484962","26":"306.542300","27":"1137.447176","28":"1.130615e+03","29":"1611.803806","_rn_":"ACACB"},{"1":"0.000000","2":"0.000000","3":"0.000000","4":"0.000000","5":"0.000000","6":"0.000000","7":"0.000000","8":"0.000000","9":"0.000000e+00","10":"0.000000","11":"0.000000e+00","12":"0.000000e+00","13":"0.000000","14":"0.000000","15":"0.000000","16":"0.000000e+00","17":"0.0000000","18":"0.000000e+00","19":"0.000000","20":"0.000000","21":"0.000000","22":"0.000000","23":"0.000000e+00","24":"0.000000","25":"0.000000","26":"0.000000","27":"0.000000","28":"0.000000e+00","29":"0.000000","_rn_":"CACNA1S"},{"1":"788.753549","2":"835.097894","3":"1253.411021","4":"2263.971205","5":"1381.257207","6":"1541.866757","7":"1255.515991","8":"1081.130021","9":"1.287859e+03","10":"2006.640998","11":"1.909900e+03","12":"7.747726e+02","13":"2603.407664","14":"1970.990233","15":"612.513156","16":"8.027249e+02","17":"767.4039262","18":"2.823940e+03","19":"927.649788","20":"1255.373720","21":"945.329893","22":"1755.635024","23":"1.179051e+03","24":"1174.040593","25":"2215.654658","26":"1881.252344","27":"1079.710083","28":"8.124181e+02","29":"1104.140305","_rn_":"NLRC4"},{"1":"0.000000","2":"0.000000","3":"0.000000","4":"1.085422","5":"0.000000","6":"0.000000","7":"0.000000","8":"0.000000","9":"0.000000e+00","10":"0.000000","11":"0.000000e+00","12":"0.000000e+00","13":"0.000000","14":"0.000000","15":"0.000000","16":"0.000000e+00","17":"2.9396430","18":"0.000000e+00","19":"0.000000","20":"1.920892","21":"0.000000","22":"0.000000","23":"0.000000e+00","24":"0.000000","25":"0.000000","26":"0.000000","27":"0.000000","28":"0.000000e+00","29":"0.000000","_rn_":"MYH7"},{"1":"7932.458843","2":"7254.237848","3":"8833.315727","4":"7489.761901","5":"10995.004437","6":"10873.875758","7":"8187.040331","8":"9886.053952","9":"1.588488e+04","10":"10010.770750","11":"1.111862e+04","12":"6.731531e+03","13":"9598.274061","14":"11841.362910","15":"7039.720102","16":"7.439721e+03","17":"6591.3404498","18":"8.011283e+03","19":"8268.051202","20":"11582.869188","21":"11630.711462","22":"17184.531486","23":"9.277256e+03","24":"10650.990023","25":"9550.378338","26":"6443.944584","27":"10505.064061","28":"9.456160e+03","29":"11429.155317","_rn_":"SBF1"},{"1":"142.434866","2":"130.146948","3":"136.293246","4":"80.692736","5":"154.980101","6":"274.710410","7":"183.807134","8":"153.781359","9":"1.866005e+02","10":"124.933315","11":"1.730426e+02","12":"8.408049e+01","13":"120.939944","14":"225.644946","15":"106.842703","16":"8.030370e+01","17":"105.9262431","18":"1.281893e+02","19":"115.300692","20":"154.901099","21":"218.125713","22":"237.923581","23":"2.492694e+02","24":"148.819746","25":"93.480741","26":"83.549239","27":"186.347512","28":"1.148204e+02","29":"245.157426","_rn_":"HAGHL"},{"1":"4.567232","2":"3.470169","3":"1.589024","4":"0.000000","5":"1.263354","6":"0.000000","7":"0.000000","8":"0.000000","9":"1.201768e+00","10":"1.223673","11":"1.183274e+00","12":"0.000000e+00","13":"1.270854","14":"3.833963","15":"0.000000","16":"0.000000e+00","17":"0.0000000","18":"6.196551e+00","19":"0.000000","20":"0.000000","21":"0.000000","22":"1.186347","23":"0.000000e+00","24":"0.000000","25":"0.000000","26":"0.000000","27":"0.000000","28":"0.000000e+00","29":"0.000000","_rn_":"MYH14"},{"1":"713.442059","2":"385.998711","3":"569.254295","4":"608.932952","5":"479.415800","6":"730.810821","7":"828.389234","8":"917.911584","9":"8.373560e+02","10":"688.849676","11":"8.275453e+02","12":"4.159466e+02","13":"642.230717","14":"971.403731","15":"746.302416","16":"7.061477e+02","17":"565.7279499","18":"5.358893e+02","19":"250.016155","20":"709.477548","21":"654.876636","22":"1022.666798","23":"5.659908e+02","24":"861.125078","25":"614.310885","26":"439.406561","27":"958.777208","28":"9.605722e+02","29":"539.957087","_rn_":"CUBN"},{"1":"76.289141","2":"70.750718","3":"60.340725","4":"40.012201","5":"117.769337","6":"96.516506","7":"86.771197","8":"101.670688","9":"2.228812e+02","10":"118.494345","11":"1.220687e+02","12":"1.090150e+02","13":"128.068220","14":"142.458684","15":"143.874115","16":"1.025198e+02","17":"109.5204929","18":"1.177443e+02","19":"102.346193","20":"118.451891","21":"133.561863","22":"246.159651","23":"1.476159e+02","24":"124.785171","25":"116.593626","26":"130.323871","27":"182.708586","28":"1.019817e+02","29":"185.237880","_rn_":"ENO3"},{"1":"91.268952","2":"53.420116","3":"38.418425","4":"175.063446","5":"133.740410","6":"63.009497","7":"80.625531","8":"105.671914","9":"1.239286e+02","10":"112.335556","11":"1.243973e+02","12":"4.948774e+01","13":"58.463509","14":"140.923168","15":"46.698967","16":"6.173562e+01","17":"42.9579221","18":"4.760082e+01","19":"115.849543","20":"111.384814","21":"115.489067","22":"122.427577","23":"4.873094e+01","24":"71.778129","25":"71.960057","26":"214.005369","27":"96.498993","28":"1.210786e+02","29":"126.734494","_rn_":"CHRNE"},{"1":"152.142907","2":"181.843280","3":"189.522945","4":"183.562606","5":"202.290378","6":"283.609606","7":"216.425055","8":"107.491097","9":"2.964571e+02","10":"185.100959","11":"3.909292e+02","12":"1.711034e+02","13":"298.059754","14":"406.359233","15":"232.715438","16":"2.273287e+02","17":"174.3662640","18":"4.577276e+02","19":"216.549341","20":"290.560480","21":"164.055070","22":"407.544264","23":"2.600964e+02","24":"250.128910","25":"235.487776","26":"537.356780","27":"189.806713","28":"1.725613e+02","29":"205.308627","_rn_":"SIAE"},{"1":"2861.536153","2":"2617.759994","3":"2760.587249","4":"2380.200522","5":"3661.180142","6":"3309.428696","7":"3152.433536","8":"3063.883451","9":"6.221585e+03","10":"3454.669874","11":"5.223174e+03","12":"2.557858e+03","13":"3341.819268","14":"4809.972672","15":"3065.422645","16":"2.694258e+03","17":"2418.2177052","18":"3.319698e+03","19":"2840.429573","20":"3455.830925","21":"3554.732808","22":"6069.418757","23":"3.420021e+03","24":"3817.025633","25":"3634.392182","26":"2115.144691","27":"3772.533141","28":"3.251596e+03","29":"3321.420757","_rn_":"MADD"},{"1":"484.638599","2":"624.074544","3":"509.470263","4":"1358.960641","5":"659.793538","6":"469.050983","7":"551.748687","8":"787.001660","9":"5.072710e+02","10":"1094.423958","11":"9.810169e+02","12":"3.010140e+02","13":"825.234355","14":"686.519878","15":"195.553000","16":"4.734371e+02","17":"361.7540403","18":"9.244881e+02","19":"539.063292","20":"275.681996","21":"1057.836568","22":"1343.560097","23":"4.685272e+02","24":"433.811061","25":"1108.608018","26":"884.581155","27":"390.275218","28":"5.354038e+02","29":"386.004627","_rn_":"CFAP92"},{"1":"1127.179235","2":"857.179242","3":"721.495001","4":"824.679648","5":"956.037910","6":"993.833257","7":"903.658758","8":"776.180378","9":"1.323546e+03","10":"944.048960","11":"1.550434e+03","12":"9.330945e+02","13":"1105.063785","14":"1730.721949","15":"884.605918","16":"7.532732e+02","17":"1313.7113453","18":"1.338929e+03","19":"808.387534","20":"1112.815958","21":"734.010586","22":"1549.289819","23":"9.764989e+02","24":"947.863123","25":"1145.538335","26":"742.660376","27":"1230.561907","28":"8.268803e+02","29":"1465.828954","_rn_":"ACADM"},{"1":"187.329941","2":"325.410239","3":"174.812380","4":"249.518522","5":"369.949124","6":"212.859620","7":"298.686667","8":"95.789864","9":"1.742035e+02","10":"152.515328","11":"3.249609e+02","12":"2.579675e+02","13":"266.462801","14":"459.400769","15":"345.272057","16":"1.813451e+02","17":"310.9734945","18":"1.618706e+02","19":"130.558303","20":"607.463496","21":"242.028356","22":"700.472549","23":"1.306034e+02","24":"17.551163","25":"139.038511","26":"21.312699","27":"236.020105","28":"1.719474e+02","29":"95.646722","_rn_":"CR2"},{"1":"151.331836","2":"171.847138","3":"138.169608","4":"121.132605","5":"220.308491","6":"154.759873","7":"284.600152","8":"189.246613","9":"3.385679e+02","10":"416.972167","11":"2.706268e+02","12":"8.886948e+01","13":"229.975341","14":"346.218821","15":"204.744989","16":"1.311001e+02","17":"83.7335548","18":"3.503489e+02","19":"130.155476","20":"369.481654","21":"128.881148","22":"273.376322","23":"1.376684e+02","24":"101.061680","25":"172.743924","26":"236.574096","27":"519.265362","28":"9.683763e+01","29":"113.572210","_rn_":"CENPF"},{"1":"53.584460","2":"47.680681","3":"45.468460","4":"57.142839","5":"55.914331","6":"58.738406","7":"106.036461","8":"29.571657","9":"4.940112e+01","10":"51.118231","11":"9.411371e+01","12":"6.437089e+01","13":"44.396944","14":"120.043382","15":"42.645956","16":"3.541889e+01","17":"98.1855005","18":"6.445648e+01","19":"45.215958","20":"32.520734","21":"51.833553","22":"48.821798","23":"6.165953e+01","24":"7.674580","25":"33.891634","26":"13.846146","27":"14.438947","28":"2.014471e+01","29":"41.970576","_rn_":"ELOVL4"},{"1":"79.286921","2":"100.662839","3":"80.633155","4":"257.527769","5":"172.357928","6":"157.484851","7":"139.497511","8":"234.414531","9":"1.736914e+02","10":"217.905423","11":"1.864112e+02","12":"1.107555e+02","13":"186.383886","14":"199.632228","15":"97.798714","16":"9.802516e+01","17":"90.8157281","18":"2.266362e+02","19":"154.013885","20":"56.324651","21":"130.222967","22":"301.426129","23":"1.271294e+02","24":"120.654603","25":"213.486102","26":"199.361621","27":"137.941855","28":"1.630681e+02","29":"101.809544","_rn_":"CHRNA10"},{"1":"1.696674","2":"53.761035","3":"100.063698","4":"155.648804","5":"160.795642","6":"30.250001","7":"136.337579","8":"247.038401","9":"7.057621e+01","10":"77.011781","11":"6.475814e+02","12":"2.439942e+01","13":"52.958182","14":"30.860914","15":"1.227918","16":"4.753179e+01","17":"6.4099365","18":"1.491739e+01","19":"119.381454","20":"98.693860","21":"73.678320","22":"20.280698","23":"6.663797e+01","24":"156.830507","25":"50.126319","26":"141.075057","27":"265.448159","28":"6.589102e+01","29":"23.747481","_rn_":"CACNG6"},{"1":"254.399940","2":"253.453781","3":"291.366235","4":"271.270268","5":"313.486105","6":"346.753633","7":"208.904248","8":"302.512840","9":"4.270296e+02","10":"402.261713","11":"4.192567e+02","12":"2.411887e+02","13":"381.782134","14":"552.218576","15":"213.444459","16":"2.484185e+02","17":"243.8416758","18":"3.820154e+02","19":"286.271862","20":"421.495654","21":"489.883874","22":"601.255867","23":"4.036403e+02","24":"299.607824","25":"403.622898","26":"145.205540","27":"330.577508","28":"2.826651e+02","29":"549.145017","_rn_":"TACO1"},{"1":"0.000000","2":"11.234047","3":"12.109335","4":"18.756652","5":"12.134933","6":"7.464057","7":"19.330725","8":"13.909461","9":"1.347118e+01","10":"13.493307","11":"8.279918e+00","12":"3.544482e+00","13":"4.868367","14":"9.311505","15":"15.846435","16":"1.116485e+01","17":"7.4756105","18":"6.621533e+00","19":"5.016031","20":"0.000000","21":"4.929832","22":"13.904249","23":"0.000000e+00","24":"61.489435","25":"16.977839","26":"0.000000","27":"17.446105","28":"9.454719e-01","29":"9.456307","_rn_":"SLC3A1"},{"1":"0.000000","2":"0.000000","3":"0.000000","4":"2.207571","5":"0.000000","6":"0.000000","7":"2.173201","8":"0.000000","9":"4.467181e+00","10":"0.000000","11":"0.000000e+00","12":"0.000000e+00","13":"0.000000","14":"1.002083","15":"0.000000","16":"9.141087e-01","17":"0.0000000","18":"5.406349e-01","19":"1.544079","20":"0.000000","21":"0.000000","22":"11.900801","23":"0.000000e+00","24":"0.000000","25":"0.000000","26":"0.000000","27":"0.000000","28":"0.000000e+00","29":"9.731740","_rn_":"SLC13A5"},{"1":"9595.833195","2":"10789.477338","3":"13635.768496","4":"28474.637591","5":"16615.951324","6":"13701.273630","7":"13603.222521","8":"20646.258960","9":"1.322420e+04","10":"19421.733954","11":"1.813765e+04","12":"7.647414e+03","13":"22214.232149","14":"18033.436793","15":"5770.461128","16":"9.975484e+03","17":"6436.6634113","18":"1.989949e+04","19":"12911.157159","20":"15437.572785","21":"21057.809224","22":"30041.080220","23":"1.588465e+04","24":"16931.253902","25":"19719.340313","26":"21800.919991","27":"13135.595955","28":"1.477119e+04","29":"8880.060346","_rn_":"SLC16A3"},{"1":"0.000000","2":"1.228988","3":"18.466566","4":"1.703805","5":"11.833146","6":"19.941276","7":"12.941246","8":"8.904761","9":"1.040279e+01","10":"11.212233","11":"3.296844e+00","12":"3.800509e+00","13":"10.162633","14":"7.163213","15":"4.236601","16":"1.255703e+00","17":"0.6811458","18":"2.365148e+01","19":"1.577225","20":"2.772764","21":"15.219942","22":"8.767794","23":"0.000000e+00","24":"0.000000","25":"2.218436","26":"7.106482","27":"2.796926","28":"0.000000e+00","29":"0.000000","_rn_":"CARD14"},{"1":"888.385263","2":"1020.295410","3":"627.491422","4":"1136.075706","5":"1035.273292","6":"1339.135769","7":"811.052564","8":"584.999925","9":"9.493489e+02","10":"1309.609839","11":"9.358026e+02","12":"5.900281e+02","13":"1050.838250","14":"640.049241","15":"524.273411","16":"7.581540e+02","17":"428.9480223","18":"7.129526e+02","19":"729.899290","20":"1092.894402","21":"1120.373013","22":"794.499162","23":"1.586971e+03","24":"1086.776566","25":"1203.805259","26":"1635.680953","27":"824.949600","28":"4.057694e+02","29":"648.210124","_rn_":"TRPM2"},{"1":"2816.661038","2":"3163.829016","3":"4777.561026","4":"9600.613988","5":"5491.561193","6":"6048.077418","7":"5023.039693","8":"9195.378942","9":"6.034266e+03","10":"8187.869866","11":"8.906448e+03","12":"2.308816e+03","13":"6510.054452","14":"6923.582257","15":"2150.728655","16":"3.939811e+03","17":"2249.3371448","18":"7.799573e+03","19":"5687.087940","20":"5022.843115","21":"7523.828789","22":"11178.363260","23":"4.464482e+03","24":"6571.476983","25":"8550.572374","26":"10891.555440","27":"4149.331926","28":"5.826652e+03","29":"3407.561258","_rn_":"NLRP12"},{"1":"6776.526280","2":"7679.432448","3":"8070.816795","4":"14748.686603","5":"8341.036795","6":"9520.512092","7":"8751.187121","8":"11242.043297","9":"9.796784e+03","10":"15060.491666","11":"1.398725e+04","12":"5.364584e+03","13":"13254.477506","14":"12365.916109","15":"4532.720684","16":"5.761925e+03","17":"4110.8372318","18":"1.205403e+04","19":"7189.393331","20":"8377.772513","21":"12130.659686","22":"15780.137971","23":"8.751368e+03","24":"9945.474576","25":"12634.821906","26":"12947.989103","27":"7092.638650","28":"8.888104e+03","29":"7945.712895","_rn_":"SLC12A9"},{"1":"0.000000","2":"6.087859","3":"1.896604","4":"1.187205","5":"1.753648","6":"6.355633","7":"0.000000","8":"0.853664","9":"4.766054e+00","10":"1.061271","11":"1.003460e+00","12":"9.840591e-01","13":"4.645586","14":"8.192732","15":"1.981425","16":"9.620631e-01","17":"4.7783658","18":"1.232053e+00","19":"3.260698","20":"4.410976","21":"7.702236","22":"1.919039","23":"2.156278e+00","24":"1.145494","25":"7.472596","26":"0.000000","27":"0.000000","28":"0.000000e+00","29":"0.000000","_rn_":"CACNA1B"},{"1":"442.981203","2":"573.965581","3":"379.422312","4":"513.041880","5":"598.938138","6":"858.442746","7":"590.593160","8":"683.629387","9":"1.086520e+03","10":"445.002319","11":"6.661853e+02","12":"4.718751e+02","13":"529.047202","14":"821.543572","15":"474.118695","16":"3.930306e+02","17":"308.2508720","18":"5.309963e+02","19":"537.066827","20":"561.574398","21":"558.633306","22":"1096.326169","23":"6.452391e+02","24":"544.120725","25":"618.329079","26":"306.700526","27":"624.100063","28":"5.666637e+02","29":"969.363426","_rn_":"FCSK"},{"1":"17.995131","2":"7.923227","3":"5.292013","4":"18.905450","5":"4.446078","6":"6.048713","7":"11.083364","8":"4.223217","9":"1.671735e+01","10":"22.822704","11":"1.717881e+01","12":"6.361447e+00","13":"12.205096","14":"12.523207","15":"3.706650","16":"1.640222e+01","17":"7.1694966","18":"9.597481e+00","19":"24.175203","20":"10.747098","21":"0.000000","22":"40.158207","23":"5.202201e+00","24":"14.120704","25":"21.500378","26":"1.022654","27":"11.897370","28":"6.751762e+00","29":"4.219849","_rn_":"PGAM2"},{"1":"21.138781","2":"18.015349","3":"0.000000","4":"70.514136","5":"73.046664","6":"19.236417","7":"24.042454","8":"118.705125","9":"1.282044e+02","10":"87.497461","11":"1.235095e+02","12":"9.879593e+01","13":"39.419526","14":"136.788048","15":"12.941198","16":"3.226335e+01","17":"12.2749240","18":"6.887071e+01","19":"14.701003","20":"20.308024","21":"22.689632","22":"94.416887","23":"3.050247e+01","24":"59.726052","25":"43.610238","26":"79.891425","27":"9.088040","28":"6.318782e+01","29":"47.099352","_rn_":"CHRFAM7A"},{"1":"2735.552515","2":"1124.500199","3":"2626.273402","4":"2303.150548","5":"2086.875979","6":"2128.304732","7":"1123.940305","8":"4090.246846","9":"4.120913e+03","10":"4875.939206","11":"2.877152e+03","12":"1.463499e+03","13":"8124.287816","14":"4653.718588","15":"1321.607659","16":"1.207700e+03","17":"1155.6136266","18":"3.633788e+03","19":"1495.706206","20":"2869.083821","21":"4173.244865","22":"4941.273984","23":"3.789945e+03","24":"3089.223799","25":"3174.618505","26":"5762.837320","27":"1903.768625","28":"2.406940e+03","29":"1649.191736","_rn_":"NOD2"},{"1":"0.000000","2":"0.000000","3":"0.000000","4":"0.000000","5":"0.000000","6":"0.000000","7":"2.893543","8":"0.000000","9":"0.000000e+00","10":"0.000000","11":"0.000000e+00","12":"0.000000e+00","13":"6.734763","14":"2.193581","15":"0.000000","16":"0.000000e+00","17":"0.6342587","18":"0.000000e+00","19":"0.000000","20":"0.000000","21":"0.000000","22":"0.000000","23":"0.000000e+00","24":"0.000000","25":"0.000000","26":"0.000000","27":"0.000000","28":"0.000000e+00","29":"0.000000","_rn_":"SCNN1B"},{"1":"1181.695038","2":"1338.446269","3":"967.785215","4":"1116.668156","5":"1424.809827","6":"1817.252460","7":"1500.493580","8":"1895.309173","9":"2.380886e+03","10":"1368.762145","11":"1.867884e+03","12":"1.227077e+03","13":"1265.098898","14":"2239.041458","15":"1215.262417","16":"1.134400e+03","17":"1414.2982231","18":"9.376756e+02","19":"1551.858380","20":"2140.658120","21":"1814.913815","22":"2520.862706","23":"1.504007e+03","24":"1555.549098","25":"1399.280964","26":"814.664860","27":"2503.354274","28":"1.604873e+03","29":"2469.290384","_rn_":"ACAD9"},{"1":"0.000000","2":"0.000000","3":"0.000000","4":"0.000000","5":"1.646037","6":"0.000000","7":"0.000000","8":"0.000000","9":"0.000000e+00","10":"0.000000","11":"4.224352e+00","12":"0.000000e+00","13":"0.000000","14":"2.609011","15":"0.000000","16":"0.000000e+00","17":"0.0000000","18":"0.000000e+00","19":"0.000000","20":"0.000000","21":"0.000000","22":"1.072744","23":"9.506601e-01","24":"0.000000","25":"0.000000","26":"0.000000","27":"0.000000","28":"0.000000e+00","29":"0.000000","_rn_":"CLCNKA"},{"1":"0.000000","2":"23.038105","3":"9.712320","4":"23.139042","5":"23.601222","6":"11.910610","7":"3.888318","8":"25.110559","9":"1.995568e+01","10":"14.358246","11":"6.961501e+00","12":"1.527935e+01","13":"4.781669","14":"3.912201","15":"8.050006","16":"8.892107e+00","17":"6.1997952","18":"1.990531e+00","19":"12.206454","20":"10.181881","21":"18.587616","22":"6.073011","23":"2.005034e+01","24":"72.053537","25":"8.280907","26":"35.781419","27":"3.801355","28":"0.000000e+00","29":"0.000000","_rn_":"CLCN1"},{"1":"161.753797","2":"69.111202","3":"150.323892","4":"80.622358","5":"135.421909","6":"113.802159","7":"53.557780","8":"131.715183","9":"1.091472e+02","10":"131.229194","11":"1.052495e+02","12":"1.125020e+02","13":"120.357371","14":"225.935486","15":"109.936548","16":"1.296353e+02","17":"48.1614680","18":"1.528087e+01","19":"147.103238","20":"119.041034","21":"154.090785","22":"112.955407","23":"2.759285e+02","24":"243.003849","25":"131.955075","26":"269.880981","27":"123.642178","28":"6.742728e+01","29":"136.380386","_rn_":"RYR1"},{"1":"150.595016","2":"155.430592","3":"241.813398","4":"342.826837","5":"424.134020","6":"776.084146","7":"372.753874","8":"379.073191","9":"8.369385e+02","10":"537.485290","11":"7.615646e+02","12":"1.917086e+02","13":"470.928183","14":"658.974635","15":"220.546454","16":"2.196690e+02","17":"1148.4905798","18":"9.066298e+02","19":"226.878149","20":"674.647719","21":"484.850019","22":"891.989430","23":"3.457686e+02","24":"339.657449","25":"624.809935","26":"405.324752","27":"519.609659","28":"4.550096e+02","29":"2153.390185","_rn_":"TOMM7"},{"1":"5387.570197","2":"6353.022810","3":"5429.518460","4":"5338.951263","5":"6402.732874","6":"6459.252596","7":"5543.065837","8":"5440.755082","9":"9.448230e+03","10":"6085.820146","11":"8.699591e+03","12":"6.294002e+03","13":"6320.045619","14":"10226.264881","15":"5967.090756","16":"4.925308e+03","17":"5924.0113657","18":"7.242114e+03","19":"4573.157627","20":"6544.706840","21":"6430.494391","22":"11727.068104","23":"5.249133e+03","24":"5710.460739","25":"6352.429698","26":"2898.219038","27":"6475.578785","28":"5.127992e+03","29":"7259.884507","_rn_":"LRBA"},{"1":"1625.941135","2":"1801.825492","3":"1243.316406","4":"1528.485536","5":"1678.782374","6":"2472.288984","7":"2153.368658","8":"1674.296850","9":"2.576222e+03","10":"1832.273019","11":"2.257282e+03","12":"1.676075e+03","13":"2219.407716","14":"2784.883889","15":"1629.546939","16":"1.803667e+03","17":"1327.6239193","18":"2.134070e+03","19":"1755.906027","20":"2374.610718","21":"2439.757901","22":"4116.935896","23":"2.140085e+03","24":"2102.816005","25":"1573.823855","26":"1770.679537","27":"2020.309724","28":"1.875075e+03","29":"1938.604560","_rn_":"INF2"},{"1":"0.000000","2":"0.000000","3":"0.000000","4":"0.000000","5":"0.000000","6":"0.000000","7":"0.000000","8":"0.000000","9":"0.000000e+00","10":"0.000000","11":"0.000000e+00","12":"0.000000e+00","13":"0.000000","14":"0.000000","15":"0.000000","16":"0.000000e+00","17":"0.0000000","18":"0.000000e+00","19":"0.000000","20":"0.000000","21":"0.000000","22":"0.000000","23":"0.000000e+00","24":"0.000000","25":"0.000000","26":"0.000000","27":"0.000000","28":"0.000000e+00","29":"0.000000","_rn_":"KCNJ18"}],"options":{"columns":{"min":{},"max":[10]},"rows":{"min":[15],"max":[15]},"pages":{}}}
+  </script>
+</div>
+<p>Below is a heatmap highlighting the expression of our genes of
+interest across batch, disease group, and affected status.</p>
+<pre class="r"><code>mat3 &lt;- assay(vsd_limma)[filtered_by_interest$Ensembl_ID, ]
+rownames(mat3) &lt;- gene_info$gene_name[match(filtered_by_interest$Ensembl_ID, gene_info$Ensembl_ID)]
+df_sub &lt;- as.data.frame(colData(vsd_limma)[, c(&quot;Affected&quot;, &quot;Category&quot;)])
+pheatmap(mat3, annotation_col = df_sub, annotation_colors = ann_colors2, fontsize = 4, angle_col = c(&quot;0&quot;))</code></pre>
+<p><img src="figure/all-condition-analysis.Rmd/heatmap-genes-interest-all-1.png" width="1200px" style="display: block; margin: auto;" /></p>
+</div>
+<div id="enrichment-analysis" class="section level2">
+<h2>Enrichment analysis</h2>
+<pre class="r"><code># res &lt;- gost(query = significant_data$name, organism = &quot;hsapiens&quot;, significant = FALSE) # should significant be true or false?
+# 
+# x &lt;- gostplot(res, capped = FALSE, interactive = FALSE)
+# x + geom_label_repel(aes(label = &quot;term_id&quot;),
+#   box.padding   = 0.35,
+#   point.padding = 0.5,
+#   segment.color = &quot;grey50&quot;
+# )</code></pre>
+<pre class="r"><code># Your existing code for obtaining geneList with Ensembl IDs
+rownames(res_aff_vs_unaff_df_sub) &lt;- gsub(&quot;\\..*&quot;, &quot;&quot;, rownames(res_aff_vs_unaff_df_sub))
+res_aff_vs_unaff_df_sub &lt;- res_aff_vs_unaff_df_sub %&gt;% dplyr::distinct()
+geneList &lt;- res_aff_vs_unaff_df_sub$log2FoldChange
+geneList2 &lt;- res_aff_vs_unaff_df_sub$padj
+geneList3 &lt;- res_aff_vs_unaff_df_sub$padj
+names(geneList3) &lt;- rownames(res_aff_vs_unaff_df_sub)
+names(geneList2) &lt;- rownames(res_aff_vs_unaff_df_sub)
+names(geneList) &lt;- rownames(res_aff_vs_unaff_df_sub)
+
+# Initialize BioMart
+ensembl &lt;- useMart(&quot;ensembl&quot;, dataset = &quot;hsapiens_gene_ensembl&quot;)
+
+# Convert all Ensembl IDs in geneList to Entrez IDs
+attributes &lt;- c(&quot;ensembl_gene_id&quot;, &quot;entrezgene_id&quot;)
+filters &lt;- &quot;ensembl_gene_id&quot;
+results &lt;- getBM(attributes = attributes, filters = filters, values = names(geneList), mart = ensembl)
+results3 &lt;- getBM(attributes = attributes, filters = filters, values = names(geneList2), mart = ensembl)
+
+# Convert all Ensembl IDs in geneList to Entrez IDs
+# This is for genes of interest
+attributes2 &lt;- c(&quot;hgnc_symbol&quot;, &quot;ensembl_gene_id&quot;, &quot;entrezgene_id&quot;)
+filters2 &lt;- &quot;hgnc_symbol&quot;
+results2 &lt;- getBM(attributes = attributes2, filters = filters2, values = genes_of_interest, mart = ensembl)
+
+# Remove rows with NA or empty Entrez IDs
+results &lt;- results[!is.na(results$entrezgene_id) &amp; results$entrezgene_id != &quot;&quot;, ]
+results3 &lt;- results3[!is.na(results3$entrezgene_id) &amp; results3$entrezgene_id != &quot;&quot;, ]
+
+results2 &lt;- results2[!is.na(results2$entrezgene_id) &amp; results2$entrezgene_id != &quot;&quot;, ]
+
+# Create a new geneList with Entrez IDs
+geneList_entrez &lt;- geneList[results$ensembl_gene_id]
+names(geneList_entrez) &lt;- results$entrezgene_id
+
+# Create a new geneList with Entrez IDs
+geneList_entrez2 &lt;- geneList2[results3$ensembl_gene_id]
+names(geneList_entrez2) &lt;- results3$entrezgene_id
+
+# Create a new geneList with Entrez IDs
+geneList_entrez3 &lt;- geneList3[results2$ensembl_gene_id]
+names(geneList_entrez3) &lt;- results2$entrezgene_id
+
+# Filter genes with abs(log2FoldChange) &gt; 2
+gene_entrez &lt;- names(geneList_entrez)[abs(geneList_entrez) &gt; 2]
+
+# Filter genes with padj &lt; .05
+gene_entrez2 &lt;- names(geneList_entrez2)[!is.na(geneList_entrez2) &amp; geneList_entrez2 &lt; .05]
+
+# Run enrichGO with Entrez IDs
+ego_cc &lt;- enrichGO(
+  gene = gene_entrez,
+  universe = names(geneList_entrez),
+  OrgDb = org.Hs.eg.db,
+  ont = &quot;CC&quot;,
+  pAdjustMethod = &quot;BH&quot;,
+  pvalueCutoff = 0.01,
+  qvalueCutoff = 0.05,
+  readable = TRUE
+)
+
+# Plot results
+dotplot(ego_cc, showCategory = 10, title = &quot;Overrepresented Cellular Components&quot;) + ggthemes::theme_clean()</code></pre>
+<p><img src="figure/all-condition-analysis.Rmd/enrichgo-cc-1.png" width="672" style="display: block; margin: auto;" /></p>
+<pre class="r"><code># ego_bp &lt;- enrichGO(
+#   gene = gene_entrez,
+#   universe = names(geneList_entrez),
+#   OrgDb = org.Hs.eg.db,
+#   ont = &quot;BP&quot;,
+#   pAdjustMethod = &quot;BH&quot;,
+#   pvalueCutoff = 0.01,
+#   qvalueCutoff = 0.05,
+#   readable = TRUE
+# )
+# 
+# # Plot results
+# dotplot(ego_bp, showCategory = 10, title = &quot;Overrepresented Biological Processes&quot;) + ggthemes::theme_clean()</code></pre>
+<pre class="r"><code>ego_mf &lt;- enrichGO(
+  gene = gene_entrez,
+  universe = names(geneList_entrez),
+  OrgDb = org.Hs.eg.db,
+  ont = &quot;MF&quot;,
+  pAdjustMethod = &quot;BH&quot;,
+  pvalueCutoff = 0.01,
+  qvalueCutoff = 0.05,
+  readable = TRUE
+)
+
+# Plot results
+dotplot(ego_mf, showCategory = 10, title = &quot;Overrepresented Molecular Functions&quot;) + ggthemes::theme_clean()</code></pre>
+<p><img src="figure/all-condition-analysis.Rmd/enrichgo-mf-1.png" width="672" style="display: block; margin: auto;" /></p>
+<pre class="r"><code>gl &lt;- geneList_entrez[abs(geneList_entrez) &gt; 2]
+gl &lt;- na.omit(gl)
+gl_sorted &lt;- sort(gl, decreasing = TRUE)
+
+gse &lt;- gseGO(
+  geneList = gl_sorted,
+  OrgDb = org.Hs.eg.db,
+  ont = &quot;ALL&quot;,
+  minGSSize = 3,
+  maxGSSize = 500,
+  pvalueCutoff = 0.05,
+  verbose = FALSE
+)
+
+dotplot(gse, showCategory = 10, split = &quot;.sign&quot;, title = &quot;GO Gene Set Enrichment Analysis&quot;) + facet_grid(. ~ .sign)</code></pre>
+<p><img src="figure/all-condition-analysis.Rmd/dose-plot-1.png" width="672" style="display: block; margin: auto;" /></p>
+<pre class="r"><code>kk2 &lt;- gseKEGG(
+  geneList = gl_sorted,
+  organism = &quot;hsa&quot;, # humans = hsa for KEGG
+  nPerm = 100000,
+  minGSSize = 3,
+  maxGSSize = 800,
+  pvalueCutoff = 0.05,
+  pAdjustMethod = &quot;none&quot;,
+  keyType = &quot;ncbi-geneid&quot;
+)
+
+dotplot(kk2, showCategory = 10, title = &quot;Enriched KEGG Pathways&quot;, split = &quot;.sign&quot;) + facet_grid(. ~ .sign)</code></pre>
+<p><img src="figure/all-condition-analysis.Rmd/kegg-plot-1.png" width="672" style="display: block; margin: auto;" /></p>
+<pre class="r"><code>y &lt;- enrichPathway(gene_entrez, pvalueCutoff = 0.05)
+
+dotplot(y, showCategory = 10, title = &quot;Reactome Pathway Over-representation Analysis&quot;, font.size = 10)</code></pre>
+<p><img src="figure/all-condition-analysis.Rmd/reactome-plot-1.png" width="672" style="display: block; margin: auto;" /></p>
+<pre class="r"><code>string_db &lt;- STRINGdb$new(version = &quot;11.5&quot;, species = 9606, score_threshold = 100, network_type = &quot;full&quot;, input_directory = &quot;&quot;)
+
+mapped_degs &lt;- string_db$map(significant_data, &quot;name&quot;, removeUnmappedRows = TRUE)</code></pre>
+<pre><code>Warning:  we couldn&#39;t map to STRING 34% of your identifiers</code></pre>
+<pre class="r"><code>hits &lt;- mapped_degs$STRING_id[1:29]
+
+mapped_degs_dec &lt;- string_db$add_diff_exp_color(mapped_degs, logFcColStr = &quot;lfc&quot;)
+
+payload_id &lt;- string_db$post_payload(mapped_degs_dec$STRING_id, colors = mapped_degs_dec$color)
+string_db$plot_network(hits, payload_id = payload_id)</code></pre>
+<p><img src="figure/all-condition-analysis.Rmd/stringdb-network-significant-1.png" width="672" style="display: block; margin: auto;" /></p>
+<pre class="r"><code>string_db &lt;- STRINGdb$new(version = &quot;11.5&quot;, species = 9606, score_threshold = 200, network_type = &quot;full&quot;, input_directory = &quot;&quot;)
+
+significant_data_copy &lt;- significant_data %&gt;% 
+  rename(gene_name = name, log2FoldChange = lfc, baseMean = mean)
+
+# Ensure both dataframes have the same columns (optional step to demonstrate alignment)
+# This step is not necessary if you are sure both dataframes are already aligned
+significant_data_copy &lt;- significant_data_copy[c(&quot;gene_name&quot;, &quot;baseMean&quot;, &quot;log2FoldChange&quot;)]
+filtered_by_interest2 &lt;- filtered_by_interest[c(&quot;gene_name&quot;, &quot;baseMean&quot;, &quot;log2FoldChange&quot;)]
+
+combined_df &lt;- dplyr::bind_rows(significant_data_copy, filtered_by_interest2)
+
+combined_df_mapped &lt;- string_db$map(combined_df, &quot;gene_name&quot;, removeUnmappedRows = TRUE)</code></pre>
+<pre><code>Warning:  we couldn&#39;t map to STRING 22% of your identifiers</code></pre>
+<pre class="r"><code>combined_hits &lt;- combined_df_mapped$STRING_id
+
+string_db$plot_network(combined_hits)</code></pre>
+<p><img src="figure/all-condition-analysis.Rmd/stringdb-network-combined-1.png" width="672" style="display: block; margin: auto;" /></p>
+<pre class="r"><code>combined_enrichment &lt;- string_db$get_enrichment(combined_hits)
+
+enrich_file_name &lt;- &quot;output/stringdb_combined_enrichment.csv&quot;
+write.csv(combined_enrichment, enrich_file_name, row.names = FALSE)</code></pre>
+<pre class="r"><code>listEnrichrSites()
+setEnrichrSite(&quot;Enrichr&quot;) # Human genes
+dbs &lt;- listEnrichrDbs()
+#query_dbs &lt;- c(&quot;GO_Molecular_Function_2015&quot;, &quot;GO_Cellular_Component_2015&quot;, &quot;GO_Biological_Process_2015&quot;)
+enriched &lt;- enrichr(genes = significant_data$name, databases = dbs$libraryName)</code></pre>
+<pre><code>Uploading data to Enrichr... Done.
+  Querying Genome_Browser_PWMs... Done.
+  Querying TRANSFAC_and_JASPAR_PWMs... Done.
+  Querying Transcription_Factor_PPIs... Done.
+  Querying ChEA_2013... Done.
+  Querying Drug_Perturbations_from_GEO_2014... Done.
+  Querying ENCODE_TF_ChIP-seq_2014... Done.
+  Querying BioCarta_2013... Done.
+  Querying Reactome_2013... Done.
+  Querying WikiPathways_2013... Done.
+  Querying Disease_Signatures_from_GEO_up_2014... Done.
+  Querying KEGG_2013... Done.
+  Querying TF-LOF_Expression_from_GEO... Done.
+  Querying TargetScan_microRNA... Done.
+  Querying PPI_Hub_Proteins... Done.
+  Querying GO_Molecular_Function_2015... Done.
+  Querying GeneSigDB... Done.
+  Querying Chromosome_Location... Done.
+  Querying Human_Gene_Atlas... Done.
+  Querying Mouse_Gene_Atlas... Done.
+  Querying GO_Cellular_Component_2015... Done.
+  Querying GO_Biological_Process_2015... Done.
+  Querying Human_Phenotype_Ontology... Done.
+  Querying Epigenomics_Roadmap_HM_ChIP-seq... Done.
+  Querying KEA_2013... Done.
+  Querying NURSA_Human_Endogenous_Complexome... Done.
+  Querying CORUM... Done.
+  Querying SILAC_Phosphoproteomics... Done.
+  Querying MGI_Mammalian_Phenotype_Level_3... Done.
+  Querying MGI_Mammalian_Phenotype_Level_4... Done.
+  Querying Old_CMAP_up... Done.
+  Querying Old_CMAP_down... Done.
+  Querying OMIM_Disease... Done.
+  Querying OMIM_Expanded... Done.
+  Querying VirusMINT... Done.
+  Querying MSigDB_Computational... Done.
+  Querying MSigDB_Oncogenic_Signatures... Done.
+  Querying Disease_Signatures_from_GEO_down_2014... Done.
+  Querying Virus_Perturbations_from_GEO_up... Done.
+  Querying Virus_Perturbations_from_GEO_down... Done.
+  Querying Cancer_Cell_Line_Encyclopedia... Done.
+  Querying NCI-60_Cancer_Cell_Lines... Done.
+  Querying Tissue_Protein_Expression_from_ProteomicsDB... Done.
+  Querying Tissue_Protein_Expression_from_Human_Proteome_Map... Done.
+  Querying HMDB_Metabolites... Done.
+  Querying Pfam_InterPro_Domains... Done.
+  Querying GO_Biological_Process_2013... Done.
+  Querying GO_Cellular_Component_2013... Done.
+  Querying GO_Molecular_Function_2013... Done.
+  Querying Allen_Brain_Atlas_up... Done.
+  Querying ENCODE_TF_ChIP-seq_2015... Done.
+  Querying ENCODE_Histone_Modifications_2015... Done.
+  Querying Phosphatase_Substrates_from_DEPOD... Done.
+  Querying Allen_Brain_Atlas_down... Done.
+  Querying ENCODE_Histone_Modifications_2013... Done.
+  Querying Achilles_fitness_increase... Done.
+  Querying Achilles_fitness_decrease... Done.
+  Querying MGI_Mammalian_Phenotype_2013... Done.
+  Querying BioCarta_2015... Done.
+  Querying HumanCyc_2015... Done.
+  Querying KEGG_2015... Done.
+  Querying NCI-Nature_2015... Done.
+  Querying Panther_2015... Done.
+  Querying WikiPathways_2015... Done.
+  Querying Reactome_2015... Done.
+  Querying ESCAPE... Done.
+  Querying HomoloGene... Done.
+  Querying Disease_Perturbations_from_GEO_down... Done.
+  Querying Disease_Perturbations_from_GEO_up... Done.
+  Querying Drug_Perturbations_from_GEO_down... Done.
+  Querying Genes_Associated_with_NIH_Grants... Done.
+  Querying Drug_Perturbations_from_GEO_up... Done.
+  Querying KEA_2015... Done.
+  Querying Gene_Perturbations_from_GEO_up... Done.
+  Querying Gene_Perturbations_from_GEO_down... Done.
+  Querying ChEA_2015... Done.
+  Querying dbGaP... Done.
+  Querying LINCS_L1000_Chem_Pert_up... Done.
+  Querying LINCS_L1000_Chem_Pert_down... Done.
+  Querying GTEx_Tissue_Expression_Down... Done.
+  Querying GTEx_Tissue_Expression_Up... Done.
+  Querying Ligand_Perturbations_from_GEO_down... Done.
+  Querying Aging_Perturbations_from_GEO_down... Done.
+  Querying Aging_Perturbations_from_GEO_up... Done.
+  Querying Ligand_Perturbations_from_GEO_up... Done.
+  Querying MCF7_Perturbations_from_GEO_down... Done.
+  Querying MCF7_Perturbations_from_GEO_up... Done.
+  Querying Microbe_Perturbations_from_GEO_down... Done.
+  Querying Microbe_Perturbations_from_GEO_up... Done.
+  Querying LINCS_L1000_Ligand_Perturbations_down... Done.
+  Querying LINCS_L1000_Ligand_Perturbations_up... Done.
+  Querying L1000_Kinase_and_GPCR_Perturbations_down... Done.
+  Querying L1000_Kinase_and_GPCR_Perturbations_up... Done.
+  Querying Reactome_2016... Done.
+  Querying KEGG_2016... Done.
+  Querying WikiPathways_2016... Done.
+  Querying ENCODE_and_ChEA_Consensus_TFs_from_ChIP-X... Done.
+  Querying Kinase_Perturbations_from_GEO_down... Done.
+  Querying Kinase_Perturbations_from_GEO_up... Done.
+  Querying BioCarta_2016... Done.
+  Querying HumanCyc_2016... Done.
+  Querying NCI-Nature_2016... Done.
+  Querying Panther_2016... Done.
+  Querying DrugMatrix... Done.
+  Querying ChEA_2016... Done.
+  Querying huMAP... Done.
+  Querying Jensen_TISSUES... Done.
+  Querying RNA-Seq_Disease_Gene_and_Drug_Signatures_from_GEO... Done.
+  Querying MGI_Mammalian_Phenotype_2017... Done.
+  Querying Jensen_COMPARTMENTS... Done.
+  Querying Jensen_DISEASES... Done.
+  Querying BioPlex_2017... Done.
+  Querying GO_Cellular_Component_2017... Done.
+  Querying GO_Molecular_Function_2017... Done.
+  Querying GO_Biological_Process_2017... Done.
+  Querying GO_Cellular_Component_2017b... Done.
+  Querying GO_Molecular_Function_2017b... Done.
+  Querying GO_Biological_Process_2017b... Done.
+  Querying ARCHS4_Tissues... Done.
+  Querying ARCHS4_Cell-lines... Done.
+  Querying ARCHS4_IDG_Coexp... Done.
+  Querying ARCHS4_Kinases_Coexp... Done.
+  Querying ARCHS4_TFs_Coexp... Done.
+  Querying SysMyo_Muscle_Gene_Sets... Done.
+  Querying miRTarBase_2017... Done.
+  Querying TargetScan_microRNA_2017... Done.
+  Querying Enrichr_Libraries_Most_Popular_Genes... Done.
+  Querying Enrichr_Submissions_TF-Gene_Coocurrence... Done.
+  Querying Data_Acquisition_Method_Most_Popular_Genes... Done.
+  Querying DSigDB... Done.
+  Querying GO_Biological_Process_2018... Done.
+  Querying GO_Cellular_Component_2018... Done.
+  Querying GO_Molecular_Function_2018... Done.
+  Querying TF_Perturbations_Followed_by_Expression... Done.
+  Querying Chromosome_Location_hg19... Done.
+  Querying NIH_Funded_PIs_2017_Human_GeneRIF... Done.
+  Querying NIH_Funded_PIs_2017_Human_AutoRIF... Done.
+  Querying Rare_Diseases_AutoRIF_ARCHS4_Predictions... Done.
+  Querying Rare_Diseases_GeneRIF_ARCHS4_Predictions... Done.
+  Querying NIH_Funded_PIs_2017_AutoRIF_ARCHS4_Predictions... Done.
+  Querying NIH_Funded_PIs_2017_GeneRIF_ARCHS4_Predictions... Done.
+  Querying Rare_Diseases_GeneRIF_Gene_Lists... Done.
+  Querying Rare_Diseases_AutoRIF_Gene_Lists... Done.
+  Querying SubCell_BarCode... Done.
+  Querying GWAS_Catalog_2019... Done.
+  Querying WikiPathways_2019_Human... Done.
+  Querying WikiPathways_2019_Mouse... Done.
+  Querying TRRUST_Transcription_Factors_2019... Done.
+  Querying KEGG_2019_Human... Done.
+  Querying KEGG_2019_Mouse... Done.
+  Querying InterPro_Domains_2019... Done.
+  Querying Pfam_Domains_2019... Done.
+  Querying DepMap_WG_CRISPR_Screens_Broad_CellLines_2019... Done.
+  Querying DepMap_WG_CRISPR_Screens_Sanger_CellLines_2019... Done.
+  Querying MGI_Mammalian_Phenotype_Level_4_2019... Done.
+  Querying UK_Biobank_GWAS_v1... Done.
+  Querying BioPlanet_2019... Done.
+  Querying ClinVar_2019... Done.
+  Querying PheWeb_2019... Done.
+  Querying DisGeNET... Done.
+  Querying HMS_LINCS_KinomeScan... Done.
+  Querying CCLE_Proteomics_2020... Done.
+  Querying ProteomicsDB_2020... Done.
+  Querying lncHUB_lncRNA_Co-Expression... Done.
+  Querying Virus-Host_PPI_P-HIPSTer_2020... Done.
+  Querying Elsevier_Pathway_Collection... Done.
+  Querying Table_Mining_of_CRISPR_Studies... Done.
+  Querying COVID-19_Related_Gene_Sets... Done.
+  Querying MSigDB_Hallmark_2020... Done.
+  Querying Enrichr_Users_Contributed_Lists_2020... Done.
+  Querying TG_GATES_2020... Done.
+  Querying Allen_Brain_Atlas_10x_scRNA_2021... Done.
+  Querying Descartes_Cell_Types_and_Tissue_2021... Done.
+  Querying KEGG_2021_Human... Done.
+  Querying WikiPathway_2021_Human... Done.
+  Querying HuBMAP_ASCT_plus_B_augmented_w_RNAseq_Coexpression... Done.
+  Querying GO_Biological_Process_2021... Done.
+  Querying GO_Cellular_Component_2021... Done.
+  Querying GO_Molecular_Function_2021... Done.
+  Querying MGI_Mammalian_Phenotype_Level_4_2021... Done.
+  Querying CellMarker_Augmented_2021... Done.
+  Querying Orphanet_Augmented_2021... Done.
+  Querying COVID-19_Related_Gene_Sets_2021... Done.
+  Querying PanglaoDB_Augmented_2021... Done.
+  Querying Azimuth_Cell_Types_2021... Done.
+  Querying PhenGenI_Association_2021... Done.
+  Querying RNAseq_Automatic_GEO_Signatures_Human_Down... Done.
+  Querying RNAseq_Automatic_GEO_Signatures_Human_Up... Done.
+  Querying RNAseq_Automatic_GEO_Signatures_Mouse_Down... Done.
+  Querying RNAseq_Automatic_GEO_Signatures_Mouse_Up... Done.
+  Querying GTEx_Aging_Signatures_2021... Done.
+  Querying HDSigDB_Human_2021... Done.
+  Querying HDSigDB_Mouse_2021... Done.
+  Querying HuBMAP_ASCTplusB_augmented_2022... Done.
+  Querying FANTOM6_lncRNA_KD_DEGs... Done.
+  Querying MAGMA_Drugs_and_Diseases... Done.
+  Querying PFOCR_Pathways... Done.
+  Querying Tabula_Sapiens... Done.
+  Querying ChEA_2022... Done.
+  Querying Diabetes_Perturbations_GEO_2022... Done.
+  Querying LINCS_L1000_Chem_Pert_Consensus_Sigs... Done.
+  Querying LINCS_L1000_CRISPR_KO_Consensus_Sigs... Done.
+  Querying Tabula_Muris... Done.
+  Querying Reactome_2022... Done.
+  Querying SynGO_2022... Done.
+  Querying GlyGen_Glycosylated_Proteins_2022... Done.
+  Querying IDG_Drug_Targets_2022... Done.
+  Querying KOMP2_Mouse_Phenotypes_2022... Done.
+  Querying Metabolomics_Workbench_Metabolites_2022... Done.
+  Querying Proteomics_Drug_Atlas_2023... Done.
+  Querying The_Kinase_Library_2023... Done.
+  Querying GTEx_Tissues_V8_2023... Done.
+  Querying GO_Biological_Process_2023... Done.
+  Querying GO_Cellular_Component_2023... Done.
+  Querying GO_Molecular_Function_2023... Done.
+  Querying PFOCR_Pathways_2023... Done.
+  Querying GWAS_Catalog_2023... Done.
+  Querying GeDiPNet_2023... Done.
+  Querying MAGNET_2023... Done.
+  Querying Azimuth_2023... Done.
+  Querying Rummagene_kinases... Done.
+  Querying Rummagene_signatures... Done.
+  Querying Rummagene_transcription_factors... Done.
+  Querying MoTrPAC_2023... Done.
+  Querying WikiPathway_2023_Human... Done.
+  Querying SynGO_2024... Done.
+  Querying CellMarker_2024... Done.
+Parsing results... Done.</code></pre>
+<pre class="r"><code>db_names &lt;- names(enriched)
+
+for (db_name in db_names) {
+  df &lt;- as.data.frame(enriched[[db_name]]) # Access the data frame by name
+  if (is.data.frame(df)) { # Ensure it is a data frame
+    file_name &lt;- paste0(&quot;output/enrichr-dbs/&quot;, db_name, &quot;.csv&quot;)
+    write.csv(df, file_name, row.names = FALSE) # Write to CSV without row names
+  }
+}</code></pre>
+<pre class="r"><code>cluster &lt;- list(&quot;Significant Genes&quot; = gene_entrez2, &quot;Genes of Interest&quot; = as.character(results2$entrezgene_id))
+ck &lt;- compareCluster(geneCluster = cluster, fun = &quot;enrichGO&quot;, OrgDb=&#39;org.Hs.eg.db&#39;)
+ck &lt;- setReadable(ck, OrgDb = org.Hs.eg.db, keyType=&quot;ENTREZID&quot;)
+dotplot(ck)</code></pre>
+<p><img src="figure/all-condition-analysis.Rmd/compare-clusters-enrich-go-1.png" width="672" style="display: block; margin: auto;" /></p>
+<pre class="r"><code>xx &lt;- compareCluster(cluster, fun=&quot;enrichKEGG&quot;,
+                     organism=&quot;hsa&quot;, pvalueCutoff=0.05)
+dotplot(xx)</code></pre>
+<p><img src="figure/all-condition-analysis.Rmd/compare-clusters-enrich-kegg-1.png" width="672" style="display: block; margin: auto;" /></p>
+<pre class="r"><code>xx &lt;- compareCluster(cluster, fun=&quot;enrichPathway&quot;, pvalueCutoff=0.05)
+dotplot(xx)</code></pre>
+<p><img src="figure/all-condition-analysis.Rmd/compare-clusters-enrich-pathway-1.png" width="672" style="display: block; margin: auto;" /></p>
+</div>
+<div id="genes-of-interest-plot-counts" class="section level2">
+<h2>Genes of Interest Plot Counts</h2>
+<pre class="r"><code># Create an empty list to store the results for each gene
+gene_results_list &lt;- list()
+
+# Create an empty dataframe to store all counts data for plotting
+all_counts_gof &lt;- data.frame()
+
+# Loop through each gene to calculate and plot counts
+for (ensembl_id in filtered_by_interest$Ensembl_ID) {
+  d &lt;- plotCounts(dds, gene = ensembl_id, intgroup = &quot;Affected&quot;, returnData = TRUE)
+  dp &lt;- plotCounts(dds, gene = ensembl_id, intgroup = &quot;Affected&quot;, returnData = TRUE)
+  gene_name &lt;- filtered_by_interest$gene_name[filtered_by_interest$Ensembl_ID == ensembl_id]
+  
+  # Calculate the mean and standard deviation of counts within each condition
+  d_stats &lt;- d %&gt;%
+    group_by(Affected) %&gt;%
+    summarise(
+      mean_count = mean(count),
+      sd_count = sd(count)
+    )
+  
+  # Merge statistics back with the data
+  d &lt;- merge(d, d_stats, by = &quot;Affected&quot;)
+  
+  # Create a temporary dataframe to store results for this gene
+  temp_gene_df &lt;- data.frame(
+    Patient = rownames(d),
+    stringsAsFactors = FALSE
+  )
+  
+  # Calculate Z-scores and determine regulation status
+  regulation_status &lt;- sapply(1:nrow(d), function(i) {
+    z_score &lt;- (d$count[i] - d$mean_count[i]) / d$sd_count[i]
+    
+    # Determine regulation status based on Z-score
+    if (z_score &gt; 1) {
+      return(&quot;Upregulated&quot;)
+    } else if (z_score &lt; -1) {
+      return(&quot;Downregulated&quot;)
+    } else {
+      return(&quot;Neutral&quot;)
+    }
+  })
+  
+  # Add the regulation status to the temporary dataframe
+  temp_gene_df[[gene_name]] &lt;- regulation_status
+  
+  # Merge the temporary dataframe with the results list
+  if (length(gene_results_list) == 0) {
+    gene_results_list[[1]] &lt;- temp_gene_df
+  } else {
+    gene_results_list[[1]] &lt;- merge(gene_results_list[[1]], temp_gene_df, by = &quot;Patient&quot;, all = TRUE)
+  }
+  
+  # Add the gene name to the dp dataframe
+  dp$Gene &lt;- gene_name
+  dp$Ensembl_ID &lt;- ensembl_id
+  dp$SampleID &lt;- rownames(dp)
+  
+  # Combine dp with all_counts dataframe
+  all_counts_gof &lt;- rbind(all_counts_gof, dp)
+  
+  # Generate the boxplot
+  gene_plot &lt;- ggboxplot(dp,
+    x = &quot;Affected&quot;, y = &quot;count&quot;, add = &quot;jitter&quot;,
+    color = &quot;Affected&quot;, palette = c(&quot;red&quot;, &quot;navy&quot;),
+    title = gene_name
+  ) +
+    geom_text_repel(aes(label = rownames(dp))) +
+    scale_color_manual(
+      name = &quot;Affected Status&quot;,
+      labels = c(&quot;Affected&quot;, &quot;Unaffected&quot;),
+      values = c(&quot;red&quot;, &quot;navy&quot;)
+    )
+  print(gene_plot) # Ensure each plot is printed during the loop
+  ggsave(
+    filename = paste0(gene_name, &quot;-all-plot-counts.png&quot;),
+    path = &quot;output/batch-correction-limma/plot-counts/genes-of-interest-all&quot;,
+    plot = gene_plot, dpi = 450
+  )
+}</code></pre>
+<p><img src="figure/all-condition-analysis.Rmd/generate-plot-counts-genes-interest-all-1.png" width="672" style="display: block; margin: auto;" /><img src="figure/all-condition-analysis.Rmd/generate-plot-counts-genes-interest-all-2.png" width="672" style="display: block; margin: auto;" /><img src="figure/all-condition-analysis.Rmd/generate-plot-counts-genes-interest-all-3.png" width="672" style="display: block; margin: auto;" /><img src="figure/all-condition-analysis.Rmd/generate-plot-counts-genes-interest-all-4.png" width="672" style="display: block; margin: auto;" /><img src="figure/all-condition-analysis.Rmd/generate-plot-counts-genes-interest-all-5.png" width="672" style="display: block; margin: auto;" /><img src="figure/all-condition-analysis.Rmd/generate-plot-counts-genes-interest-all-6.png" width="672" style="display: block; margin: auto;" /><img src="figure/all-condition-analysis.Rmd/generate-plot-counts-genes-interest-all-7.png" width="672" style="display: block; margin: auto;" /><img src="figure/all-condition-analysis.Rmd/generate-plot-counts-genes-interest-all-8.png" width="672" style="display: block; margin: auto;" /><img src="figure/all-condition-analysis.Rmd/generate-plot-counts-genes-interest-all-9.png" width="672" style="display: block; margin: auto;" /><img src="figure/all-condition-analysis.Rmd/generate-plot-counts-genes-interest-all-10.png" width="672" style="display: block; margin: auto;" /><img src="figure/all-condition-analysis.Rmd/generate-plot-counts-genes-interest-all-11.png" width="672" style="display: block; margin: auto;" /><img src="figure/all-condition-analysis.Rmd/generate-plot-counts-genes-interest-all-12.png" width="672" style="display: block; margin: auto;" /><img src="figure/all-condition-analysis.Rmd/generate-plot-counts-genes-interest-all-13.png" width="672" style="display: block; margin: auto;" /><img src="figure/all-condition-analysis.Rmd/generate-plot-counts-genes-interest-all-14.png" width="672" style="display: block; margin: auto;" /><img src="figure/all-condition-analysis.Rmd/generate-plot-counts-genes-interest-all-15.png" width="672" style="display: block; margin: auto;" /><img src="figure/all-condition-analysis.Rmd/generate-plot-counts-genes-interest-all-16.png" width="672" style="display: block; margin: auto;" /><img src="figure/all-condition-analysis.Rmd/generate-plot-counts-genes-interest-all-17.png" width="672" style="display: block; margin: auto;" /><img src="figure/all-condition-analysis.Rmd/generate-plot-counts-genes-interest-all-18.png" width="672" style="display: block; margin: auto;" /><img src="figure/all-condition-analysis.Rmd/generate-plot-counts-genes-interest-all-19.png" width="672" style="display: block; margin: auto;" /><img src="figure/all-condition-analysis.Rmd/generate-plot-counts-genes-interest-all-20.png" width="672" style="display: block; margin: auto;" /><img src="figure/all-condition-analysis.Rmd/generate-plot-counts-genes-interest-all-21.png" width="672" style="display: block; margin: auto;" /><img src="figure/all-condition-analysis.Rmd/generate-plot-counts-genes-interest-all-22.png" width="672" style="display: block; margin: auto;" /><img src="figure/all-condition-analysis.Rmd/generate-plot-counts-genes-interest-all-23.png" width="672" style="display: block; margin: auto;" /><img src="figure/all-condition-analysis.Rmd/generate-plot-counts-genes-interest-all-24.png" width="672" style="display: block; margin: auto;" /><img src="figure/all-condition-analysis.Rmd/generate-plot-counts-genes-interest-all-25.png" width="672" style="display: block; margin: auto;" /><img src="figure/all-condition-analysis.Rmd/generate-plot-counts-genes-interest-all-26.png" width="672" style="display: block; margin: auto;" /><img src="figure/all-condition-analysis.Rmd/generate-plot-counts-genes-interest-all-27.png" width="672" style="display: block; margin: auto;" /><img src="figure/all-condition-analysis.Rmd/generate-plot-counts-genes-interest-all-28.png" width="672" style="display: block; margin: auto;" /><img src="figure/all-condition-analysis.Rmd/generate-plot-counts-genes-interest-all-29.png" width="672" style="display: block; margin: auto;" /><img src="figure/all-condition-analysis.Rmd/generate-plot-counts-genes-interest-all-30.png" width="672" style="display: block; margin: auto;" /><img src="figure/all-condition-analysis.Rmd/generate-plot-counts-genes-interest-all-31.png" width="672" style="display: block; margin: auto;" /><img src="figure/all-condition-analysis.Rmd/generate-plot-counts-genes-interest-all-32.png" width="672" style="display: block; margin: auto;" /><img src="figure/all-condition-analysis.Rmd/generate-plot-counts-genes-interest-all-33.png" width="672" style="display: block; margin: auto;" /><img src="figure/all-condition-analysis.Rmd/generate-plot-counts-genes-interest-all-34.png" width="672" style="display: block; margin: auto;" /><img src="figure/all-condition-analysis.Rmd/generate-plot-counts-genes-interest-all-35.png" width="672" style="display: block; margin: auto;" /><img src="figure/all-condition-analysis.Rmd/generate-plot-counts-genes-interest-all-36.png" width="672" style="display: block; margin: auto;" /><img src="figure/all-condition-analysis.Rmd/generate-plot-counts-genes-interest-all-37.png" width="672" style="display: block; margin: auto;" /></p>
+<pre class="r"><code># Create the faceted plot
+faceted_plot &lt;- ggplot(all_counts_gof, aes(x = Affected, y = count, color = Affected)) +
+  geom_boxplot() +
+  geom_jitter(width = 0.2, size = 1.25) + # Adjust size of the dots
+  geom_text_repel(aes(label = SampleID), size = 2) + # Add labels to the dots
+  facet_wrap(~ Gene, scales = &quot;free_y&quot;) +
+  theme_bw() +
+  labs(title = &quot;Gene Expression Counts by Affected Status&quot;, x = &quot;Affected Status&quot;, y = &quot;Count&quot;) +
+  scale_color_manual(values = c(&quot;red&quot;, &quot;navy&quot;))
+
+faceted_plot</code></pre>
+<p><img src="figure/all-condition-analysis.Rmd/generate-plot-counts-genes-interest-all-38.png" width="672" style="display: block; margin: auto;" /></p>
+<pre class="r"><code># Save the faceted plot
+ggsave(
+  filename = &quot;faceted_genes_of_interest_plot_counts_all_samples.png&quot;,
+  path = &quot;output/batch-correction-limma/plot-counts/genes-of-interest-all&quot;,
+  plot = faceted_plot, dpi = 1200
+)
+
+# Convert the list to a dataframe
+gene_results_df &lt;- gene_results_list[[1]]
+
+file_name &lt;- &quot;output/genes_of_interest_plot_counts_signals.csv&quot;
+write.csv(gene_results_df, file_name, row.names = FALSE)</code></pre>
+</div>
+<div id="significant-genes-plot-counts" class="section level2">
+<h2>Significant Genes Plot Counts</h2>
+<pre class="r"><code># Create an empty list to store the results for each gene
+results_list &lt;- list()
+
+# Create an empty dataframe to store all counts data for plotting
+all_counts &lt;- data.frame()
+
+# Loop through each gene to calculate and plot counts
+for (ensembl_id in res_aff_vs_unaff_df_genename_05$Ensembl_ID) {
+  dp &lt;- plotCounts(dds, gene = ensembl_id, intgroup = &quot;Affected&quot;, returnData = TRUE)
+  d &lt;- plotCounts(dds, gene = ensembl_id, intgroup = &quot;Affected&quot;, returnData = TRUE)
+  gene_name &lt;- res_aff_vs_unaff_df_genename_1$gene_name[res_aff_vs_unaff_df_genename_1$Ensembl_ID == ensembl_id]
+  
+  # Calculate the mean and standard deviation of counts within each condition
+  d_stats &lt;- d %&gt;%
+    group_by(Affected) %&gt;%
+    summarise(
+      mean_count = mean(count),
+      sd_count = sd(count)
+    )
+  
+  # Merge statistics back with the data
+  d &lt;- merge(d, d_stats, by = &quot;Affected&quot;)
+  
+  # Create a temporary dataframe to store results for this gene
+  temp_df &lt;- data.frame(
+    Patient = rownames(d),
+    stringsAsFactors = FALSE
+  )
+  
+  # Calculate Z-scores and determine regulation status
+  regulation_status &lt;- sapply(1:nrow(d), function(i) {
+    if (is.na(d$sd_count[i]) || d$sd_count[i] == 0) {
+      return(&quot;Neutral&quot;)
+    }
+    
+    z_score &lt;- (d$count[i] - d$mean_count[i]) / d$sd_count[i]
+    
+    # Determine regulation status based on Z-score
+    if (is.na(z_score)) {
+      return(&quot;Neutral&quot;)
+    } else if (z_score &gt; 1) {
+      return(&quot;Upregulated&quot;)
+    } else if (z_score &lt; -1) {
+      return(&quot;Downregulated&quot;)
+    } else {
+      return(&quot;Neutral&quot;)
+    }
+  })
+  
+  # Add the regulation status to the temporary dataframe
+  temp_df[[gene_name]] &lt;- regulation_status
+  
+  # Merge the temporary dataframe with the results list
+  if (length(results_list) == 0) {
+    results_list[[1]] &lt;- temp_df
+  } else {
+    results_list[[1]] &lt;- merge(results_list[[1]], temp_df, by = &quot;Patient&quot;, all = TRUE)
+  }
+  
+  # Add the gene name to the dp dataframe
+  dp$Gene &lt;- gene_name
+  dp$Ensembl_ID &lt;- ensembl_id
+  dp$SampleID &lt;- rownames(dp)
+  
+  # Combine dp with all_counts dataframe
+  all_counts &lt;- rbind(all_counts, dp)
+  
+  # Generate the boxplot
+  ggplot_box &lt;- ggboxplot(dp,
+    x = &quot;Affected&quot;, y = &quot;count&quot;, add = &quot;jitter&quot;,
+    color = &quot;Affected&quot;, palette = c(&quot;red&quot;, &quot;navy&quot;),
+    title = gene_name
+  ) +
+    geom_text_repel(aes(label = rownames(dp))) +
+    scale_color_manual(
+      name = &quot;Affected Status&quot;,
+      labels = c(&quot;Affected&quot;, &quot;Unaffected&quot;),
+      values = c(&quot;red&quot;, &quot;navy&quot;)
+    )
+  print(ggplot_box) # Ensure each plot is printed during the loop
+  ggsave(
+    filename = paste0(gene_name, &quot;-all-plot-counts.png&quot;),
+    path = &quot;output/batch-correction-limma/plot-counts/padj-05&quot;,
+    plot = ggplot_box, dpi = 450
+  )
+}</code></pre>
+<p><img src="figure/all-condition-analysis.Rmd/generate-plot-counts-genes-significant-1.png" width="672" style="display: block; margin: auto;" /><img src="figure/all-condition-analysis.Rmd/generate-plot-counts-genes-significant-2.png" width="672" style="display: block; margin: auto;" /><img src="figure/all-condition-analysis.Rmd/generate-plot-counts-genes-significant-3.png" width="672" style="display: block; margin: auto;" /><img src="figure/all-condition-analysis.Rmd/generate-plot-counts-genes-significant-4.png" width="672" style="display: block; margin: auto;" /><img src="figure/all-condition-analysis.Rmd/generate-plot-counts-genes-significant-5.png" width="672" style="display: block; margin: auto;" /><img src="figure/all-condition-analysis.Rmd/generate-plot-counts-genes-significant-6.png" width="672" style="display: block; margin: auto;" /><img src="figure/all-condition-analysis.Rmd/generate-plot-counts-genes-significant-7.png" width="672" style="display: block; margin: auto;" /><img src="figure/all-condition-analysis.Rmd/generate-plot-counts-genes-significant-8.png" width="672" style="display: block; margin: auto;" /><img src="figure/all-condition-analysis.Rmd/generate-plot-counts-genes-significant-9.png" width="672" style="display: block; margin: auto;" /><img src="figure/all-condition-analysis.Rmd/generate-plot-counts-genes-significant-10.png" width="672" style="display: block; margin: auto;" /><img src="figure/all-condition-analysis.Rmd/generate-plot-counts-genes-significant-11.png" width="672" style="display: block; margin: auto;" /><img src="figure/all-condition-analysis.Rmd/generate-plot-counts-genes-significant-12.png" width="672" style="display: block; margin: auto;" /><img src="figure/all-condition-analysis.Rmd/generate-plot-counts-genes-significant-13.png" width="672" style="display: block; margin: auto;" /><img src="figure/all-condition-analysis.Rmd/generate-plot-counts-genes-significant-14.png" width="672" style="display: block; margin: auto;" /><img src="figure/all-condition-analysis.Rmd/generate-plot-counts-genes-significant-15.png" width="672" style="display: block; margin: auto;" /><img src="figure/all-condition-analysis.Rmd/generate-plot-counts-genes-significant-16.png" width="672" style="display: block; margin: auto;" /><img src="figure/all-condition-analysis.Rmd/generate-plot-counts-genes-significant-17.png" width="672" style="display: block; margin: auto;" /><img src="figure/all-condition-analysis.Rmd/generate-plot-counts-genes-significant-18.png" width="672" style="display: block; margin: auto;" /><img src="figure/all-condition-analysis.Rmd/generate-plot-counts-genes-significant-19.png" width="672" style="display: block; margin: auto;" /><img src="figure/all-condition-analysis.Rmd/generate-plot-counts-genes-significant-20.png" width="672" style="display: block; margin: auto;" /><img src="figure/all-condition-analysis.Rmd/generate-plot-counts-genes-significant-21.png" width="672" style="display: block; margin: auto;" /><img src="figure/all-condition-analysis.Rmd/generate-plot-counts-genes-significant-22.png" width="672" style="display: block; margin: auto;" /><img src="figure/all-condition-analysis.Rmd/generate-plot-counts-genes-significant-23.png" width="672" style="display: block; margin: auto;" /><img src="figure/all-condition-analysis.Rmd/generate-plot-counts-genes-significant-24.png" width="672" style="display: block; margin: auto;" /><img src="figure/all-condition-analysis.Rmd/generate-plot-counts-genes-significant-25.png" width="672" style="display: block; margin: auto;" /><img src="figure/all-condition-analysis.Rmd/generate-plot-counts-genes-significant-26.png" width="672" style="display: block; margin: auto;" /><img src="figure/all-condition-analysis.Rmd/generate-plot-counts-genes-significant-27.png" width="672" style="display: block; margin: auto;" /><img src="figure/all-condition-analysis.Rmd/generate-plot-counts-genes-significant-28.png" width="672" style="display: block; margin: auto;" /><img src="figure/all-condition-analysis.Rmd/generate-plot-counts-genes-significant-29.png" width="672" style="display: block; margin: auto;" /><img src="figure/all-condition-analysis.Rmd/generate-plot-counts-genes-significant-30.png" width="672" style="display: block; margin: auto;" /><img src="figure/all-condition-analysis.Rmd/generate-plot-counts-genes-significant-31.png" width="672" style="display: block; margin: auto;" /><img src="figure/all-condition-analysis.Rmd/generate-plot-counts-genes-significant-32.png" width="672" style="display: block; margin: auto;" /><img src="figure/all-condition-analysis.Rmd/generate-plot-counts-genes-significant-33.png" width="672" style="display: block; margin: auto;" /><img src="figure/all-condition-analysis.Rmd/generate-plot-counts-genes-significant-34.png" width="672" style="display: block; margin: auto;" /><img src="figure/all-condition-analysis.Rmd/generate-plot-counts-genes-significant-35.png" width="672" style="display: block; margin: auto;" /><img src="figure/all-condition-analysis.Rmd/generate-plot-counts-genes-significant-36.png" width="672" style="display: block; margin: auto;" /><img src="figure/all-condition-analysis.Rmd/generate-plot-counts-genes-significant-37.png" width="672" style="display: block; margin: auto;" /><img src="figure/all-condition-analysis.Rmd/generate-plot-counts-genes-significant-38.png" width="672" style="display: block; margin: auto;" /><img src="figure/all-condition-analysis.Rmd/generate-plot-counts-genes-significant-39.png" width="672" style="display: block; margin: auto;" /><img src="figure/all-condition-analysis.Rmd/generate-plot-counts-genes-significant-40.png" width="672" style="display: block; margin: auto;" /><img src="figure/all-condition-analysis.Rmd/generate-plot-counts-genes-significant-41.png" width="672" style="display: block; margin: auto;" /><img src="figure/all-condition-analysis.Rmd/generate-plot-counts-genes-significant-42.png" width="672" style="display: block; margin: auto;" /><img src="figure/all-condition-analysis.Rmd/generate-plot-counts-genes-significant-43.png" width="672" style="display: block; margin: auto;" /><img src="figure/all-condition-analysis.Rmd/generate-plot-counts-genes-significant-44.png" width="672" style="display: block; margin: auto;" /><img src="figure/all-condition-analysis.Rmd/generate-plot-counts-genes-significant-45.png" width="672" style="display: block; margin: auto;" /></p>
+<pre class="r"><code># Create the faceted plot
+faceted_plot &lt;- ggplot(all_counts, aes(x = Affected, y = count, color = Affected)) +
+  geom_boxplot() +
+  geom_jitter(width = 0.2, size = 1.25) + # Adjust size of the dots
+  geom_text_repel(aes(label = SampleID), size = 2) + # Add labels to the dots
+  facet_wrap(~ Gene, scales = &quot;free_y&quot;) +
+  theme_bw() +
+  labs(title = &quot;Gene Expression Counts by Affected Status&quot;, x = &quot;Affected Status&quot;, y = &quot;Count&quot;) +
+  scale_color_manual(values = c(&quot;red&quot;, &quot;navy&quot;))
+
+faceted_plot</code></pre>
+<p><img src="figure/all-condition-analysis.Rmd/generate-plot-counts-genes-significant-46.png" width="672" style="display: block; margin: auto;" /></p>
+<pre class="r"><code># Save the faceted plot
+ggsave(
+  filename = &quot;faceted_significant_degs_plot_counts_all_samples.png&quot;,
+  path = &quot;output/batch-correction-limma/plot-counts/padj-05-all&quot;,
+  plot = faceted_plot, dpi = 1200
+)
+
+# Convert the list to a dataframe
+results_df &lt;- results_list[[1]]
+
+file_name &lt;- &quot;output/significant_plot_counts_signals.csv&quot;
+write.csv(results_df, file_name, row.names = FALSE)</code></pre>
+</div>
+<div id="combined-heatmap-of-degs-and-patient-genes"
+class="section level2">
+<h2>Combined Heatmap of DEGs and Patient Genes</h2>
+<pre class="r"><code>mat3 &lt;- assay(vsd_limma)[filtered_by_interest$Ensembl_ID, ]
+rownames(mat3) &lt;- gene_info$gene_name[match(filtered_by_interest$Ensembl_ID, gene_info$Ensembl_ID)]
+df_sub &lt;- as.data.frame(colData(vsd_limma)[, c(&quot;Affected&quot;, &quot;Category&quot;)])
+pheatmap(mat3, annotation_col = df_sub, annotation_colors = ann_colors2, fontsize = 4, angle_col = c(&quot;0&quot;))</code></pre>
+<p><img src="figure/all-condition-analysis.Rmd/combined-heatmap-genes-interest-all-1.png" width="1200px" style="display: block; margin: auto;" /></p>
+<div id="save-data" class="section level3">
+<h3>Save data</h3>
+<pre class="r"><code>save.image(file = &quot;output/all-condition-analysis.RData&quot;)</code></pre>
+<br>
+<p>
+<button type="button" class="btn btn-default btn-workflowr btn-workflowr-sessioninfo" data-toggle="collapse" data-target="#workflowr-sessioninfo" style="display: block;">
+<span class="glyphicon glyphicon-wrench" aria-hidden="true"></span>
+Session information
+</button>
+</p>
+<div id="workflowr-sessioninfo" class="collapse">
+<pre class="r"><code>sessionInfo()</code></pre>
+<pre><code>R version 4.4.0 (2024-04-24)
+Platform: x86_64-apple-darwin20
+Running under: macOS Sonoma 14.5
+
+Matrix products: default
+BLAS:   /Library/Frameworks/R.framework/Versions/4.4-x86_64/Resources/lib/libRblas.0.dylib 
+LAPACK: /Library/Frameworks/R.framework/Versions/4.4-x86_64/Resources/lib/libRlapack.dylib;  LAPACK version 3.12.0
+
+locale:
+[1] en_US.UTF-8/en_US.UTF-8/en_US.UTF-8/C/en_US.UTF-8/en_US.UTF-8
+
+time zone: America/Chicago
+tzcode source: internal
+
+attached base packages:
+[1] grid      stats4    stats     graphics  grDevices datasets  utils    
+[8] methods   base     
+
+other attached packages:
+ [1] ComplexHeatmap_2.20.0       EnhancedVolcano_1.22.0     
+ [3] STRINGdb_2.16.4             enrichR_3.2                
+ [5] DOSE_3.30.1                 mygene_1.40.0              
+ [7] txdbmaker_1.0.1             GenomicFeatures_1.56.0     
+ [9] ReactomePA_1.48.0           ggrepel_0.9.5              
+[11] org.Hs.eg.db_3.19.1         AnnotationDbi_1.66.0       
+[13] clusterProfiler_4.12.0      rmarkdown_2.27             
+[15] ggpubr_0.6.0                plotly_4.10.4              
+[17] biomaRt_2.60.1              gprofiler2_0.2.3           
+[19] limma_3.60.3                genefilter_1.86.0          
+[21] pheatmap_1.0.12             RColorBrewer_1.1-3         
+[23] DESeq2_1.44.0               SummarizedExperiment_1.34.0
+[25] Biobase_2.64.0              MatrixGenerics_1.16.0      
+[27] matrixStats_1.3.0           GenomicRanges_1.56.1       
+[29] GenomeInfoDb_1.40.1         IRanges_2.38.1             
+[31] S4Vectors_0.42.1            BiocGenerics_0.50.0        
+[33] lubridate_1.9.3             forcats_1.0.0              
+[35] stringr_1.5.1               dplyr_1.1.4                
+[37] purrr_1.0.2                 readr_2.1.5                
+[39] tidyr_1.3.1                 tibble_3.2.1               
+[41] ggplot2_3.5.1               tidyverse_2.0.0            
+[43] workflowr_1.7.1            
+
+loaded via a namespace (and not attached):
+  [1] fs_1.6.4                 bitops_1.0-7             enrichplot_1.24.0       
+  [4] doParallel_1.0.17        HDO.db_0.99.1            httr_1.4.7              
+  [7] tools_4.4.0              backports_1.5.0          utf8_1.2.4              
+ [10] R6_2.5.1                 lazyeval_0.2.2           GetoptLong_1.0.5        
+ [13] withr_3.0.0              graphite_1.50.0          prettyunits_1.2.0       
+ [16] gridExtra_2.3            textshaping_0.4.0        cli_3.6.3               
+ [19] scatterpie_0.2.3         labeling_0.4.3           sass_0.4.9              
+ [22] systemfonts_1.1.0        Rsamtools_2.20.0         yulab.utils_0.1.4       
+ [25] gson_0.1.0               foreign_0.8-86           WriteXLS_6.6.0          
+ [28] plotrix_3.8-4            rstudioapi_0.16.0        RSQLite_2.3.7           
+ [31] shape_1.4.6.1            generics_0.1.3           gridGraphics_0.5-1      
+ [34] BiocIO_1.14.0            vroom_1.6.5              gtools_3.9.5            
+ [37] car_3.1-2                GO.db_3.19.1             Matrix_1.7-0            
+ [40] fansi_1.0.6              abind_1.4-5              lifecycle_1.0.4         
+ [43] whisker_0.4.1            yaml_2.3.9               carData_3.0-5           
+ [46] gplots_3.1.3.1           qvalue_2.36.0            SparseArray_1.4.8       
+ [49] BiocFileCache_2.12.0     blob_1.2.4               promises_1.3.0          
+ [52] crayon_1.5.3             lattice_0.22-6           cowplot_1.1.3           
+ [55] annotate_1.82.0          KEGGREST_1.44.1          pillar_1.9.0            
+ [58] knitr_1.48               fgsea_1.30.0             rjson_0.2.21            
+ [61] codetools_0.2-20         fastmatch_1.1-4          glue_1.7.0              
+ [64] getPass_0.2-4            ggfun_0.1.5              data.table_1.15.4       
+ [67] vctrs_0.6.5              png_0.1-8                treeio_1.28.0           
+ [70] gtable_0.3.5             gsubfn_0.7               cachem_1.1.0            
+ [73] xfun_0.45                S4Arrays_1.4.1           tidygraph_1.3.1         
+ [76] survival_3.5-8           iterators_1.0.14         statmod_1.5.0           
+ [79] nlme_3.1-164             ggtree_3.12.0            bit64_4.0.5             
+ [82] progress_1.2.3           filelock_1.0.3           rprojroot_2.0.4         
+ [85] bslib_0.7.0              KernSmooth_2.23-22       rpart_4.1.23            
+ [88] colorspace_2.1-0         DBI_1.2.3                Hmisc_5.1-3             
+ [91] nnet_7.3-19              tidyselect_1.2.1         processx_3.8.4          
+ [94] chron_2.3-61             bit_4.0.5                compiler_4.4.0          
+ [97] curl_5.2.1               git2r_0.33.0             httr2_1.0.1             
+[100] graph_1.82.0             htmlTable_2.4.2          xml2_1.3.6              
+[103] DelayedArray_0.30.1      shadowtext_0.1.3         rtracklayer_1.64.0      
+[106] caTools_1.18.2           checkmate_2.3.1          scales_1.3.0            
+[109] callr_3.7.6              rappdirs_0.3.3           digest_0.6.36           
+[112] XVector_0.44.0           htmltools_0.5.8.1        pkgconfig_2.0.3         
+[115] base64enc_0.1-3          highr_0.11               dbplyr_2.5.0            
+[118] fastmap_1.2.0            ggthemes_5.1.0           GlobalOptions_0.1.2     
+[121] rlang_1.1.4              htmlwidgets_1.6.4        UCSC.utils_1.0.0        
+[124] farver_2.1.2             jquerylib_0.1.4          jsonlite_1.8.8          
+[127] BiocParallel_1.38.0      GOSemSim_2.30.0          RCurl_1.98-1.16         
+[130] magrittr_2.0.3           Formula_1.2-5            GenomeInfoDbData_1.2.12 
+[133] ggplotify_0.1.2          patchwork_1.2.0          munsell_0.5.1           
+[136] Rcpp_1.0.12              proto_1.0.0              ape_5.8                 
+[139] viridis_0.6.5            sqldf_0.4-11             stringi_1.8.4           
+[142] ggraph_2.2.1             zlibbioc_1.50.0          MASS_7.3-60.2           
+[145] plyr_1.8.9               parallel_4.4.0           Biostrings_2.72.1       
+[148] graphlayouts_1.1.1       splines_4.4.0            hash_2.2.6.3            
+[151] circlize_0.4.16          hms_1.1.3                locfit_1.5-9.10         
+[154] ps_1.7.7                 igraph_2.0.3             ggsignif_0.6.4          
+[157] reshape2_1.4.4           XML_3.99-0.17            evaluate_0.24.0         
+[160] renv_1.0.7               BiocManager_1.30.23      foreach_1.5.2           
+[163] tzdb_0.4.0               tweenr_2.0.3             httpuv_1.6.15           
+[166] polyclip_1.10-6          clue_0.3-65              ggforce_0.4.2           
+[169] broom_1.0.6              xtable_1.8-4             restfulr_0.0.15         
+[172] reactome.db_1.88.0       tidytree_0.4.6           rstatix_0.7.2           
+[175] later_1.3.2              ragg_1.3.2               viridisLite_0.4.2       
+[178] aplot_0.2.3              memoise_2.0.1            GenomicAlignments_1.40.0
+[181] cluster_2.1.6            timechange_0.3.0        </code></pre>
+</div>
+</div>
+</div>
+</div>
+
+
+<!-- Adjust MathJax settings so that all math formulae are shown using
+TeX fonts only; see
+https://docs.mathjax.org/en/latest/web/configuration.html. This will make
+the presentation more consistent at the cost of the webpage sometimes
+taking slightly longer to load. Note that this only works because the
+footer is added to webpages before the MathJax javascript. -->
+<script type="text/x-mathjax-config">
+  MathJax.Hub.Config({
+    "HTML-CSS": { availableFonts: ["TeX"] }
+  });
+</script>
+
+
+
+
+</div>
+</div>
+
+</div>
+
+<script>
+
+// add bootstrap table styles to pandoc tables
+function bootstrapStylePandocTables() {
+  $('tr.odd').parent('tbody').parent('table').addClass('table table-condensed');
+}
+$(document).ready(function () {
+  bootstrapStylePandocTables();
+});
+
+
+</script>
+
+<!-- tabsets -->
+
+<script>
+$(document).ready(function () {
+  window.buildTabsets("TOC");
+});
+
+$(document).ready(function () {
+  $('.tabset-dropdown > .nav-tabs > li').click(function () {
+    $(this).parent().toggleClass('nav-tabs-open');
+  });
+});
+</script>
+
+<!-- code folding -->
+<script>
+$(document).ready(function () {
+  window.initializeCodeFolding("hide" === "show");
+});
+</script>
+
+<script>
+$(document).ready(function ()  {
+
+    // temporarily add toc-ignore selector to headers for the consistency with Pandoc
+    $('.unlisted.unnumbered').addClass('toc-ignore')
+
+    // move toc-ignore selectors from section div to header
+    $('div.section.toc-ignore')
+        .removeClass('toc-ignore')
+        .children('h1,h2,h3,h4,h5').addClass('toc-ignore');
+
+    // establish options
+    var options = {
+      selectors: "h1,h2,h3",
+      theme: "bootstrap3",
+      context: '.toc-content',
+      hashGenerator: function (text) {
+        return text.replace(/[.\\/?&!#<>]/g, '').replace(/\s/g, '_');
+      },
+      ignoreSelector: ".toc-ignore",
+      scrollTo: 0
+    };
+    options.showAndHide = true;
+    options.smoothScroll = true;
+
+    // tocify
+    var toc = $("#TOC").tocify(options).data("toc-tocify");
+});
+</script>
+
+<!-- dynamically load mathjax for compatibility with self-contained -->
+<script>
+  (function () {
+    var script = document.createElement("script");
+    script.type = "text/javascript";
+    script.src  = "https://mathjax.rstudio.com/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML";
+    document.getElementsByTagName("head")[0].appendChild(script);
+  })();
+</script>
+
+</body>
+</html>
