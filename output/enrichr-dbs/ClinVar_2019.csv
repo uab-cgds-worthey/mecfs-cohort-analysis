@@ -1,7 +1,0 @@
-"Term","Overlap","P.value","Adjusted.P.value","Old.P.value","Old.Adjusted.P.value","Odds.Ratio","Combined.Score","Genes"
-"disorder of fatty acid metabolism","1/11",0.0271653448579924,0.162992069147954,0,0,40.6938775510204,146.734521000359,"SLC25A20"
-"autosomal dominant non-syndromic sensorineural deafness type dfna","1/25",0.0606955298241754,0.182086589472526,0,0,16.9438775510204,47.4748002047703,"TMC1"
-"nonsyndromic hearing loss and deafness, autosomal recessive","1/51",0.119987608922091,0.205744771728549,0,0,8.12244897959184,17.2225711551973,"TMC1"
-"nonsyndromic hearing loss and deafness","1/72",0.165185695910124,0.205744771728549,0,0,5.71399827536648,10.2891110310162,"TMC1"
-"retinitis pigmentosa","1/75",0.171453976440458,0.205744771728549,0,0,5.4815223386652,9.66633798573148,"FSCN2"
-"hereditary hearing loss and deafness","1/170",0.347759333321801,0.347759333321801,0,0,2.38872116894095,2.52307385797591,"TMC1"

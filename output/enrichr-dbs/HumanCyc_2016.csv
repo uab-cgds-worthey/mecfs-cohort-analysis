@@ -1,7 +1,0 @@
-"Term","Overlap","P.value","Adjusted.P.value","Old.P.value","Old.Adjusted.P.value","Odds.Ratio","Combined.Score","Genes"
-"glycoaminoglycan-protein linkage region biosynthesis Homo sapiens PWY-6557","1/7",0.017371741450284,0.083353309582467,0,0,67.8367346938775,274.936210768444,"B3GAT1"
-"dermatan sulfate biosynthesis Homo sapiens PWY-6571","1/13",0.032026213248763,0.083353309582467,0,0,33.9081632653061,116.684789992962,"B3GAT1"
-"chondroitin sulfate biosynthesis Homo sapiens PWY-6569","1/17",0.0416766547912335,0.083353309582467,0,0,25.4260204081633,80.799167280865,"B3GAT1"
-"3-phosphoinositide biosynthesis Homo sapiens PWY-6352","1/27",0.0653921522588676,0.0840789106046507,0,0,15.6389324960754,42.6528898315632,"PIK3R3"
-"heparan sulfate biosynthesis Homo sapiens PWY-6564","1/29",0.0700657588372089,0.0840789106046507,0,0,14.5204081632653,38.5999069065122,"B3GAT1"
-"superpathway of inositol phosphate compounds Homo sapiens PWY-6371","1/68",0.156755649080656,0.156755649080656,0,0,6.05635089856838,11.2228243619718,"PIK3R3"
