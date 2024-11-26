@@ -1,22 +1,22 @@
-# mecfs-dge-analysis
+# ME/CFS-Differential-Gene-Expression-Analysis
 
-This repository hosts the differential gene expression analysis of a cohort of 29 patients who have been diagnosed with ME/CFS.
+This repository hosts the differential gene expression analysis of a cohort of 23 patients diagnosed with ME/CFS.
 
 ## Background
 
-Myalgic Encephalomyelitis/Chronic Fatigue Syndrome (ME/CFS) is a chronic and debilitating illness affecting millions of Americans, characterized by severe fatigue, pain, flu-like symptoms, and cognitive issues. The cause of ME/CFS is not well understood, but there is evidence suggesting a genetic predisposition and dysregulation of the immune system leading to an overactive immune response.
+Myalgic Encephalomyelitis/Chronic Fatigue Syndrome (ME/CFS) is a chronic and debilitating illness affecting millions of individuals worldwide. It is characterized by severe fatigue, pain, flu-like symptoms, and cognitive issues. The cause of ME/CFS is not well understood, but evidence suggests a genetic predisposition and dysregulation of the immune system leading to an overactive immune response.
 
-## Rerunning the analysis
+## Installation
 
-This project has been created using the `workflowr` template.
+### Requirements
 
-The analysis and associated code is modified from [Dr.Gurpreet Kaur's](https://github.com/gurpreet-bioinfo) example: https://github.com/uab-cgds-worthey/bulk_rna-seq_dge
+- R (version 4.4.0)
+- RStudio
+- Git v2.0+
 
-Analysis Rmarkdown files are located in the `analysis` folder.
+### Setup
 
-To rerun the entire workflow, clone this repository and run the below in your R console. This project is using both `renv` and `workflowr` to improve reproducibility and allow results to be viewed in a web browser.
-
-### Cloning this repository
+Installation starts with fetching the Git repo and cloning it:
 
 ```bash
 git clone https://github.com/uab-cgds-worthey/mecfs-dge-analysis.git
@@ -25,27 +25,41 @@ cd mecfs-dge-analysis/
 
 ### Restoring the Environment
 
-Open this project in RStudio. Upon opening, renv should automatically install.
+Open this project in RStudio. Upon opening, \`renv\` should automatically install.
 
-If `renv` does not install automatically, run ```install.packages('renv')``` and 
-proceed with the instructions below.
+If `renv` does not install automatically, run the following command in your R console:
 
 ```r
-# After cloning the project, open it in RStudio
-# renv should automatically install
-# restore the r environment
-renv::restore()
+install.packages('renv')
+```
 
-# Rebuild the workflow R site to view all figures in the browser.
+Then proceed with the instructions below:
+
+```r
+# Restore the R environment
+renv::restore()
+```
+
+## Analysis
+
+This project has been created using the `workflowr` template. The analysis and associated code are modified from [Dr. Gurpreet Kaur's example](https://github.com/uab-cgds-worthey/bulk_rna-seq_dge). The Rmarkdown files for the analysis are located in the `analysis` folder.
+
+To rerun the entire workflow, open the project in RStudio and run the following commands in your R console:
+
+```r
+# Load the workflowr library
 library(workflowr)
+
+# Rebuild the workflow R site to view all figures in the browser
 wflow_build("analysis/*.Rmd")
 wflow_view()
 ```
 
 ## Results
 
-Please review detailed results in our publication.
+Results (including figures generated for the publication) can be found in the `docs` folder.
 
-## Authors
+## Author
 
-Shaurita D. Hutchins [:email:](mailto:sdhutchins@uab.edu) | Graduate Student
+Shaurita D. Hutchins [:email:](mailto:sdhutchins@uab.edu) | Graduate Research Assistant
+
