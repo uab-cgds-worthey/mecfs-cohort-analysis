@@ -215,3 +215,20 @@ process_genes_of_interest <- function(filtered_data, dds, vsd, genes_to_filter, 
   faceted_plot <- create_faceted_plot(gi_all_counts, output_path)
   return(list(faceted_plot = faceted_plot, gene_results_df = gene_results_list[[1]]))
 }
+
+# Function to filter, order, and save data
+process_and_save_results <- function(df, padj_threshold, lfc_threshold = NULL, outpath, filename) {
+  # Filter by padj
+  filtered_df <- subset(df, padj < padj_threshold)
+
+  # Filter by log2FoldChange if threshold is specified
+  if (!is.null(lfc_threshold)) {
+    filtered_df <- subset(filtered_df, log2FoldChange >= lfc_threshold | log2FoldChange <= -lfc_threshold)
+  }
+
+  # Order by padj
+  ordered_df <- filtered_df[order(filtered_df$padj), ]
+
+  # Save to CSV
+  write.csv(ordered_df, file = file.path("output", outpath, filename), row.names = FALSE)
+}
