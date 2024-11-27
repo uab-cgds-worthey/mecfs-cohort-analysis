@@ -419,7 +419,7 @@ generate_string_network <- function(data, gene_col, lfc_col, species = 9606, sco
 
 # Utility function to generate an MA plot
 generate_ma_plot <- function(data, genenames, main_title = "MA Plot",
-                             output_file = NULL, fdr = 0.1, fc = 1, size = 0.4,
+                             output_file = NULL, fdr = 0.05, fc = 1, size = 0.4,
                              top_genes = 30, theme = ggplot2::theme_minimal()) {
 
   # Create the MA plot
