@@ -39,8 +39,21 @@ check_order <- function(sample_metadata, counts) {
 
 
 retrieve_gene_info <- function(values, filters) {
-  # Create biomart object
-  biomart <- useMart(biomart = "ensembl", dataset = "hsapiens_gene_ensembl")
+  # Helper function to create the biomart object
+  create_biomart <- function(host) {
+    useMart(biomart = "ensembl", dataset = "hsapiens_gene_ensembl", host = host)
+  }
+
+  # Try block to retrieve gene information
+  tryCatch({
+    # Create biomart object with default host
+    biomart <- create_biomart("www.ensembl.org")
+  }, error = function(e) {
+    message("Error encountered. Switching to alternative Ensembl host...")
+    # Retry with alternative host
+    biomart <- create_biomart("https://useast.ensembl.org")
+    return(biomart)
+  }) -> biomart
 
   # Define attributes to retrieve
   attributes <- c(
@@ -62,6 +75,7 @@ retrieve_gene_info <- function(values, filters) {
 
   return(gene_info)
 }
+
 
 
 process_and_save_results <- function(data_df, output_file) {
@@ -128,9 +142,9 @@ determine_regulation_status <- function(data) {
 # Function to create and save individual gene plots
 create_gene_plot <- function(dp, gene_name, output_path) {
   plot <- ggboxplot(dp,
-                    x = "Affected", y = "count", add = "jitter",
-                    color = "Affected", palette = c("red", "navy"),
-                    title = gene_name
+    x = "Affected", y = "count", add = "jitter",
+    color = "Affected", palette = c("red", "navy"),
+    title = gene_name
   ) +
     geom_text_repel(aes(label = rownames(dp))) +
     scale_color_manual(
@@ -151,11 +165,13 @@ create_faceted_plot <- function(data, output_path) {
   plot <- ggplot(data, aes(x = Affected, y = count, color = Affected)) +
     geom_boxplot(alpha = 0.35) +
     geom_jitter(width = 0.2, size = .45) +
-    geom_text_repel(aes(label = SampleID), size = 2,
-                    max.overlaps = Inf, force = 10, color = "black",
-                    segment.color = "gray", min.segment.length = 0,
-                    point.padding = 0.1) +
-    facet_wrap(~ Gene, scales = "free_y") +
+    geom_text_repel(aes(label = SampleID),
+      size = 2,
+      max.overlaps = Inf, force = 10, color = "black",
+      segment.color = "gray", min.segment.length = 0,
+      point.padding = 0.1
+    ) +
+    facet_wrap(~Gene, scales = "free_y") +
     theme_bw() +
     labs(title = "Gene Expression Counts by Affected Status", x = "Affected Status", y = "Count") +
     scale_color_manual(values = c("red", "navy")) +
@@ -178,10 +194,11 @@ create_faceted_plot <- function(data, output_path) {
 }
 
 # Function to generate heatmap
-create_heatmap <- function(mat, gene_info, vsd_coldata, output_path, ann_colors) {
+create_heatmap <- function(mat, gene_info, vsd_coldata, output_path, ann_colors,
+                           width = 12, height = 10) {
   rownames(mat) <- gene_info$gene_name[match(rownames(mat), gene_info$Ensembl_ID)]
   df_sub <- as.data.frame(vsd_coldata[, c("Affected", "OverallCategory")])
-  png(file.path(output_path, "genes_of_interest_heatmap.png"), width = 12, height = 10, units = "in", res = 1200)
+  png(output_path, width = width, height = height, units = "in", res = 1200)
   draw(ComplexHeatmap::pheatmap(
     mat = mat,
     color = colorRampPalette(rev(brewer.pal(n = 9, name = "RdYlBu")))(50),
@@ -197,38 +214,86 @@ create_heatmap <- function(mat, gene_info, vsd_coldata, output_path, ann_colors)
 }
 
 # Main function to process and plot genes of interest
-process_genes_of_interest <- function(filtered_data, dds, vsd, genes_to_filter, output_path) {
+process_genes_of_interest <- function(filtered_data = NULL, dds, vsd, genes_to_filter = NULL, output_path, preprocessed_data = NULL) {
+  # Determine the dataset to use: preprocessed data or filtered data
+  if (!is.null(preprocessed_data)) {
+    # Use preprocessed data directly and ensure rownames are sequential
+    data_to_process <- preprocessed_data
+    rownames(data_to_process) <- seq_len(nrow(data_to_process)) # Reset rownames to sequential numbers
+  } else if (!is.null(filtered_data) && !is.null(genes_to_filter)) {
+    # Filter genes if filtered_data and genes_to_filter are provided
+    data_to_process <- filter_genes(filtered_data, genes_to_filter, include = FALSE)
+  } else {
+    stop("Either preprocessed_data or both filtered_data and genes_to_filter must be provided.")
+  }
+
+  # Initialize results
   gene_results_list <- list()
   gi_all_counts <- data.frame()
 
-  # Filter genes
-  filtered_without_genes <- filter_genes(filtered_data, genes_to_filter, include = FALSE)
-
-  for (ensembl_id in filtered_without_genes$Ensembl_ID) {
+  # Process each gene in the data
+  for (ensembl_id in data_to_process$Ensembl_ID) {
+    # Calculate gene statistics
     d <- calculate_gene_stats(dds, ensembl_id, "Affected")
-    regulation_status <- determine_regulation_status(d)
+    regulation_status <- sapply(1:nrow(d), function(i) {
+      mean_count <- mean(d$count[d$Affected == d$Affected[i]], na.rm = TRUE)
+      sd_count <- sd(d$count[d$Affected == d$Affected[i]], na.rm = TRUE)
 
-    gene_name <- filtered_without_genes$gene_name[filtered_without_genes$Ensembl_ID == ensembl_id]
-    temp_gene_df <- data.frame(Patient = rownames(d), !!gene_name := regulation_status, stringsAsFactors = FALSE)
+      if (is.na(sd_count) || sd_count == 0) {
+        return("Neutral")
+      }
 
+      z_score <- (d$count[i] - mean_count) / sd_count
+
+      # Check for NA and assign regulation status
+      if (is.na(z_score)) {
+        return("Neutral")
+      } else if (z_score > 1) {
+        return("Upregulated")
+      } else if (z_score < -1) {
+        return("Downregulated")
+      } else {
+        return("Neutral")
+      }
+    })
+
+    # Get the gene name
+    gene_name <- data_to_process$gene_name[data_to_process$Ensembl_ID == ensembl_id]
+
+    # Create a temporary data frame for the regulation status
+    temp_gene_df <- data.frame(Patient = rownames(d), stringsAsFactors = FALSE)
+    temp_gene_df[[gene_name]] <- regulation_status
+
+    # Merge the results
     if (length(gene_results_list) == 0) {
       gene_results_list[[1]] <- temp_gene_df
     } else {
       gene_results_list[[1]] <- merge(gene_results_list[[1]], temp_gene_df, by = "Patient", all = TRUE)
     }
 
+    # Add gene-specific details to the main dataframe
     dp <- d
     dp$Gene <- gene_name
     dp$Ensembl_ID <- ensembl_id
     dp$SampleID <- rownames(dp)
 
+    # Combine the data for all genes
     gi_all_counts <- rbind(gi_all_counts, dp)
+
+    # Generate a plot for the current gene
     create_gene_plot(dp, gene_name, output_path)
   }
 
+  # Create a faceted plot for all genes
   faceted_plot <- create_faceted_plot(gi_all_counts, output_path)
+
+  # Return results as a list
   return(list(faceted_plot = faceted_plot, gene_results_df = gene_results_list[[1]]))
 }
+
+
+
+
 
 # Function to filter, order, and save data
 process_and_save_filtered_results <- function(df, padj_threshold, lfc_threshold = NULL, outpath, filename) {
@@ -261,7 +326,7 @@ generate_pca_plot <- function(pca_data, percent_var, colour = "Affected", fill =
     # Map colour, shape, and fill
     geom_point(aes_string(colour = colour, shape = shape, fill = fill), size = 4, stroke = 1.5) +
     # Define scales for shape and fill
-    scale_shape_manual(values = c(21, 22, 24)) +  # Circle, square, triangle
+    scale_shape_manual(values = c(21, 22, 24)) + # Circle, square, triangle
     scale_fill_manual(values = c("white", "darkgray"), guide = guide_legend(title = fill)) +
     # Define axis labels
     xlab(paste0("PC1: ", percent_var[1], "% variance")) +
@@ -269,9 +334,9 @@ generate_pca_plot <- function(pca_data, percent_var, colour = "Affected", fill =
     coord_fixed() +
     # Custom guides to ensure proper legends
     guides(
-      shape = guide_legend(override.aes = list(fill = NA)),  # Batch shapes, no fill
-      colour = guide_legend(title = colour),  # Affected legend
-      fill = guide_legend(override.aes = list(shape = 21, size = 4))  # Fill legend with consistent shape
+      shape = guide_legend(override.aes = list(fill = NA)), # Batch shapes, no fill
+      colour = guide_legend(title = colour), # Affected legend
+      fill = guide_legend(override.aes = list(shape = 21, size = 4)) # Fill legend with consistent shape
     ) +
     theme_minimal()
 }
@@ -290,7 +355,7 @@ generate_top_variable_genes_heatmap <- function(vsd_data, gene_info, annotation_
 
   # Map Ensembl IDs to gene names
   ensembl_to_gene <- setNames(gene_info$gene_name, gene_info$Ensembl_ID)
-  rownames(mat) <- ensembl_to_gene[rownames(mat)]  # Set gene names as row names
+  rownames(mat) <- ensembl_to_gene[rownames(mat)] # Set gene names as row names
 
   # Generate the heatmap
   ComplexHeatmap::pheatmap(
@@ -313,7 +378,7 @@ generate_significant_genes_heatmap <- function(vsd_data, res_data, gene_info, an
 
   # Map Ensembl IDs to gene names
   ensembl_to_gene <- setNames(gene_info$gene_name, gene_info$Ensembl_ID)
-  rownames(significant_genes_matrix) <- ensembl_to_gene[rownames(significant_genes_matrix)]  # Replace Ensembl IDs with gene names
+  rownames(significant_genes_matrix) <- ensembl_to_gene[rownames(significant_genes_matrix)] # Replace Ensembl IDs with gene names
 
   # Order rows alphabetically by gene name
   significant_genes_matrix <- significant_genes_matrix[order(rownames(significant_genes_matrix)), ]
@@ -349,34 +414,35 @@ generate_volcano_plot <- function(res_data, gene_labels, x_col, y_col, select_ge
                                   output_file = "volcano_plot.png") {
   # Create the EnhancedVolcano plot
   volcano_plot <- EnhancedVolcano(res_data,
-                                  lab = res_data[[gene_labels]],
-                                  x = x_col,
-                                  y = y_col,
-                                  selectLab = select_genes,
-                                  xlab = xlab_text,
-                                  ylab = ylab_text,
-                                  pCutoff = p_cutoff,
-                                  FCcutoff = fc_cutoff,
-                                  pointSize = 2.0,
-                                  labSize = 4.0,
-                                  labCol = 'black',
-                                  labFace = 'bold',
-                                  boxedLabels = TRUE,
-                                  colAlpha = 4 / 5,
-                                  legendPosition = 'bottom',
-                                  legendLabSize = 14,
-                                  legendIconSize = 4.0,
-                                  drawConnectors = TRUE,
-                                  widthConnectors = 1.0,
-                                  colConnectors = 'black',
-                                  legendLabels = c(
-                                    " NS",
-                                    bquote(~Log[2]~ 'fold change'),
-                                    " padj",
-                                    bquote(~Log[2]~ 'fold change and padj')
-                                  ),
-                                  title = 'Affected versus Unaffected',
-                                  subtitle = "Differential Gene Expression Analysis in ME/CFS Patients")
+    lab = res_data[[gene_labels]],
+    x = x_col,
+    y = y_col,
+    selectLab = select_genes,
+    xlab = xlab_text,
+    ylab = ylab_text,
+    pCutoff = p_cutoff,
+    FCcutoff = fc_cutoff,
+    pointSize = 2.0,
+    labSize = 4.0,
+    labCol = "black",
+    labFace = "bold",
+    boxedLabels = TRUE,
+    colAlpha = 4 / 5,
+    legendPosition = "bottom",
+    legendLabSize = 14,
+    legendIconSize = 4.0,
+    drawConnectors = TRUE,
+    widthConnectors = 1.0,
+    colConnectors = "black",
+    legendLabels = c(
+      " NS",
+      bquote(~ Log[2] ~ "fold change"),
+      " padj",
+      bquote(~ Log[2] ~ "fold change and padj")
+    ),
+    title = "Affected versus Unaffected",
+    subtitle = "Differential Gene Expression Analysis in ME/CFS Patients"
+  )
 
   # Add custom scaling
   volcano_plot <- volcano_plot +
@@ -421,7 +487,6 @@ generate_string_network <- function(data, gene_col, lfc_col, species = 9606, sco
 generate_ma_plot <- function(data, genenames, main_title = "MA Plot",
                              output_file = NULL, fdr = 0.05, fc = 1, size = 0.4,
                              top_genes = 30, theme = ggplot2::theme_minimal()) {
-
   # Create the MA plot
   plot <- ggmaplot(
     data = data,
@@ -429,7 +494,7 @@ generate_ma_plot <- function(data, genenames, main_title = "MA Plot",
     fdr = fdr,
     fc = fc,
     size = size,
-    genenames = genenames,  # Dynamically passed gene names
+    genenames = genenames, # Dynamically passed gene names
     ggtheme = theme,
     legend = "top",
     top = top_genes,
@@ -446,4 +511,3 @@ generate_ma_plot <- function(data, genenames, main_title = "MA Plot",
 
   return(plot)
 }
-
