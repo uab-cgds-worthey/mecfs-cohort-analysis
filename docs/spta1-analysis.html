@@ -1,0 +1,2366 @@
+<!DOCTYPE html>
+
+<html>
+
+<head>
+
+<meta charset="utf-8" />
+<meta name="generator" content="pandoc" />
+<meta http-equiv="X-UA-Compatible" content="IE=EDGE" />
+
+
+<meta name="author" content="Shaurita D. Hutchins" />
+
+
+<title>SPTA1 vs Unaffected Differential Gene Expression (DGE) Analysis</title>
+
+<script src="site_libs/header-attrs-2.27/header-attrs.js"></script>
+<script src="site_libs/jquery-3.6.0/jquery-3.6.0.min.js"></script>
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<link href="site_libs/bootstrap-3.3.5/css/journal.min.css" rel="stylesheet" />
+<script src="site_libs/bootstrap-3.3.5/js/bootstrap.min.js"></script>
+<script src="site_libs/bootstrap-3.3.5/shim/html5shiv.min.js"></script>
+<script src="site_libs/bootstrap-3.3.5/shim/respond.min.js"></script>
+<style>h1 {font-size: 34px;}
+       h1.title {font-size: 38px;}
+       h2 {font-size: 30px;}
+       h3 {font-size: 24px;}
+       h4 {font-size: 18px;}
+       h5 {font-size: 16px;}
+       h6 {font-size: 12px;}
+       code {color: inherit; background-color: rgba(0, 0, 0, 0.04);}
+       pre:not([class]) { background-color: white }</style>
+<script src="site_libs/jqueryui-1.13.2/jquery-ui.min.js"></script>
+<link href="site_libs/tocify-1.9.1/jquery.tocify.css" rel="stylesheet" />
+<script src="site_libs/tocify-1.9.1/jquery.tocify.js"></script>
+<script src="site_libs/navigation-1.1/tabsets.js"></script>
+<script src="site_libs/navigation-1.1/codefolding.js"></script>
+<link href="site_libs/highlightjs-9.12.0/textmate.css" rel="stylesheet" />
+<script src="site_libs/highlightjs-9.12.0/highlight.js"></script>
+<link href="site_libs/pagedtable-1.1/css/pagedtable.css" rel="stylesheet" />
+<script src="site_libs/pagedtable-1.1/js/pagedtable.js"></script>
+<link href="site_libs/font-awesome-6.4.2/css/all.min.css" rel="stylesheet" />
+<link href="site_libs/font-awesome-6.4.2/css/v4-shims.min.css" rel="stylesheet" />
+
+<link rel="icon" href="https://github.com/workflowr/workflowr-assets/raw/main/img/reproducible.png">
+<!-- Add a small amount of space between sections. -->
+<style type="text/css">
+div.section {
+  padding-top: 12px;
+}
+</style>
+
+
+
+<style type="text/css">
+  code{white-space: pre-wrap;}
+  span.smallcaps{font-variant: small-caps;}
+  span.underline{text-decoration: underline;}
+  div.column{display: inline-block; vertical-align: top; width: 50%;}
+  div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
+  ul.task-list{list-style: none;}
+    </style>
+
+<style type="text/css">code{white-space: pre;}</style>
+<script type="text/javascript">
+if (window.hljs) {
+  hljs.configure({languages: []});
+  hljs.initHighlightingOnLoad();
+  if (document.readyState && document.readyState === "complete") {
+    window.setTimeout(function() { hljs.initHighlighting(); }, 0);
+  }
+}
+</script>
+
+
+
+
+
+
+
+
+
+<style type = "text/css">
+.main-container {
+  max-width: 940px;
+  margin-left: auto;
+  margin-right: auto;
+}
+img {
+  max-width:100%;
+}
+.tabbed-pane {
+  padding-top: 12px;
+}
+.html-widget {
+  margin-bottom: 20px;
+}
+button.code-folding-btn:focus {
+  outline: none;
+}
+summary {
+  display: list-item;
+}
+details > summary > p:only-child {
+  display: inline;
+}
+pre code {
+  padding: 0;
+}
+</style>
+
+
+<style type="text/css">
+.dropdown-submenu {
+  position: relative;
+}
+.dropdown-submenu>.dropdown-menu {
+  top: 0;
+  left: 100%;
+  margin-top: -6px;
+  margin-left: -1px;
+  border-radius: 0 6px 6px 6px;
+}
+.dropdown-submenu:hover>.dropdown-menu {
+  display: block;
+}
+.dropdown-submenu>a:after {
+  display: block;
+  content: " ";
+  float: right;
+  width: 0;
+  height: 0;
+  border-color: transparent;
+  border-style: solid;
+  border-width: 5px 0 5px 5px;
+  border-left-color: #cccccc;
+  margin-top: 5px;
+  margin-right: -10px;
+}
+.dropdown-submenu:hover>a:after {
+  border-left-color: #adb5bd;
+}
+.dropdown-submenu.pull-left {
+  float: none;
+}
+.dropdown-submenu.pull-left>.dropdown-menu {
+  left: -100%;
+  margin-left: 10px;
+  border-radius: 6px 0 6px 6px;
+}
+</style>
+
+<script type="text/javascript">
+// manage active state of menu based on current page
+$(document).ready(function () {
+  // active menu anchor
+  href = window.location.pathname
+  href = href.substr(href.lastIndexOf('/') + 1)
+  if (href === "")
+    href = "index.html";
+  var menuAnchor = $('a[href="' + href + '"]');
+
+  // mark the anchor link active (and if it's in a dropdown, also mark that active)
+  var dropdown = menuAnchor.closest('li.dropdown');
+  if (window.bootstrap) { // Bootstrap 4+
+    menuAnchor.addClass('active');
+    dropdown.find('> .dropdown-toggle').addClass('active');
+  } else { // Bootstrap 3
+    menuAnchor.parent().addClass('active');
+    dropdown.addClass('active');
+  }
+
+  // Navbar adjustments
+  var navHeight = $(".navbar").first().height() + 15;
+  var style = document.createElement('style');
+  var pt = "padding-top: " + navHeight + "px; ";
+  var mt = "margin-top: -" + navHeight + "px; ";
+  var css = "";
+  // offset scroll position for anchor links (for fixed navbar)
+  for (var i = 1; i <= 6; i++) {
+    css += ".section h" + i + "{ " + pt + mt + "}\n";
+  }
+  style.innerHTML = "body {" + pt + "padding-bottom: 40px; }\n" + css;
+  document.head.appendChild(style);
+});
+</script>
+
+<!-- tabsets -->
+
+<style type="text/css">
+.tabset-dropdown > .nav-tabs {
+  display: inline-table;
+  max-height: 500px;
+  min-height: 44px;
+  overflow-y: auto;
+  border: 1px solid #ddd;
+  border-radius: 4px;
+}
+
+.tabset-dropdown > .nav-tabs > li.active:before, .tabset-dropdown > .nav-tabs.nav-tabs-open:before {
+  content: "\e259";
+  font-family: 'Glyphicons Halflings';
+  display: inline-block;
+  padding: 10px;
+  border-right: 1px solid #ddd;
+}
+
+.tabset-dropdown > .nav-tabs.nav-tabs-open > li.active:before {
+  content: "\e258";
+  font-family: 'Glyphicons Halflings';
+  border: none;
+}
+
+.tabset-dropdown > .nav-tabs > li.active {
+  display: block;
+}
+
+.tabset-dropdown > .nav-tabs > li > a,
+.tabset-dropdown > .nav-tabs > li > a:focus,
+.tabset-dropdown > .nav-tabs > li > a:hover {
+  border: none;
+  display: inline-block;
+  border-radius: 4px;
+  background-color: transparent;
+}
+
+.tabset-dropdown > .nav-tabs.nav-tabs-open > li {
+  display: block;
+  float: none;
+}
+
+.tabset-dropdown > .nav-tabs > li {
+  display: none;
+}
+</style>
+
+<!-- code folding -->
+<style type="text/css">
+.code-folding-btn { margin-bottom: 4px; }
+</style>
+
+
+
+<style type="text/css">
+
+#TOC {
+  margin: 25px 0px 20px 0px;
+}
+@media (max-width: 768px) {
+#TOC {
+  position: relative;
+  width: 100%;
+}
+}
+
+@media print {
+.toc-content {
+  /* see https://github.com/w3c/csswg-drafts/issues/4434 */
+  float: right;
+}
+}
+
+.toc-content {
+  padding-left: 30px;
+  padding-right: 40px;
+}
+
+div.main-container {
+  max-width: 1200px;
+}
+
+div.tocify {
+  width: 20%;
+  max-width: 260px;
+  max-height: 85%;
+}
+
+@media (min-width: 768px) and (max-width: 991px) {
+  div.tocify {
+    width: 25%;
+  }
+}
+
+@media (max-width: 767px) {
+  div.tocify {
+    width: 100%;
+    max-width: none;
+  }
+}
+
+.tocify ul, .tocify li {
+  line-height: 20px;
+}
+
+.tocify-subheader .tocify-item {
+  font-size: 0.90em;
+}
+
+.tocify .list-group-item {
+  border-radius: 0px;
+}
+
+
+</style>
+
+
+
+</head>
+
+<body>
+
+
+<div class="container-fluid main-container">
+
+
+<!-- setup 3col/9col grid for toc_float and main content  -->
+<div class="row">
+<div class="col-xs-12 col-sm-4 col-md-3">
+<div id="TOC" class="tocify">
+</div>
+</div>
+
+<div class="toc-content col-xs-12 col-sm-8 col-md-9">
+
+
+
+
+<div class="navbar navbar-default  navbar-fixed-top" role="navigation">
+  <div class="container">
+    <div class="navbar-header">
+      <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-bs-toggle="collapse" data-target="#navbar" data-bs-target="#navbar">
+        <span class="icon-bar"></span>
+        <span class="icon-bar"></span>
+        <span class="icon-bar"></span>
+      </button>
+      <a class="navbar-brand" href="index.html">mecfs-dge-analysis</a>
+    </div>
+    <div id="navbar" class="navbar-collapse collapse">
+      <ul class="nav navbar-nav">
+        <li>
+  <a href="index.html">Home</a>
+</li>
+<li>
+  <a href="background.html">Background</a>
+</li>
+<li class="dropdown">
+  <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+    Analysis
+     
+    <span class="caret"></span>
+  </a>
+  <ul class="dropdown-menu" role="menu">
+    <li>
+      <a href="subsetted-condition-analysis.html">Subsetted Analysis</a>
+    </li>
+  </ul>
+</li>
+      </ul>
+      <ul class="nav navbar-nav navbar-right">
+        <li>
+  <a href="https://github.com/uab-cgds-worthey/mecfs-dge-analysis">
+    <span class="fa fa-github"></span>
+     
+  </a>
+</li>
+      </ul>
+    </div><!--/.nav-collapse -->
+  </div><!--/.container -->
+</div><!--/.navbar -->
+
+<div id="header">
+
+<div class="btn-group pull-right float-right">
+<button type="button" class="btn btn-default btn-xs btn-secondary btn-sm dropdown-toggle" data-toggle="dropdown" data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false"><span>Code</span> <span class="caret"></span></button>
+<ul class="dropdown-menu dropdown-menu-right" style="min-width: 50px;">
+<li><a id="rmd-show-all-code" href="#">Show All Code</a></li>
+<li><a id="rmd-hide-all-code" href="#">Hide All Code</a></li>
+</ul>
+</div>
+
+
+
+<h1 class="title toc-ignore">SPTA1 vs Unaffected Differential Gene
+Expression (DGE) Analysis</h1>
+<h4 class="author">Shaurita D. Hutchins</h4>
+<h4 class="date">Last updated on 2024-12-04</h4>
+
+</div>
+
+
+<p>
+<button type="button" class="btn btn-default btn-workflowr btn-workflowr-report" data-toggle="collapse" data-target="#workflowr-report">
+<span class="glyphicon glyphicon-list" aria-hidden="true"></span>
+workflowr <span class="glyphicon glyphicon-ok text-success"
+aria-hidden="true"></span>
+</button>
+</p>
+<div id="workflowr-report" class="collapse">
+<ul class="nav nav-tabs">
+<li class="active">
+<a data-toggle="tab" href="#summary">Summary</a>
+</li>
+<li>
+<a data-toggle="tab" href="#checks"> Checks <span
+class="glyphicon glyphicon-ok text-success" aria-hidden="true"></span>
+</a>
+</li>
+<li>
+<a data-toggle="tab" href="#versions">Past versions</a>
+</li>
+</ul>
+<div class="tab-content">
+<div id="summary" class="tab-pane fade in active">
+<p>
+<strong>Last updated:</strong> 2024-12-04
+</p>
+<p>
+<strong>Checks:</strong> <span
+class="glyphicon glyphicon-ok text-success" aria-hidden="true"></span> 7
+<span class="glyphicon glyphicon-exclamation-sign text-danger"
+aria-hidden="true"></span> 0
+</p>
+<p>
+<strong>Knit directory:</strong> <code>mecfs-dge-analysis/</code> <span
+class="glyphicon glyphicon-question-sign" aria-hidden="true"
+title="This is the local directory in which the code in this file was executed.">
+</span>
+</p>
+<p>
+This reproducible <a href="https://rmarkdown.rstudio.com">R Markdown</a>
+analysis was created with <a
+  href="https://github.com/workflowr/workflowr">workflowr</a> (version
+1.7.1). The <em>Checks</em> tab describes the reproducibility checks
+that were applied when the results were created. The <em>Past
+versions</em> tab lists the development history.
+</p>
+<hr>
+</div>
+<div id="checks" class="tab-pane fade">
+<div id="workflowr-checks" class="panel-group">
+<div class="panel panel-default">
+<div class="panel-heading">
+<p class="panel-title">
+<a data-toggle="collapse" data-parent="#workflowr-checks" href="#strongRMarkdownfilestronguptodate">
+<span class="glyphicon glyphicon-ok text-success"
+aria-hidden="true"></span> <strong>R Markdown file:</strong> up-to-date
+</a>
+</p>
+</div>
+<div id="strongRMarkdownfilestronguptodate"
+class="panel-collapse collapse">
+<div class="panel-body">
+<p>Great! Since the R Markdown file has been committed to the Git
+repository, you know the exact version of the code that produced these
+results.</p>
+</div>
+</div>
+</div>
+<div class="panel panel-default">
+<div class="panel-heading">
+<p class="panel-title">
+<a data-toggle="collapse" data-parent="#workflowr-checks" href="#strongEnvironmentstrongempty">
+<span class="glyphicon glyphicon-ok text-success"
+aria-hidden="true"></span> <strong>Environment:</strong> empty </a>
+</p>
+</div>
+<div id="strongEnvironmentstrongempty" class="panel-collapse collapse">
+<div class="panel-body">
+<p>Great job! The global environment was empty. Objects defined in the
+global environment can affect the analysis in your R Markdown file in
+unknown ways. For reproduciblity it’s best to always run the code in an
+empty environment.</p>
+</div>
+</div>
+</div>
+<div class="panel panel-default">
+<div class="panel-heading">
+<p class="panel-title">
+<a data-toggle="collapse" data-parent="#workflowr-checks" href="#strongSeedstrongcodesetseed20230618code">
+<span class="glyphicon glyphicon-ok text-success"
+aria-hidden="true"></span> <strong>Seed:</strong>
+<code>set.seed(20230618)</code> </a>
+</p>
+</div>
+<div id="strongSeedstrongcodesetseed20230618code"
+class="panel-collapse collapse">
+<div class="panel-body">
+<p>The command <code>set.seed(20230618)</code> was run prior to running
+the code in the R Markdown file. Setting a seed ensures that any results
+that rely on randomness, e.g. subsampling or permutations, are
+reproducible.</p>
+</div>
+</div>
+</div>
+<div class="panel panel-default">
+<div class="panel-heading">
+<p class="panel-title">
+<a data-toggle="collapse" data-parent="#workflowr-checks" href="#strongSessioninformationstrongrecorded">
+<span class="glyphicon glyphicon-ok text-success"
+aria-hidden="true"></span> <strong>Session information:</strong>
+recorded </a>
+</p>
+</div>
+<div id="strongSessioninformationstrongrecorded"
+class="panel-collapse collapse">
+<div class="panel-body">
+<p>Great job! Recording the operating system, R version, and package
+versions is critical for reproducibility.</p>
+</div>
+</div>
+</div>
+<div class="panel panel-default">
+<div class="panel-heading">
+<p class="panel-title">
+<a data-toggle="collapse" data-parent="#workflowr-checks" href="#strongCachestrongnone">
+<span class="glyphicon glyphicon-ok text-success"
+aria-hidden="true"></span> <strong>Cache:</strong> none </a>
+</p>
+</div>
+<div id="strongCachestrongnone" class="panel-collapse collapse">
+<div class="panel-body">
+<p>Nice! There were no cached chunks for this analysis, so you can be
+confident that you successfully produced the results during this
+run.</p>
+</div>
+</div>
+</div>
+<div class="panel panel-default">
+<div class="panel-heading">
+<p class="panel-title">
+<a data-toggle="collapse" data-parent="#workflowr-checks" href="#strongFilepathsstrongrelative">
+<span class="glyphicon glyphicon-ok text-success"
+aria-hidden="true"></span> <strong>File paths:</strong> relative </a>
+</p>
+</div>
+<div id="strongFilepathsstrongrelative" class="panel-collapse collapse">
+<div class="panel-body">
+<p>Great job! Using relative paths to the files within your workflowr
+project makes it easier to run your code on other machines.</p>
+</div>
+</div>
+</div>
+<div class="panel panel-default">
+<div class="panel-heading">
+<p class="panel-title">
+<a data-toggle="collapse" data-parent="#workflowr-checks" href="#strongRepositoryversionstrongahrefhttpsgithubcomuabcgdswortheymecfsdgeanalysistreeb97a5a5e2439c2445d0a2568d0668da916dfb66ftargetblankb97a5a5a">
+<span class="glyphicon glyphicon-ok text-success"
+aria-hidden="true"></span> <strong>Repository version:</strong>
+<a href="https://github.com/uab-cgds-worthey/mecfs-dge-analysis/tree/b97a5a5e2439c2445d0a2568d0668da916dfb66f" target="_blank">b97a5a5</a>
+</a>
+</p>
+</div>
+<div
+id="strongRepositoryversionstrongahrefhttpsgithubcomuabcgdswortheymecfsdgeanalysistreeb97a5a5e2439c2445d0a2568d0668da916dfb66ftargetblankb97a5a5a"
+class="panel-collapse collapse">
+<div class="panel-body">
+<p>
+Great! You are using Git for version control. Tracking code development
+and connecting the code version to the results is critical for
+reproducibility.
+</p>
+<p>
+The results in this page were generated with repository version
+<a href="https://github.com/uab-cgds-worthey/mecfs-dge-analysis/tree/b97a5a5e2439c2445d0a2568d0668da916dfb66f" target="_blank">b97a5a5</a>.
+See the <em>Past versions</em> tab to see a history of the changes made
+to the R Markdown and HTML files.
+</p>
+<p>
+Note that you need to be careful to ensure that all relevant files for
+the analysis have been committed to Git prior to generating the results
+(you can use <code>wflow_publish</code> or
+<code>wflow_git_commit</code>). workflowr only checks the R Markdown
+file, but you know if there are other scripts or data files that it
+depends on. Below is the status of the Git repository when the results
+were generated:
+</p>
+<pre><code>
+Ignored files:
+    Ignored:    .DS_Store
+    Ignored:    .Rhistory
+    Ignored:    .Rproj.user/
+    Ignored:    analysis/.DS_Store
+    Ignored:    analysis/figure/
+    Ignored:    data/.DS_Store
+    Ignored:    omnipathr-log/
+    Ignored:    output/.DS_Store
+    Ignored:    output/publication-analysis/.DS_Store
+    Ignored:    output/publication-analysis/batch-correction-limma/.DS_Store
+    Ignored:    output/publication-analysis/batch-correction-limma/plot-counts/spta1-genes-of-interest/
+    Ignored:    output/spta1-analysis/.DS_Store
+    Ignored:    output/spta1-analysis/batch-correction-limma/.DS_Store
+    Ignored:    renv/.DS_Store
+    Ignored:    renv/library/
+    Ignored:    renv/staging/
+
+Untracked files:
+    Untracked:  output/all-samples-analysis/
+    Untracked:  output/publication-analysis/batch-correction-limma/plot-counts/padj-05/
+    Untracked:  output/publication-analysis/publication-analysis.RData
+    Untracked:  output/spta1-analysis/batch-correction-limma/plot-counts/madd-genes-of-interest/faceted_madd_genes_of_interest_plot_counts.png
+    Untracked:  output/spta1-analysis/batch-correction-limma/plot-counts/padj-05/CORO7-PAM16-plot-counts.png
+    Untracked:  output/spta1-analysis/batch-correction-limma/plot-counts/padj-05/GOLGA8O-plot-counts.png
+    Untracked:  output/spta1-analysis/batch-correction-limma/plot-counts/padj-05/KMO-plot-counts.png
+    Untracked:  output/spta1-analysis/batch-correction-limma/plot-counts/padj-05/LRRC37A4P-plot-counts.png
+    Untracked:  output/spta1-analysis/batch-correction-limma/plot-counts/padj-05/PDCD1-plot-counts.png
+    Untracked:  output/spta1-analysis/batch-correction-limma/plot-counts/padj-05/PLAAT3-plot-counts.png
+    Untracked:  output/spta1-analysis/batch-correction-limma/plot-counts/padj-05/PMS2P6-plot-counts.png
+    Untracked:  output/spta1-analysis/batch-correction-limma/plot-counts/padj-05/RNF217-plot-counts.png
+    Untracked:  output/spta1-analysis/batch-correction-limma/plot-counts/padj-05/SMG1P2-plot-counts.png
+    Untracked:  output/spta1-analysis/batch-correction-limma/plot-counts/padj-05/TMEM184A-plot-counts.png
+    Untracked:  output/spta1-analysis/batch-correction-limma/plot-counts/padj-05/TUBB4BP2-plot-counts.png
+    Untracked:  output/spta1-analysis/batch-correction-limma/plot-counts/padj-05/TVP23C-CDRT4-plot-counts.png
+    Untracked:  output/spta1-analysis/batch-correction-limma/plot-counts/padj-05/U2AF1-plot-counts.png
+    Untracked:  output/spta1-analysis/batch-correction-limma/plot-counts/padj-05/faceted_significant_degs_plot_counts.png
+    Untracked:  output/spta1-analysis/batch-correction-limma/plot-counts/spta1-genes-of-interest/
+    Untracked:  output/spta1-analysis/genes-of-interest.png
+    Untracked:  output/spta1-analysis/genes_of_interest_plot_counts_signals.csv
+    Untracked:  output/spta1-analysis/significant_plot_counts_signals.csv
+    Untracked:  output/spta1-analysis/spta1_genes_of_interest.csv
+    Untracked:  output/spta1-analysis/spta1_genes_of_interest_heatmap.png
+    Untracked:  output/spta1-analysis/spta1_genes_of_interest_plot_counts_signals.csv
+
+Unstaged changes:
+    Modified:   analysis/all-condition-analysis.Rmd
+    Modified:   analysis/subsetted-condition-analysis.Rmd
+    Modified:   code/helpers.R
+    Modified:   output/publication-analysis/Supplemental Table 5. Significant Differentially Expressed Genes.csv
+    Deleted:    output/publication-analysis/batch-correction-limma/plot-counts/additional-genes-of-interest/ACACB-subsetted-plot-counts.png
+    Deleted:    output/publication-analysis/batch-correction-limma/plot-counts/additional-genes-of-interest/ACADM-subsetted-plot-counts.png
+    Deleted:    output/publication-analysis/batch-correction-limma/plot-counts/additional-genes-of-interest/ACADVL-subsetted-plot-counts.png
+    Deleted:    output/publication-analysis/batch-correction-limma/plot-counts/additional-genes-of-interest/ADM2-subsetted-plot-counts.png
+    Deleted:    output/publication-analysis/batch-correction-limma/plot-counts/additional-genes-of-interest/ADORA2A-subsetted-plot-counts.png
+    Deleted:    output/publication-analysis/batch-correction-limma/plot-counts/additional-genes-of-interest/ADORA2B-subsetted-plot-counts.png
+    Deleted:    output/publication-analysis/batch-correction-limma/plot-counts/additional-genes-of-interest/ADRB2-subsetted-plot-counts.png
+    Deleted:    output/publication-analysis/batch-correction-limma/plot-counts/additional-genes-of-interest/AHSP-subsetted-plot-counts.png
+    Deleted:    output/publication-analysis/batch-correction-limma/plot-counts/additional-genes-of-interest/ATP1A1-subsetted-plot-counts.png
+    Deleted:    output/publication-analysis/batch-correction-limma/plot-counts/additional-genes-of-interest/CALCB-subsetted-plot-counts.png
+    Deleted:    output/publication-analysis/batch-correction-limma/plot-counts/additional-genes-of-interest/CCR5-subsetted-plot-counts.png
+    Deleted:    output/publication-analysis/batch-correction-limma/plot-counts/additional-genes-of-interest/CHRFAM7A-subsetted-plot-counts.png
+    Deleted:    output/publication-analysis/batch-correction-limma/plot-counts/additional-genes-of-interest/COL6A3-subsetted-plot-counts.png
+    Deleted:    output/publication-analysis/batch-correction-limma/plot-counts/additional-genes-of-interest/COMT-subsetted-plot-counts.png
+    Deleted:    output/publication-analysis/batch-correction-limma/plot-counts/additional-genes-of-interest/CPT1A-subsetted-plot-counts.png
+    Deleted:    output/publication-analysis/batch-correction-limma/plot-counts/additional-genes-of-interest/CPT1B-subsetted-plot-counts.png
+    Deleted:    output/publication-analysis/batch-correction-limma/plot-counts/additional-genes-of-interest/CPT1C-subsetted-plot-counts.png
+    Deleted:    output/publication-analysis/batch-correction-limma/plot-counts/additional-genes-of-interest/CUBN-subsetted-plot-counts.png
+    Deleted:    output/publication-analysis/batch-correction-limma/plot-counts/additional-genes-of-interest/CYTH2-subsetted-plot-counts.png
+    Deleted:    output/publication-analysis/batch-correction-limma/plot-counts/additional-genes-of-interest/DENND1A-subsetted-plot-counts.png
+    Deleted:    output/publication-analysis/batch-correction-limma/plot-counts/additional-genes-of-interest/DMXL2-subsetted-plot-counts.png
+    Deleted:    output/publication-analysis/batch-correction-limma/plot-counts/additional-genes-of-interest/ELOVL4-subsetted-plot-counts.png
+    Deleted:    output/publication-analysis/batch-correction-limma/plot-counts/additional-genes-of-interest/ENO3-subsetted-plot-counts.png
+    Deleted:    output/publication-analysis/batch-correction-limma/plot-counts/additional-genes-of-interest/EPB42-subsetted-plot-counts.png
+    Deleted:    output/publication-analysis/batch-correction-limma/plot-counts/additional-genes-of-interest/ETFB-subsetted-plot-counts.png
+    Deleted:    output/publication-analysis/batch-correction-limma/plot-counts/additional-genes-of-interest/FKBP5-subsetted-plot-counts.png
+    Deleted:    output/publication-analysis/batch-correction-limma/plot-counts/additional-genes-of-interest/G6PD-subsetted-plot-counts.png
+    Deleted:    output/publication-analysis/batch-correction-limma/plot-counts/additional-genes-of-interest/GABRB3-subsetted-plot-counts.png
+    Deleted:    output/publication-analysis/batch-correction-limma/plot-counts/additional-genes-of-interest/GIPR-subsetted-plot-counts.png
+    Deleted:    output/publication-analysis/batch-correction-limma/plot-counts/additional-genes-of-interest/GLYCTK-subsetted-plot-counts.png
+    Deleted:    output/publication-analysis/batch-correction-limma/plot-counts/additional-genes-of-interest/GPNMB-subsetted-plot-counts.png
+    Deleted:    output/publication-analysis/batch-correction-limma/plot-counts/additional-genes-of-interest/GYPA-subsetted-plot-counts.png
+    Deleted:    output/publication-analysis/batch-correction-limma/plot-counts/additional-genes-of-interest/GYPB-subsetted-plot-counts.png
+    Deleted:    output/publication-analysis/batch-correction-limma/plot-counts/additional-genes-of-interest/GYPE-subsetted-plot-counts.png
+    Deleted:    output/publication-analysis/batch-correction-limma/plot-counts/additional-genes-of-interest/HADHA-subsetted-plot-counts.png
+    Deleted:    output/publication-analysis/batch-correction-limma/plot-counts/additional-genes-of-interest/HEMGN-subsetted-plot-counts.png
+    Deleted:    output/publication-analysis/batch-correction-limma/plot-counts/additional-genes-of-interest/HSPA1A-subsetted-plot-counts.png
+    Deleted:    output/publication-analysis/batch-correction-limma/plot-counts/additional-genes-of-interest/HTR6-subsetted-plot-counts.png
+    Deleted:    output/publication-analysis/batch-correction-limma/plot-counts/additional-genes-of-interest/IDO1-subsetted-plot-counts.png
+    Deleted:    output/publication-analysis/batch-correction-limma/plot-counts/additional-genes-of-interest/IFNG-subsetted-plot-counts.png
+    Deleted:    output/publication-analysis/batch-correction-limma/plot-counts/additional-genes-of-interest/IL10-subsetted-plot-counts.png
+    Deleted:    output/publication-analysis/batch-correction-limma/plot-counts/additional-genes-of-interest/IL6-subsetted-plot-counts.png
+    Deleted:    output/publication-analysis/batch-correction-limma/plot-counts/additional-genes-of-interest/KEL-subsetted-plot-counts.png
+    Deleted:    output/publication-analysis/batch-correction-limma/plot-counts/additional-genes-of-interest/KLHL7-subsetted-plot-counts.png
+    Deleted:    output/publication-analysis/batch-correction-limma/plot-counts/additional-genes-of-interest/LMBRD1-subsetted-plot-counts.png
+    Deleted:    output/publication-analysis/batch-correction-limma/plot-counts/additional-genes-of-interest/MADD-subsetted-plot-counts.png
+    Deleted:    output/publication-analysis/batch-correction-limma/plot-counts/additional-genes-of-interest/MAPK1-subsetted-plot-counts.png
+    Deleted:    output/publication-analysis/batch-correction-limma/plot-counts/additional-genes-of-interest/MCCC1-subsetted-plot-counts.png
+    Deleted:    output/publication-analysis/batch-correction-limma/plot-counts/additional-genes-of-interest/MCCC2-subsetted-plot-counts.png
+    Deleted:    output/publication-analysis/batch-correction-limma/plot-counts/additional-genes-of-interest/MINPP1-subsetted-plot-counts.png
+    Deleted:    output/publication-analysis/batch-correction-limma/plot-counts/additional-genes-of-interest/MLYCD-subsetted-plot-counts.png
+    Deleted:    output/publication-analysis/batch-correction-limma/plot-counts/additional-genes-of-interest/MMAA-subsetted-plot-counts.png
+    Deleted:    output/publication-analysis/batch-correction-limma/plot-counts/additional-genes-of-interest/MMACHC-subsetted-plot-counts.png
+    Deleted:    output/publication-analysis/batch-correction-limma/plot-counts/additional-genes-of-interest/MYH9-subsetted-plot-counts.png
+    Deleted:    output/publication-analysis/batch-correction-limma/plot-counts/additional-genes-of-interest/NLRP3-subsetted-plot-counts.png
+    Deleted:    output/publication-analysis/batch-correction-limma/plot-counts/additional-genes-of-interest/NR3C1-subsetted-plot-counts.png
+    Deleted:    output/publication-analysis/batch-correction-limma/plot-counts/additional-genes-of-interest/NUP42-subsetted-plot-counts.png
+    Deleted:    output/publication-analysis/batch-correction-limma/plot-counts/additional-genes-of-interest/OXTR-subsetted-plot-counts.png
+    Deleted:    output/publication-analysis/batch-correction-limma/plot-counts/additional-genes-of-interest/P2RX7-subsetted-plot-counts.png
+    Deleted:    output/publication-analysis/batch-correction-limma/plot-counts/additional-genes-of-interest/PCK2-subsetted-plot-counts.png
+    Deleted:    output/publication-analysis/batch-correction-limma/plot-counts/additional-genes-of-interest/PGM1-subsetted-plot-counts.png
+    Deleted:    output/publication-analysis/batch-correction-limma/plot-counts/additional-genes-of-interest/POLG-subsetted-plot-counts.png
+    Deleted:    output/publication-analysis/batch-correction-limma/plot-counts/additional-genes-of-interest/PTPN22-subsetted-plot-counts.png
+    Deleted:    output/publication-analysis/batch-correction-limma/plot-counts/additional-genes-of-interest/RHAG-subsetted-plot-counts.png
+    Deleted:    output/publication-analysis/batch-correction-limma/plot-counts/additional-genes-of-interest/SLC12A3-subsetted-plot-counts.png
+    Deleted:    output/publication-analysis/batch-correction-limma/plot-counts/additional-genes-of-interest/SLC25A20-subsetted-plot-counts.png
+    Deleted:    output/publication-analysis/batch-correction-limma/plot-counts/additional-genes-of-interest/SLC4A1-subsetted-plot-counts.png
+    Deleted:    output/publication-analysis/batch-correction-limma/plot-counts/additional-genes-of-interest/SLC7A9-subsetted-plot-counts.png
+    Deleted:    output/publication-analysis/batch-correction-limma/plot-counts/additional-genes-of-interest/SMCR8-subsetted-plot-counts.png
+    Deleted:    output/publication-analysis/batch-correction-limma/plot-counts/additional-genes-of-interest/SPTA1-subsetted-plot-counts.png
+    Deleted:    output/publication-analysis/batch-correction-limma/plot-counts/additional-genes-of-interest/SPTB-subsetted-plot-counts.png
+    Deleted:    output/publication-analysis/batch-correction-limma/plot-counts/additional-genes-of-interest/SPTBN5-subsetted-plot-counts.png
+    Deleted:    output/publication-analysis/batch-correction-limma/plot-counts/additional-genes-of-interest/SURF1-subsetted-plot-counts.png
+    Deleted:    output/publication-analysis/batch-correction-limma/plot-counts/additional-genes-of-interest/SYT6-subsetted-plot-counts.png
+    Deleted:    output/publication-analysis/batch-correction-limma/plot-counts/additional-genes-of-interest/TACO1-subsetted-plot-counts.png
+    Deleted:    output/publication-analysis/batch-correction-limma/plot-counts/additional-genes-of-interest/TNF-subsetted-plot-counts.png
+    Deleted:    output/publication-analysis/batch-correction-limma/plot-counts/additional-genes-of-interest/TOMM7-subsetted-plot-counts.png
+    Deleted:    output/publication-analysis/batch-correction-limma/plot-counts/additional-genes-of-interest/UCP2-subsetted-plot-counts.png
+    Deleted:    output/publication-analysis/batch-correction-limma/plot-counts/additional-genes-of-interest/VIPR2-subsetted-plot-counts.png
+    Modified:   output/publication-analysis/batch-correction-limma/plot-counts/genes-of-interest/ACACB-subsetted-plot-counts.png
+    Modified:   output/publication-analysis/batch-correction-limma/plot-counts/genes-of-interest/ACADM-subsetted-plot-counts.png
+    Modified:   output/publication-analysis/batch-correction-limma/plot-counts/genes-of-interest/ACADVL-subsetted-plot-counts.png
+    Modified:   output/publication-analysis/batch-correction-limma/plot-counts/genes-of-interest/ADM2-subsetted-plot-counts.png
+    Modified:   output/publication-analysis/batch-correction-limma/plot-counts/genes-of-interest/ADORA2A-subsetted-plot-counts.png
+    Modified:   output/publication-analysis/batch-correction-limma/plot-counts/genes-of-interest/ADORA2B-subsetted-plot-counts.png
+    Modified:   output/publication-analysis/batch-correction-limma/plot-counts/genes-of-interest/ADRB2-subsetted-plot-counts.png
+    Modified:   output/publication-analysis/batch-correction-limma/plot-counts/genes-of-interest/ATP1A1-subsetted-plot-counts.png
+    Modified:   output/publication-analysis/batch-correction-limma/plot-counts/genes-of-interest/CALCB-subsetted-plot-counts.png
+    Modified:   output/publication-analysis/batch-correction-limma/plot-counts/genes-of-interest/CCR5-subsetted-plot-counts.png
+    Modified:   output/publication-analysis/batch-correction-limma/plot-counts/genes-of-interest/CHRFAM7A-subsetted-plot-counts.png
+    Modified:   output/publication-analysis/batch-correction-limma/plot-counts/genes-of-interest/COL6A3-subsetted-plot-counts.png
+    Modified:   output/publication-analysis/batch-correction-limma/plot-counts/genes-of-interest/COMT-subsetted-plot-counts.png
+    Modified:   output/publication-analysis/batch-correction-limma/plot-counts/genes-of-interest/CPT1A-subsetted-plot-counts.png
+    Modified:   output/publication-analysis/batch-correction-limma/plot-counts/genes-of-interest/CPT1B-subsetted-plot-counts.png
+    Modified:   output/publication-analysis/batch-correction-limma/plot-counts/genes-of-interest/CPT1C-subsetted-plot-counts.png
+    Modified:   output/publication-analysis/batch-correction-limma/plot-counts/genes-of-interest/CUBN-subsetted-plot-counts.png
+    Modified:   output/publication-analysis/batch-correction-limma/plot-counts/genes-of-interest/CYTH2-subsetted-plot-counts.png
+    Modified:   output/publication-analysis/batch-correction-limma/plot-counts/genes-of-interest/DENND1A-subsetted-plot-counts.png
+    Modified:   output/publication-analysis/batch-correction-limma/plot-counts/genes-of-interest/DMXL2-subsetted-plot-counts.png
+    Modified:   output/publication-analysis/batch-correction-limma/plot-counts/genes-of-interest/ELOVL4-subsetted-plot-counts.png
+    Modified:   output/publication-analysis/batch-correction-limma/plot-counts/genes-of-interest/ENO3-subsetted-plot-counts.png
+    Modified:   output/publication-analysis/batch-correction-limma/plot-counts/genes-of-interest/ETFB-subsetted-plot-counts.png
+    Modified:   output/publication-analysis/batch-correction-limma/plot-counts/genes-of-interest/FKBP5-subsetted-plot-counts.png
+    Modified:   output/publication-analysis/batch-correction-limma/plot-counts/genes-of-interest/G6PD-subsetted-plot-counts.png
+    Modified:   output/publication-analysis/batch-correction-limma/plot-counts/genes-of-interest/GABRB3-subsetted-plot-counts.png
+    Modified:   output/publication-analysis/batch-correction-limma/plot-counts/genes-of-interest/GIPR-subsetted-plot-counts.png
+    Modified:   output/publication-analysis/batch-correction-limma/plot-counts/genes-of-interest/GLYCTK-subsetted-plot-counts.png
+    Modified:   output/publication-analysis/batch-correction-limma/plot-counts/genes-of-interest/GPNMB-subsetted-plot-counts.png
+    Modified:   output/publication-analysis/batch-correction-limma/plot-counts/genes-of-interest/HADHA-subsetted-plot-counts.png
+    Modified:   output/publication-analysis/batch-correction-limma/plot-counts/genes-of-interest/HSPA1A-subsetted-plot-counts.png
+    Modified:   output/publication-analysis/batch-correction-limma/plot-counts/genes-of-interest/HTR6-subsetted-plot-counts.png
+    Modified:   output/publication-analysis/batch-correction-limma/plot-counts/genes-of-interest/IDO1-subsetted-plot-counts.png
+    Modified:   output/publication-analysis/batch-correction-limma/plot-counts/genes-of-interest/IFNG-subsetted-plot-counts.png
+    Modified:   output/publication-analysis/batch-correction-limma/plot-counts/genes-of-interest/IL10-subsetted-plot-counts.png
+    Modified:   output/publication-analysis/batch-correction-limma/plot-counts/genes-of-interest/IL6-subsetted-plot-counts.png
+    Modified:   output/publication-analysis/batch-correction-limma/plot-counts/genes-of-interest/KLHL7-subsetted-plot-counts.png
+    Modified:   output/publication-analysis/batch-correction-limma/plot-counts/genes-of-interest/LMBRD1-subsetted-plot-counts.png
+    Modified:   output/publication-analysis/batch-correction-limma/plot-counts/genes-of-interest/MADD-subsetted-plot-counts.png
+    Modified:   output/publication-analysis/batch-correction-limma/plot-counts/genes-of-interest/MAPK1-subsetted-plot-counts.png
+    Modified:   output/publication-analysis/batch-correction-limma/plot-counts/genes-of-interest/MCCC1-subsetted-plot-counts.png
+    Modified:   output/publication-analysis/batch-correction-limma/plot-counts/genes-of-interest/MCCC2-subsetted-plot-counts.png
+    Modified:   output/publication-analysis/batch-correction-limma/plot-counts/genes-of-interest/MINPP1-subsetted-plot-counts.png
+    Modified:   output/publication-analysis/batch-correction-limma/plot-counts/genes-of-interest/MLYCD-subsetted-plot-counts.png
+    Modified:   output/publication-analysis/batch-correction-limma/plot-counts/genes-of-interest/MMAA-subsetted-plot-counts.png
+    Modified:   output/publication-analysis/batch-correction-limma/plot-counts/genes-of-interest/MMACHC-subsetted-plot-counts.png
+    Modified:   output/publication-analysis/batch-correction-limma/plot-counts/genes-of-interest/MYH9-subsetted-plot-counts.png
+    Modified:   output/publication-analysis/batch-correction-limma/plot-counts/genes-of-interest/NLRP3-subsetted-plot-counts.png
+    Modified:   output/publication-analysis/batch-correction-limma/plot-counts/genes-of-interest/NR3C1-subsetted-plot-counts.png
+    Modified:   output/publication-analysis/batch-correction-limma/plot-counts/genes-of-interest/NUP42-subsetted-plot-counts.png
+    Modified:   output/publication-analysis/batch-correction-limma/plot-counts/genes-of-interest/OXTR-subsetted-plot-counts.png
+    Modified:   output/publication-analysis/batch-correction-limma/plot-counts/genes-of-interest/P2RX7-subsetted-plot-counts.png
+    Modified:   output/publication-analysis/batch-correction-limma/plot-counts/genes-of-interest/PCK2-subsetted-plot-counts.png
+    Modified:   output/publication-analysis/batch-correction-limma/plot-counts/genes-of-interest/PGM1-subsetted-plot-counts.png
+    Modified:   output/publication-analysis/batch-correction-limma/plot-counts/genes-of-interest/POLG-subsetted-plot-counts.png
+    Modified:   output/publication-analysis/batch-correction-limma/plot-counts/genes-of-interest/PTPN22-subsetted-plot-counts.png
+    Modified:   output/publication-analysis/batch-correction-limma/plot-counts/genes-of-interest/SLC12A3-subsetted-plot-counts.png
+    Modified:   output/publication-analysis/batch-correction-limma/plot-counts/genes-of-interest/SLC25A20-subsetted-plot-counts.png
+    Modified:   output/publication-analysis/batch-correction-limma/plot-counts/genes-of-interest/SLC7A9-subsetted-plot-counts.png
+    Modified:   output/publication-analysis/batch-correction-limma/plot-counts/genes-of-interest/SMCR8-subsetted-plot-counts.png
+    Modified:   output/publication-analysis/batch-correction-limma/plot-counts/genes-of-interest/SURF1-subsetted-plot-counts.png
+    Modified:   output/publication-analysis/batch-correction-limma/plot-counts/genes-of-interest/SYT6-subsetted-plot-counts.png
+    Modified:   output/publication-analysis/batch-correction-limma/plot-counts/genes-of-interest/TACO1-subsetted-plot-counts.png
+    Modified:   output/publication-analysis/batch-correction-limma/plot-counts/genes-of-interest/TNF-subsetted-plot-counts.png
+    Modified:   output/publication-analysis/batch-correction-limma/plot-counts/genes-of-interest/TOMM7-subsetted-plot-counts.png
+    Modified:   output/publication-analysis/batch-correction-limma/plot-counts/genes-of-interest/UCP2-subsetted-plot-counts.png
+    Modified:   output/publication-analysis/batch-correction-limma/plot-counts/genes-of-interest/VIPR2-subsetted-plot-counts.png
+    Modified:   output/publication-analysis/batch-correction-limma/plot-counts/genes-of-interest/faceted_genes_of_interest_plot_counts.png
+    Modified:   output/publication-analysis/batch-correction-limma/plot-counts/genes-of-interest/genes_of_interest_heatmap.png
+    Deleted:    output/publication-analysis/res_aff_vs_unaff_df_sub_genename_padj05_lfc1.csv
+    Modified:   output/publication-analysis/res_aff_vs_unaff_significant_subsetted_mygene.csv
+    Modified:   output/publication-analysis/subsetted-analysis-volcano-plot.png
+    Modified:   output/spta1-analysis/batch-correction-limma/plot-counts/genes-of-interest/ADRB2-subsetted-plot-counts.png
+    Modified:   output/spta1-analysis/batch-correction-limma/plot-counts/genes-of-interest/ATP1A1-subsetted-plot-counts.png
+    Modified:   output/spta1-analysis/batch-correction-limma/plot-counts/genes-of-interest/CCR5-subsetted-plot-counts.png
+    Modified:   output/spta1-analysis/batch-correction-limma/plot-counts/genes-of-interest/CHRFAM7A-subsetted-plot-counts.png
+    Modified:   output/spta1-analysis/batch-correction-limma/plot-counts/genes-of-interest/COL6A3-subsetted-plot-counts.png
+    Modified:   output/spta1-analysis/batch-correction-limma/plot-counts/genes-of-interest/COMT-subsetted-plot-counts.png
+    Modified:   output/spta1-analysis/batch-correction-limma/plot-counts/genes-of-interest/FKBP5-subsetted-plot-counts.png
+    Modified:   output/spta1-analysis/batch-correction-limma/plot-counts/genes-of-interest/GPNMB-subsetted-plot-counts.png
+    Modified:   output/spta1-analysis/batch-correction-limma/plot-counts/genes-of-interest/HSPA1A-subsetted-plot-counts.png
+    Modified:   output/spta1-analysis/batch-correction-limma/plot-counts/genes-of-interest/IDO1-subsetted-plot-counts.png
+    Modified:   output/spta1-analysis/batch-correction-limma/plot-counts/genes-of-interest/IFNG-subsetted-plot-counts.png
+    Modified:   output/spta1-analysis/batch-correction-limma/plot-counts/genes-of-interest/IL10-subsetted-plot-counts.png
+    Modified:   output/spta1-analysis/batch-correction-limma/plot-counts/genes-of-interest/IL6-subsetted-plot-counts.png
+    Modified:   output/spta1-analysis/batch-correction-limma/plot-counts/genes-of-interest/KLHL7-subsetted-plot-counts.png
+    Modified:   output/spta1-analysis/batch-correction-limma/plot-counts/genes-of-interest/MAPK1-subsetted-plot-counts.png
+    Modified:   output/spta1-analysis/batch-correction-limma/plot-counts/genes-of-interest/MYH9-subsetted-plot-counts.png
+    Modified:   output/spta1-analysis/batch-correction-limma/plot-counts/genes-of-interest/NLRP3-subsetted-plot-counts.png
+    Modified:   output/spta1-analysis/batch-correction-limma/plot-counts/genes-of-interest/NR3C1-subsetted-plot-counts.png
+    Modified:   output/spta1-analysis/batch-correction-limma/plot-counts/genes-of-interest/NUP42-subsetted-plot-counts.png
+    Modified:   output/spta1-analysis/batch-correction-limma/plot-counts/genes-of-interest/OXTR-subsetted-plot-counts.png
+    Modified:   output/spta1-analysis/batch-correction-limma/plot-counts/genes-of-interest/P2RX7-subsetted-plot-counts.png
+    Modified:   output/spta1-analysis/batch-correction-limma/plot-counts/genes-of-interest/POLG-subsetted-plot-counts.png
+    Modified:   output/spta1-analysis/batch-correction-limma/plot-counts/genes-of-interest/PTPN22-subsetted-plot-counts.png
+    Modified:   output/spta1-analysis/batch-correction-limma/plot-counts/genes-of-interest/SLC12A3-subsetted-plot-counts.png
+    Modified:   output/spta1-analysis/batch-correction-limma/plot-counts/genes-of-interest/SLC25A20-subsetted-plot-counts.png
+    Modified:   output/spta1-analysis/batch-correction-limma/plot-counts/genes-of-interest/SLC7A9-subsetted-plot-counts.png
+    Modified:   output/spta1-analysis/batch-correction-limma/plot-counts/genes-of-interest/TNF-subsetted-plot-counts.png
+    Modified:   output/spta1-analysis/batch-correction-limma/plot-counts/genes-of-interest/TOMM7-subsetted-plot-counts.png
+    Modified:   output/spta1-analysis/batch-correction-limma/plot-counts/genes-of-interest/UCP2-subsetted-plot-counts.png
+    Modified:   output/spta1-analysis/batch-correction-limma/plot-counts/genes-of-interest/faceted_genes_of_interest_plot_counts.png
+    Modified:   output/spta1-analysis/batch-correction-limma/plot-counts/madd-genes-of-interest/ADM2-plot-counts.png
+    Modified:   output/spta1-analysis/batch-correction-limma/plot-counts/madd-genes-of-interest/ADORA2A-plot-counts.png
+    Modified:   output/spta1-analysis/batch-correction-limma/plot-counts/madd-genes-of-interest/ADORA2B-plot-counts.png
+    Modified:   output/spta1-analysis/batch-correction-limma/plot-counts/madd-genes-of-interest/CALCB-plot-counts.png
+    Modified:   output/spta1-analysis/batch-correction-limma/plot-counts/madd-genes-of-interest/CYTH2-plot-counts.png
+    Modified:   output/spta1-analysis/batch-correction-limma/plot-counts/madd-genes-of-interest/DENND1A-plot-counts.png
+    Modified:   output/spta1-analysis/batch-correction-limma/plot-counts/madd-genes-of-interest/DMXL2-plot-counts.png
+    Modified:   output/spta1-analysis/batch-correction-limma/plot-counts/madd-genes-of-interest/GIPR-plot-counts.png
+    Modified:   output/spta1-analysis/batch-correction-limma/plot-counts/madd-genes-of-interest/HTR6-plot-counts.png
+    Modified:   output/spta1-analysis/batch-correction-limma/plot-counts/madd-genes-of-interest/MADD-plot-counts.png
+    Modified:   output/spta1-analysis/batch-correction-limma/plot-counts/madd-genes-of-interest/SMCR8-plot-counts.png
+    Modified:   output/spta1-analysis/batch-correction-limma/plot-counts/madd-genes-of-interest/VIPR2-plot-counts.png
+    Modified:   output/spta1-analysis/batch-correction-limma/plot-counts/mito-genes-of-interest/ACACB-plot-counts.png
+    Modified:   output/spta1-analysis/batch-correction-limma/plot-counts/mito-genes-of-interest/ACADM-plot-counts.png
+    Modified:   output/spta1-analysis/batch-correction-limma/plot-counts/mito-genes-of-interest/ACADVL-plot-counts.png
+    Modified:   output/spta1-analysis/batch-correction-limma/plot-counts/mito-genes-of-interest/CPT1A-plot-counts.png
+    Modified:   output/spta1-analysis/batch-correction-limma/plot-counts/mito-genes-of-interest/CPT1B-plot-counts.png
+    Modified:   output/spta1-analysis/batch-correction-limma/plot-counts/mito-genes-of-interest/CPT1C-plot-counts.png
+    Modified:   output/spta1-analysis/batch-correction-limma/plot-counts/mito-genes-of-interest/CUBN-plot-counts.png
+    Modified:   output/spta1-analysis/batch-correction-limma/plot-counts/mito-genes-of-interest/ELOVL4-plot-counts.png
+    Modified:   output/spta1-analysis/batch-correction-limma/plot-counts/mito-genes-of-interest/ENO3-plot-counts.png
+    Modified:   output/spta1-analysis/batch-correction-limma/plot-counts/mito-genes-of-interest/ETFB-plot-counts.png
+    Modified:   output/spta1-analysis/batch-correction-limma/plot-counts/mito-genes-of-interest/G6PD-plot-counts.png
+    Modified:   output/spta1-analysis/batch-correction-limma/plot-counts/mito-genes-of-interest/GLYCTK-plot-counts.png
+    Modified:   output/spta1-analysis/batch-correction-limma/plot-counts/mito-genes-of-interest/HADHA-plot-counts.png
+    Modified:   output/spta1-analysis/batch-correction-limma/plot-counts/mito-genes-of-interest/LMBRD1-plot-counts.png
+    Modified:   output/spta1-analysis/batch-correction-limma/plot-counts/mito-genes-of-interest/MCCC1-plot-counts.png
+    Modified:   output/spta1-analysis/batch-correction-limma/plot-counts/mito-genes-of-interest/MCCC2-plot-counts.png
+    Modified:   output/spta1-analysis/batch-correction-limma/plot-counts/mito-genes-of-interest/MINPP1-plot-counts.png
+    Modified:   output/spta1-analysis/batch-correction-limma/plot-counts/mito-genes-of-interest/MLYCD-plot-counts.png
+    Modified:   output/spta1-analysis/batch-correction-limma/plot-counts/mito-genes-of-interest/MMAA-plot-counts.png
+    Modified:   output/spta1-analysis/batch-correction-limma/plot-counts/mito-genes-of-interest/MMACHC-plot-counts.png
+    Modified:   output/spta1-analysis/batch-correction-limma/plot-counts/mito-genes-of-interest/PCK2-plot-counts.png
+    Modified:   output/spta1-analysis/batch-correction-limma/plot-counts/mito-genes-of-interest/PGM1-plot-counts.png
+    Modified:   output/spta1-analysis/batch-correction-limma/plot-counts/mito-genes-of-interest/SURF1-plot-counts.png
+    Modified:   output/spta1-analysis/batch-correction-limma/plot-counts/mito-genes-of-interest/TACO1-plot-counts.png
+    Modified:   output/spta1-analysis/batch-correction-limma/plot-counts/mito-genes-of-interest/faceted_madd_genes_of_interest_plot_counts.png
+    Deleted:    output/spta1-analysis/batch-correction-limma/plot-counts/slc4a1-genes-of-interest/AHSP-plot-counts.png
+    Deleted:    output/spta1-analysis/batch-correction-limma/plot-counts/slc4a1-genes-of-interest/CHI3L1-plot-counts.png
+    Deleted:    output/spta1-analysis/batch-correction-limma/plot-counts/slc4a1-genes-of-interest/EPB42-plot-counts.png
+    Deleted:    output/spta1-analysis/batch-correction-limma/plot-counts/slc4a1-genes-of-interest/GYPA-plot-counts.png
+    Deleted:    output/spta1-analysis/batch-correction-limma/plot-counts/slc4a1-genes-of-interest/GYPB-plot-counts.png
+    Deleted:    output/spta1-analysis/batch-correction-limma/plot-counts/slc4a1-genes-of-interest/GYPE-plot-counts.png
+    Deleted:    output/spta1-analysis/batch-correction-limma/plot-counts/slc4a1-genes-of-interest/HEMGN-plot-counts.png
+    Deleted:    output/spta1-analysis/batch-correction-limma/plot-counts/slc4a1-genes-of-interest/KEL-plot-counts.png
+    Deleted:    output/spta1-analysis/batch-correction-limma/plot-counts/slc4a1-genes-of-interest/RHAG-plot-counts.png
+    Deleted:    output/spta1-analysis/batch-correction-limma/plot-counts/slc4a1-genes-of-interest/SLC4A1-plot-counts.png
+    Deleted:    output/spta1-analysis/batch-correction-limma/plot-counts/slc4a1-genes-of-interest/SPTA1-plot-counts.png
+    Deleted:    output/spta1-analysis/batch-correction-limma/plot-counts/slc4a1-genes-of-interest/SPTB-plot-counts.png
+    Deleted:    output/spta1-analysis/batch-correction-limma/plot-counts/slc4a1-genes-of-interest/SPTBN5-plot-counts.png
+    Deleted:    output/spta1-analysis/batch-correction-limma/plot-counts/slc4a1-genes-of-interest/faceted_slc4a1_genes_of_interest_plot_counts.png
+    Modified:   output/spta1-analysis/res_spta1_vs_unaff_siggenes.csv
+    Deleted:    output/spta1-analysis/slc4a1_genes_of_interest_heatmap.png
+    Deleted:    output/spta1-analysis/slc4a1_genes_of_interest_plot_counts_signals.csv
+    Modified:   output/spta1-analysis/volcano-plot.png
+    Modified:   renv.lock
+
+</code></pre>
+<p>
+Note that any generated files, e.g. HTML, png, CSS, etc., are not
+included in this status report because it is ok for generated content to
+have uncommitted changes.
+</p>
+</div>
+</div>
+</div>
+</div>
+<hr>
+</div>
+<div id="versions" class="tab-pane fade">
+
+<p>
+These are the previous versions of the repository in which changes were
+made to the R Markdown (<code>analysis/spta1-analysis.Rmd</code>) and
+HTML (<code>docs/spta1-analysis.html</code>) files. If you’ve configured
+a remote Git repository (see <code>?wflow_git_remote</code>), click on
+the hyperlinks in the table below to view the files as they were in that
+past version.
+</p>
+<div class="table-responsive">
+<table class="table table-condensed table-hover">
+<thead>
+<tr>
+<th>
+File
+</th>
+<th>
+Version
+</th>
+<th>
+Author
+</th>
+<th>
+Date
+</th>
+<th>
+Message
+</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>
+Rmd
+</td>
+<td>
+<a href="https://github.com/uab-cgds-worthey/mecfs-dge-analysis/blob/b97a5a5e2439c2445d0a2568d0668da916dfb66f/analysis/spta1-analysis.Rmd" target="_blank">b97a5a5</a>
+</td>
+<td>
+sdhutchins
+</td>
+<td>
+2024-12-04
+</td>
+<td>
+Add spta1 analysis.
+</td>
+</tr>
+<tr>
+<td>
+Rmd
+</td>
+<td>
+<a href="https://github.com/uab-cgds-worthey/mecfs-dge-analysis/blob/f9106e844939c5e67b29416b825632fe081f03bb/analysis/spta1-analysis.Rmd" target="_blank">f9106e8</a>
+</td>
+<td>
+sdhutchins
+</td>
+<td>
+2024-11-25
+</td>
+<td>
+Remove archived analyses.
+</td>
+</tr>
+</tbody>
+</table>
+</div>
+<hr>
+</div>
+</div>
+</div>
+<div id="dge-analysis-setup" class="section level1">
+<h1>DGE Analysis Setup</h1>
+<p>Ensure you have all necessary libraries installed and load the helper
+code.</p>
+<pre class="r"><code>library(tidyverse) # Available via CRAN
+library(DESeq2) # Available via Bioconductor
+library(RColorBrewer) # Available via CRAN
+library(pheatmap) # Available via CRAN
+library(genefilter) # Available via Bioconductor
+library(limma) # Available via Bioconductor
+library(gprofiler2) # Available via CRAN
+library(biomaRt) # Available via Bioconductor
+library(plotly) # Available via CRAN
+library(ggpubr) # Available via CRAN
+library(rmarkdown) # Available via CRAN
+library(clusterProfiler) # Available via Bioconductor
+library(org.Hs.eg.db) # Available via Bioconductor
+library(ggrepel) # Available via CRAN
+library(ReactomePA) # Available via Bioconductor
+library(mygene) # Available via Bioconductor
+library(DOSE) # Available via Bioconductor
+library(enrichR) # Available via Bioconductor
+library(STRINGdb) # Available via Bioconductor
+library(EnhancedVolcano)
+library(ComplexHeatmap)</code></pre>
+<div id="data-import" class="section level2">
+<h2>Data Import</h2>
+<p>We will be importing counts data from the star-salmon pipeline and
+our metadata for the project which is hosted on Box. This also ensures
+data is properly ordered by sample id.</p>
+<pre class="r"><code>counts &lt;- read_tsv(&quot;data/star-salmon/salmon.merged.gene_counts_length_scaled.tsv&quot;)
+
+# Import variants of interest
+genes_of_interest &lt;- read_csv(&quot;data/Prioritized_Genes_From_WGS_2024_11_19.csv&quot;)
+genes_of_interest &lt;- unique(genes_of_interest$Genes)
+genes_of_interest &lt;- genes_of_interest[!is.na(genes_of_interest)]
+# Add a gene manually to the list
+genes_of_interest &lt;- unique(c(genes_of_interest, &quot;CHI3L1&quot;))
+
+# Use first column (gene_id) for row names
+counts &lt;- data.frame(counts, row.names = 1)
+counts$Ensembl_ID &lt;- row.names(counts)
+drop &lt;- c(&quot;Ensembl_ID&quot;, &quot;gene_name&quot;)
+gene_info &lt;- counts[, drop]
+counts &lt;- counts[, !(names(counts) %in% drop)] # remove both columns
+
+# Import metadata
+sample_metadata &lt;- read_csv(&quot;data/Metadata_2024_11_20.csv&quot;)
+row.names(sample_metadata) &lt;- sample_metadata$ID
+
+# Assuming counts is your counts dataframe and sample_metadata is your metadata dataframe
+# Rename columns in counts to match metadata IDs
+counts &lt;- rename_counts_columns(counts, sample_metadata, &quot;ID&quot;, &quot;RNA_Samples_id&quot;)
+
+# What gene (based on variants samples have) is this analysis based on
+genetic_variant &lt;- &quot;SPTA1&quot;
+genetic_variant_lower &lt;- tolower(genetic_variant) # Convert to lowercase
+outpath_var &lt;- paste0(genetic_variant_lower, &quot;-analysis&quot;)
+
+# Filter metadata for Variant column values of &quot;Unaffected&quot; and &quot;SPTA1&quot;
+sample_metadata &lt;- sample_metadata %&gt;%
+  filter(Variant %in% c(&quot;Unaffected&quot;, genetic_variant))
+
+# Ensure counts dataframe has only the filtered samples
+filtered_sample_ids &lt;- sample_metadata$ID
+counts &lt;- counts[, colnames(counts) %in% filtered_sample_ids, drop = FALSE]
+
+# Ensure columns are in the same order as the metadata IDs
+counts &lt;- counts[, match(filtered_sample_ids, colnames(counts))]
+
+# Check that data is ordered properly
+sample_metadata &lt;- check_order(sample_metadata = sample_metadata, counts = counts)
+
+genes_biomart &lt;- retrieve_gene_info(values = gene_info$Ensembl_ID, filters = &quot;ensembl_gene_id_version&quot;)</code></pre>
+</div>
+<div id="deseq2-analysis" class="section level2">
+<h2>DESeq2 Analysis</h2>
+<pre class="r"><code>sample_metadata$Family &lt;- factor(sample_metadata$Family)
+sample_metadata$Affected &lt;- factor(sample_metadata$Affected)
+sample_metadata$Batch &lt;- factor(sample_metadata$Batch)
+sample_metadata$Sex &lt;- factor(sample_metadata$Sex)
+sample_metadata$Ancestry &lt;- factor(sample_metadata$Ancestry)
+sample_metadata$SubCategory &lt;- factor(sample_metadata$SubCategory)
+sample_metadata$Category &lt;- factor(sample_metadata$Category)
+sample_metadata$OverallCategory &lt;- factor(sample_metadata$`Overall category assigned`)
+sample_metadata$Variant &lt;- factor(sample_metadata$Variant)
+
+# Account for Family later but batch is accounted for
+# Accounting for another factor seems to be an issue.
+dds &lt;- DESeqDataSetFromMatrix(
+  countData = round(counts), colData = sample_metadata,
+  design = ~ Batch + Variant
+)
+
+# Pre-filtering: Keep only rows that have at least 10 reads total
+keep &lt;- rowSums(counts(dds)) &gt;= 50
+dds &lt;- dds[keep, ]
+
+# Run DESeq function
+dds &lt;- DESeq(dds)
+
+# Normalize gene counts for differences in seq. depth/global differences
+counts_norm &lt;- counts(dds, normalized = TRUE)</code></pre>
+<div id="data-transformation-and-visualization" class="section level3">
+<h3>Data transformation and visualization</h3>
+<p>Perform count data transformation by variance stabilizing
+transformation (vst) on normalized counts.</p>
+<pre class="r"><code>vsd &lt;- vst(dds, blind = FALSE)</code></pre>
+</div>
+<div id="batch-correction-with-limma" class="section level3">
+<h3>Batch correction with limma</h3>
+<pre class="r"><code>counts_vst &lt;- assay(vsd)
+write.csv(counts_vst, file.path(&quot;output&quot;, outpath_var, &quot;counts_vst.csv&quot;))
+mm &lt;- model.matrix(~ Batch + Variant, colData(vsd))
+
+counts_vst_limma &lt;- limma::removeBatchEffect(counts_vst,
+  batch = vsd$Batch,
+  design = mm
+)</code></pre>
+<pre><code>Coefficients not estimable: batch1 batch2 </code></pre>
+<pre class="r"><code>write.csv(counts_vst_limma, file = file.path(&quot;output&quot;, outpath_var, &quot;counts_vst_limma.csv&quot;))
+
+vsd_limma &lt;- vsd
+assay(vsd_limma) &lt;- counts_vst_limma</code></pre>
+</div>
+<div id="sample-distances-heatmap" class="section level3">
+<h3>Sample distances heatmap</h3>
+<pre class="r"><code>sample_dists_all &lt;- dist(t(assay(vsd_limma)))
+sample_dist_matrix_all &lt;- as.matrix(sample_dists_all)
+rownames(sample_dist_matrix_all) &lt;- paste(vsd_limma$Batch, vsd_limma$Affected,
+  sep = &quot; | &quot;
+)
+colnames(sample_dist_matrix_all) &lt;- paste(vsd_limma$ID, vsd_limma$Affected,
+  sep = &quot; | &quot;
+)
+colors &lt;- colorRampPalette(rev(brewer.pal(9, &quot;Blues&quot;)))(255)
+
+pheatmap(sample_dist_matrix_all,
+  clustering_distance_rows = sample_dists_all,
+  clustering_distance_cols = sample_dists_all, col = colors
+)</code></pre>
+<p><img src="figure/spta1-analysis.Rmd/sample-dist-heatmap-1.png" width="672" style="display: block; margin: auto;" /></p>
+</div>
+<div id="principal-components-analysis" class="section level3">
+<h3>Principal Components Analysis</h3>
+<p>Our below PCA shows that there does not seem to be a batch-related
+effect occurring after using limma. However, we can see that our 3 male
+samples are grouping. Given this knowledge, removing them from
+downstream analyses is the best option.</p>
+<pre class="r"><code>pca_data_all &lt;- plotPCA(vsd_limma,
+  intgroup = c(&quot;Batch&quot;, &quot;Variant&quot;),
+  returnData = TRUE
+)
+percent_var_all &lt;- round(100 * attr(pca_data_all, &quot;percentVar&quot;))
+
+ggplot(pca_data_all, aes(PC1, PC2)) +
+  geom_point(aes(colour = Variant, shape = Batch), size = 4) +
+  xlab(paste0(&quot;PC1: &quot;, percent_var_all[1], &quot;% variance&quot;)) +
+  ylab(paste0(&quot;PC2: &quot;, percent_var_all[2], &quot;% variance&quot;)) +
+  coord_fixed()</code></pre>
+<p><img src="figure/spta1-analysis.Rmd/principal-components-analysis-all-1.png" width="672" style="display: block; margin: auto;" /></p>
+<pre class="r"><code>pca_data_all &lt;- plotPCA(vsd_limma,
+  intgroup = c(&quot;OverallCategory&quot;),
+  returnData = TRUE
+)
+percent_var_all &lt;- round(100 * attr(pca_data_all, &quot;percentVar&quot;))
+
+ggplot(pca_data_all, aes(PC1, PC2)) +
+  geom_point(aes(colour = OverallCategory), size = 5) +
+  scale_colour_manual(
+    values = c(
+      &quot;#B3DE69&quot;, &quot;#FFFFB3&quot;, &quot;#BEBADA&quot;, &quot;#FB8072&quot;, &quot;#000000&quot;
+    ),
+    name = &quot;OverallCategory&quot;
+  ) +
+  # geom_text(aes(label = name), vjust = -.75, hjust = -.5, size = 3) +
+  # geom_text_repel(aes(label = name), size = 5, vjust = -2, hjust = -0.65) +
+  geom_text_repel(aes(label = name), size = 3) +
+  xlab(paste0(&quot;PC1: &quot;, percent_var_all[1], &quot;% variance&quot;)) +
+  ylab(paste0(&quot;PC2: &quot;, percent_var_all[2], &quot;% variance&quot;)) +
+  ggthemes::theme_clean()</code></pre>
+<p><img src="figure/spta1-analysis.Rmd/principal-components-analysis-category-1.png" width="672" style="display: block; margin: auto;" /></p>
+<pre class="r"><code># Specify annotation colors by columns
+# Use RColorBrewer::brewer.pal(n=10, name=&quot;Set1&quot;)
+overall_category_colors &lt;- c(
+  &quot;ENE&quot; = &quot;#BFDFBF&quot;, # Magenta
+  &quot;IMM&quot; = &quot;#EEBFEE&quot;, # Light green
+  &quot;SOL&quot; = &quot;#FFFF33&quot;, # Mustard yellow
+  &quot;STR&quot; = &quot;#BFBFFF&quot;, # Brown
+  &quot;N/A&quot; = &quot;darkgray&quot; # Dark grey
+)
+
+variant_colors &lt;- c(
+  &quot;CHRFAM7A&quot; = &quot;#80B1D3&quot;, # Blue
+  &quot;SPTA1&quot; = &quot;#FB8072&quot;, # Light red
+  &quot;N/A&quot; = &quot;#FDB462&quot;, # Orange
+  &quot;Unaffected&quot; = &quot;darkgray&quot; # Dark grey
+)
+
+ann_colors &lt;- list(
+  Batch = c(B1 = &quot;purple&quot;, B2 = &quot;firebrick&quot;, B3 = &quot;yellow&quot;),
+  Affected = c(Affected = &quot;green&quot;, Unaffected = &quot;navy&quot;),
+  OverallCategory = overall_category_colors,
+  Variant = variant_colors
+)</code></pre>
+</div>
+<div id="comparisoncontrast-of-spta1-affected-vs-unaffected"
+class="section level3">
+<h3>Comparison/Contrast of SPTA1 Affected vs Unaffected</h3>
+<pre class="r"><code># Perform differential expression analysis for &quot;Unaffected&quot; vs &quot;SPTA1&quot;
+res_aff_vs_unaff &lt;- results(dds, contrast = c(&quot;Variant&quot;, &quot;Unaffected&quot;, &quot;SPTA1&quot;))
+
+# Define output file path for saving results
+res_file_name &lt;- file.path(&quot;output&quot;, outpath_var, &quot;res_spta1_vs_unaff.csv&quot;)
+
+# Process results and save them to the output file
+res_aff_vs_unaff_df &lt;- process_and_save_results(res_aff_vs_unaff, res_file_name)
+
+# Sort results by adjusted p-value (padj)
+res_aff_vs_unaff_df &lt;- arrange(res_aff_vs_unaff_df, padj)
+
+# Filter for significant results (padj &lt; 0.05)
+res_aff_vs_unaff_df_05 &lt;- subset(res_aff_vs_unaff_df, padj &lt; 0.05)
+
+# Filter for marginally significant results (padj &lt; 0.1)
+res_aff_vs_unaff_df_1 &lt;- subset(res_aff_vs_unaff_df, padj &lt; 0.1)
+
+# Further filter marginally significant results with |log2FoldChange| &gt;= 1
+res_aff_vs_unaff_df_padj1_lfc1 &lt;- subset(
+  res_aff_vs_unaff_df_1,
+  log2FoldChange &gt;= 1 | log2FoldChange &lt;= -1
+)
+
+# Further filter significant results with |log2FoldChange| &gt;= 1
+res_aff_vs_unaff_df_padj05_lfc1 &lt;- subset(
+  res_aff_vs_unaff_df_05,
+  log2FoldChange &gt;= 1 | log2FoldChange &lt;= -1
+)
+
+# Summarize differential expression results
+summary(res_aff_vs_unaff)</code></pre>
+<pre><code>
+out of 21455 with nonzero total read count
+adjusted p-value &lt; 0.1
+LFC &gt; 0 (up)       : 21, 0.098%
+LFC &lt; 0 (down)     : 6, 0.028%
+outliers [1]       : 129, 0.6%
+low counts [2]     : 4120, 19%
+(mean count &lt; 19)
+[1] see &#39;cooksCutoff&#39; argument of ?results
+[2] see &#39;independentFiltering&#39; argument of ?results</code></pre>
+</div>
+</div>
+<div id="heatmap-of-significant-genes" class="section level2">
+<h2>Heatmap of Significant Genes</h2>
+<pre class="r"><code># Assuming &#39;res_aff_vs_unaff_df&#39; has a column &#39;padj&#39; for adjusted p-values or &#39;pvalue&#39; for p-values
+# Ensure the row names of &#39;res_aff_vs_unaff_df&#39; are Ensembl IDs
+# Order the dataframe by padj in ascending order
+res_aff_vs_unaff_df &lt;- res_aff_vs_unaff_df[order(res_aff_vs_unaff_df$padj), ]
+
+# Select the top 50 entries
+# top_50_res &lt;- head(res_aff_vs_unaff_df, 55)
+# topgenes_byensemblid &lt;- rownames(top_50_res)
+
+# Get the most significant genes based on adjusted p-values and log2foldchange of 1
+topgenes_byensemblid &lt;- rownames(res_aff_vs_unaff_df_padj1_lfc1)
+
+# Extract the corresponding subset of the data matrix
+topgenes_aff_vs_unaff_05 &lt;- assay(vsd_limma)[topgenes_byensemblid, ]
+
+# Normalize by subtracting the row means
+topgenes_aff_vs_unaff_05 &lt;- topgenes_aff_vs_unaff_05 - rowMeans(topgenes_aff_vs_unaff_05)
+
+# Map Ensembl IDs to gene names
+ensembl_to_gene &lt;- setNames(gene_info$gene_name, gene_info$Ensembl_ID)
+current_ensembl_ids &lt;- rownames(topgenes_aff_vs_unaff_05)
+new_row_names &lt;- ensembl_to_gene[current_ensembl_ids]
+rownames(topgenes_aff_vs_unaff_05) &lt;- new_row_names
+
+# Order the matrix based on significance (most significant to least significant)
+topgenes_aff_vs_unaff_05 &lt;- topgenes_aff_vs_unaff_05[order(res_aff_vs_unaff_df$padj[topgenes_byensemblid]), ]
+
+df &lt;- df &lt;- colData(vsd_limma) %&gt;%
+  as.data.frame() %&gt;%
+  dplyr::select(OverallCategory)
+
+ComplexHeatmap::pheatmap(topgenes_aff_vs_unaff_05, color = colorRampPalette(rev(brewer.pal(
+  n = 9, name =
+    &quot;RdYlBu&quot;
+)))(50), annotation_col = df, annotation_colors = ann_colors, fontsize = 7, angle_col = c(&quot;0&quot;), cellheight = 10, cellwidth = 24, border_color = &quot;black&quot;, heatmap_legend_param = list(
+  title = &quot;&quot;
+))</code></pre>
+<p><img src="figure/spta1-analysis.Rmd/significant-genes-deseq-padj1-lfc1-1.png" width="100%" height="100%" style="display: block; margin: auto;" /></p>
+<pre class="r"><code># Assuming &#39;res_aff_vs_unaff_df&#39; has a column &#39;padj&#39; for adjusted p-values or &#39;pvalue&#39; for p-values
+# Ensure the row names of &#39;res_aff_vs_unaff_df&#39; are Ensembl IDs
+res_aff_vs_unaff_df &lt;- res_aff_vs_unaff_df[order(res_aff_vs_unaff_df$padj), ]
+
+# Get the most significant genes based on adjusted p-values and log2foldchange of 1
+topgenes_byensemblid &lt;- rownames(res_aff_vs_unaff_df_padj05_lfc1)
+
+
+# Extract the corresponding subset of the data matrix
+topgenes_aff_vs_unaff_05 &lt;- assay(vsd_limma)[topgenes_byensemblid, ]
+
+# Normalize by subtracting the row means
+topgenes_aff_vs_unaff_05 &lt;- topgenes_aff_vs_unaff_05 - rowMeans(topgenes_aff_vs_unaff_05)
+
+# Map Ensembl IDs to gene names
+ensembl_to_gene &lt;- setNames(gene_info$gene_name, gene_info$Ensembl_ID)
+current_ensembl_ids &lt;- rownames(topgenes_aff_vs_unaff_05)
+new_row_names &lt;- ensembl_to_gene[current_ensembl_ids]
+rownames(topgenes_aff_vs_unaff_05) &lt;- new_row_names
+
+# Order the matrix based on significance (most significant to least significant)
+topgenes_aff_vs_unaff_05 &lt;- topgenes_aff_vs_unaff_05[order(res_aff_vs_unaff_df$padj[topgenes_byensemblid]), ]
+
+df &lt;- df &lt;- colData(vsd_limma) %&gt;%
+  as.data.frame() %&gt;%
+  dplyr::select(Variant)
+
+ComplexHeatmap::pheatmap(topgenes_aff_vs_unaff_05, color = colorRampPalette(rev(brewer.pal(
+  n = 9, name =
+    &quot;RdYlBu&quot;
+)))(50), annotation_col = df, annotation_colors = ann_colors, fontsize = 7, angle_col = c(&quot;0&quot;), cellheight = 10, cellwidth = 24, border_color = &quot;black&quot;, heatmap_legend_param = list(
+  title = &quot;&quot;
+))</code></pre>
+<p><img src="figure/spta1-analysis.Rmd/significant-genes-deseq-lfc1-1.png" width="1400px" height="800px" style="display: block; margin: auto;" /></p>
+<pre class="r"><code># Extract relevant columns from genes_biomart (first and last columns)
+gb_df &lt;- genes_biomart[, c(1, ncol(genes_biomart))]
+
+# Copy results dataframe to add gene annotations
+res_aff_vs_unaff_df_genename &lt;- res_aff_vs_unaff_df
+
+# Add Ensembl IDs as a new column
+res_aff_vs_unaff_df_genename$Ensembl_ID &lt;- row.names(res_aff_vs_unaff_df)
+
+# Merge gene annotation information from gene_info using Ensembl IDs
+res_aff_vs_unaff_df_genename &lt;- merge(
+  x = res_aff_vs_unaff_df_genename,
+  y = gene_info,
+  by.x = &quot;Ensembl_ID&quot;,
+  by.y = &quot;Ensembl_ID&quot;,
+  all.x = TRUE
+)
+
+# Reorder columns to place the newly added gene information first
+res_aff_vs_unaff_df_genename &lt;- res_aff_vs_unaff_df_genename[
+  ,
+  c(
+    dim(res_aff_vs_unaff_df_genename)[2],
+    1:dim(res_aff_vs_unaff_df_genename)[2] - 1
+  )
+]
+
+# Sort the dataframe by adjusted p-value (padj)
+res_aff_vs_unaff_df_genename &lt;- res_aff_vs_unaff_df_genename[
+  order(res_aff_vs_unaff_df_genename[, &quot;padj&quot;]),
+]
+
+# Define output file path for the annotated results
+res_file_genename &lt;- file.path(
+  &quot;output&quot;, outpath_var,
+  &quot;res_spta1_vs_unaff_df_genename.csv&quot;
+)
+
+# Save the annotated results to a CSV file
+write.csv(res_aff_vs_unaff_df_genename, file = res_file_genename)</code></pre>
+</div>
+<div id="volcano-plot" class="section level2">
+<h2>Volcano Plot</h2>
+<pre class="r"><code># Parameters for the function
+res_data &lt;- res_aff_vs_unaff_df_genename
+gene_labels &lt;- &quot;gene_name&quot;
+x_col &lt;- &quot;log2FoldChange&quot;
+y_col &lt;- &quot;padj&quot;
+select_genes &lt;- &quot;&quot;
+xlab_text &lt;- bquote(~ Log[2] ~ &quot;fold change&quot;)
+ylab_text &lt;- bquote(~ Log[10] ~ &quot;padj&quot;)
+xlim_range &lt;- c(-25, 25)
+ylim_range &lt;- c(0, 7)
+output_volcano_file &lt;- file.path(&quot;output&quot;, outpath_var, &quot;volcano-plot.png&quot;)
+
+# Generate and save the volcano plot
+generate_volcano_plot(
+  res_data = res_data, gene_labels = gene_labels, x_col = x_col,
+  y_col = y_col, select_genes = select_genes, xlab_text = xlab_text,
+  ylab_text = ylab_text, p_cutoff = 0.05, fc_cutoff = 1.0,
+  xlim_range = xlim_range, ylim_range = ylim_range,
+  output_file = output_volcano_file
+)</code></pre>
+<pre class="r"><code># Process and save the data
+process_and_save_filtered_results(res_aff_vs_unaff_df_genename,
+  padj_threshold = 0.05, lfc_threshold = NULL,
+  outpath = outpath_var, filename = &quot;res_aff_vs_unaff_df_genename_05.csv&quot;
+)
+
+process_and_save_filtered_results(res_aff_vs_unaff_df_genename,
+  padj_threshold = 0.05, lfc_threshold = 1,
+  outpath = outpath_var, filename = &quot;res_aff_vs_unaff_df_genename_padj05_lfc1.csv&quot;
+)
+
+process_and_save_filtered_results(res_aff_vs_unaff_df_genename,
+  padj_threshold = 0.1, lfc_threshold = NULL,
+  outpath = outpath_var, filename = &quot;res_aff_vs_unaff_df_genename_padj1.csv&quot;
+)
+
+process_and_save_filtered_results(res_aff_vs_unaff_df_genename,
+  padj_threshold = 0.1, lfc_threshold = 1,
+  outpath = outpath_var, filename = &quot;res_aff_vs_unaff_df_genename_padj1_lfc1.csv&quot;
+)</code></pre>
+<pre class="r"><code>filtered_gene_names &lt;- res_aff_vs_unaff_df_genename$gene_name[!grepl(&quot;^ENS&quot;, res_aff_vs_unaff_df_genename$gene_name)]
+# Select specific genes to show
+# set top = 0, then specify genes using label.select argument
+maplot &lt;- generate_ma_plot(
+  data = res_aff_vs_unaff_df,
+  genenames = as.vector(res_aff_vs_unaff_df_genename$gene_name),
+  main_title = &quot;SPTA1 vs Unaffected MA Plot&quot;,
+  top_genes = 30
+)
+maplot</code></pre>
+<p><img src="figure/spta1-analysis.Rmd/maplot-samples-1.png" width="672" style="display: block; margin: auto;" /></p>
+<pre class="r"><code>significant_data &lt;- maplot$data %&gt;%
+  filter(grepl(&quot;Up|Down&quot;, sig)) %&gt;%
+  mutate(direction = ifelse(grepl(&quot;Up&quot;, sig), &quot;Up&quot;, &quot;Down&quot;)) %&gt;%
+  dplyr::select(-sig) # This removes the &#39;sig&#39; column
+
+paged_table(as.data.frame(significant_data), options = list(rows.print = 30))</code></pre>
+<div data-pagedtable="false">
+<script data-pagedtable-source type="application/json">
+{"columns":[{"label":["name"],"name":[1],"type":["chr"],"align":["left"]},{"label":["mean"],"name":[2],"type":["dbl"],"align":["right"]},{"label":["lfc"],"name":[3],"type":["dbl"],"align":["right"]},{"label":["padj"],"name":[4],"type":["dbl"],"align":["right"]},{"label":["direction"],"name":[5],"type":["chr"],"align":["left"]}],"data":[{"1":"LRRC37A4P","2":"11.214881","3":"5.831258","4":"1.363324e-18","5":"Up"},{"1":"U2AF1","2":"10.849109","3":"13.802837","4":"2.350085e-03","5":"Up"},{"1":"TMEM184A","2":"4.740849","3":"-9.447345","4":"2.350085e-03","5":"Down"},{"1":"TVP23C-CDRT4","2":"7.701697","3":"10.506030","4":"2.350085e-03","5":"Up"},{"1":"KMO","2":"7.915129","3":"-1.609118","4":"3.359345e-03","5":"Down"},{"1":"GOLGA8O","2":"8.464784","3":"1.939125","4":"7.904395e-03","5":"Up"},{"1":"PMS2P6","2":"7.053202","3":"9.786181","4":"1.399634e-02","5":"Up"},{"1":"RNF217","2":"8.133302","3":"1.582334","4":"1.490150e-02","5":"Up"},{"1":"PDCD1","2":"7.420674","3":"2.711992","4":"1.602439e-02","5":"Up"},{"1":"CORO7-PAM16","2":"6.555434","3":"9.534153","4":"1.949444e-02","5":"Up"},{"1":"SMG1P2","2":"8.217890","3":"1.806325","4":"2.362310e-02","5":"Up"},{"1":"TUBB4BP2","2":"5.440692","3":"3.807810","4":"3.692641e-02","5":"Up"},{"1":"PLAAT3","2":"7.179063","3":"2.069724","4":"4.288658e-02","5":"Up"}],"options":{"columns":{"min":{},"max":[10]},"rows":{"min":[30],"max":[30]},"pages":{}}}
+  </script>
+</div>
+<pre class="r"><code># Save significant genes
+output_maplot_siggenes &lt;- file.path(
+  &quot;output&quot;, outpath_var,
+  &quot;res_spta1_vs_unaff_siggenes.csv&quot;
+)
+write.csv(significant_data, file = output_maplot_siggenes, row.names = FALSE)</code></pre>
+</div>
+<div id="expression-of-candidate-genes" class="section level2">
+<h2>Expression of Candidate Genes</h2>
+<p>Below is a table of expression of the genes identified during our WGS
+analysis.</p>
+<pre class="r"><code># Subset gene_info using genes of interest
+subset_gene_info &lt;- gene_info[gene_info$gene_name %in% genes_of_interest, ]
+
+filtered_by_interest &lt;- filter(res_aff_vs_unaff_df_genename, Ensembl_ID %in% subset_gene_info$Ensembl_ID)
+
+# Filtering the dataframe by row names
+filtered_counts &lt;- counts[row.names(counts) %in% subset_gene_info$Ensembl_ID, ]
+
+# Match and update row names
+matching_indices &lt;- match(rownames(filtered_counts), subset_gene_info$Ensembl_ID)
+
+# Update row names based on matching_column values from metadata
+rownames(filtered_counts) &lt;- subset_gene_info$gene_name[matching_indices]
+
+missing_genes &lt;- setdiff(subset_gene_info$Ensembl_ID, filtered_by_interest$Ensembl_ID)
+
+corresponding_gene_names &lt;- subset_gene_info$gene_name[subset_gene_info$Ensembl_ID %in% missing_genes]
+
+missing_gene_counts &lt;- counts[row.names(counts) %in% missing_genes, ]
+
+paged_table(filtered_by_interest, options = list(rows.print = 15))</code></pre>
+<div data-pagedtable="false">
+<script data-pagedtable-source type="application/json">
+{"columns":[{"label":["gene_name"],"name":[1],"type":["chr"],"align":["left"]},{"label":["Ensembl_ID"],"name":[2],"type":["chr"],"align":["left"]},{"label":["baseMean"],"name":[3],"type":["dbl"],"align":["right"]},{"label":["log2FoldChange"],"name":[4],"type":["dbl"],"align":["right"]},{"label":["lfcSE"],"name":[5],"type":["dbl"],"align":["right"]},{"label":["stat"],"name":[6],"type":["dbl"],"align":["right"]},{"label":["pvalue"],"name":[7],"type":["dbl"],"align":["right"]},{"label":["padj"],"name":[8],"type":["dbl"],"align":["right"]}],"data":[{"1":"CHI3L1","2":"ENSG00000133048.13","3":"3450.949194","4":"2.560035700","5":"0.7406562","6":"3.45644270","7":"0.0005473556","8":"0.1757669"},{"1":"ADRB2","2":"ENSG00000169252.6","3":"1210.945773","4":"0.975724788","5":"0.3373923","6":"2.89195897","7":"0.0038284795","8":"0.4008217"},{"1":"SLC4A1","2":"ENSG00000004939.16","3":"41796.577721","4":"-1.001802624","5":"1.1280222","6":"-0.88810542","7":"0.3744840486","8":"0.9999726"},{"1":"GIPR","2":"ENSG00000010310.9","3":"119.384395","4":"0.699847467","5":"1.0162832","6":"0.68863431","7":"0.4910534248","8":"0.9999726"},{"1":"SPTB","2":"ENSG00000070182.21","3":"6596.599366","4":"-0.808121391","5":"1.4990901","6":"-0.53907461","7":"0.5898353764","8":"0.9999726"},{"1":"SLC12A3","2":"ENSG00000070915.10","3":"35.838334","4":"-0.182506124","5":"1.5949781","6":"-0.11442547","7":"0.9089005216","8":"0.9999726"},{"1":"ACADVL","2":"ENSG00000072778.20","3":"3342.846193","4":"-0.028739228","5":"0.2287229","6":"-0.12565083","7":"0.9000083263","8":"0.9999726"},{"1":"ACACB","2":"ENSG00000076555.16","3":"1023.447432","4":"0.807552552","5":"0.5846527","6":"1.38125165","7":"0.1672015994","8":"0.9999726"},{"1":"MCCC1","2":"ENSG00000078070.14","3":"420.721395","4":"0.239122772","5":"0.4209195","6":"0.56809625","7":"0.5699696161","8":"0.9999726"},{"1":"PGM1","2":"ENSG00000079739.17","3":"706.805654","4":"-0.083502667","5":"0.2816349","6":"-0.29649265","7":"0.7668538770","8":"0.9999726"},{"1":"HADHA","2":"ENSG00000084754.12","3":"3706.234522","4":"0.212450957","5":"0.1943695","6":"1.09302638","7":"0.2743822184","8":"0.9999726"},{"1":"P2RX7","2":"ENSG00000089041.17","3":"967.150495","4":"0.465793206","5":"0.4610189","6":"1.01035599","7":"0.3123247644","8":"0.9999726"},{"1":"COMT","2":"ENSG00000093010.15","3":"1183.272104","4":"-0.108501635","5":"0.3882531","6":"-0.27946107","7":"0.7798910091","8":"0.9999726"},{"1":"FKBP5","2":"ENSG00000096060.15","3":"4387.113730","4":"0.724276210","5":"0.6657301","6":"1.08794268","7":"0.2766204129","8":"0.9999726"},{"1":"MAPK1","2":"ENSG00000100030.15","3":"8384.709589","4":"0.218263480","5":"0.4899764","6":"0.44545716","7":"0.6559894111","8":"0.9999726"},{"1":"MYH9","2":"ENSG00000100345.23","3":"66290.437691","4":"0.206746252","5":"0.4241495","6":"0.48743727","7":"0.6259484858","8":"0.9999726"},{"1":"PCK2","2":"ENSG00000100889.12","3":"642.940336","4":"0.404963688","5":"0.3959893","6":"1.02266309","7":"0.3064671688","8":"0.9999726"},{"1":"MLYCD","2":"ENSG00000103150.7","3":"2478.988688","4":"0.211302626","5":"0.2583101","6":"0.81801927","7":"0.4133461856","8":"0.9999726"},{"1":"DMXL2","2":"ENSG00000104093.14","3":"5984.679875","4":"0.280747121","5":"0.4892188","6":"0.57386821","7":"0.5660569843","8":"0.9999726"},{"1":"ETFB","2":"ENSG00000105379.10","3":"852.158056","4":"-0.055120617","5":"0.2989715","6":"-0.18436748","7":"0.8537251780","8":"0.9999726"},{"1":"CYTH2","2":"ENSG00000105443.16","3":"2032.277191","4":"0.208191457","5":"0.3598120","6":"0.57861178","7":"0.5628511515","8":"0.9999726"},{"1":"CUBN","2":"ENSG00000107611.16","3":"698.482118","4":"0.033732534","5":"0.4765005","6":"0.07079223","7":"0.9435631191","8":"0.9999726"},{"1":"MINPP1","2":"ENSG00000107789.16","3":"231.534897","4":"-0.463957132","5":"0.3743084","6":"-1.23950501","7":"0.2151585350","8":"0.9999726"},{"1":"ENO3","2":"ENSG00000108515.18","3":"131.967270","4":"0.294901703","5":"0.3928723","6":"0.75062982","7":"0.4528754668","8":"0.9999726"},{"1":"CPT1A","2":"ENSG00000110090.13","3":"2806.605958","4":"0.427772530","5":"0.3070095","6":"1.39335275","7":"0.1635131455","8":"0.9999726"},{"1":"MADD","2":"ENSG00000110514.19","3":"3130.691219","4":"-0.077459661","5":"0.2993214","6":"-0.25878426","7":"0.7958017009","8":"0.9999726"},{"1":"RHAG","2":"ENSG00000112077.18","3":"43.013951","4":"-0.370987701","5":"1.3818495","6":"-0.26847187","7":"0.7883361282","8":"0.9999726"},{"1":"NR3C1","2":"ENSG00000113580.15","3":"5837.488496","4":"0.207751705","5":"0.2834974","6":"0.73281693","7":"0.4636700966","8":"0.9999726"},{"1":"ACADM","2":"ENSG00000117054.15","3":"1021.101427","4":"-0.130182591","5":"0.3481738","6":"-0.37390121","7":"0.7084778159","8":"0.9999726"},{"1":"ELOVL4","2":"ENSG00000118402.6","3":"37.832224","4":"-0.336388893","5":"1.0252683","6":"-0.32809842","7":"0.7428372488","8":"0.9999726"},{"1":"DENND1A","2":"ENSG00000119522.17","3":"2483.028620","4":"0.658660785","5":"0.4743890","6":"1.38844033","7":"0.1650030013","8":"0.9999726"},{"1":"KLHL7","2":"ENSG00000122550.18","3":"389.263856","4":"0.259785862","5":"0.3507159","6":"0.74073014","7":"0.4588570802","8":"0.9999726"},{"1":"ADM2","2":"ENSG00000128165.9","3":"81.126077","4":"-0.517809832","5":"0.5138452","6":"-1.00771559","7":"0.3135910204","8":"0.9999726"},{"1":"ADORA2A","2":"ENSG00000128271.22","3":"1171.222129","4":"-0.007833042","5":"0.2535180","6":"-0.03089738","7":"0.9753513759","8":"0.9999726"},{"1":"IDO1","2":"ENSG00000131203.13","3":"119.460519","4":"0.899044547","5":"1.2226767","6":"0.73530850","7":"0.4621516304","8":"0.9999726"},{"1":"MCCC2","2":"ENSG00000131844.17","3":"1159.472576","4":"-0.043050382","5":"0.3272860","6":"-0.13153748","7":"0.8953501356","8":"0.9999726"},{"1":"MMACHC","2":"ENSG00000132763.15","3":"177.799471","4":"-0.328128834","5":"0.6290734","6":"-0.52160658","7":"0.6019442789","8":"0.9999726"},{"1":"PTPN22","2":"ENSG00000134242.16","3":"933.901499","4":"-0.146891916","5":"0.3749134","6":"-0.39180229","7":"0.6952042997","8":"0.9999726"},{"1":"NUP42","2":"ENSG00000136243.18","3":"451.983686","4":"-0.366082563","5":"0.3000300","6":"-1.22015306","7":"0.2224068555","8":"0.9999726"},{"1":"TACO1","2":"ENSG00000136463.9","3":"308.729958","4":"-0.369581785","5":"0.4522024","6":"-0.81729287","7":"0.4137610782","8":"0.9999726"},{"1":"HEMGN","2":"ENSG00000136929.13","3":"3313.059490","4":"-1.018966383","5":"0.9396679","6":"-1.08438993","7":"0.2781919473","8":"0.9999726"},{"1":"SPTBN5","2":"ENSG00000137877.10","3":"126.159682","4":"-0.136168430","5":"0.6927946","6":"-0.19654951","7":"0.8441800887","8":"0.9999726"},{"1":"POLG","2":"ENSG00000140521.17","3":"3271.863564","4":"0.105680833","5":"0.2286598","6":"0.46217498","7":"0.6439558463","8":"0.9999726"},{"1":"SURF1","2":"ENSG00000148290.10","3":"480.488604","4":"0.237510924","5":"0.2663923","6":"0.89158316","7":"0.3726163999","8":"0.9999726"},{"1":"MMAA","2":"ENSG00000151611.17","3":"251.122627","4":"-0.062653428","5":"0.4041831","6":"-0.15501249","7":"0.8768114670","8":"0.9999726"},{"1":"HTR6","2":"ENSG00000158748.4","3":"40.074896","4":"1.742081349","5":"1.5798137","6":"1.10271317","7":"0.2701517455","8":"0.9999726"},{"1":"G6PD","2":"ENSG00000160211.20","3":"4218.781563","4":"0.444703871","5":"0.6140499","6":"0.72421460","7":"0.4689339951","8":"0.9999726"},{"1":"CCR5","2":"ENSG00000160791.14","3":"681.398905","4":"0.574694287","5":"0.4603290","6":"1.24844258","7":"0.2118690238","8":"0.9999726"},{"1":"NLRP3","2":"ENSG00000162711.18","3":"1374.705939","4":"-0.068990999","5":"0.4790539","6":"-0.14401512","7":"0.8854885281","8":"0.9999726"},{"1":"COL6A3","2":"ENSG00000163359.17","3":"139.176786","4":"0.380636547","5":"1.0376562","6":"0.36682338","7":"0.7137507633","8":"0.9999726"},{"1":"ATP1A1","2":"ENSG00000163399.16","3":"5999.252340","4":"-0.079334221","5":"0.2584803","6":"-0.30692564","7":"0.7588999690","8":"0.9999726"},{"1":"SPTA1","2":"ENSG00000163554.15","3":"381.435659","4":"-0.918846712","5":"1.0429166","6":"-0.88103567","7":"0.3782985130","8":"0.9999726"},{"1":"CHRFAM7A","2":"ENSG00000166664.15","3":"36.756487","4":"1.320884176","5":"1.0503600","6":"1.25755377","7":"0.2085531797","8":"0.9999726"},{"1":"EPB42","2":"ENSG00000166947.15","3":"3825.831520","4":"-0.952429064","5":"1.0602434","6":"-0.89831171","7":"0.3690193914","8":"0.9999726"},{"1":"LMBRD1","2":"ENSG00000168216.13","3":"1771.333201","4":"-0.052428963","5":"0.3862638","6":"-0.13573356","7":"0.8920319162","8":"0.9999726"},{"1":"GLYCTK","2":"ENSG00000168237.18","3":"1327.690680","4":"0.225657414","5":"0.2925434","6":"0.77136383","7":"0.4404913082","8":"0.9999726"},{"1":"AHSP","2":"ENSG00000169877.10","3":"533.856867","4":"0.292633798","5":"1.2077977","6":"0.24228709","7":"0.8085577163","8":"0.9999726"},{"1":"GYPA","2":"ENSG00000170180.22","3":"149.301398","4":"0.151166219","5":"1.5164615","6":"0.09968352","7":"0.9205955827","8":"0.9999726"},{"1":"ADORA2B","2":"ENSG00000170425.4","3":"37.631721","4":"-0.491887248","5":"0.7692445","6":"-0.63944201","7":"0.5225354298","8":"0.9999726"},{"1":"UCP2","2":"ENSG00000175567.11","3":"7270.160047","4":"-0.218570693","5":"0.2531945","6":"-0.86325224","7":"0.3879987967","8":"0.9999726"},{"1":"SMCR8","2":"ENSG00000176994.11","3":"5335.403839","4":"0.159157609","5":"0.2435272","6":"0.65355177","7":"0.5134006278","8":"0.9999726"},{"1":"SLC25A20","2":"ENSG00000178537.10","3":"556.398435","4":"0.305943502","5":"0.3606169","6":"0.84838924","7":"0.3962212347","8":"0.9999726"},{"1":"OXTR","2":"ENSG00000180914.11","3":"28.173095","4":"0.780553988","5":"1.7751505","6":"0.43971145","7":"0.6601461090","8":"0.9999726"},{"1":"TOMM7","2":"ENSG00000196683.12","3":"610.236186","4":"-0.047949595","5":"0.9717276","6":"-0.04934469","7":"0.9606446058","8":"0.9999726"},{"1":"GYPE","2":"ENSG00000197465.14","3":"33.171346","4":"1.418038025","5":"1.5356545","6":"0.92340955","7":"0.3557938159","8":"0.9999726"},{"1":"KEL","2":"ENSG00000197993.9","3":"231.244157","4":"-0.156677317","5":"1.0713583","6":"-0.14624175","7":"0.8837305471","8":"0.9999726"},{"1":"HSPA1A","2":"ENSG00000204389.10","3":"8079.477967","4":"0.070417418","5":"0.5077119","6":"0.13869562","7":"0.8896906809","8":"0.9999726"},{"1":"CPT1B","2":"ENSG00000205560.13","3":"464.735662","4":"0.331639216","5":"0.3341704","6":"0.99242557","7":"0.3209899688","8":"0.9999726"},{"1":"TNF","2":"ENSG00000232810.4","3":"394.452210","4":"0.271691300","5":"0.3892917","6":"0.69791188","7":"0.4852323059","8":"0.9999726"},{"1":"GYPB","2":"ENSG00000250361.9","3":"255.500716","4":"-0.694171463","5":"1.2122885","6":"-0.57261245","7":"0.5669071280","8":"0.9999726"},{"1":"SLC7A9","2":"ENSG00000021488.13","3":"8.099811","4":"0.642391866","5":"1.6091687","6":"0.39920728","7":"0.6897404793","8":"NA"},{"1":"VIPR2","2":"ENSG00000106018.14","3":"16.464572","4":"1.934742004","5":"1.2426381","6":"1.55696335","7":"0.1194791876","8":"NA"},{"1":"IFNG","2":"ENSG00000111537.5","3":"12.664561","4":"1.160306196","5":"1.7484085","6":"0.66363563","7":"0.5069235460","8":"NA"},{"1":"GPNMB","2":"ENSG00000136235.17","3":"17.730628","4":"0.740733993","5":"1.2334337","6":"0.60054626","7":"0.5481422429","8":"NA"},{"1":"IL6","2":"ENSG00000136244.12","3":"16.408907","4":"-1.550034410","5":"1.2406712","6":"-1.24935144","7":"0.2115365602","8":"NA"},{"1":"IL10","2":"ENSG00000136634.7","3":"11.205043","4":"-0.023390646","5":"1.0671716","6":"-0.02191836","7":"0.9825130831","8":"NA"},{"1":"CPT1C","2":"ENSG00000169169.15","3":"10.372681","4":"1.819377388","5":"2.2538741","6":"0.80722229","7":"0.4195384287","8":"NA"},{"1":"CALCB","2":"ENSG00000175868.14","3":"8.290301","4":"0.697745942","5":"1.3965781","6":"0.49961113","7":"0.6173489194","8":"NA"}],"options":{"columns":{"min":{},"max":[10]},"rows":{"min":[15],"max":[15]},"pages":{}}}
+  </script>
+</div>
+<pre class="r"><code>paged_table(filtered_counts, options = list(rows.print = 15))</code></pre>
+<div data-pagedtable="false">
+<script data-pagedtable-source type="application/json">
+{"columns":[{"label":[""],"name":["_rn_"],"type":[""],"align":["left"]},{"label":["21"],"name":[1],"type":["dbl"],"align":["right"]},{"label":["22"],"name":[2],"type":["dbl"],"align":["right"]},{"label":["23"],"name":[3],"type":["dbl"],"align":["right"]},{"label":["26"],"name":[4],"type":["dbl"],"align":["right"]},{"label":["10H"],"name":[5],"type":["dbl"],"align":["right"]},{"label":["11H"],"name":[6],"type":["dbl"],"align":["right"]},{"label":["13H"],"name":[7],"type":["dbl"],"align":["right"]},{"label":["25H"],"name":[8],"type":["dbl"],"align":["right"]},{"label":["26H"],"name":[9],"type":["dbl"],"align":["right"]},{"label":["28_27H"],"name":[10],"type":["dbl"],"align":["right"]},{"label":["9H"],"name":[11],"type":["dbl"],"align":["right"]}],"data":[{"1":"72095.363151","2":"59475.174185","3":"5.859664e+03","4":"68331.154564","5":"23106.997507","6":"11006.223225","7":"4.665642e+04","8":"8.617932e+04","9":"35174.012033","10":"16299.500675","11":"19179.725568","_rn_":"SLC4A1"},{"1":"122.929355","2":"69.790193","3":"6.918346e+01","4":"85.847812","5":"86.060560","6":"216.146596","7":"1.644611e+02","8":"1.014877e+01","9":"106.081507","10":"214.378388","11":"237.099083","_rn_":"GIPR"},{"1":"9.767601","2":"3.123483","3":"1.628031e+00","4":"7.264727","5":"1.738697","6":"23.683025","7":"2.787484e+00","8":"1.379681e+00","9":"13.349422","10":"18.244225","11":"7.982563","_rn_":"SLC7A9"},{"1":"11226.804777","2":"5875.778151","3":"8.751111e+02","4":"10840.201553","5":"3216.053183","6":"2679.895352","7":"7.098874e+03","8":"1.903112e+04","9":"5244.718862","10":"1783.748452","11":"1770.340920","_rn_":"SPTB"},{"1":"14.001306","2":"31.737185","3":"2.586519e+01","4":"47.429881","5":"135.700234","6":"11.728961","7":"3.797473e+01","8":"0.000000e+00","9":"27.905433","10":"52.123734","11":"19.647406","_rn_":"SLC12A3"},{"1":"2694.242506","2":"2325.275892","3":"2.235554e+03","4":"3750.211738","5":"3764.925256","6":"3343.742465","7":"4.831394e+03","8":"3.342460e+03","9":"3634.513572","10":"3909.612661","11":"3945.829115","_rn_":"ACADVL"},{"1":"805.445488","2":"928.531359","3":"8.238140e+02","4":"671.581926","5":"1626.307949","6":"1418.557829","7":"1.162485e+03","8":"3.065423e+02","9":"1137.447176","10":"1130.614566","11":"1611.803806","_rn_":"ACACB"},{"1":"359.616006","2":"405.439505","3":"3.768669e+02","4":"372.809651","5":"462.490559","6":"491.031541","7":"5.397828e+02","8":"2.150104e+02","9":"561.388400","10":"317.770084","11":"658.994680","_rn_":"MCCC1"},{"1":"510.834043","2":"623.543565","3":"4.280697e+02","4":"811.805046","5":"660.847818","6":"802.935095","7":"1.036316e+03","8":"7.762872e+02","9":"761.120303","10":"688.716821","11":"891.400602","_rn_":"PGM1"},{"1":"0.000000","2":"0.000000","3":"0.000000e+00","4":"0.000000","5":"0.000000","6":"0.000000","7":"0.000000e+00","8":"0.000000e+00","9":"0.000000","10":"0.000000","11":"0.000000","_rn_":"TRPM3"},{"1":"2793.910912","2":"3023.204190","3":"2.815989e+03","4":"3496.849476","5":"3711.984013","6":"3898.488580","7":"5.444253e+03","8":"3.901830e+03","9":"3890.428473","10":"4141.452473","11":"4674.421308","_rn_":"HADHA"},{"1":"1093.759129","2":"803.288293","3":"8.143416e+02","4":"702.825834","5":"787.595953","6":"955.922199","7":"1.590949e+03","8":"1.327918e+03","9":"948.021120","10":"902.135275","11":"742.450237","_rn_":"P2RX7"},{"1":"0.000000","2":"0.000000","3":"2.939643e+00","4":"1.920892","5":"0.000000","6":"0.000000","7":"0.000000e+00","8":"0.000000e+00","9":"0.000000","10":"0.000000","11":"0.000000","_rn_":"MYH7"},{"1":"922.630701","2":"930.526300","3":"6.600036e+02","4":"1380.495711","5":"1297.958066","6":"1147.904679","7":"1.891037e+03","8":"1.613022e+03","9":"1122.763893","10":"1144.764313","11":"1205.762827","_rn_":"COMT"},{"1":"2281.174397","2":"2959.397431","3":"2.540382e+03","4":"3419.164290","5":"3792.137406","6":"4365.679758","7":"4.824403e+03","8":"1.138437e+04","9":"4711.486186","10":"3035.025157","11":"5231.197266","_rn_":"FKBP5"},{"1":"6448.771937","2":"7037.216368","3":"5.474963e+03","4":"7591.541373","5":"6954.650946","6":"8808.170234","7":"1.618035e+04","8":"1.320070e+04","9":"6531.319506","10":"8699.308653","11":"7108.656917","_rn_":"MAPK1"},{"1":"40213.543068","2":"46024.165173","3":"3.412354e+04","4":"68877.207786","5":"60104.648677","6":"89792.363672","7":"9.091031e+04","8":"9.914002e+04","9":"74184.412762","10":"80478.201363","11":"61509.609115","_rn_":"MYH9"},{"1":"496.624782","2":"420.493064","3":"4.004701e+02","4":"578.525099","5":"1091.422876","6":"721.872229","7":"7.817057e+02","8":"7.090620e+02","9":"775.674592","10":"482.267760","11":"803.623227","_rn_":"PCK2"},{"1":"2259.602147","2":"2177.970257","3":"1.921751e+03","4":"2300.610812","5":"2432.485750","6":"2619.990195","7":"3.090486e+03","8":"1.785016e+03","9":"2956.562994","10":"2541.514293","11":"3903.123514","_rn_":"MLYCD"},{"1":"4288.151534","2":"4515.311300","3":"4.203834e+03","4":"5180.425106","5":"6940.673879","6":"5914.017375","7":"1.279530e+04","8":"8.729759e+03","9":"5375.820792","10":"5628.111335","11":"3890.339732","_rn_":"DMXL2"},{"1":"507.755191","2":"534.160304","3":"4.859077e+02","4":"1064.846006","5":"983.797826","6":"1005.336006","7":"9.451196e+02","8":"1.117801e+03","9":"1122.814752","10":"741.918969","11":"1140.152547","_rn_":"ETFB"},{"1":"1215.901550","2":"1491.558688","3":"1.214248e+03","4":"2040.940648","5":"2121.966669","6":"2721.201801","7":"3.106017e+03","8":"2.638729e+03","9":"1979.720757","10":"2414.694081","11":"2008.297513","_rn_":"CYTH2"},{"1":"14.970344","2":"10.362591","3":"8.759714e+00","4":"4.933068","5":"21.591116","6":"35.688639","7":"3.609503e+01","8":"7.124079e+00","9":"34.369055","10":"6.202910","11":"9.868633","_rn_":"VIPR2"},{"1":"746.302416","2":"706.147689","3":"5.657279e+02","4":"709.477548","5":"565.990814","6":"861.125078","7":"6.143109e+02","8":"4.394066e+02","9":"958.777208","10":"960.572220","11":"539.957087","_rn_":"CUBN"},{"1":"196.482286","2":"196.544991","3":"2.222253e+02","4":"307.207025","5":"155.407507","6":"198.167295","7":"3.398402e+02","8":"1.588013e+02","9":"295.736912","10":"219.536153","11":"326.840083","_rn_":"MINPP1"},{"1":"143.874115","2":"102.519841","3":"1.095205e+02","4":"118.451891","5":"147.615927","6":"124.785171","7":"1.165936e+02","8":"1.303239e+02","9":"182.708586","10":"101.981714","11":"185.237880","_rn_":"ENO3"},{"1":"1092.020095","2":"1261.832279","3":"1.082711e+03","4":"2709.128049","5":"2396.514893","6":"4048.003042","7":"4.675091e+03","8":"3.204191e+03","9":"3612.954151","10":"3980.970230","11":"4683.862834","_rn_":"CPT1A"},{"1":"3065.422645","2":"2694.258070","3":"2.418218e+03","4":"3455.830925","5":"3420.020905","6":"3817.025633","7":"3.634392e+03","8":"2.115145e+03","9":"3772.533141","10":"3251.595918","11":"3321.420757","_rn_":"MADD"},{"1":"3.249904","2":"6.776125","3":"7.657749e+00","4":"8.222990","5":"3.938769","6":"0.000000","7":"1.219525e+01","8":"1.457457e+01","9":"6.640149","10":"23.604105","11":"65.007736","_rn_":"IFNG"},{"1":"40.211757","2":"68.397264","3":"6.382869e+00","4":"54.365689","5":"21.022149","6":"11.923341","7":"6.253834e+01","8":"1.173653e+02","9":"51.123686","10":"15.368771","11":"14.871649","_rn_":"RHAG"},{"1":"4367.869790","2":"4924.339213","3":"3.909115e+03","4":"5557.943359","5":"6198.499796","6":"6800.053369","7":"8.866558e+03","8":"6.204550e+03","9":"5700.732210","10":"7086.030076","11":"6081.982767","_rn_":"NR3C1"},{"1":"884.605918","2":"753.273180","3":"1.313711e+03","4":"1112.815958","5":"976.498940","6":"947.863123","7":"1.145538e+03","8":"7.426604e+02","9":"1230.561907","10":"826.880262","11":"1465.828954","_rn_":"ACADM"},{"1":"42.645956","2":"35.418893","3":"9.818550e+01","4":"32.520734","5":"61.659532","6":"7.674580","7":"3.389163e+01","8":"1.384615e+01","9":"14.438947","10":"20.144714","11":"41.970576","_rn_":"ELOVL4"},{"1":"2312.465869","2":"2349.272469","3":"1.517747e+03","4":"1716.142660","5":"3137.099627","6":"2798.392526","7":"3.830679e+03","8":"2.905772e+03","9":"2203.325278","10":"3090.540640","11":"1700.087972","_rn_":"DENND1A"},{"1":"294.998734","2":"255.623689","3":"3.281174e+02","4":"370.645232","5":"514.581918","6":"404.626325","7":"4.700596e+02","8":"3.184909e+02","9":"334.178902","10":"541.326183","11":"565.269691","_rn_":"KLHL7"},{"1":"1.723191","2":"0.000000","3":"2.510556e+00","4":"0.000000","5":"0.000000","6":"0.000000","7":"1.879120e+00","8":"0.000000e+00","9":"0.000000","10":"0.000000","11":"0.000000","_rn_":"TP53TG5"},{"1":"48.628885","2":"39.489744","3":"7.026911e+01","4":"131.186118","5":"79.686477","6":"138.580338","7":"7.877777e+01","8":"6.064402e+01","9":"107.444719","10":"75.200924","11":"88.225082","_rn_":"ADM2"},{"1":"967.970236","2":"986.748590","3":"8.425546e+02","4":"1282.654230","5":"1498.492324","6":"1291.613378","7":"1.415318e+03","8":"9.417232e+02","9":"1190.225445","10":"1068.426155","11":"1749.151731","_rn_":"ADORA2A"},{"1":"1.757681","2":"3.620987","3":"8.023998e-01","4":"0.000000","5":"0.000000","6":"0.000000","7":"7.499294e-01","8":"0.000000e+00","9":"0.000000","10":"1.627842","11":"0.000000","_rn_":"ACE2"},{"1":"56.793371","2":"71.238571","3":"2.691250e+01","4":"84.723815","5":"303.017783","6":"385.389909","7":"1.967945e+02","8":"3.209166e+01","9":"93.442138","10":"108.366559","11":"19.221991","_rn_":"IDO1"},{"1":"1162.861992","2":"1064.271818","3":"1.155418e+03","4":"1171.673296","5":"1044.583751","6":"1324.821758","7":"1.494094e+03","8":"6.273656e+02","9":"1227.979501","10":"1066.775650","11":"1668.009564","_rn_":"MCCC2"},{"1":"169.639227","2":"178.522325","3":"1.611356e+02","4":"211.823309","5":"219.651494","6":"217.000575","7":"2.460460e+02","8":"5.444464e+01","9":"126.695834","10":"119.091107","11":"316.160301","_rn_":"MMACHC"},{"1":"919.637969","2":"2117.811005","3":"1.753245e+03","4":"718.517173","5":"3060.387998","6":"3776.293256","7":"1.001541e+04","8":"7.429216e+03","9":"1657.075626","10":"5364.378207","11":"2968.812909","_rn_":"CHI3L1"},{"1":"0.000000","2":"0.000000","3":"0.000000e+00","4":"0.000000","5":"0.000000","6":"0.000000","7":"0.000000e+00","8":"0.000000e+00","9":"0.000000","10":"0.000000","11":"0.000000","_rn_":"TSHB"},{"1":"3.816031","2":"2.541000","3":"6.310493e-01","4":"3.720683","5":"0.000000","6":"9.700337","7":"0.000000e+00","8":"0.000000e+00","9":"0.000000","10":"21.068439","11":"0.000000","_rn_":"SYT6"},{"1":"807.181139","2":"798.099578","3":"9.318806e+02","4":"1046.532554","5":"736.203191","6":"908.059612","7":"1.154769e+03","8":"5.490404e+02","9":"1208.334687","10":"869.745294","11":"1544.213834","_rn_":"PTPN22"},{"1":"0.000000","2":"0.000000","3":"0.000000e+00","4":"0.000000","5":"0.000000","6":"0.000000","7":"0.000000e+00","8":"0.000000e+00","9":"0.000000","10":"0.000000","11":"0.000000","_rn_":"CGA"},{"1":"12.822183","2":"5.463568","3":"9.661659e+00","4":"14.866306","5":"66.493275","6":"29.475636","7":"5.773717e+00","8":"1.776364e+01","9":"16.773225","10":"11.077152","11":"5.747097","_rn_":"GPNMB"},{"1":"431.033083","2":"356.485724","3":"4.895655e+02","4":"570.991874","5":"417.089583","6":"414.182296","7":"5.092437e+02","8":"3.566516e+02","9":"457.536833","10":"358.222172","11":"694.513582","_rn_":"NUP42"},{"1":"14.809317","2":"11.641926","3":"1.687121e+01","4":"44.091890","5":"25.064652","6":"23.530759","7":"8.935220e-01","8":"0.000000e+00","9":"9.023977","10":"17.067966","11":"17.122335","_rn_":"IL6"},{"1":"213.444459","2":"248.418482","3":"2.438417e+02","4":"421.495654","5":"403.640333","6":"299.607824","7":"4.036229e+02","8":"1.452055e+02","9":"330.577508","10":"282.665145","11":"549.145017","_rn_":"TACO1"},{"1":"6.842882","2":"6.520800","3":"1.502382e+00","4":"13.247694","5":"11.387628","6":"22.498357","7":"2.494412e+01","8":"1.726264e+01","9":"7.074846","10":"9.058407","11":"8.606613","_rn_":"IL10"},{"1":"5344.966482","2":"8075.123147","3":"6.325613e+02","4":"4397.204782","5":"1951.347166","6":"1310.301101","7":"4.036313e+03","8":"3.436150e+03","9":"2472.114521","10":"2187.850728","11":"1094.361459","_rn_":"HEMGN"},{"1":"89.443671","2":"79.270158","3":"1.008277e+02","4":"160.469866","5":"83.283410","6":"114.550105","7":"1.162421e+02","8":"5.282898e+01","9":"288.108865","10":"158.395195","11":"197.040453","_rn_":"SPTBN5"},{"1":"0.000000","2":"0.000000","3":"0.000000e+00","4":"0.000000","5":"0.000000","6":"0.000000","7":"0.000000e+00","8":"0.000000e+00","9":"0.000000","10":"0.000000","11":"0.000000","_rn_":"LHCGR"},{"1":"2510.664688","2":"2237.132723","3":"2.408903e+03","4":"3471.923774","5":"3790.087422","6":"3664.282157","7":"3.849688e+03","8":"2.626248e+03","9":"3988.703024","10":"4159.574250","11":"4257.924686","_rn_":"POLG"},{"1":"0.000000","2":"0.000000","3":"0.000000e+00","4":"0.000000","5":"0.000000","6":"0.000000","7":"0.000000e+00","8":"0.000000e+00","9":"0.000000","10":"0.000000","11":"0.000000","_rn_":"PTH2"},{"1":"297.482865","2":"415.691372","3":"3.573046e+02","4":"450.394897","5":"537.459880","6":"568.132393","7":"7.541104e+02","8":"4.236592e+02","9":"446.238334","10":"507.166860","11":"726.029291","_rn_":"SURF1"},{"1":"180.263466","2":"293.177549","3":"2.729056e+02","4":"264.057215","5":"207.002138","6":"187.958944","7":"2.451579e+02","8":"2.000022e+02","9":"274.392114","10":"249.959401","11":"424.600605","_rn_":"MMAA"},{"1":"17.124657","2":"36.252032","3":"1.879240e+01","4":"15.514195","5":"0.000000","6":"41.318553","7":"4.802421e+01","8":"3.427835e+01","9":"85.940408","10":"13.250015","11":"172.913659","_rn_":"HTR6"},{"1":"0.000000","2":"0.000000","3":"0.000000e+00","4":"0.000000","5":"0.000000","6":"0.000000","7":"0.000000e+00","8":"0.000000e+00","9":"0.000000","10":"0.000000","11":"0.000000","_rn_":"GIP"},{"1":"2629.908950","2":"3549.864333","3":"1.854926e+03","4":"3556.093891","5":"3793.655125","6":"5393.885926","7":"7.898611e+03","8":"7.632811e+03","9":"3511.930918","10":"4745.215645","11":"2743.511583","_rn_":"G6PD"},{"1":"619.830666","2":"604.234826","3":"7.743410e+02","4":"435.457490","5":"860.725187","6":"320.619593","7":"1.343372e+03","8":"4.833631e+02","9":"654.682960","10":"666.906510","11":"944.577606","_rn_":"CCR5"},{"1":"925.715673","2":"1024.906903","3":"7.799108e+02","4":"1603.649257","5":"1674.671321","6":"1585.684670","7":"2.187795e+03","8":"1.927609e+03","9":"1314.716271","10":"1466.681726","11":"922.725320","_rn_":"NLRP3"},{"1":"127.764077","2":"128.613823","3":"8.413708e+01","4":"119.749489","5":"27.169115","6":"217.458843","7":"1.610901e+02","8":"8.140361e+01","9":"74.877397","10":"88.655186","11":"526.027360","_rn_":"COL6A3"},{"1":"5211.281267","2":"4159.876865","3":"4.894912e+03","4":"6918.156650","5":"6569.773784","6":"7652.182620","7":"6.801872e+03","8":"4.305183e+03","9":"6646.644150","10":"6075.261812","11":"8468.650638","_rn_":"ATP1A1"},{"1":"524.155474","2":"527.423540","3":"6.666703e+01","4":"616.846508","5":"178.118844","6":"193.648648","7":"5.435926e+02","8":"7.223952e+02","9":"291.348023","10":"318.909644","11":"122.704464","_rn_":"SPTA1"},{"1":"1.415426","2":"1.013379","3":"1.414065e+00","4":"5.207947","5":"0.000000","6":"4.675081","7":"9.895855e+00","8":"0.000000e+00","9":"4.698719","10":"0.000000","11":"11.757598","_rn_":"GABRB3"},{"1":"12.941198","2":"32.263353","3":"1.227492e+01","4":"20.308024","5":"30.502466","6":"59.726052","7":"4.361024e+01","8":"7.989142e+01","9":"9.088040","10":"63.187821","11":"47.099352","_rn_":"CHRFAM7A"},{"1":"7505.072380","2":"5704.291110","3":"5.446927e+02","4":"5531.860629","5":"2542.118598","6":"1865.134015","7":"5.277425e+03","8":"6.245771e+03","9":"2850.357205","10":"1241.578853","11":"1399.979543","_rn_":"EPB42"},{"1":"1089.139050","2":"1736.014222","3":"1.715363e+03","4":"1864.170016","5":"1381.375213","6":"1930.029406","7":"2.767485e+03","8":"2.100440e+03","9":"1493.639540","10":"1863.438392","11":"1864.434236","_rn_":"LMBRD1"},{"1":"931.048745","2":"972.861081","3":"8.766836e+02","4":"1321.722573","5":"1368.518328","6":"1353.751026","7":"1.649333e+03","8":"1.002237e+03","9":"1872.390113","10":"1707.448261","11":"2081.756541","_rn_":"GLYCTK"},{"1":"1.981790","2":"15.378492","3":"6.573261e+00","4":"4.163937","5":"49.216460","6":"7.379505","7":"2.184433e+00","8":"0.000000e+00","9":"0.000000","10":"22.100643","11":"6.420801","_rn_":"CPT1C"},{"1":"940.099608","2":"843.795569","3":"7.406182e+02","4":"729.668977","5":"1299.459105","6":"997.135395","7":"1.923033e+03","8":"1.317211e+03","9":"1384.291402","10":"1746.975907","11":"1874.569571","_rn_":"ADRB2"},{"1":"739.605723","2":"729.272640","3":"9.557229e+01","4":"400.247222","5":"402.952226","6":"102.978241","7":"1.096776e+03","8":"1.405954e+03","9":"333.936445","10":"167.461043","11":"302.039632","_rn_":"AHSP"},{"1":"212.770181","2":"381.648876","3":"3.087931e+01","4":"94.165467","5":"26.391179","6":"16.259435","7":"2.758282e+02","8":"3.856600e+02","9":"58.658130","10":"37.355198","11":"32.758146","_rn_":"GYPA"},{"1":"17.855125","2":"27.653396","3":"1.601138e+01","4":"58.725854","5":"44.182023","6":"19.012615","7":"6.024933e+01","8":"6.494603e+01","9":"24.230774","10":"42.946543","11":"51.860721","_rn_":"ADORA2B"},{"1":"0.000000","2":"0.000000","3":"0.000000e+00","4":"0.000000","5":"0.000000","6":"0.000000","7":"0.000000e+00","8":"0.000000e+00","9":"0.000000","10":"0.000000","11":"0.000000","_rn_":"AQP4"},{"1":"7635.688282","2":"6386.040017","3":"5.210820e+03","4":"8594.644896","5":"6707.150505","6":"7190.178867","7":"8.967880e+03","8":"6.577310e+03","9":"8225.037055","10":"6594.045759","11":"9137.616085","_rn_":"UCP2"},{"1":"4.008381","2":"15.107908","3":"4.665847e+00","4":"4.890897","5":"3.810716","6":"15.447131","7":"1.569336e+01","8":"9.601082e-01","9":"12.386401","10":"6.605598","11":"10.617649","_rn_":"CALCB"},{"1":"3744.542956","2":"4068.061191","3":"3.850639e+03","4":"5294.101910","5":"5752.430315","6":"6887.526657","7":"8.147302e+03","8":"5.516710e+03","9":"5350.794111","10":"5818.782889","11":"5861.028029","_rn_":"SMCR8"},{"1":"185.054518","2":"355.074738","3":"3.352601e+02","4":"545.811045","5":"515.807483","6":"697.113442","7":"9.687278e+02","8":"6.116505e+02","9":"679.715312","10":"652.214914","11":"912.894024","_rn_":"SLC25A20"},{"1":"18.254374","2":"2.692398","3":"7.955296e+00","4":"25.321694","5":"10.740230","6":"36.731612","7":"8.964764e+00","8":"1.339096e+02","9":"47.022239","10":"1.930791","11":"1.912936","_rn_":"OXTR"},{"1":"0.000000","2":"0.000000","3":"0.000000e+00","4":"0.000000","5":"0.000000","6":"0.000000","7":"0.000000e+00","8":"0.000000e+00","9":"0.000000","10":"0.000000","11":"0.000000","_rn_":"TMPRSS2"},{"1":"220.546454","2":"219.669010","3":"1.148491e+03","4":"674.647719","5":"345.768622","6":"339.657449","7":"6.248099e+02","8":"4.053248e+02","9":"519.609659","10":"455.009555","11":"2153.390185","_rn_":"TOMM7"},{"1":"62.876539","2":"27.997853","3":"7.655896e+00","4":"13.193372","5":"13.520814","6":"3.043544","7":"4.631196e+01","8":"1.112722e+02","9":"25.286832","10":"16.235622","11":"21.986514","_rn_":"GYPE"},{"1":"403.450837","2":"445.815563","3":"2.173353e+01","4":"198.122739","5":"104.939019","6":"131.997081","7":"3.938258e+02","8":"3.393049e+02","9":"165.289985","10":"103.224168","11":"187.022745","_rn_":"KEL"},{"1":"3737.023473","2":"5451.660640","3":"3.483038e+03","4":"8821.947047","5":"8555.925295","6":"13167.369365","7":"1.703050e+04","8":"9.107416e+03","9":"6735.259025","10":"10978.874456","11":"5745.326960","_rn_":"HSPA1A"},{"1":"353.811567","2":"376.509820","3":"4.161585e+02","4":"407.001832","5":"624.013926","6":"443.408084","7":"5.909266e+02","8":"3.384494e+02","9":"476.019064","10":"444.350938","11":"805.786154","_rn_":"CPT1B"},{"1":"0.000000","2":"0.000000","3":"0.000000e+00","4":"0.000000","5":"0.000000","6":"0.000000","7":"0.000000e+00","8":"0.000000e+00","9":"0.000000","10":"0.000000","11":"0.000000","_rn_":"IGHV3-16"},{"1":"0.000000","2":"0.000000","3":"0.000000e+00","4":"0.000000","5":"0.000000","6":"0.000000","7":"0.000000e+00","8":"0.000000e+00","9":"0.000000","10":"0.000000","11":"0.000000","_rn_":"CGB8"},{"1":"233.476821","2":"213.184948","3":"2.588066e+02","4":"396.939942","5":"650.712215","6":"361.987320","7":"5.274780e+02","8":"4.303934e+02","9":"341.904551","10":"507.293963","11":"578.416937","_rn_":"TNF"},{"1":"437.917283","2":"458.787780","3":"5.119863e+01","4":"306.541450","5":"152.454815","6":"55.566702","7":"3.961931e+02","8":"4.968641e+02","9":"202.671214","10":"43.956688","11":"110.165651","_rn_":"GYPB"},{"1":"0.000000","2":"0.000000","3":"0.000000e+00","4":"0.000000","5":"0.000000","6":"0.000000","7":"0.000000e+00","8":"0.000000e+00","9":"0.000000","10":"0.000000","11":"0.000000","_rn_":"KCNJ18"},{"1":"0.000000","2":"0.000000","3":"0.000000e+00","4":"0.000000","5":"0.000000","6":"0.000000","7":"0.000000e+00","8":"7.365364e+00","9":"1.875632","10":"0.000000","11":"0.000000","_rn_":"IGHV3OR16-9"}],"options":{"columns":{"min":{},"max":[10]},"rows":{"min":[15],"max":[15]},"pages":{}}}
+  </script>
+</div>
+<pre class="r"><code>string_db &lt;- STRINGdb$new(version = &quot;11.5&quot;, species = 9606, score_threshold = 100, network_type = &quot;full&quot;, input_directory = &quot;&quot;)
+
+mapped_degs &lt;- string_db$map(significant_data, &quot;name&quot;, removeUnmappedRows = TRUE)</code></pre>
+<pre><code>Warning:  we couldn&#39;t map to STRING 28% of your identifiers</code></pre>
+<pre class="r"><code>hits &lt;- mapped_degs$STRING_id[1:29]
+
+mapped_degs_dec &lt;- string_db$add_diff_exp_color(mapped_degs, logFcColStr = &quot;lfc&quot;)
+
+payload_id &lt;- string_db$post_payload(mapped_degs_dec$STRING_id, colors = mapped_degs_dec$color)
+string_db$plot_network(hits, payload_id = payload_id)</code></pre>
+<p><img src="figure/spta1-analysis.Rmd/stringdb-network-significant-1.png" width="672" style="display: block; margin: auto;" /></p>
+</div>
+<div id="genes-of-interest-plot-counts" class="section level2">
+<h2>Genes of Interest Plot Counts</h2>
+<pre class="r"><code># Create an empty list to store the results for each gene
+gene_results_list &lt;- list()
+
+# Create an empty dataframe to store all counts data for plotting
+gi_all_counts &lt;- data.frame()
+
+# List of gene names to remove or keep
+blood_genes &lt;- c(
+  &quot;AHSP&quot;, &quot;HEMGN&quot;, &quot;SLC4A1&quot;, &quot;KEL&quot;, &quot;SPTA1&quot;, &quot;RHAG&quot;,
+  &quot;GYPE&quot;, &quot;GYPA&quot;, &quot;GYPB&quot;, &quot;EPB42&quot;, &quot;SPTB&quot;, &quot;SPTBN5&quot;, &quot;CHI3L1&quot;
+)
+
+madd_genes &lt;- c(
+  &quot;ADM2&quot;, &quot;TSHB&quot;, &quot;PTH2&quot;, &quot;ADORA2B&quot;, &quot;GIP&quot;, &quot;CGA&quot;, &quot;CALCB&quot;, &quot;IGHV3-16&quot;,
+  &quot;ADORA2A&quot;, &quot;SYT6&quot;, &quot;CYTH2&quot;, &quot;VIPR2&quot;, &quot;HTR6&quot;, &quot;LHCGR&quot;, &quot;GIPR&quot;, &quot;CGB8&quot;,
+  &quot;DENND1A&quot;, &quot;MADD&quot;, &quot;DMXL2&quot;, &quot;SMCR8&quot;, &quot;TP53TG5&quot;, &quot;IGHV3OR16-9&quot;
+)
+
+mito_genes &lt;- c(
+  &quot;ETFB&quot;, &quot;PGM1&quot;, &quot;PCK2&quot;, &quot;GLYCTK&quot;, &quot;ACACB&quot;, &quot;MLYCD&quot;, &quot;MCCC1&quot;,
+  &quot;CPT1A&quot;, &quot;ELOVL4&quot;, &quot;G6PD&quot;, &quot;ACADVL&quot;, &quot;ACADM&quot;, &quot;HADHA&quot;, &quot;MCCC2&quot;,
+  &quot;CPT1C&quot;, &quot;CPT1B&quot;, &quot;ENO3&quot;, &quot;SURF1&quot;, &quot;CUBN&quot;, &quot;MMACHC&quot;, &quot;LMBRD1&quot;,
+  &quot;MINPP1&quot;, &quot;MMAA&quot;, &quot;TACO1&quot;
+)
+
+
+combined_genes &lt;- c(blood_genes, madd_genes, mito_genes)
+
+# Remove specific genes
+filtered_without_genes &lt;- filtered_by_interest %&gt;%
+  filter(!gene_name %in% combined_genes)
+
+# Keep only specific genes
+filtered_with_only_genes &lt;- filtered_by_interest %&gt;%
+  filter(gene_name %in% blood_genes)
+
+# Keep only specific genes
+filtered_with_only_madd_genes &lt;- filtered_by_interest %&gt;%
+  filter(gene_name %in% madd_genes)
+
+# Keep only specific genes
+filtered_with_only_mito_genes &lt;- filtered_by_interest %&gt;%
+  filter(gene_name %in% mito_genes)
+
+# Filtered data without specific genes
+write.csv(filtered_without_genes, &quot;output/spta1-analysis/other_genes_of_interest.csv&quot;, row.names = FALSE)
+
+# Filtered data with only specific genes (genes_to_filter)
+write.csv(filtered_with_only_genes, &quot;output/spta1-analysis/spta1_genes_of_interest.csv&quot;, row.names = FALSE)
+
+# Filtered data with only specific MADD genes
+write.csv(filtered_with_only_madd_genes, &quot;output/spta1-analysis/madd_genes_of_interest.csv&quot;, row.names = FALSE)
+
+# Filtered data with only specific MADD genes
+write.csv(filtered_with_only_mito_genes, &quot;output/spta1-analysis/mito_genes_of_interest.csv&quot;, row.names = FALSE)
+
+
+# Process genes of interest
+results &lt;- process_genes_of_interest(
+  filtered_data = filtered_without_genes,
+  dds = dds,
+  genes_to_filter = combined_genes,
+  output_path = file.path(&quot;output&quot;, outpath_var, &quot;batch-correction-limma&quot;, &quot;plot-counts&quot;, &quot;genes-of-interest&quot;)
+)
+
+# Extract results
+faceted_plot &lt;- results$faceted_plot
+gene_results_df &lt;- results$gene_results_df
+
+# Save the faceted plot
+ggsave(
+  filename = &quot;faceted_genes_of_interest_plot_counts.png&quot;,
+  path = file.path(&quot;output&quot;, outpath_var, &quot;batch-correction-limma&quot;, &quot;plot-counts&quot;, &quot;genes-of-interest&quot;),
+  plot = faceted_plot, dpi = 2200, create.dir = TRUE
+)
+
+# Save the gene results to a CSV
+file_name &lt;- file.path(&quot;output&quot;, outpath_var, &quot;genes_of_interest_plot_counts_signals.csv&quot;)
+write.csv(gene_results_df, file_name, row.names = FALSE)
+
+# Prepare the heatmap data
+mat3 &lt;- assay(vsd_limma)[filtered_without_genes$Ensembl_ID, ]
+rownames(mat3) &lt;- gene_info$gene_name[match(filtered_without_genes$Ensembl_ID, gene_info$Ensembl_ID)]
+df_sub &lt;- as.data.frame(colData(vsd_limma)[, c(&quot;Affected&quot;, &quot;OverallCategory&quot;)])
+
+# Generate heatmap
+create_heatmap(
+  mat = assay(vsd_limma)[filtered_without_genes$Ensembl_ID, ],
+  gene_info = gene_info,
+  vsd_coldata = colData(vsd_limma),
+  output_path = file.path(&quot;output&quot;, outpath_var, &quot;genes-of-interest.png&quot;),
+  ann_colors = ann_colors
+)</code></pre>
+<pre><code>quartz_off_screen 
+                2 </code></pre>
+</div>
+<div id="additional-interesting-genes" class="section level2">
+<h2>Additional Interesting Genes</h2>
+<pre class="r"><code># Create an empty list to store the results for each gene
+gene_results_list &lt;- list()
+
+# Create an empty dataframe to store all counts data for plotting
+gi_all_counts &lt;- data.frame()
+
+# Loop through each gene to calculate and plot counts
+for (ensembl_id in filtered_with_only_genes$Ensembl_ID) {
+  d &lt;- plotCounts(dds, gene = ensembl_id, intgroup = &quot;Affected&quot;, returnData = TRUE)
+  dp &lt;- plotCounts(dds, gene = ensembl_id, intgroup = &quot;Affected&quot;, returnData = TRUE)
+  gene_name &lt;- filtered_with_only_genes$gene_name[filtered_with_only_genes$Ensembl_ID == ensembl_id]
+
+  # Calculate the mean and standard deviation of counts within each condition
+  d_stats &lt;- d %&gt;%
+    group_by(Affected) %&gt;%
+    summarise(
+      mean_count = mean(count),
+      sd_count = sd(count)
+    )
+
+  # Merge statistics back with the data
+  d &lt;- merge(d, d_stats, by = &quot;Affected&quot;)
+
+  # Create a temporary dataframe to store results for this gene
+  temp_gene_df &lt;- data.frame(
+    Patient = rownames(d),
+    stringsAsFactors = FALSE
+  )
+
+  # Calculate Z-scores and determine regulation status
+  regulation_status &lt;- sapply(1:nrow(d), function(i) {
+    z_score &lt;- (d$count[i] - d$mean_count[i]) / d$sd_count[i]
+
+    # Determine regulation status based on Z-score
+    if (z_score &gt; 1) {
+      return(&quot;Upregulated&quot;)
+    } else if (z_score &lt; -1) {
+      return(&quot;Downregulated&quot;)
+    } else {
+      return(&quot;Neutral&quot;)
+    }
+  })
+
+  # Add the regulation status to the temporary dataframe
+  temp_gene_df[[gene_name]] &lt;- regulation_status
+
+  # Merge the temporary dataframe with the results list
+  if (length(gene_results_list) == 0) {
+    gene_results_list[[1]] &lt;- temp_gene_df
+  } else {
+    gene_results_list[[1]] &lt;- merge(gene_results_list[[1]], temp_gene_df, by = &quot;Patient&quot;, all = TRUE)
+  }
+
+  # Add the gene name to the dp dataframe
+  dp$Gene &lt;- gene_name
+  dp$Ensembl_ID &lt;- ensembl_id
+  dp$SampleID &lt;- rownames(dp)
+
+  # Combine dp with all_counts dataframe
+  gi_all_counts &lt;- rbind(gi_all_counts, dp)
+
+  # Generate the boxplot
+  gene_plot &lt;- ggboxplot(dp,
+    x = &quot;Affected&quot;, y = &quot;count&quot;, add = &quot;jitter&quot;,
+    color = &quot;Affected&quot;, palette = c(&quot;red&quot;, &quot;navy&quot;),
+    title = gene_name
+  ) +
+    geom_text_repel(aes(label = rownames(dp))) +
+    scale_color_manual(
+      name = &quot;Affected Status&quot;,
+      labels = c(&quot;Affected&quot;, &quot;Unaffected&quot;),
+      values = c(&quot;red&quot;, &quot;navy&quot;)
+    )
+  print(gene_plot) # Ensure each plot is printed during the loop
+  ggsave(
+    filename = paste0(gene_name, &quot;-plot-counts.png&quot;),
+    path = &quot;output/spta1-analysis/batch-correction-limma/plot-counts/spta1-genes-of-interest&quot;,
+    plot = gene_plot, dpi = 450, create.dir = TRUE
+  )
+}</code></pre>
+<p><img src="figure/spta1-analysis.Rmd/generate-plot-counts-genes-interest-spta1-1.png" width="672" style="display: block; margin: auto;" /><img src="figure/spta1-analysis.Rmd/generate-plot-counts-genes-interest-spta1-2.png" width="672" style="display: block; margin: auto;" /><img src="figure/spta1-analysis.Rmd/generate-plot-counts-genes-interest-spta1-3.png" width="672" style="display: block; margin: auto;" /><img src="figure/spta1-analysis.Rmd/generate-plot-counts-genes-interest-spta1-4.png" width="672" style="display: block; margin: auto;" /><img src="figure/spta1-analysis.Rmd/generate-plot-counts-genes-interest-spta1-5.png" width="672" style="display: block; margin: auto;" /><img src="figure/spta1-analysis.Rmd/generate-plot-counts-genes-interest-spta1-6.png" width="672" style="display: block; margin: auto;" /><img src="figure/spta1-analysis.Rmd/generate-plot-counts-genes-interest-spta1-7.png" width="672" style="display: block; margin: auto;" /><img src="figure/spta1-analysis.Rmd/generate-plot-counts-genes-interest-spta1-8.png" width="672" style="display: block; margin: auto;" /><img src="figure/spta1-analysis.Rmd/generate-plot-counts-genes-interest-spta1-9.png" width="672" style="display: block; margin: auto;" /><img src="figure/spta1-analysis.Rmd/generate-plot-counts-genes-interest-spta1-10.png" width="672" style="display: block; margin: auto;" /><img src="figure/spta1-analysis.Rmd/generate-plot-counts-genes-interest-spta1-11.png" width="672" style="display: block; margin: auto;" /><img src="figure/spta1-analysis.Rmd/generate-plot-counts-genes-interest-spta1-12.png" width="672" style="display: block; margin: auto;" /><img src="figure/spta1-analysis.Rmd/generate-plot-counts-genes-interest-spta1-13.png" width="672" style="display: block; margin: auto;" /></p>
+<pre class="r"><code># Create the faceted plot
+faceted_plot &lt;- ggplot(gi_all_counts, aes(x = Affected, y = count, color = Affected)) +
+  geom_boxplot(alpha = 0.35) +
+  geom_jitter(width = 0.2, size = .45) + # Adjust size of the dots
+  geom_text_repel(aes(label = SampleID),
+    size = 2,
+    max.overlaps = Inf, force = 10, color = &quot;black&quot;,
+    segment.color = &quot;gray&quot;,
+    min.segment.length = 0,
+    point.padding = 0.1
+  ) + # Add labels to the dots
+  facet_wrap(~Gene, scales = &quot;free_y&quot;) +
+  theme_bw() +
+  labs(title = &quot;Gene Expression Counts by Affected Status&quot;, x = &quot;Affected Status&quot;, y = &quot;Count&quot;) +
+  scale_color_manual(values = c(&quot;red&quot;, &quot;navy&quot;)) +
+  theme(
+    legend.position = &quot;bottom&quot;,
+    plot.margin = margin(10, 10, 10, 10),
+    strip.text = element_text(size = 6), # Adjust facet label text size
+    plot.title = element_text(size = 10),
+    axis.title = element_text(size = 10),
+    axis.text = element_text(size = 6),
+    panel.spacing = unit(.35, &quot;lines&quot;) # Add space between facets
+  ) +
+  coord_cartesian(clip = &quot;off&quot;) # Ensure labels are not clipped
+
+
+faceted_plot</code></pre>
+<p><img src="figure/spta1-analysis.Rmd/generate-plot-counts-genes-interest-spta1-14.png" width="672" style="display: block; margin: auto;" /></p>
+<pre class="r"><code># Save the faceted plot
+ggsave(
+  filename = &quot;faceted_spta1_genes_of_interest_plot_counts.png&quot;,
+  path = &quot;output/spta1-analysis/batch-correction-limma/plot-counts/spta1-genes-of-interest&quot;,
+  plot = faceted_plot, dpi = 2200, create.dir = TRUE
+)
+
+# Convert the list to a dataframe
+gene_results_df &lt;- gene_results_list[[1]]
+
+file_name &lt;- &quot;output/spta1-analysis/spta1_genes_of_interest_plot_counts_signals.csv&quot;
+write.csv(gene_results_df, file_name, row.names = FALSE)</code></pre>
+<p>Below is a heatmap highlighting the expression of our genes of
+interest across batch, disease group, and affected status.</p>
+<pre class="r"><code># Prepare data for the heatmap
+mat4 &lt;- assay(vsd_limma)[filtered_with_only_genes$Ensembl_ID, ]
+rownames(mat4) &lt;- gene_info$gene_name[match(filtered_with_only_genes$Ensembl_ID, gene_info$Ensembl_ID)]
+df &lt;- as.data.frame(colData(vsd_limma)[, c(&quot;Affected&quot;, &quot;OverallCategory&quot;)])
+
+# Set up color palette
+color_palette &lt;- colorRampPalette(rev(brewer.pal(n = 9, name = &quot;RdYlBu&quot;)))(50)
+
+# Specify the number of row clusters
+num_row_clusters &lt;- 3
+
+png(&quot;output/spta1-analysis/spta1_genes_of_interest_heatmap.png&quot;, width = 14, height = 10, units = &quot;in&quot;, res = 1200)
+
+draw(ComplexHeatmap::pheatmap(
+  mat = mat4,
+  color = colorRampPalette(rev(brewer.pal(n = 9, name = &quot;RdYlBu&quot;)))(50),
+  annotation_col = df,
+  annotation_colors = ann_colors,
+  fontsize = 6,
+  angle_col = c(&quot;0&quot;),
+  cellheight = 10, # Set cell height
+  cellwidth = 24, # Set cell width
+  border_color = &quot;black&quot;, # Black borders around heatmap cells
+  # cutree_rows = num_row_clusters,  # Number of row clusters
+  heatmap_legend_param = list(
+    title = &quot;Matrix&quot;
+  )
+))
+
+dev.off()</code></pre>
+<pre><code>quartz_off_screen 
+                2 </code></pre>
+</div>
+<div id="only-madd-genes" class="section level2">
+<h2>Only MADD Genes</h2>
+<pre class="r"><code># Create an empty list to store the results for each gene
+gene_results_list &lt;- list()
+
+# Create an empty dataframe to store all counts data for plotting
+gi_all_counts &lt;- data.frame()
+
+# Loop through each gene to calculate and plot counts
+for (ensembl_id in filtered_with_only_madd_genes$Ensembl_ID) {
+  d &lt;- plotCounts(dds, gene = ensembl_id, intgroup = &quot;Affected&quot;, returnData = TRUE)
+  dp &lt;- plotCounts(dds, gene = ensembl_id, intgroup = &quot;Affected&quot;, returnData = TRUE)
+  gene_name &lt;- filtered_with_only_madd_genes$gene_name[filtered_with_only_madd_genes$Ensembl_ID == ensembl_id]
+
+  # Calculate the mean and standard deviation of counts within each condition
+  d_stats &lt;- d %&gt;%
+    group_by(Affected) %&gt;%
+    summarise(
+      mean_count = mean(count),
+      sd_count = sd(count)
+    )
+
+  # Merge statistics back with the data
+  d &lt;- merge(d, d_stats, by = &quot;Affected&quot;)
+
+  # Create a temporary dataframe to store results for this gene
+  temp_gene_df &lt;- data.frame(
+    Patient = rownames(d),
+    stringsAsFactors = FALSE
+  )
+
+  # Calculate Z-scores and determine regulation status
+  regulation_status &lt;- sapply(1:nrow(d), function(i) {
+    z_score &lt;- (d$count[i] - d$mean_count[i]) / d$sd_count[i]
+
+    # Determine regulation status based on Z-score
+    if (z_score &gt; 1) {
+      return(&quot;Upregulated&quot;)
+    } else if (z_score &lt; -1) {
+      return(&quot;Downregulated&quot;)
+    } else {
+      return(&quot;Neutral&quot;)
+    }
+  })
+
+  # Add the regulation status to the temporary dataframe
+  temp_gene_df[[gene_name]] &lt;- regulation_status
+
+  # Merge the temporary dataframe with the results list
+  if (length(gene_results_list) == 0) {
+    gene_results_list[[1]] &lt;- temp_gene_df
+  } else {
+    gene_results_list[[1]] &lt;- merge(gene_results_list[[1]], temp_gene_df, by = &quot;Patient&quot;, all = TRUE)
+  }
+
+  # Add the gene name to the dp dataframe
+  dp$Gene &lt;- gene_name
+  dp$Ensembl_ID &lt;- ensembl_id
+  dp$SampleID &lt;- rownames(dp)
+
+  # Combine dp with all_counts dataframe
+  gi_all_counts &lt;- rbind(gi_all_counts, dp)
+
+  # Generate the boxplot
+  gene_plot &lt;- ggboxplot(dp,
+    x = &quot;Affected&quot;, y = &quot;count&quot;, add = &quot;jitter&quot;,
+    color = &quot;Affected&quot;, palette = c(&quot;red&quot;, &quot;navy&quot;),
+    title = gene_name
+  ) +
+    geom_text_repel(aes(label = rownames(dp))) +
+    scale_color_manual(
+      name = &quot;Affected Status&quot;,
+      labels = c(&quot;Affected&quot;, &quot;Unaffected&quot;),
+      values = c(&quot;red&quot;, &quot;navy&quot;)
+    )
+  print(gene_plot) # Ensure each plot is printed during the loop
+  ggsave(
+    filename = paste0(gene_name, &quot;-plot-counts.png&quot;),
+    path = &quot;output/spta1-analysis/batch-correction-limma/plot-counts/madd-genes-of-interest&quot;,
+    plot = gene_plot, dpi = 450, create.dir = TRUE
+  )
+}</code></pre>
+<p><img src="figure/spta1-analysis.Rmd/generate-plot-counts-genes-interest-madd-1.png" width="672" style="display: block; margin: auto;" /><img src="figure/spta1-analysis.Rmd/generate-plot-counts-genes-interest-madd-2.png" width="672" style="display: block; margin: auto;" /><img src="figure/spta1-analysis.Rmd/generate-plot-counts-genes-interest-madd-3.png" width="672" style="display: block; margin: auto;" /><img src="figure/spta1-analysis.Rmd/generate-plot-counts-genes-interest-madd-4.png" width="672" style="display: block; margin: auto;" /><img src="figure/spta1-analysis.Rmd/generate-plot-counts-genes-interest-madd-5.png" width="672" style="display: block; margin: auto;" /><img src="figure/spta1-analysis.Rmd/generate-plot-counts-genes-interest-madd-6.png" width="672" style="display: block; margin: auto;" /><img src="figure/spta1-analysis.Rmd/generate-plot-counts-genes-interest-madd-7.png" width="672" style="display: block; margin: auto;" /><img src="figure/spta1-analysis.Rmd/generate-plot-counts-genes-interest-madd-8.png" width="672" style="display: block; margin: auto;" /><img src="figure/spta1-analysis.Rmd/generate-plot-counts-genes-interest-madd-9.png" width="672" style="display: block; margin: auto;" /><img src="figure/spta1-analysis.Rmd/generate-plot-counts-genes-interest-madd-10.png" width="672" style="display: block; margin: auto;" /><img src="figure/spta1-analysis.Rmd/generate-plot-counts-genes-interest-madd-11.png" width="672" style="display: block; margin: auto;" /><img src="figure/spta1-analysis.Rmd/generate-plot-counts-genes-interest-madd-12.png" width="672" style="display: block; margin: auto;" /></p>
+<pre class="r"><code># Create the faceted plot
+faceted_plot &lt;- ggplot(gi_all_counts, aes(x = Affected, y = count, color = Affected)) +
+  geom_boxplot(alpha = 0.35) +
+  geom_jitter(width = 0.2, size = .45) + # Adjust size of the dots
+  geom_text_repel(aes(label = SampleID),
+    size = 2,
+    max.overlaps = Inf, force = 10, color = &quot;black&quot;,
+    segment.color = &quot;gray&quot;,
+    min.segment.length = 0,
+    point.padding = 0.1
+  ) + # Add labels to the dots
+  facet_wrap(~Gene, scales = &quot;free_y&quot;) +
+  theme_bw() +
+  labs(title = &quot;Gene Expression Counts by Affected Status&quot;, x = &quot;Affected Status&quot;, y = &quot;Count&quot;) +
+  scale_color_manual(values = c(&quot;red&quot;, &quot;navy&quot;)) +
+  theme(
+    legend.position = &quot;bottom&quot;,
+    plot.margin = margin(10, 10, 10, 10),
+    strip.text = element_text(size = 6), # Adjust facet label text size
+    plot.title = element_text(size = 10),
+    axis.title = element_text(size = 10),
+    axis.text = element_text(size = 6),
+    panel.spacing = unit(.35, &quot;lines&quot;) # Add space between facets
+  ) +
+  coord_cartesian(clip = &quot;off&quot;) # Ensure labels are not clipped
+
+
+faceted_plot</code></pre>
+<p><img src="figure/spta1-analysis.Rmd/generate-plot-counts-genes-interest-madd-13.png" width="672" style="display: block; margin: auto;" /></p>
+<pre class="r"><code># Save the faceted plot
+ggsave(
+  filename = &quot;faceted_madd_genes_of_interest_plot_counts.png&quot;,
+  path = &quot;output/spta1-analysis/batch-correction-limma/plot-counts/madd-genes-of-interest&quot;,
+  plot = faceted_plot, dpi = 2200, create.dir = TRUE
+)
+
+# Convert the list to a dataframe
+gene_results_df &lt;- gene_results_list[[1]]
+
+file_name &lt;- &quot;output/spta1-analysis/genes_of_interest_plot_counts_signals.csv&quot;
+write.csv(gene_results_df, file_name, row.names = FALSE)</code></pre>
+<p>Below is a heatmap highlighting the expression of our genes of
+interest across batch, disease group, and affected status.</p>
+<pre class="r"><code># Prepare data for the heatmap
+mat5 &lt;- assay(vsd_limma)[filtered_with_only_madd_genes$Ensembl_ID, ]
+rownames(mat5) &lt;- gene_info$gene_name[match(filtered_with_only_madd_genes$Ensembl_ID, gene_info$Ensembl_ID)]
+df &lt;- as.data.frame(colData(vsd_limma)[, c(&quot;Affected&quot;, &quot;OverallCategory&quot;)])
+
+# Set up color palette
+color_palette &lt;- colorRampPalette(rev(brewer.pal(n = 9, name = &quot;RdYlBu&quot;)))(50)
+
+# Specify the number of row clusters
+num_row_clusters &lt;- 3
+
+png(&quot;output/spta1-analysis/madd_genes_of_interest_heatmap.png&quot;, width = 14, height = 8, units = &quot;in&quot;, res = 1200)
+
+draw(ComplexHeatmap::pheatmap(
+  mat = mat5,
+  color = colorRampPalette(rev(brewer.pal(n = 9, name = &quot;RdYlBu&quot;)))(50),
+  annotation_col = df,
+  annotation_colors = ann_colors,
+  fontsize = 6,
+  angle_col = c(&quot;0&quot;),
+  cellheight = 10, # Set cell height
+  cellwidth = 24, # Set cell width
+  border_color = &quot;black&quot;, # Black borders around heatmap cells
+  # cutree_rows = num_row_clusters,  # Number of row clusters
+  heatmap_legend_param = list(
+    title = &quot;Matrix&quot;
+  )
+))
+
+dev.off()</code></pre>
+<pre><code>quartz_off_screen 
+                2 </code></pre>
+</div>
+<div id="only-mito-genes" class="section level2">
+<h2>Only MITO Genes</h2>
+<pre class="r"><code># Create an empty list to store the results for each gene
+gene_results_list &lt;- list()
+
+# Create an empty dataframe to store all counts data for plotting
+gi_all_counts &lt;- data.frame()
+
+# Loop through each gene to calculate and plot counts
+for (ensembl_id in filtered_with_only_mito_genes$Ensembl_ID) {
+  d &lt;- plotCounts(dds, gene = ensembl_id, intgroup = &quot;Affected&quot;, returnData = TRUE)
+  dp &lt;- plotCounts(dds, gene = ensembl_id, intgroup = &quot;Affected&quot;, returnData = TRUE)
+  gene_name &lt;- filtered_with_only_mito_genes$gene_name[filtered_with_only_mito_genes$Ensembl_ID == ensembl_id]
+
+  # Calculate the mean and standard deviation of counts within each condition
+  d_stats &lt;- d %&gt;%
+    group_by(Affected) %&gt;%
+    summarise(
+      mean_count = mean(count),
+      sd_count = sd(count)
+    )
+
+  # Merge statistics back with the data
+  d &lt;- merge(d, d_stats, by = &quot;Affected&quot;)
+
+  # Create a temporary dataframe to store results for this gene
+  temp_gene_df &lt;- data.frame(
+    Patient = rownames(d),
+    stringsAsFactors = FALSE
+  )
+
+  # Calculate Z-scores and determine regulation status
+  regulation_status &lt;- sapply(1:nrow(d), function(i) {
+    z_score &lt;- (d$count[i] - d$mean_count[i]) / d$sd_count[i]
+
+    # Determine regulation status based on Z-score
+    if (z_score &gt; 1) {
+      return(&quot;Upregulated&quot;)
+    } else if (z_score &lt; -1) {
+      return(&quot;Downregulated&quot;)
+    } else {
+      return(&quot;Neutral&quot;)
+    }
+  })
+
+  # Add the regulation status to the temporary dataframe
+  temp_gene_df[[gene_name]] &lt;- regulation_status
+
+  # Merge the temporary dataframe with the results list
+  if (length(gene_results_list) == 0) {
+    gene_results_list[[1]] &lt;- temp_gene_df
+  } else {
+    gene_results_list[[1]] &lt;- merge(gene_results_list[[1]], temp_gene_df, by = &quot;Patient&quot;, all = TRUE)
+  }
+
+  # Add the gene name to the dp dataframe
+  dp$Gene &lt;- gene_name
+  dp$Ensembl_ID &lt;- ensembl_id
+  dp$SampleID &lt;- rownames(dp)
+
+  # Combine dp with all_counts dataframe
+  gi_all_counts &lt;- rbind(gi_all_counts, dp)
+
+  # Generate the boxplot
+  gene_plot &lt;- ggboxplot(dp,
+    x = &quot;Affected&quot;, y = &quot;count&quot;, add = &quot;jitter&quot;,
+    color = &quot;Affected&quot;, palette = c(&quot;red&quot;, &quot;navy&quot;),
+    title = gene_name
+  ) +
+    geom_text_repel(aes(label = rownames(dp))) +
+    scale_color_manual(
+      name = &quot;Affected Status&quot;,
+      labels = c(&quot;Affected&quot;, &quot;Unaffected&quot;),
+      values = c(&quot;red&quot;, &quot;navy&quot;)
+    )
+  print(gene_plot) # Ensure each plot is printed during the loop
+  ggsave(
+    filename = paste0(gene_name, &quot;-plot-counts.png&quot;),
+    path = &quot;output/spta1-analysis/batch-correction-limma/plot-counts/mito-genes-of-interest&quot;,
+    plot = gene_plot, dpi = 450, create.dir = TRUE
+  )
+}</code></pre>
+<p><img src="figure/spta1-analysis.Rmd/generate-plot-counts-genes-interest-mito-1.png" width="672" style="display: block; margin: auto;" /><img src="figure/spta1-analysis.Rmd/generate-plot-counts-genes-interest-mito-2.png" width="672" style="display: block; margin: auto;" /><img src="figure/spta1-analysis.Rmd/generate-plot-counts-genes-interest-mito-3.png" width="672" style="display: block; margin: auto;" /><img src="figure/spta1-analysis.Rmd/generate-plot-counts-genes-interest-mito-4.png" width="672" style="display: block; margin: auto;" /><img src="figure/spta1-analysis.Rmd/generate-plot-counts-genes-interest-mito-5.png" width="672" style="display: block; margin: auto;" /><img src="figure/spta1-analysis.Rmd/generate-plot-counts-genes-interest-mito-6.png" width="672" style="display: block; margin: auto;" /><img src="figure/spta1-analysis.Rmd/generate-plot-counts-genes-interest-mito-7.png" width="672" style="display: block; margin: auto;" /><img src="figure/spta1-analysis.Rmd/generate-plot-counts-genes-interest-mito-8.png" width="672" style="display: block; margin: auto;" /><img src="figure/spta1-analysis.Rmd/generate-plot-counts-genes-interest-mito-9.png" width="672" style="display: block; margin: auto;" /><img src="figure/spta1-analysis.Rmd/generate-plot-counts-genes-interest-mito-10.png" width="672" style="display: block; margin: auto;" /><img src="figure/spta1-analysis.Rmd/generate-plot-counts-genes-interest-mito-11.png" width="672" style="display: block; margin: auto;" /><img src="figure/spta1-analysis.Rmd/generate-plot-counts-genes-interest-mito-12.png" width="672" style="display: block; margin: auto;" /><img src="figure/spta1-analysis.Rmd/generate-plot-counts-genes-interest-mito-13.png" width="672" style="display: block; margin: auto;" /><img src="figure/spta1-analysis.Rmd/generate-plot-counts-genes-interest-mito-14.png" width="672" style="display: block; margin: auto;" /><img src="figure/spta1-analysis.Rmd/generate-plot-counts-genes-interest-mito-15.png" width="672" style="display: block; margin: auto;" /><img src="figure/spta1-analysis.Rmd/generate-plot-counts-genes-interest-mito-16.png" width="672" style="display: block; margin: auto;" /><img src="figure/spta1-analysis.Rmd/generate-plot-counts-genes-interest-mito-17.png" width="672" style="display: block; margin: auto;" /><img src="figure/spta1-analysis.Rmd/generate-plot-counts-genes-interest-mito-18.png" width="672" style="display: block; margin: auto;" /><img src="figure/spta1-analysis.Rmd/generate-plot-counts-genes-interest-mito-19.png" width="672" style="display: block; margin: auto;" /><img src="figure/spta1-analysis.Rmd/generate-plot-counts-genes-interest-mito-20.png" width="672" style="display: block; margin: auto;" /><img src="figure/spta1-analysis.Rmd/generate-plot-counts-genes-interest-mito-21.png" width="672" style="display: block; margin: auto;" /><img src="figure/spta1-analysis.Rmd/generate-plot-counts-genes-interest-mito-22.png" width="672" style="display: block; margin: auto;" /><img src="figure/spta1-analysis.Rmd/generate-plot-counts-genes-interest-mito-23.png" width="672" style="display: block; margin: auto;" /><img src="figure/spta1-analysis.Rmd/generate-plot-counts-genes-interest-mito-24.png" width="672" style="display: block; margin: auto;" /></p>
+<pre class="r"><code># Create the faceted plot
+faceted_plot &lt;- ggplot(gi_all_counts, aes(x = Affected, y = count, color = Affected)) +
+  geom_boxplot(alpha = 0.35) +
+  geom_jitter(width = 0.2, size = .45) + # Adjust size of the dots
+  geom_text_repel(aes(label = SampleID),
+    size = 2,
+    max.overlaps = Inf, force = 10, color = &quot;black&quot;,
+    segment.color = &quot;gray&quot;,
+    min.segment.length = 0,
+    point.padding = 0.1
+  ) + # Add labels to the dots
+  facet_wrap(~Gene, scales = &quot;free_y&quot;) +
+  theme_bw() +
+  labs(title = &quot;Gene Expression Counts by Affected Status&quot;, x = &quot;Affected Status&quot;, y = &quot;Count&quot;) +
+  scale_color_manual(values = c(&quot;red&quot;, &quot;navy&quot;)) +
+  theme(
+    legend.position = &quot;bottom&quot;,
+    plot.margin = margin(10, 10, 10, 10),
+    strip.text = element_text(size = 6), # Adjust facet label text size
+    plot.title = element_text(size = 10),
+    axis.title = element_text(size = 10),
+    axis.text = element_text(size = 6),
+    panel.spacing = unit(.35, &quot;lines&quot;) # Add space between facets
+  ) +
+  coord_cartesian(clip = &quot;off&quot;) # Ensure labels are not clipped
+
+
+faceted_plot</code></pre>
+<p><img src="figure/spta1-analysis.Rmd/generate-plot-counts-genes-interest-mito-25.png" width="672" style="display: block; margin: auto;" /></p>
+<pre class="r"><code># Save the faceted plot
+ggsave(
+  filename = &quot;faceted_madd_genes_of_interest_plot_counts.png&quot;,
+  path = &quot;output/spta1-analysis/batch-correction-limma/plot-counts/mito-genes-of-interest&quot;,
+  plot = faceted_plot, dpi = 2200, create.dir = TRUE
+)
+
+# Convert the list to a dataframe
+gene_results_df &lt;- gene_results_list[[1]]
+
+file_name &lt;- &quot;output/spta1-analysis/mito_genes_of_interest_plot_counts_signals.csv&quot;
+write.csv(gene_results_df, file_name, row.names = FALSE)</code></pre>
+<p>Below is a heatmap highlighting the expression of our genes of
+interest across batch, disease group, and affected status.</p>
+<pre class="r"><code># Prepare data for the heatmap
+mat6 &lt;- assay(vsd_limma)[filtered_with_only_mito_genes$Ensembl_ID, ]
+rownames(mat6) &lt;- gene_info$gene_name[match(filtered_with_only_mito_genes$Ensembl_ID, gene_info$Ensembl_ID)]
+df &lt;- as.data.frame(colData(vsd_limma)[, c(&quot;Affected&quot;, &quot;OverallCategory&quot;)])
+
+# Set up color palette
+color_palette &lt;- colorRampPalette(rev(brewer.pal(n = 9, name = &quot;RdYlBu&quot;)))(50)
+
+# Specify the number of row clusters
+num_row_clusters &lt;- 3
+
+png(&quot;output/spta1-analysis/mito_genes_of_interest_heatmap.png&quot;, width = 14, height = 8, units = &quot;in&quot;, res = 1200)
+
+draw(ComplexHeatmap::pheatmap(
+  mat = mat6,
+  color = colorRampPalette(rev(brewer.pal(n = 9, name = &quot;RdYlBu&quot;)))(50),
+  annotation_col = df,
+  annotation_colors = ann_colors,
+  fontsize = 6,
+  angle_col = c(&quot;0&quot;),
+  cellheight = 10, # Set cell height
+  cellwidth = 24, # Set cell width
+  border_color = &quot;black&quot;, # Black borders around heatmap cells
+  # cutree_rows = num_row_clusters,  # Number of row clusters
+  heatmap_legend_param = list(
+    title = &quot;Matrix&quot;
+  )
+))
+
+dev.off()</code></pre>
+<pre><code>quartz_off_screen 
+                2 </code></pre>
+</div>
+<div id="significant-genes-plot-counts" class="section level2">
+<h2>Significant Genes Plot Counts</h2>
+<pre class="r"><code># Create an empty list to store the results for each gene
+results_list &lt;- list()
+
+# Create an empty dataframe to store all counts data for plotting
+all_counts &lt;- data.frame()
+
+res_aff_vs_unaff_df_genename_05 &lt;- subset(res_aff_vs_unaff_df_genename, padj &lt; 0.05)
+res_aff_vs_unaff_df_genename_05 &lt;- res_aff_vs_unaff_df_genename_05[order(res_aff_vs_unaff_df_genename_05$padj), ]
+
+res_aff_vs_unaff_df_genename_padj05_lfc1 &lt;- subset(res_aff_vs_unaff_df_genename_05, log2FoldChange &gt;= 1 | log2FoldChange &lt;= -1)
+res_aff_vs_unaff_df_genename_padj05_lfc1 &lt;- res_aff_vs_unaff_df_genename_padj05_lfc1[order(res_aff_vs_unaff_df_genename_padj05_lfc1$padj), ]
+
+# Loop through each gene to calculate and plot counts
+for (ensembl_id in res_aff_vs_unaff_df_genename_padj05_lfc1$Ensembl_ID) {
+  dp &lt;- plotCounts(dds, gene = ensembl_id, intgroup = &quot;Affected&quot;, returnData = TRUE)
+  d &lt;- plotCounts(dds, gene = ensembl_id, intgroup = &quot;Affected&quot;, returnData = TRUE)
+  gene_name &lt;- res_aff_vs_unaff_df_genename_padj05_lfc1$gene_name[res_aff_vs_unaff_df_genename_padj05_lfc1$Ensembl_ID == ensembl_id]
+
+  # Calculate the mean and standard deviation of counts within each condition
+  d_stats &lt;- d %&gt;%
+    group_by(Affected) %&gt;%
+    summarise(
+      mean_count = mean(count),
+      sd_count = sd(count)
+    )
+
+  # Merge statistics back with the data
+  d &lt;- merge(d, d_stats, by = &quot;Affected&quot;)
+
+  # Create a temporary dataframe to store results for this gene
+  temp_df &lt;- data.frame(
+    Patient = rownames(d),
+    stringsAsFactors = FALSE
+  )
+
+  # Calculate Z-scores and determine regulation status
+  regulation_status &lt;- sapply(1:nrow(d), function(i) {
+    if (is.na(d$sd_count[i]) || d$sd_count[i] == 0) {
+      return(&quot;Neutral&quot;)
+    }
+
+    z_score &lt;- (d$count[i] - d$mean_count[i]) / d$sd_count[i]
+
+    # Determine regulation status based on Z-score
+    if (is.na(z_score)) {
+      return(&quot;Neutral&quot;)
+    } else if (z_score &gt; 1) {
+      return(&quot;Upregulated&quot;)
+    } else if (z_score &lt; -1) {
+      return(&quot;Downregulated&quot;)
+    } else {
+      return(&quot;Neutral&quot;)
+    }
+  })
+
+  # Add the regulation status to the temporary dataframe
+  temp_df[[gene_name]] &lt;- regulation_status
+
+  # Merge the temporary dataframe with the results list
+  if (length(results_list) == 0) {
+    results_list[[1]] &lt;- temp_df
+  } else {
+    results_list[[1]] &lt;- merge(results_list[[1]], temp_df, by = &quot;Patient&quot;, all = TRUE)
+  }
+
+  # Add the gene name to the dp dataframe
+  dp$Gene &lt;- gene_name
+  dp$Ensembl_ID &lt;- ensembl_id
+  dp$SampleID &lt;- rownames(dp)
+
+  # Combine dp with all_counts dataframe
+  all_counts &lt;- rbind(all_counts, dp)
+
+  # Generate the boxplot
+  ggplot_box &lt;- ggboxplot(dp,
+    x = &quot;Affected&quot;, y = &quot;count&quot;, add = &quot;jitter&quot;,
+    color = &quot;Affected&quot;, palette = c(&quot;red&quot;, &quot;navy&quot;),
+    title = gene_name
+  ) +
+    geom_text_repel(aes(label = rownames(dp))) +
+    scale_color_manual(
+      name = &quot;Affected Status&quot;,
+      labels = c(&quot;Affected&quot;, &quot;Unaffected&quot;),
+      values = c(&quot;red&quot;, &quot;navy&quot;)
+    )
+  print(ggplot_box) # Ensure each plot is printed during the loop
+  ggsave(
+    filename = paste0(gene_name, &quot;-plot-counts.png&quot;),
+    path = &quot;output/spta1-analysis/batch-correction-limma/plot-counts/padj-05&quot;,
+    plot = ggplot_box, dpi = 450, create.dir = TRUE
+  )
+}</code></pre>
+<p><img src="figure/spta1-analysis.Rmd/generate-plot-counts-genes-significant-1.png" width="672" style="display: block; margin: auto;" /><img src="figure/spta1-analysis.Rmd/generate-plot-counts-genes-significant-2.png" width="672" style="display: block; margin: auto;" /><img src="figure/spta1-analysis.Rmd/generate-plot-counts-genes-significant-3.png" width="672" style="display: block; margin: auto;" /><img src="figure/spta1-analysis.Rmd/generate-plot-counts-genes-significant-4.png" width="672" style="display: block; margin: auto;" /><img src="figure/spta1-analysis.Rmd/generate-plot-counts-genes-significant-5.png" width="672" style="display: block; margin: auto;" /><img src="figure/spta1-analysis.Rmd/generate-plot-counts-genes-significant-6.png" width="672" style="display: block; margin: auto;" /><img src="figure/spta1-analysis.Rmd/generate-plot-counts-genes-significant-7.png" width="672" style="display: block; margin: auto;" /><img src="figure/spta1-analysis.Rmd/generate-plot-counts-genes-significant-8.png" width="672" style="display: block; margin: auto;" /><img src="figure/spta1-analysis.Rmd/generate-plot-counts-genes-significant-9.png" width="672" style="display: block; margin: auto;" /><img src="figure/spta1-analysis.Rmd/generate-plot-counts-genes-significant-10.png" width="672" style="display: block; margin: auto;" /><img src="figure/spta1-analysis.Rmd/generate-plot-counts-genes-significant-11.png" width="672" style="display: block; margin: auto;" /><img src="figure/spta1-analysis.Rmd/generate-plot-counts-genes-significant-12.png" width="672" style="display: block; margin: auto;" /><img src="figure/spta1-analysis.Rmd/generate-plot-counts-genes-significant-13.png" width="672" style="display: block; margin: auto;" /></p>
+<pre class="r"><code># Create the faceted plot
+faceted_plot &lt;- ggplot(all_counts, aes(x = Affected, y = count, color = Affected)) +
+  geom_boxplot(alpha = 0.4) +
+  geom_jitter(width = 0.2, size = 1.25) + # Adjust size of the dots
+  geom_text_repel(aes(label = SampleID),
+    size = 2,
+    max.overlaps = Inf, force = 10, color = &quot;black&quot;,
+    segment.color = &quot;gray&quot;,
+    min.segment.length = 0,
+    point.padding = 0.1
+  ) + # Add labels to the dots
+  facet_wrap(~Gene, scales = &quot;free_y&quot;) +
+  theme_bw() +
+  labs(title = &quot;Gene Expression Counts by Affected Status&quot;, x = &quot;Affected Status&quot;, y = &quot;Count&quot;) +
+  scale_color_manual(values = c(&quot;red&quot;, &quot;navy&quot;)) +
+  theme(
+    legend.position = &quot;bottom&quot;,
+    plot.margin = margin(10, 10, 10, 10),
+    strip.text = element_text(size = 8), # Adjust facet label text size
+    plot.title = element_text(size = 14),
+    axis.title = element_text(size = 12),
+    axis.text = element_text(size = 10),
+    panel.spacing = unit(1, &quot;lines&quot;) # Add space between facets
+  ) +
+  coord_cartesian(clip = &quot;off&quot;) # Ensure labels are not clipped
+
+
+faceted_plot</code></pre>
+<p><img src="figure/spta1-analysis.Rmd/generate-plot-counts-genes-significant-14.png" width="672" style="display: block; margin: auto;" /></p>
+<pre class="r"><code># Save the faceted plot
+ggsave(
+  filename = &quot;faceted_significant_degs_plot_counts.png&quot;,
+  path = &quot;output/spta1-analysis/batch-correction-limma/plot-counts/padj-05&quot;,
+  plot = faceted_plot, dpi = 1200, create.dir = TRUE
+)
+
+# Convert the list to a dataframe
+results_df &lt;- results_list[[1]]
+
+file_name &lt;- &quot;output/spta1-analysis/significant_plot_counts_signals.csv&quot;
+write.csv(results_df, file_name, row.names = FALSE)</code></pre>
+<div id="save-data" class="section level3">
+<h3>Save data</h3>
+<pre class="r"><code>save.image(file = &quot;output/spta1-analysis/spta1-condition-analysis.RData&quot;)</code></pre>
+<br>
+<p>
+<button type="button" class="btn btn-default btn-workflowr btn-workflowr-sessioninfo" data-toggle="collapse" data-target="#workflowr-sessioninfo" style="display: block;">
+<span class="glyphicon glyphicon-wrench" aria-hidden="true"></span>
+Session information
+</button>
+</p>
+<div id="workflowr-sessioninfo" class="collapse">
+<pre class="r"><code>sessionInfo()</code></pre>
+<pre><code>R version 4.4.0 (2024-04-24)
+Platform: x86_64-apple-darwin20
+Running under: macOS Sonoma 14.6.1
+
+Matrix products: default
+BLAS:   /Library/Frameworks/R.framework/Versions/4.4-x86_64/Resources/lib/libRblas.0.dylib 
+LAPACK: /Library/Frameworks/R.framework/Versions/4.4-x86_64/Resources/lib/libRlapack.dylib;  LAPACK version 3.12.0
+
+locale:
+[1] en_US.UTF-8/en_US.UTF-8/en_US.UTF-8/C/en_US.UTF-8/en_US.UTF-8
+
+time zone: America/Chicago
+tzcode source: internal
+
+attached base packages:
+[1] grid      stats4    stats     graphics  grDevices datasets  utils    
+[8] methods   base     
+
+other attached packages:
+ [1] ComplexHeatmap_2.20.0       EnhancedVolcano_1.22.0     
+ [3] STRINGdb_2.16.4             enrichR_3.2                
+ [5] DOSE_3.30.1                 mygene_1.40.0              
+ [7] txdbmaker_1.0.1             GenomicFeatures_1.56.0     
+ [9] ReactomePA_1.48.0           ggrepel_0.9.5              
+[11] org.Hs.eg.db_3.19.1         AnnotationDbi_1.66.0       
+[13] clusterProfiler_4.12.0      rmarkdown_2.27             
+[15] ggpubr_0.6.0                plotly_4.10.4              
+[17] biomaRt_2.60.1              gprofiler2_0.2.3           
+[19] limma_3.60.3                genefilter_1.86.0          
+[21] pheatmap_1.0.12             RColorBrewer_1.1-3         
+[23] DESeq2_1.44.0               SummarizedExperiment_1.34.0
+[25] Biobase_2.64.0              MatrixGenerics_1.16.0      
+[27] matrixStats_1.3.0           GenomicRanges_1.56.1       
+[29] GenomeInfoDb_1.40.1         IRanges_2.38.1             
+[31] S4Vectors_0.42.1            BiocGenerics_0.50.0        
+[33] lubridate_1.9.3             forcats_1.0.0              
+[35] stringr_1.5.1               dplyr_1.1.4                
+[37] purrr_1.0.2                 readr_2.1.5                
+[39] tidyr_1.3.1                 tibble_3.2.1               
+[41] ggplot2_3.5.1               tidyverse_2.0.0            
+[43] workflowr_1.7.1            
+
+loaded via a namespace (and not attached):
+  [1] fs_1.6.4                 bitops_1.0-7             enrichplot_1.24.0       
+  [4] doParallel_1.0.17        HDO.db_0.99.1            httr_1.4.7              
+  [7] tools_4.4.0              backports_1.5.0          utf8_1.2.4              
+ [10] R6_2.5.1                 lazyeval_0.2.2           GetoptLong_1.0.5        
+ [13] withr_3.0.0              graphite_1.50.0          prettyunits_1.2.0       
+ [16] gridExtra_2.3            textshaping_0.4.0        cli_3.6.3               
+ [19] scatterpie_0.2.3         labeling_0.4.3           sass_0.4.9              
+ [22] systemfonts_1.1.0        Rsamtools_2.20.0         yulab.utils_0.1.4       
+ [25] gson_0.1.0               foreign_0.8-86           WriteXLS_6.6.0          
+ [28] plotrix_3.8-4            rstudioapi_0.16.0        RSQLite_2.3.7           
+ [31] shape_1.4.6.1            generics_0.1.3           gridGraphics_0.5-1      
+ [34] BiocIO_1.14.0            vroom_1.6.5              gtools_3.9.5            
+ [37] car_3.1-2                GO.db_3.19.1             Matrix_1.7-0            
+ [40] fansi_1.0.6              abind_1.4-5              lifecycle_1.0.4         
+ [43] whisker_0.4.1            yaml_2.3.9               carData_3.0-5           
+ [46] gplots_3.1.3.1           qvalue_2.36.0            SparseArray_1.4.8       
+ [49] BiocFileCache_2.12.0     blob_1.2.4               promises_1.3.0          
+ [52] crayon_1.5.3             lattice_0.22-6           cowplot_1.1.3           
+ [55] annotate_1.82.0          KEGGREST_1.44.1          pillar_1.9.0            
+ [58] knitr_1.48               fgsea_1.30.0             rjson_0.2.21            
+ [61] codetools_0.2-20         fastmatch_1.1-4          glue_1.7.0              
+ [64] getPass_0.2-4            ggfun_0.1.5              data.table_1.15.4       
+ [67] vctrs_0.6.5              png_0.1-8                treeio_1.28.0           
+ [70] gtable_0.3.5             gsubfn_0.7               cachem_1.1.0            
+ [73] xfun_0.45                S4Arrays_1.4.1           tidygraph_1.3.1         
+ [76] survival_3.5-8           iterators_1.0.14         statmod_1.5.0           
+ [79] nlme_3.1-164             ggtree_3.12.0            bit64_4.0.5             
+ [82] progress_1.2.3           filelock_1.0.3           rprojroot_2.0.4         
+ [85] bslib_0.7.0              KernSmooth_2.23-22       rpart_4.1.23            
+ [88] colorspace_2.1-0         DBI_1.2.3                Hmisc_5.1-3             
+ [91] nnet_7.3-19              tidyselect_1.2.1         processx_3.8.4          
+ [94] chron_2.3-61             bit_4.0.5                compiler_4.4.0          
+ [97] curl_5.2.1               git2r_0.33.0             httr2_1.0.1             
+[100] graph_1.82.0             htmlTable_2.4.2          xml2_1.3.6              
+[103] DelayedArray_0.30.1      shadowtext_0.1.3         rtracklayer_1.64.0      
+[106] caTools_1.18.2           checkmate_2.3.1          scales_1.3.0            
+[109] callr_3.7.6              rappdirs_0.3.3           digest_0.6.36           
+[112] XVector_0.44.0           htmltools_0.5.8.1        pkgconfig_2.0.3         
+[115] base64enc_0.1-3          highr_0.11               dbplyr_2.5.0            
+[118] fastmap_1.2.0            ggthemes_5.1.0           GlobalOptions_0.1.2     
+[121] rlang_1.1.4              htmlwidgets_1.6.4        UCSC.utils_1.0.0        
+[124] farver_2.1.2             jquerylib_0.1.4          jsonlite_1.8.8          
+[127] BiocParallel_1.38.0      GOSemSim_2.30.0          RCurl_1.98-1.16         
+[130] magrittr_2.0.3           Formula_1.2-5            GenomeInfoDbData_1.2.12 
+[133] ggplotify_0.1.2          patchwork_1.2.0          munsell_0.5.1           
+[136] Rcpp_1.0.12              proto_1.0.0              ape_5.8                 
+[139] viridis_0.6.5            sqldf_0.4-11             stringi_1.8.4           
+[142] ggraph_2.2.1             zlibbioc_1.50.0          MASS_7.3-60.2           
+[145] plyr_1.8.9               parallel_4.4.0           Biostrings_2.72.1       
+[148] graphlayouts_1.1.1       splines_4.4.0            hash_2.2.6.3            
+[151] circlize_0.4.16          hms_1.1.3                locfit_1.5-9.10         
+[154] ps_1.7.7                 igraph_2.0.3             ggsignif_0.6.4          
+[157] reshape2_1.4.4           XML_3.99-0.17            evaluate_0.24.0         
+[160] renv_1.0.7               BiocManager_1.30.23      foreach_1.5.2           
+[163] tzdb_0.4.0               tweenr_2.0.3             httpuv_1.6.15           
+[166] polyclip_1.10-6          clue_0.3-65              ggforce_0.4.2           
+[169] broom_1.0.6              xtable_1.8-4             restfulr_0.0.15         
+[172] reactome.db_1.88.0       tidytree_0.4.6           rstatix_0.7.2           
+[175] later_1.3.2              ragg_1.3.2               viridisLite_0.4.2       
+[178] aplot_0.2.3              memoise_2.0.1            GenomicAlignments_1.40.0
+[181] cluster_2.1.6            timechange_0.3.0        </code></pre>
+</div>
+</div>
+</div>
+</div>
+
+
+<!-- Adjust MathJax settings so that all math formulae are shown using
+TeX fonts only; see
+https://docs.mathjax.org/en/latest/web/configuration.html. This will make
+the presentation more consistent at the cost of the webpage sometimes
+taking slightly longer to load. Note that this only works because the
+footer is added to webpages before the MathJax javascript. -->
+<script type="text/x-mathjax-config">
+  MathJax.Hub.Config({
+    "HTML-CSS": { availableFonts: ["TeX"] }
+  });
+</script>
+
+
+
+
+</div>
+</div>
+
+</div>
+
+<script>
+
+// add bootstrap table styles to pandoc tables
+function bootstrapStylePandocTables() {
+  $('tr.odd').parent('tbody').parent('table').addClass('table table-condensed');
+}
+$(document).ready(function () {
+  bootstrapStylePandocTables();
+});
+
+
+</script>
+
+<!-- tabsets -->
+
+<script>
+$(document).ready(function () {
+  window.buildTabsets("TOC");
+});
+
+$(document).ready(function () {
+  $('.tabset-dropdown > .nav-tabs > li').click(function () {
+    $(this).parent().toggleClass('nav-tabs-open');
+  });
+});
+</script>
+
+<!-- code folding -->
+<script>
+$(document).ready(function () {
+  window.initializeCodeFolding("hide" === "show");
+});
+</script>
+
+<script>
+$(document).ready(function ()  {
+
+    // temporarily add toc-ignore selector to headers for the consistency with Pandoc
+    $('.unlisted.unnumbered').addClass('toc-ignore')
+
+    // move toc-ignore selectors from section div to header
+    $('div.section.toc-ignore')
+        .removeClass('toc-ignore')
+        .children('h1,h2,h3,h4,h5').addClass('toc-ignore');
+
+    // establish options
+    var options = {
+      selectors: "h1,h2,h3",
+      theme: "bootstrap3",
+      context: '.toc-content',
+      hashGenerator: function (text) {
+        return text.replace(/[.\\/?&!#<>]/g, '').replace(/\s/g, '_');
+      },
+      ignoreSelector: ".toc-ignore",
+      scrollTo: 0
+    };
+    options.showAndHide = true;
+    options.smoothScroll = true;
+
+    // tocify
+    var toc = $("#TOC").tocify(options).data("toc-tocify");
+});
+</script>
+
+<!-- dynamically load mathjax for compatibility with self-contained -->
+<script>
+  (function () {
+    var script = document.createElement("script");
+    script.type = "text/javascript";
+    script.src  = "https://mathjax.rstudio.com/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML";
+    document.getElementsByTagName("head")[0].appendChild(script);
+  })();
+</script>
+
+</body>
+</html>
