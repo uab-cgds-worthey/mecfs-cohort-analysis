@@ -57,7 +57,7 @@ wflow_view()
 
 ## Results
 
-Results (including figures generated for the publication) can be found in the `docs` folder.
+Results (including figures generated for the publication) can be found in the `docs` folder or viewable at [this website](https://uab-cgds-worthey.github.io/mecfs-dge-analysis/).
 
 ## Author
 
