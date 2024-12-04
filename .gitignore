@@ -1,18 +1,25 @@
-.Rproj.user
+# R-specific files
+.Rproj.user/
 .Rhistory
 .RData
 .Ruserdata
 .Rapp.history
-.DS_Store
-analysis/figure
-analysis/*png
-analysis/*html
-analysis/*_cache
-analysis/site_libs
-output/*.RData
-omnipathr-log/
-output/*/batch-correction-limma/*
 
-# Ignore .RData files for additonal analyses.
-all-condition-analysis.RData
-spta1-analysis.RData
+# macOS-specific files
+.DS_Store
+
+# Analysis artifacts
+analysis/figure/
+analysis/*.png
+analysis/*.html
+analysis/*_cache/
+analysis/site_libs/
+
+# Output files
+output/*.RData
+output/*/batch-correction-limma/**
+output/**/all-condition-analysis.RData
+output/**/spta1-analysis.RData
+
+# Logs
+omnipathr-log/
