@@ -155,7 +155,7 @@ create_gene_plot <- function(dp, gene_name, output_path) {
   ggsave(
     filename = paste0(gene_name, "-subsetted-plot-counts.png"),
     path = output_path,
-    plot = plot, dpi = 450
+    plot = plot, dpi = 450, create.dir = TRUE
   )
   return(plot)
 }
@@ -188,7 +188,7 @@ create_faceted_plot <- function(data, output_path) {
   ggsave(
     filename = "faceted_genes_of_interest_plot_counts.png",
     path = output_path,
-    plot = plot, dpi = 2200
+    plot = plot, dpi = 2200, create.dir = TRUE
   )
   return(plot)
 }
@@ -451,7 +451,7 @@ generate_volcano_plot <- function(res_data, gene_labels, x_col, y_col, select_ge
     ggplot2::scale_y_continuous(breaks = seq(ylim_range[1], ylim_range[2], 1))
 
   # Save the plot
-  ggsave(plot = volcano_plot, filename = output_file, device = "png", width = 14, dpi = 1200, units = "in")
+  ggsave(plot = volcano_plot, filename = output_file, device = "png", width = 14, dpi = 1200, units = "in", create.dir = TRUE)
 }
 
 # Function to map data to STRING, add color coding, and plot the network
@@ -506,7 +506,7 @@ generate_ma_plot <- function(data, genenames, main_title = "MA Plot",
 
   # Save plot if output_file is specified
   if (!is.null(output_file)) {
-    ggsave(plot = plot, filename = output_file, device = "png", dpi = 300, width = 10, height = 8, units = "in")
+    ggsave(plot = plot, filename = output_file, device = "png", dpi = 300, width = 10, height = 8, units = "in", create.dir = TRUE)
   }
 
   return(plot)
