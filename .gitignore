@@ -17,9 +17,7 @@ analysis/site_libs/
 
 # Output files
 output/*.RData
-output/*/batch-correction-limma/**
+output/**/batch-correction-limma/**
 output/**/all-condition-analysis.RData
 output/**/spta1-analysis.RData
 
-# Logs
-omnipathr-log/
