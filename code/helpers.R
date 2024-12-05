@@ -45,15 +45,18 @@ retrieve_gene_info <- function(values, filters) {
   }
 
   # Try block to retrieve gene information
-  tryCatch({
-    # Create biomart object with default host
-    biomart <- create_biomart("www.ensembl.org")
-  }, error = function(e) {
-    message("Error encountered. Switching to alternative Ensembl host...")
-    # Retry with alternative host
-    biomart <- create_biomart("https://useast.ensembl.org")
-    return(biomart)
-  }) -> biomart
+  tryCatch(
+    {
+      # Create biomart object with default host
+      biomart <- create_biomart("www.ensembl.org")
+    },
+    error = function(e) {
+      message("Error encountered. Switching to alternative Ensembl host...")
+      # Retry with alternative host
+      biomart <- create_biomart("https://useast.ensembl.org")
+      return(biomart)
+    }
+  ) -> biomart
 
   # Define attributes to retrieve
   attributes <- c(
