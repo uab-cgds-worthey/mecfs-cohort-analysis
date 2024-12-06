@@ -56,7 +56,10 @@ We will be importing counts data from the star-salmon pipeline and our metadata
 for the project which is hosted on Box. This also ensures data is properly ordered by sample id.
 
 ```{r, import data}
-counts <- read_tsv("data/star-salmon/salmon.merged.gene_counts_length_scaled.tsv")
+# Import counts and metadata
+sample_metadata <- read_csv("data/Metadata_2024_11_20.csv")
+row.names(sample_metadata) <- sample_metadata$ID
+counts <- read_tsv("data/star-salmon/salmon_merged_gene_counts_length_scaled.tsv")
 
 # Import variants of interest
 genes_of_interest <- read_csv("data/Prioritized_Genes_From_WGS_2024_11_19.csv")
@@ -66,19 +69,11 @@ genes_of_interest <- genes_of_interest[!is.na(genes_of_interest)]
 genes_of_interest <- unique(c(genes_of_interest, "CHI3L1"))
 
 # Use first column (gene_id) for row names
-counts <- data.frame(counts, row.names = 1)
+counts <- data.frame(counts, row.names = 1, check.names = FALSE)
 counts$Ensembl_ID <- row.names(counts)
 drop <- c("Ensembl_ID", "gene_name")
 gene_info <- counts[, drop]
 counts <- counts[, !(names(counts) %in% drop)] # remove both columns
-
-# Import metadata
-sample_metadata <- read_csv("data/Metadata_2024_11_20.csv")
-row.names(sample_metadata) <- sample_metadata$ID
-
-# Assuming counts is your counts dataframe and sample_metadata is your metadata dataframe
-# Rename columns in counts to match metadata IDs
-counts <- rename_counts_columns(counts, sample_metadata, "ID", "RNA_Samples_id")
 
 # What gene (based on variants samples have) is this analysis based on
 genetic_variant <- "SPTA1"

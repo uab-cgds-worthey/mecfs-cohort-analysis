@@ -21,6 +21,8 @@ library(EnhancedVolcano)
 library(ComplexHeatmap)
 
 check_order <- function(sample_metadata, counts) {
+  # Order counts data
+
   # Check if data is ordered properly
   if (!all(rownames(sample_metadata) %in% colnames(counts)) ||
     !all(rownames(sample_metadata) == colnames(counts))) {
@@ -93,18 +95,27 @@ rename_counts_columns <- function(counts_df, metadata_df, id_column, rna_samples
   # Create a named vector for mapping
   name_mapping <- setNames(metadata_df[[id_column]], metadata_df[[rna_samples_id_column]])
 
-  # Check if all column names in counts are present in the name mapping
-  if (!all(colnames(counts_df) %in% names(name_mapping))) {
-    stop("Not all columns in counts can be mapped to new names.")
+  # Find intersecting columns between counts_df and the RNA samples in metadata
+  intersecting_columns <- intersect(colnames(counts_df), names(name_mapping))
+
+  # Warn if there are columns in counts_df that are not in the metadata
+  if (length(intersecting_columns) < length(colnames(counts_df)) - 2) {
+    warning("Some columns in counts_df could not be mapped to new names. They will be excluded.")
   }
 
-  # Use the mapping to rename columns
-  counts_df <- counts_df[, names(name_mapping)] # Subset the counts_df to columns that are in name_mapping
-  colnames(counts_df) <- name_mapping[colnames(counts_df)]
+  # Subset counts_df to include only matching columns
+  counts_df <- counts_df[, c("gene_id", "gene_name", intersecting_columns), drop = FALSE]
+
+  # Rename the intersecting columns using the mapping
+  colnames(counts_df)[colnames(counts_df) %in% intersecting_columns] <-
+    name_mapping[colnames(counts_df)[colnames(counts_df) %in% intersecting_columns]]
+
+  # Ensure column names are treated as plain strings
+  colnames(counts_df) <- gsub("^|$", "", colnames(counts_df)) # Remove backticks
+  colnames(counts_df) <- gsub("^X", "", colnames(counts_df))    # Remove 'X' prefix added by R
 
   return(counts_df)
 }
-
 
 # Function to filter genes by exclusion or inclusion
 filter_genes <- function(filtered_data, genes_to_filter, include = FALSE) {
