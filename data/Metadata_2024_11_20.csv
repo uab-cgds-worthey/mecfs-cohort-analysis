@@ -1,0 +1,30 @@
+ID,ID2,Family,Gender,Relation,Category,CombinedCategory,Affected,Study_group,Seq,Batch,Replicate,RIN,RIN Analysis Error,Disease Group,Tier,Sex,Ancestry,SubCategory,Overall category assigned,Variant
+4,4,d,F,Proband,C-E,Transporter-Metabolism,Affected,MECFS,50M,B3,,7.6,,Thyrotoxic Periodic Paralysis,1,F,White,Channelopathy,SOL,N/A
+5,5,e,F,Proband,C-E,Transporter-Metabolism,Affected,MECFS,50M,B3,,8.1,,Glycogen Storage Disease,1,F,Black,Metabolic disorder,ENE,N/A
+6,6,f,F,Proband,E,Metabolism,Affected,MECFS,50M,B3,,8.5,,Neurological/Neuromuscular Disorders,2,F,Black,Metabolic disorder,ENE,N/A
+7,7,g,F,Proband/Mother,E,Metabolism,Affected,MECFS,50M,B2,,7.935681683,,Mitochondrial Disorder,1,F,White,Mitochondrial disorder,ENE,N/A
+8,8,g,M,Proband,C-E,Metabolism,Affected,MECFS,50M,B2,,,,Mitochondrial Disorder,1,M,White,Myasthenic disorder,ENE,N/A
+9,9,h,F,Proband,E-I,Metabolism-Immune,Affected,MECFS,50M,B1,,9.432363826,,Immunodeficiency/Autoinflammatory Diseases ,3,F,White,Mitochondrial disorder,ENE,N/A
+10,10,i,F,Proband,I,Metabolism-Immune,Affected,MECFS,50M,B1,,9.634566225,,Immunodeficiency/Autoinflammatory Diseases ,1,F,White,Inflammatory disorder,IMM,N/A
+11,11,j,F,Proband,C-I,Immune-Transporter,Affected,MECFS,50M,B1,,9.622614458,,Immunodeficiency/Autoinflammatory Diseases ,1,F,White,Autoimmune disorder,IMM,CHRFAM7A
+12,12,j,F,Proband/Mother,C-I,Immune-Transporter,Affected,MECFS,50M,B2,,,,Immunodeficiency/Autoinflammatory Diseases ,1,F,White,Autoimmune disorder,IMM,CHRFAM7A
+13,13,k,F,Proband,C-I,Immune-Transporter,Affected,MECFS,50M,B2,,8.871244513,,Immunodeficiency/Autoinflammatory Diseases ,1,F,White,Immunodeficiency,SOL,N/A
+14,14,l,F,Proband,C-I,Transporter,Affected,MECFS,50M,B2,,8.5,Concentration > 500.00 ng/ul. Quality score is suspect.,Immunodeficiency/Autoinflammatory Diseases ,2,F,White,Channelopathy,IMM,CHRFAM7A
+18,18,q,F,Proband,C,Metabolism,Affected,MECFS,50M,B3,,8.9,,Neurological/Neuromuscular Disorders,2,F,White,Metabolic disorder,ENE,N/A
+19,19,r,F,Proband,C-E,Transporter-Metabolism,Affected,MECFS,50M,B2,,,,Gitelman Syndrome,1,F,White,Channelopathy,STR,N/A
+20,20,r,F,Proband,C,Transporter,Affected,MECFS,50M,B2,,,,Gitelman Syndrome,1,F,White,Channelopathy,SOL,N/A
+21,21,s,F,Proband/Mother,S,Cytoskeletal,Affected,MECFS,50M,B3,,8,,Stromme syndrome,2,F,White,Neurologic disorder,STR,SPTA1
+22,22,s,F,Proband,S,Cytoskeletal,Affected,MECFS,50M,B3,,8,,Stromme syndrome,2,F,White,Neurologic disorder,STR,SPTA1
+23,23,s,F,Proband,S,Cytoskeletal,Affected,MECFS,50M,B3,,8.4,,Stromme syndrome,2,F,White,Neurologic disorder,STR,SPTA1
+24,24,t,F,Proband,C,Metabolism,Affected,MECFS,50M,B2,,,,Cryohydrocytosis,2,F,Black,Metabolic disorder,SOL,N/A
+25,25,u,F,Proband,C-E,Cytoskeletal,Affected,MECFS,50M,B1,,10,,Unknown,2,F,White,Neuropathy,STR,N/A
+26,26,v,F,Proband,E,Metabolism,Affected,MECFS,50M,B1,,8.707908924,,Unknown,2,F,White,Mitochondrial disorder,STR,SPTA1
+27,27,w,F,Proband,C-E-I,Transporter-Immune-Metabolism,Affected,MECFS,50M,B1,,10,,Unknown,3,F,White,Channelopathy,SOL,N/A
+28,28,w,F,Proband,C-E,Transporter-Metabolism,Affected,MECFS,50M,B2,,,,Unknown,2,F,White,Channelopathy,SOL,N/A
+10H,10HFDR,i,F,Mother,Unaffected,Unaffected,Unaffected,MECFS,50M,B1,,9.771113135,,Unknown,Unaffected,F,White,Unaffected,N/A,Unaffected
+11H,11HFDR,j,M,Father,Unaffected,Unaffected,Unaffected,MECFS,50M,B1,,10,,Unknown,Unaffected,M,White,Unaffected,N/A,Unaffected
+13H,13HFDR,k,M,Father,Unaffected,Unaffected,Unaffected,MECFS,50M,B2,,,,Unknown,Unaffected,M,White,Unaffected,N/A,Unaffected
+25H,25HFDR,u,F,Mother,Unaffected,Unaffected,Unaffected,MECFS,50M,B1,,9.408044477,,Unknown,Unaffected,F,White,Unaffected,N/A,Unaffected
+26H,26HFDR,v,F,Mother,Unaffected,Unaffected,Unaffected,MECFS,50M,B1,,9.841389374,,Unknown,Unaffected,F,White,Unaffected,N/A,Unaffected
+28_27H,28_27HFDR,w,F,Mother,Unaffected,Unaffected,Unaffected,MECFS,50M,B1,,10,,Unknown,Unaffected,F,White,Unaffected,N/A,Unaffected
+9H,9HFDR,h,F,Mother,Unaffected,Unaffected,Unaffected,MECFS,50M,B1,,10,,Unknown,Unaffected,F,White,Unaffected,N/A,Unaffected
