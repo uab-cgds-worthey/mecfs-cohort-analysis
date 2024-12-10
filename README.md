@@ -61,7 +61,7 @@ Input file: [salmon_merged_gene_counts_length_scaled](data/star-salmon/salmon_me
 
 ### Rerunning the workflow
 
-To rerun the entire workflow, open the project in RStudio and run the following commands in your R console:
+To rerun the entire workflow (and visualize the entire analysis including PCA plots, MA plots, and heatmaps) , open the project in RStudio and run the following commands in your R console:
 
 ```r
 # Load the workflowr library
