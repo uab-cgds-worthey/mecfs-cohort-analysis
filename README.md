@@ -36,14 +36,15 @@ Open this project in RStudio. Upon opening, `renv` should automatically install.
 install.packages('renv')
 ```
 
-:warning: If you get the message `One or more packages recorded in the lockfile are not installed` in your R console, then proceed with the instructions below:
+:warning: If you get the message `One or more packages recorded in the lockfile are not installed` in your R console,
+then proceed with the instructions below:
 
 ```r
 # Restore the R environment
 renv::restore()
 ```
 
-The `renv::restore()` command will install any packages that were not initially 
+The `renv::restore()` command will install any packages that were not initially
 installed.
 
 ## Analysis
@@ -61,7 +62,8 @@ Input file: [salmon_merged_gene_counts_length_scaled](data/star-salmon/salmon_me
 
 ### Rerunning the workflow
 
-To rerun the entire workflow (and visualize the entire analysis including PCA plots, MA plots, and heatmaps) , open the project in RStudio and run the following commands in your R console:
+To rerun the entire workflow (and visualize the entire analysis including PCA plots, MA plots, and heatmaps) , open the
+project in RStudio and run the following commands in your R console:
 
 ```r
 # Load the workflowr library
