@@ -13,8 +13,8 @@ system leading to an overactive immune response.
 
 ### Requirements
 
-- R (version 4.4.0)
-- RStudio
+- R (v4.4.0)
+- RStudio (v2024.04.2)
 - Git v2.0+
 
 ### Setup
@@ -30,18 +30,21 @@ cd mecfs-dge-analysis/
 
 Open this project in RStudio. Upon opening, `renv` should automatically install.
 
-If `renv` does not install automatically, run the following command in your R console:
+:warning: If `renv` does not install automatically, run the following command in your R console:
 
 ```r
 install.packages('renv')
 ```
 
-Then proceed with the instructions below:
+:warning: If you get the message `One or more packages recorded in the lockfile are not installed` in your R console, then proceed with the instructions below:
 
 ```r
 # Restore the R environment
 renv::restore()
 ```
+
+The `renv::restore()` command will install any packages that were not initially 
+installed.
 
 ## Analysis
 
