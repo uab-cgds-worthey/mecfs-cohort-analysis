@@ -12,9 +12,6 @@ Myalgic Encephalomyelitis/Chronic Fatigue Syndrome (ME/CFS) is a severely disabl
 
 # Methods 
 
-
-## Performing WGS Analysis
-
 ## Performing Bulk RNASeq Analysis
 
 We have collected RNA samples on 29 ME/CFS patients for expression analysis and performed bulk RNA sequencing via Vantage. 
