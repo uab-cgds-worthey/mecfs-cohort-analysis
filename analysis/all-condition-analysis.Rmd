@@ -323,41 +323,6 @@ res_aff_vs_unaff_df_padj05_lfc1 <- subset(res_aff_vs_unaff_df_05, log2FoldChange
 summary(res_aff_vs_unaff)
 ```
 
-```{r, compare-7-and-8}
-# topgenes_byensemblid <- head(rownames(res_aff_vs_unaff_df), 1000)
-# topgenes_aff_vs_unaff_1000 <- assay(vsd_limma)[topgenes_byensemblid, ]
-# topgenes_aff_vs_unaff_1000 <- topgenes_aff_vs_unaff_1000 - rowMeans(topgenes_aff_vs_unaff_1000)
-#
-# samples_to_compare <- c("7", "8")  # Replace with actual sample names or column indices
-# sample_expression <- topgenes_aff_vs_unaff_1000[, samples_to_compare]
-#
-# ensembl_to_gene <- setNames(gene_info$gene_name, gene_info$Ensembl_ID)
-#
-# # Get the current row names of the matrix 'mat'
-# current_ensembl_ids <- rownames(sample_expression)
-#
-# # Find the corresponding gene names for the Ensembl IDs
-# new_row_names <- ensembl_to_gene[current_ensembl_ids]
-#
-# # Set the new row names for the matrix 'mat'
-# rownames(sample_expression) <- new_row_names
-#
-# sample_expression<- sample_expression[order(row.names(sample_expression)), ]
-#
-# df <- as.data.frame(colData(vsd_limma)[samples_to_compare, c("Affected", "OverallCategory")])
-# pheatmap(sample_expression, annotation_col = df, annotation_colors = ann_colors3, fontsize = 5, angle_col = c("0"))
-#
-# expression_difference <- sample_expression[, "7"] - sample_expression[, "8"]
-# diff_df <- data.frame(Gene = rownames(sample_expression),
-#                       Diff = expression_difference)
-# head(diff_df[order(abs(diff_df$Diff), decreasing=TRUE), ], 20)  # Top 20 largest differences
-#
-# top_diff_genes <- head(diff_df[order(abs(diff_df$Diff), decreasing=TRUE), ], 20)
-# barplot(top_diff_genes$Diff, names.arg=top_diff_genes$Gene,
-#         las=2, col="steelblue",
-#         main="Top Differential Genes Between Sample 7 and Sample 8",
-#         ylab="Expression Difference")
-```
 
 
 ## Heatmap of Significant Genes
@@ -476,7 +441,6 @@ Below is a table of information about the top genes.
 genes <- res_aff_vs_unaff_df_genename_05$gene_name
 my_gene_data <- queryMany(genes, scopes = "symbol", fields = c("symbol", "name", "summary", species = "human"))
 my_gene_data_unique <- as.data.frame(my_gene_data) %>% dplyr::distinct(query, .keep_all = TRUE)
-# paged_table(my_gene_data, options = list(rows.print = 15))
 ```
 
 ```{r, maplot-samples}
@@ -780,7 +744,6 @@ draw(ComplexHeatmap::pheatmap(
   cellheight = 10, # Set cell height
   cellwidth = 24, # Set cell width
   border_color = "black", # Black borders around heatmap cells
-  # cutree_rows = num_row_clusters,  # Number of row clusters
   heatmap_legend_param = list(
     title = "Matrix"
   )
@@ -1446,10 +1409,46 @@ draw(
 dev.off()
 ```
 
+## Heatmap of Genes of Interest
+
+```{r, heatmap-of-all-samples-genes-of-interest}
+genes_of_interest <- read_csv("data/Manually_Curated_Genes_List_2024_12_05.csv")
+genes_of_interest <- unique(genes_of_interest$Genes)
+genes_of_interest <- genes_of_interest[!is.na(genes_of_interest)]
+
+output_path <- "output/all-samples-analysis/"
+file_name <- file.path(output_path, "Supplemental Figure 3. Genes of Interest Heatmap.png")
+
+# Keep only specific genes
+all_genes_data <- res_aff_vs_unaff_df_genename %>%
+  filter(gene_name %in% genes_of_interest)
+
+# Prepare the heatmap data
+all_mat <- assay(vsd_limma)[all_genes_data$Ensembl_ID, ]
+rownames(all_mat) <- gene_info$gene_name[match(all_genes_data$Ensembl_ID, gene_info$Ensembl_ID)]
+df_sub <- as.data.frame(colData(vsd_limma)[, c("Affected", "OverallCategory")])
+
+png(file_name, width = 16, height = 26, units = "in", res = 1200)
+draw(
+  ComplexHeatmap::pheatmap(
+    mat = all_mat,
+    color = colorRampPalette(rev(brewer.pal(n = 9, name = "RdYlBu")))(50),
+    annotation_col = df_sub,
+    annotation_colors = ann_colors,
+    fontsize = 6,
+    angle_col = c("0"),
+    cellheight = 10,
+    cellwidth = 24,
+    border_color = "black",
+    heatmap_legend_param = list(title = "Matrix")
+  )
+)
+dev.off()
+```
+
 
 ### Save data
 
 ```{r, save-data}
 save.image(file = "output/all-samples-analysis/all-condition-analysis.RData")
 ```
-
