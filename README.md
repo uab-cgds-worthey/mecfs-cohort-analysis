@@ -81,3 +81,7 @@ Results (including figures generated for the publication) can be found in the `d
 ## Author
 
 Shaurita D. Hutchins [:email:](mailto:sdhutchins@uab.edu) | Graduate Research Assistant
+
+## License
+
+This project is licensed under the [GNU General Public License v3.0](LICENSE).
