@@ -11,8 +11,6 @@ navbar:
     menu:
     - text: Subsetted Analysis
       href: subsetted-condition-analysis.html
-    - text: All Samples Analysiss
-      href: all-condition-analysis.html
   right:
   - icon: fa-github
     href: https://github.com/uab-cgds-worthey/mecfs-dge-analysis

@@ -1,4 +1,0 @@
-"Term","Overlap","P.value","Adjusted.P.value","Old.P.value","Old.Adjusted.P.value","Odds.Ratio","Combined.Score","Genes"
-"Voltage-Gated IC Activity Involved In Regulation Of Presynaptic Membrane Potential (GO:0099508) BP","1/17",0.0416766547912335,0.1250299643737,0,0,25.4260204081633,80.799167280865,"KCNQ5"
-"Integral Component Of Postsynaptic Membrane (GO:0099055) CC","1/120",0.260124462166282,0.27670792410592,0,0,3.40096038415366,4.57971645890887,"KCNQ5"
-"Integral Component Of Presynaptic Membrane (GO:0099056) CC","1/129",0.27670792410592,0.27670792410592,0,0,3.16039540816327,4.06045312240468,"KCNQ5"
