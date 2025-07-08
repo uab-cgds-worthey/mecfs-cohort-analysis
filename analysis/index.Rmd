@@ -8,8 +8,27 @@ editor_options:
   chunk_output_type: console
 ---
 
-This site hosts differential gene expression analysis performed by CGDS on ME/CFS Patients.
+This site hosts differential gene expression analysis performed by CGDS on ME/CFS patients.
 
-1. [View the project's background](background.html)
+We analyzed bulk RNA-seq data from a cohort of 23 individuals diagnosed with Myalgic Encephalomyelitis/Chronic Fatigue Syndrome (ME/CFS).
+
+The study aims to identify transcriptional changes associated with ME/CFS and investigate potential immune and metabolic dysregulation.
+
+Expression data were processed using the [nf-core/rnaseq](https://nf-co.re/rnaseq) pipeline with transcript-level quantification via Salmon.
+
+This site was built with the [workflowr](https://jdblischak.github.io/workflowr/) framework to ensure reproducibility and transparency.
+
+## Project Pages
+
+1. [Background: Study Overview and Methods](background.html)  
 2. [Subsetted Differential Gene Expression (DGE) Analysis](subsetted-condition-analysis.html)
 
+## Results and Access
+
+- Figures, statistics, and annotations from this analysis are presented in the pages above.  
+- Input files were generated via Salmon quantification and are located in the `data/star-salmon` directory of the GitHub repository.  
+- You can also browse the full source code and workflow on [GitHub](https://github.com/uab-cgds-worthey/mecfs-dge-analysis).
+
+## License
+
+This project is licensed under the [GNU General Public License v3.0](https://github.com/uab-cgds-worthey/mecfs-dge-analysis/blob/main/LICENSE).
