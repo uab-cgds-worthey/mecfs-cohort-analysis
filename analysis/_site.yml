@@ -12,6 +12,8 @@ navbar:
     - text: Subsetted Analysis
       href: subsetted-condition-analysis.html
   right:
+  - text: Contact
+    href: contact.html
   - icon: fa-github
     href: https://github.com/uab-cgds-worthey/mecfs-dge-analysis
 output:
