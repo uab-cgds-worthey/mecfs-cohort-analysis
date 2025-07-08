@@ -14,7 +14,7 @@ system leading to an overactive immune response.
 ### Requirements
 
 - R (v4.4.0)
-- RStudio (v2024.04.2)
+- RStudio (v2024.04.2 or later)
 - Git v2.0+
 
 ### Setup
