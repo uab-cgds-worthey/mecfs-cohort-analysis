@@ -8,14 +8,19 @@ editor_options:
 ---
 # Project Background
 
-Myalgic Encephalomyelitis/Chronic Fatigue Syndrome (ME/CFS) is a severely disabling, chronic illness that affects approximately 1-3 million Americans. ME/CFS can be briefly described as presenting with severe unrelenting fatigue,widespread unexplained pain, general malaise or feelings of illness described as flu-like,post-exertional malaise syndrome which is characterized by the drastic reduction in physical and mental ability following exertion of any kind, GI and digestive problems,mental fogginess, and cardio-pulmonary abnormalities. The cause of ME/CFS is not well understood. The majority of ME/CFS patients can recall a time of either sudden onset of dysfunction from an illness or a gradual decline in function, and this most often occurs in adulthood. Many biological abnormalities have been identified in ME/CFS patients, such as altered cytokine responses indicating increased systemic inflammation, altered metabolic profiling, dysregulation of the immune system, and neuroinflammation. Despite a delay in initiation of genetic studies, there is now a growing body of knowledge indicating an underlying genetic predisposition. Studies have shown that having a family member with ME/CFS is one of the strongest predictive factors for the presence of disease; first-degree relatives of affected individuals were found to be three times more likely to develop ME/CFS than controls. We hypothesized that ME/CFS is a genetically inherited disease that results in disrupted metabolic regulation of the immune system,thus resulting in an inappropriately activated immune system.
+Myalgic Encephalomyelitis/Chronic Fatigue Syndrome (ME/CFS) is a chronic, disabling illness affecting an estimated 1–3 million Americans. It is marked by persistent fatigue, post-exertional malaise, cognitive impairment, pain, and a range of immune, metabolic, and neurological symptoms.
 
-# Methods 
+Onset often follows infection or occurs gradually in adulthood. Research has identified biological abnormalities in ME/CFS, including immune dysregulation, altered cytokine profiles, metabolic dysfunction, and neuroinflammation.
 
-## Performing Bulk RNASeq Analysis
+Family studies suggest a genetic component, with first-degree relatives of ME/CFS patients at increased risk.
 
-We have collected RNA samples on 29 ME/CFS patients for expression analysis and performed bulk RNA sequencing via Vantage. 
 
-Our lab uses nf-core's rnaseq pipeline for secondary analysis which we've modified to work on the cluster, Cheaha, that we use.
+# Methods
+
+## Bulk RNA-Seq Analysis
+
+Peripheral blood RNA was collected from 29 ME/CFS patients for transcriptomic profiling. Bulk RNA sequencing was performed by Vantage.
+
+We used the [nf-core/rnaseq](https://nf-co.re/rnaseq) pipeline for secondary analysis. This pipeline was modified to run on UAB’s Cheaha high-performance computing cluster.
 
 ![nf-core rnaseq map](https://raw.githubusercontent.com/nf-core/rnaseq/3.12.0/docs/images/nf-core-rnaseq_metro_map_grey.png)

@@ -20,5 +20,8 @@ output:
   workflowr::wflow_html:
     toc: yes
     toc_float: yes
-    theme: journal
+    theme: sandstone
     highlight: textmate
+    css: custom.css
+    includes:
+      in_header: head.html

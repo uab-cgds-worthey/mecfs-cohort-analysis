@@ -1,0 +1,22 @@
+---
+title: "Contact"
+site: workflowr::wflow_site
+output:
+  workflowr::wflow_html:
+    toc: false
+editor_options:
+  chunk_output_type: console
+---
+For questions about this analysis or collaboration inquiries, please reach out to:
+
+**Shaurita D. Hutchins**  
+Graduate Research Assistant  
+Center for Computational Genomics and Data Science (CGDS)  
+Email: sdhutchins [@] uab.edu  
+GitHub: [@sdhutchins]()  
+
+  
+**Dr. Liz Worthey, PhD**  
+Director  
+Center for Computational Genomics and Data Science (CGDS)    
+Email: lworthey [@] uab.edu  

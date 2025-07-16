@@ -8,22 +8,19 @@ editor_options:
   chunk_output_type: console
 ---
 
-This site hosts differential gene expression analysis performed by CGDS on ME/CFS patients.
+This site presents a differential gene expression analysis conducted by CGDS on 23 individuals diagnosed with ME/CFS using bulk RNA-seq.
 
-We analyzed bulk RNA-seq data from a cohort of 23 individuals diagnosed with Myalgic Encephalomyelitis/Chronic Fatigue Syndrome (ME/CFS).
+Data was processed with the [nf-core/rnaseq](https://nf-co.re/rnaseq) pipeline and quantified using Salmon to identify transcriptional changes related to immune and metabolic dysregulation.
 
-The study aims to identify transcriptional changes associated with ME/CFS and investigate potential immune and metabolic dysregulation.
+The site was built with [workflowr](https://jdblischak.github.io/workflowr/) to ensure transparency and reproducibility.
 
-Expression data were processed using the [nf-core/rnaseq](https://nf-co.re/rnaseq) pipeline with transcript-level quantification via Salmon.
 
-This site was built with the [workflowr](https://jdblischak.github.io/workflowr/) framework to ensure reproducibility and transparency.
-
-## Project Pages
+## Study Design and Differential Expression Results
 
 1. [Background: Study Overview and Methods](background.html)  
 2. [Subsetted Differential Gene Expression (DGE) Analysis](subsetted-condition-analysis.html)
 
-## Results and Access
+## Results and Data Availability
 
 - Figures, statistics, and annotations from this analysis are presented in the pages above.  
 - Input files were generated via Salmon quantification and are located in the `data/star-salmon` directory of the GitHub repository.  
