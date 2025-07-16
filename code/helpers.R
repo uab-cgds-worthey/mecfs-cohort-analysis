@@ -43,19 +43,22 @@ check_order <- function(sample_metadata, counts) {
 retrieve_gene_info <- function(values, filters) {
   # Helper function to create the biomart object
   create_biomart <- function(host) {
-    useMart(biomart = "ensembl", dataset = "hsapiens_gene_ensembl", host = host)
+    useMart(
+      biomart = "ensembl", dataset = "hsapiens_gene_ensembl",
+      host = host
+    )
   }
 
   # Try block to retrieve gene information
   tryCatch(
     {
       # Create biomart object with default host
-      biomart <- create_biomart("www.ensembl.org")
+      biomart <- create_biomart("https://www.ensembl.org")
     },
     error = function(e) {
       message("Error encountered. Switching to alternative Ensembl host...")
       # Retry with alternative host
-      biomart <- create_biomart("https://useast.ensembl.org")
+      biomart <- create_biomart("https://oct2024.archive.ensembl.org")
       return(biomart)
     }
   ) -> biomart
@@ -112,7 +115,7 @@ rename_counts_columns <- function(counts_df, metadata_df, id_column, rna_samples
 
   # Ensure column names are treated as plain strings
   colnames(counts_df) <- gsub("^|$", "", colnames(counts_df)) # Remove backticks
-  colnames(counts_df) <- gsub("^X", "", colnames(counts_df))    # Remove 'X' prefix added by R
+  colnames(counts_df) <- gsub("^X", "", colnames(counts_df)) # Remove 'X' prefix added by R
 
   return(counts_df)
 }
@@ -211,7 +214,7 @@ create_faceted_plot <- function(data, output_path) {
 create_heatmap <- function(mat, gene_info, vsd_coldata, output_path, ann_colors,
                            width = 12, height = 10) {
   rownames(mat) <- gene_info$gene_name[match(rownames(mat), gene_info$Ensembl_ID)]
-  df_sub <- as.data.frame(vsd_coldata[, c("Affected", "OverallCategory")])
+  df_sub <- as.data.frame(vsd_coldata[, c("Affected", "Category")])
   png(output_path, width = width, height = height, units = "in", res = 1200)
   draw(ComplexHeatmap::pheatmap(
     mat = mat,
@@ -335,25 +338,50 @@ prepare_pca_data <- function(vsd_data, intgroup) {
 }
 
 # Function to generate PCA plot
-generate_pca_plot <- function(pca_data, percent_var, colour = "Affected", fill = NULL, shape = "Batch") {
+generate_pca_plot <- function(pca_data, percent_var, colour = "Subgroup", fill = "Affected", shape = "Batch") {
+  # Simplify subgroup names if they contain comma-separated labels
+  if ("Subgroup" %in% colnames(pca_data)) {
+    pca_data$Subgroup <- sapply(strsplit(as.character(pca_data$Subgroup), ","), `[`, 1)
+  }
+
   ggplot(pca_data, aes(x = PC1, y = PC2)) +
-    # Map colour, shape, and fill
-    geom_point(aes_string(colour = colour, shape = shape, fill = fill), size = 4, stroke = 1.5) +
-    # Define scales for shape and fill
-    scale_shape_manual(values = c(21, 22, 24)) + # Circle, square, triangle
-    scale_fill_manual(values = c("white", "darkgray"), guide = guide_legend(title = fill)) +
-    # Define axis labels
+    # Shape = Batch, Colour = Subgroup, Fill = Affected
+    geom_point(
+      aes_string(
+        shape = shape,
+        colour = colour,
+        fill = fill
+      ),
+      size = 4,
+      stroke = 1.2
+    ) +
+
+    # Use manually set shapes that support fill
+    scale_shape_manual(values = c("B1" = 21, "B2" = 22, "B3" = 24)) +
+
+    # Fill for Affected status
+    scale_fill_manual(
+      values = c("Affected" = "black", "Unaffected" = "white"),
+      guide = guide_legend(title = fill)
+    ) +
+
+    # Discrete color palette for subgroup or other categorical variable
+    scale_colour_brewer(palette = "Set2") +
+
+    # Label axes with variance explained
     xlab(paste0("PC1: ", percent_var[1], "% variance")) +
     ylab(paste0("PC2: ", percent_var[2], "% variance")) +
     coord_fixed() +
-    # Custom guides to ensure proper legends
+
+    # Legend appearance customization
     guides(
-      shape = guide_legend(override.aes = list(fill = NA)), # Batch shapes, no fill
-      colour = guide_legend(title = colour), # Affected legend
-      fill = guide_legend(override.aes = list(shape = 21, size = 4)) # Fill legend with consistent shape
+      shape = guide_legend(override.aes = list(fill = "gray80")),
+      colour = guide_legend(override.aes = list(shape = 21, size = 4)),
+      fill = guide_legend(override.aes = list(shape = 21, size = 4))
     ) +
-    theme_minimal()
+    theme_minimal(base_size = 14)
 }
+
 
 # Function to generate a heatmap of the top N variable genes
 generate_top_variable_genes_heatmap <- function(vsd_data, gene_info, annotation_columns, annotation_colors, top_n = 50) {
@@ -382,7 +410,7 @@ generate_top_variable_genes_heatmap <- function(vsd_data, gene_info, annotation_
 }
 
 # Function to generate a heatmap for significant genes
-generate_significant_genes_heatmap <- function(vsd_data, res_data, gene_info, annotation_columns, annotation_colors, output_file) {
+generate_significant_genes_heatmap <- function(vsd_data, res_data, gene_info, annotation_columns, annotation_colors, output_file = NULL) {
   # Extract Ensembl IDs for significant genes
   top_genes_ensembl <- rownames(res_data)
 
@@ -392,7 +420,7 @@ generate_significant_genes_heatmap <- function(vsd_data, res_data, gene_info, an
 
   # Map Ensembl IDs to gene names
   ensembl_to_gene <- setNames(gene_info$gene_name, gene_info$Ensembl_ID)
-  rownames(significant_genes_matrix) <- ensembl_to_gene[rownames(significant_genes_matrix)] # Replace Ensembl IDs with gene names
+  rownames(significant_genes_matrix) <- ensembl_to_gene[rownames(significant_genes_matrix)]
 
   # Order rows alphabetically by gene name
   significant_genes_matrix <- significant_genes_matrix[order(rownames(significant_genes_matrix)), ]
@@ -402,30 +430,41 @@ generate_significant_genes_heatmap <- function(vsd_data, res_data, gene_info, an
     as.data.frame() %>%
     dplyr::select(all_of(annotation_columns))
 
-  # Generate the heatmap and save to file
-  png(output_file, width = 12, height = 10, units = "in", res = 1200)
-  draw(
-    ComplexHeatmap::pheatmap(
-      mat = significant_genes_matrix,
-      color = colorRampPalette(rev(brewer.pal(n = 9, name = "RdYlBu")))(50),
-      annotation_col = annotation_df,
-      annotation_colors = annotation_colors,
-      fontsize = 6,
-      angle_col = c("0"),
-      cellheight = 10,
-      cellwidth = 24,
-      border_color = "black",
-      heatmap_legend_param = list(title = "Matrix")
-    )
+  # Build the heatmap object
+  heatmap_obj <- ComplexHeatmap::pheatmap(
+    mat = significant_genes_matrix,
+    color = colorRampPalette(c("midnightblue", "oldlace", "firebrick"))(50),
+    annotation_col = annotation_df,
+    annotation_colors = annotation_colors,
+    fontsize = 6,
+    angle_col = c("0"),
+    cellheight = 10,
+    cellwidth = 24,
+    border_color = "black",
+    heatmap_legend_param = list(title = "Matrix")
   )
-  dev.off()
+
+  # Save to file if output_file is provided
+  if (!is.null(output_file)) {
+    png(output_file, width = 12, height = 10, units = "in", res = 1200)
+    draw(heatmap_obj)
+    dev.off()
+  }
+
+  # Return the heatmap object for interactive display
+  return(heatmap_obj)
 }
 
-# Function to generate and save a volcano plot
 generate_volcano_plot <- function(res_data, gene_labels, x_col, y_col, select_genes,
                                   xlab_text, ylab_text, p_cutoff = 0.05, fc_cutoff = 1.0,
                                   xlim_range = c(-25, 25), ylim_range = c(0, 7),
                                   output_file = "volcano_plot.png") {
+  # If no genes are manually selected, choose those meeting cutoff criteria
+  if (length(select_genes) == 0 || all(select_genes == "")) {
+    significant_rows <- res_data[[y_col]] < p_cutoff & abs(res_data[[x_col]]) >= fc_cutoff
+    select_genes <- res_data[[gene_labels]][significant_rows]
+  }
+
   # Create the EnhancedVolcano plot
   volcano_plot <- EnhancedVolcano(res_data,
     lab = res_data[[gene_labels]],
@@ -458,15 +497,22 @@ generate_volcano_plot <- function(res_data, gene_labels, x_col, y_col, select_ge
     subtitle = "Differential Gene Expression Analysis in ME/CFS Patients"
   )
 
-  # Add custom scaling
+  # Apply scaling
   volcano_plot <- volcano_plot +
     ggplot2::coord_cartesian(xlim = xlim_range) +
     ggplot2::scale_x_continuous(breaks = seq(xlim_range[1], xlim_range[2], 5)) +
     ggplot2::scale_y_continuous(breaks = seq(ylim_range[1], ylim_range[2], 1))
 
-  # Save the plot
-  ggsave(plot = volcano_plot, filename = output_file, device = "png", width = 14, dpi = 1200, units = "in", create.dir = TRUE)
+  # Show Plot
+  print(volcano_plot)
+
+  # Save
+  ggsave(
+    plot = volcano_plot, filename = output_file, device = "png",
+    width = 14, dpi = 1200, units = "in", create.dir = TRUE
+  )
 }
+
 
 # Function to map data to STRING, add color coding, and plot the network
 generate_string_network <- function(data, gene_col, lfc_col, species = 9606, score_threshold = 100,
@@ -517,6 +563,8 @@ generate_ma_plot <- function(data, genenames, main_title = "MA Plot",
     font.legend = "bold",
     font.main = "bold"
   )
+  # Show plot
+  plot
 
   # Save plot if output_file is specified
   if (!is.null(output_file)) {
