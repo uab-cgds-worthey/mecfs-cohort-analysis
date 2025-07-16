@@ -12,11 +12,12 @@ For questions about this analysis or collaboration inquiries, please reach out t
 **Shaurita D. Hutchins**  
 Graduate Research Assistant  
 Center for Computational Genomics and Data Science (CGDS)  
-Email: sdhutchins [@] uab.edu  
-GitHub: [@sdhutchins]()  
+**Email:** sdhutchins [at] uab [dot] edu  
+**GitHub:** [@sdhutchins](https://github.com/sdhutchins)  
 
   
 **Dr. Liz Worthey, PhD**  
 Director  
 Center for Computational Genomics and Data Science (CGDS)    
-Email: lworthey [@] uab.edu  
+**Email:** eaworthey [at] uabmc [dot] edu
+**GitHub:** [@lizworthey-cgds](https://github.com/lizworthey-cgds)  
