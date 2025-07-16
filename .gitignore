@@ -15,9 +15,10 @@ analysis/*.html
 analysis/*_cache/
 analysis/site_libs/
 
-# Output files
-output/*.RData
-output/**/batch-correction-limma/**
-output/**/all-condition-analysis.RData
-output/**/spta1-analysis.RData
+# Ignore all .RData files in output directories
+output/**/*.RData
+
+# Ignore all PNGs from batch-correction-limma (recursively)
+output/**/batch-correction-limma/**/*.png
+
 
