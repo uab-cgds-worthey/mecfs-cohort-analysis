@@ -6,7 +6,6 @@ output:
 editor_options:
   chunk_output_type: console
 ---
-# Project Background
 
 Myalgic Encephalomyelitis/Chronic Fatigue Syndrome (ME/CFS) is a chronic, disabling illness affecting an estimated 1–3 million Americans. It is marked by persistent fatigue, post-exertional malaise, cognitive impairment, pain, and a range of immune, metabolic, and neurological symptoms.
 
@@ -15,9 +14,9 @@ Onset often follows infection or occurs gradually in adulthood. Research has ide
 Family studies suggest a genetic component, with first-degree relatives of ME/CFS patients at increased risk.
 
 
-# Methods
+## Methods
 
-## Bulk RNA-Seq Analysis
+### Bulk RNA-Seq Analysis
 
 Peripheral blood RNA was collected from 29 ME/CFS patients for transcriptomic profiling. Bulk RNA sequencing was performed by Vantage.
 
