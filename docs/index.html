@@ -13,10 +13,10 @@
 
 <title>Home</title>
 
-<script src="site_libs/header-attrs-2.24/header-attrs.js"></script>
+<script src="site_libs/header-attrs-2.27/header-attrs.js"></script>
 <script src="site_libs/jquery-3.6.0/jquery-3.6.0.min.js"></script>
 <meta name="viewport" content="width=device-width, initial-scale=1" />
-<link href="site_libs/bootstrap-3.3.5/css/journal.min.css" rel="stylesheet" />
+<link href="site_libs/bootstrap-3.3.5/css/sandstone.min.css" rel="stylesheet" />
 <script src="site_libs/bootstrap-3.3.5/js/bootstrap.min.js"></script>
 <script src="site_libs/bootstrap-3.3.5/shim/html5shiv.min.js"></script>
 <script src="site_libs/bootstrap-3.3.5/shim/respond.min.js"></script>
@@ -32,8 +32,11 @@
 <script src="site_libs/navigation-1.1/tabsets.js"></script>
 <link href="site_libs/highlightjs-9.12.0/textmate.css" rel="stylesheet" />
 <script src="site_libs/highlightjs-9.12.0/highlight.js"></script>
-<link href="site_libs/font-awesome-6.4.0/css/all.min.css" rel="stylesheet" />
-<link href="site_libs/font-awesome-6.4.0/css/v4-shims.min.css" rel="stylesheet" />
+<link href="site_libs/font-awesome-6.4.2/css/all.min.css" rel="stylesheet" />
+<link href="site_libs/font-awesome-6.4.2/css/v4-shims.min.css" rel="stylesheet" />
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Arimo:ital,wght@0,400..700;1,400..700&family=Noto+Sans:ital,wght@0,100..900;1,100..900&family=Roboto:ital,wght@0,100..900;1,100..900&display=swap" rel="stylesheet">
 
 <link rel="icon" href="https://github.com/workflowr/workflowr-assets/raw/main/img/reproducible.png">
 <!-- Add a small amount of space between sections. -->
@@ -70,6 +73,7 @@ if (window.hljs) {
 
 
 
+<link rel="stylesheet" href="custom.css" type="text/css" />
 
 
 
@@ -268,19 +272,16 @@ $(document).ready(function () {
   </a>
   <ul class="dropdown-menu" role="menu">
     <li>
-      <a href="condition-analysis.html">By Condition</a>
-    </li>
-    <li>
-      <a href="tier-analysis.html">By Tier</a>
-    </li>
-    <li>
-      <a href="batch-analysis.html">By Batch</a>
+      <a href="subsetted-condition-analysis.html">Subsetted Analysis</a>
     </li>
   </ul>
 </li>
       </ul>
       <ul class="nav navbar-nav navbar-right">
         <li>
+  <a href="contact.html">Contact</a>
+</li>
+<li>
   <a href="https://github.com/uab-cgds-worthey/mecfs-dge-analysis">
     <span class="fa fa-github"></span>
      
@@ -324,7 +325,7 @@ class="glyphicon glyphicon-ok text-success" aria-hidden="true"></span>
 <div class="tab-content">
 <div id="summary" class="tab-pane fade in active">
 <p>
-<strong>Last updated:</strong> 2023-08-16
+<strong>Last updated:</strong> 2025-07-15
 </p>
 <p>
 <strong>Checks:</strong> <span
@@ -342,7 +343,7 @@ title="This is the local directory in which the code in this file was executed."
 This reproducible <a href="https://rmarkdown.rstudio.com">R Markdown</a>
 analysis was created with <a
   href="https://github.com/workflowr/workflowr">workflowr</a> (version
-1.7.0). The <em>Checks</em> tab describes the reproducibility checks
+1.7.1). The <em>Checks</em> tab describes the reproducibility checks
 that were applied when the results were created. The <em>Past
 versions</em> tab lists the development history.
 </p>
@@ -371,15 +372,15 @@ results.</p>
 <div class="panel panel-default">
 <div class="panel-heading">
 <p class="panel-title">
-<a data-toggle="collapse" data-parent="#workflowr-checks" href="#strongRepositoryversionstrongahrefhttpsgithubcomuabcgdswortheymecfsdgeanalysistreef22d1e242164ce86f8775e3aa24a8fcda5e056bdtargetblankf22d1e2a">
+<a data-toggle="collapse" data-parent="#workflowr-checks" href="#strongRepositoryversionstrongahrefhttpsgithubcomuabcgdswortheymecfsdgeanalysistree1373f8e34f1d048e21230fe2d9d890856d36c89ctargetblank1373f8ea">
 <span class="glyphicon glyphicon-ok text-success"
 aria-hidden="true"></span> <strong>Repository version:</strong>
-<a href="https://github.com/uab-cgds-worthey/mecfs-dge-analysis/tree/f22d1e242164ce86f8775e3aa24a8fcda5e056bd" target="_blank">f22d1e2</a>
+<a href="https://github.com/uab-cgds-worthey/mecfs-dge-analysis/tree/1373f8e34f1d048e21230fe2d9d890856d36c89c" target="_blank">1373f8e</a>
 </a>
 </p>
 </div>
 <div
-id="strongRepositoryversionstrongahrefhttpsgithubcomuabcgdswortheymecfsdgeanalysistreef22d1e242164ce86f8775e3aa24a8fcda5e056bdtargetblankf22d1e2a"
+id="strongRepositoryversionstrongahrefhttpsgithubcomuabcgdswortheymecfsdgeanalysistree1373f8e34f1d048e21230fe2d9d890856d36c89ctargetblank1373f8ea"
 class="panel-collapse collapse">
 <div class="panel-body">
 <p>
@@ -389,7 +390,7 @@ reproducibility.
 </p>
 <p>
 The results in this page were generated with repository version
-<a href="https://github.com/uab-cgds-worthey/mecfs-dge-analysis/tree/f22d1e242164ce86f8775e3aa24a8fcda5e056bd" target="_blank">f22d1e2</a>.
+<a href="https://github.com/uab-cgds-worthey/mecfs-dge-analysis/tree/1373f8e34f1d048e21230fe2d9d890856d36c89c" target="_blank">1373f8e</a>.
 See the <em>Past versions</em> tab to see a history of the changes made
 to the R Markdown and HTML files.
 </p>
@@ -407,27 +408,152 @@ Ignored files:
     Ignored:    .DS_Store
     Ignored:    .Rhistory
     Ignored:    .Rproj.user/
-    Ignored:    output/batch-correction-limma/
+    Ignored:    .github/.DS_Store
+    Ignored:    .test/
+    Ignored:    analysis/.DS_Store
+    Ignored:    analysis/head.html
+    Ignored:    configs/
+    Ignored:    data/.DS_Store
+    Ignored:    notebooks/
+    Ignored:    output/.DS_Store
+    Ignored:    output/all-samples-analysis/.DS_Store
+    Ignored:    output/all-samples-analysis/all-condition-analysis.RData
+    Ignored:    output/all-samples-analysis/batch-correction-limma/
+    Ignored:    output/publication-analysis/.DS_Store
+    Ignored:    output/publication-analysis/batch-correction-limma/plot-counts/padj-05/
+    Ignored:    output/publication-analysis/batch-correction-limma/plot-counts/spta1-genes-of-interest/
+    Ignored:    output/spta1-analysis/batch-correction-limma/plot-counts/spta1-genes-of-interest/
+    Ignored:    renv/.DS_Store
+    Ignored:    renv/library/
+    Ignored:    renv/staging/
+    Ignored:    src/
 
 Untracked files:
-    Untracked:  code/edit_metadata.R
-    Untracked:  data/MECFS_RNAseq_metadata_2023_08_16.csv
-    Untracked:  data/MECFS_RNAseq_metadata_2023_08_17.csv
-    Untracked:  output/batch-analysis.RData
-    Untracked:  output/condition-analysis.RData
-    Untracked:  output/counts_vst2.csv
-    Untracked:  output/res_batch.csv
-    Untracked:  output/results_tier.csv
-    Untracked:  output/results_tier_1_vs_2.csv
-    Untracked:  output/results_tier_1_vs_3.csv
+    Untracked:  output/all-samples-analysis/Supplemental Figure 3. Genes of Interest Heatmap.png
+    Untracked:  output/all-samples-analysis/missing_genes_interest_counts.csv
+    Untracked:  output/publication-analysis/Supplemental Figure 4. Significant DEGs (Padj < 0.05).png
+    Untracked:  output/publication-analysis/Supplemental Figure 4. Significant DEGs (Padj < 0.1).png.png
+    Untracked:  output/publication-analysis/mecfs_deg_variant_network.png
+    Untracked:  output/publication-analysis/missing_genes_interest_counts.csv
+    Untracked:  output/subgroup-chrn-analysis/
+    Untracked:  output/subgroup-hpp-analysis/
+    Untracked:  output/subgroup-ion_channel-analysis/
+    Untracked:  output/subgroup-mito-analysis/
+    Untracked:  output/subgroup-rbc-analysis/
 
 Unstaged changes:
-    Modified:   README.md
-    Deleted:    analysis/analysis.Rmd
-    Deleted:    analysis/initial-analysis.Rmd
+    Deleted:    analysis/spta1-analysis.Rmd
     Modified:   code/helpers.R
-    Modified:   data/MECFS_RNAseq_metadata_2023_06_23.csv
-    Modified:   output/counts_vst_limma.csv
+    Modified:   data/Prioritized_Genes_From_WGS_2025_06_18.csv
+    Modified:   output/all-samples-analysis/all-genes-heatmap.png
+    Modified:   output/all-samples-analysis/analysis-volcano-plot.png
+    Modified:   output/all-samples-analysis/counts_vst.csv
+    Modified:   output/all-samples-analysis/counts_vst_limma.csv
+    Modified:   output/all-samples-analysis/genes_of_interest_heatmap.png
+    Modified:   output/all-samples-analysis/genes_of_interest_plot_counts_signals.csv
+    Modified:   output/all-samples-analysis/madd_genes_of_interest.csv
+    Modified:   output/all-samples-analysis/madd_genes_of_interest_heatmap.png
+    Modified:   output/all-samples-analysis/mito_genes_of_interest.csv
+    Modified:   output/all-samples-analysis/mito_genes_of_interest_heatmap.png
+    Modified:   output/all-samples-analysis/mito_genes_of_interest_plot_counts_signals.csv
+    Modified:   output/all-samples-analysis/other_genes_of_interest.csv
+    Modified:   output/all-samples-analysis/res_aff_vs_unaff.csv
+    Modified:   output/all-samples-analysis/res_aff_vs_unaff_df_genename.csv
+    Modified:   output/all-samples-analysis/res_aff_vs_unaff_significant_mygene.csv
+    Modified:   output/all-samples-analysis/res_aff_vs_unaff_significant_samples.csv
+    Modified:   output/all-samples-analysis/res_spta1_vs_unaff_df_genename_05.csv
+    Modified:   output/all-samples-analysis/res_spta1_vs_unaff_df_genename_padj05_lfc1.csv
+    Modified:   output/all-samples-analysis/res_spta1_vs_unaff_df_genename_padj1.csv
+    Modified:   output/all-samples-analysis/res_spta1_vs_unaff_df_genename_padj1_lfc1.csv
+    Modified:   output/all-samples-analysis/significant_plot_counts_signals.csv
+    Modified:   output/all-samples-analysis/slc4a1_genes_of_interest.csv
+    Modified:   output/all-samples-analysis/slc4a1_genes_of_interest_heatmap.png
+    Modified:   output/all-samples-analysis/slc4a1_genes_of_interest_plot_counts_signals.csv
+    Modified:   output/all-samples-analysis/stringdb_combined_enrichment.csv
+    Modified:   output/publication-analysis/Supplemental Figure 4. DEGs (Padj < 0.1).png
+    Deleted:    output/publication-analysis/Supplemental Figure 4. Significant DEGs.png
+    Modified:   output/publication-analysis/Supplemental Table 5. Significant Differentially Expressed Genes.csv
+    Modified:   output/publication-analysis/batch-correction-limma/plot-counts/genes-of-interest/ACACB-subsetted-plot-counts.png
+    Modified:   output/publication-analysis/batch-correction-limma/plot-counts/genes-of-interest/ACADM-subsetted-plot-counts.png
+    Modified:   output/publication-analysis/batch-correction-limma/plot-counts/genes-of-interest/ACADVL-subsetted-plot-counts.png
+    Modified:   output/publication-analysis/batch-correction-limma/plot-counts/genes-of-interest/ADM2-subsetted-plot-counts.png
+    Modified:   output/publication-analysis/batch-correction-limma/plot-counts/genes-of-interest/ADORA2A-subsetted-plot-counts.png
+    Modified:   output/publication-analysis/batch-correction-limma/plot-counts/genes-of-interest/ADORA2B-subsetted-plot-counts.png
+    Modified:   output/publication-analysis/batch-correction-limma/plot-counts/genes-of-interest/ADRB2-subsetted-plot-counts.png
+    Modified:   output/publication-analysis/batch-correction-limma/plot-counts/genes-of-interest/ATP1A1-subsetted-plot-counts.png
+    Modified:   output/publication-analysis/batch-correction-limma/plot-counts/genes-of-interest/CALCB-subsetted-plot-counts.png
+    Modified:   output/publication-analysis/batch-correction-limma/plot-counts/genes-of-interest/CCR5-subsetted-plot-counts.png
+    Modified:   output/publication-analysis/batch-correction-limma/plot-counts/genes-of-interest/CHRFAM7A-subsetted-plot-counts.png
+    Modified:   output/publication-analysis/batch-correction-limma/plot-counts/genes-of-interest/COL6A3-subsetted-plot-counts.png
+    Modified:   output/publication-analysis/batch-correction-limma/plot-counts/genes-of-interest/COMT-subsetted-plot-counts.png
+    Modified:   output/publication-analysis/batch-correction-limma/plot-counts/genes-of-interest/CPT1A-subsetted-plot-counts.png
+    Modified:   output/publication-analysis/batch-correction-limma/plot-counts/genes-of-interest/CPT1B-subsetted-plot-counts.png
+    Modified:   output/publication-analysis/batch-correction-limma/plot-counts/genes-of-interest/CPT1C-subsetted-plot-counts.png
+    Modified:   output/publication-analysis/batch-correction-limma/plot-counts/genes-of-interest/CUBN-subsetted-plot-counts.png
+    Modified:   output/publication-analysis/batch-correction-limma/plot-counts/genes-of-interest/CYTH2-subsetted-plot-counts.png
+    Modified:   output/publication-analysis/batch-correction-limma/plot-counts/genes-of-interest/DENND1A-subsetted-plot-counts.png
+    Modified:   output/publication-analysis/batch-correction-limma/plot-counts/genes-of-interest/DMXL2-subsetted-plot-counts.png
+    Modified:   output/publication-analysis/batch-correction-limma/plot-counts/genes-of-interest/ELOVL4-subsetted-plot-counts.png
+    Modified:   output/publication-analysis/batch-correction-limma/plot-counts/genes-of-interest/ENO3-subsetted-plot-counts.png
+    Modified:   output/publication-analysis/batch-correction-limma/plot-counts/genes-of-interest/ETFB-subsetted-plot-counts.png
+    Modified:   output/publication-analysis/batch-correction-limma/plot-counts/genes-of-interest/FKBP5-subsetted-plot-counts.png
+    Modified:   output/publication-analysis/batch-correction-limma/plot-counts/genes-of-interest/G6PD-subsetted-plot-counts.png
+    Modified:   output/publication-analysis/batch-correction-limma/plot-counts/genes-of-interest/GABRB3-subsetted-plot-counts.png
+    Modified:   output/publication-analysis/batch-correction-limma/plot-counts/genes-of-interest/GIPR-subsetted-plot-counts.png
+    Modified:   output/publication-analysis/batch-correction-limma/plot-counts/genes-of-interest/GLYCTK-subsetted-plot-counts.png
+    Modified:   output/publication-analysis/batch-correction-limma/plot-counts/genes-of-interest/GPNMB-subsetted-plot-counts.png
+    Modified:   output/publication-analysis/batch-correction-limma/plot-counts/genes-of-interest/HADHA-subsetted-plot-counts.png
+    Modified:   output/publication-analysis/batch-correction-limma/plot-counts/genes-of-interest/HSPA1A-subsetted-plot-counts.png
+    Modified:   output/publication-analysis/batch-correction-limma/plot-counts/genes-of-interest/HTR6-subsetted-plot-counts.png
+    Modified:   output/publication-analysis/batch-correction-limma/plot-counts/genes-of-interest/IDO1-subsetted-plot-counts.png
+    Modified:   output/publication-analysis/batch-correction-limma/plot-counts/genes-of-interest/IFNG-subsetted-plot-counts.png
+    Modified:   output/publication-analysis/batch-correction-limma/plot-counts/genes-of-interest/IL10-subsetted-plot-counts.png
+    Modified:   output/publication-analysis/batch-correction-limma/plot-counts/genes-of-interest/IL6-subsetted-plot-counts.png
+    Modified:   output/publication-analysis/batch-correction-limma/plot-counts/genes-of-interest/KLHL7-subsetted-plot-counts.png
+    Modified:   output/publication-analysis/batch-correction-limma/plot-counts/genes-of-interest/LMBRD1-subsetted-plot-counts.png
+    Modified:   output/publication-analysis/batch-correction-limma/plot-counts/genes-of-interest/MADD-subsetted-plot-counts.png
+    Modified:   output/publication-analysis/batch-correction-limma/plot-counts/genes-of-interest/MAPK1-subsetted-plot-counts.png
+    Modified:   output/publication-analysis/batch-correction-limma/plot-counts/genes-of-interest/MCCC1-subsetted-plot-counts.png
+    Modified:   output/publication-analysis/batch-correction-limma/plot-counts/genes-of-interest/MCCC2-subsetted-plot-counts.png
+    Modified:   output/publication-analysis/batch-correction-limma/plot-counts/genes-of-interest/MINPP1-subsetted-plot-counts.png
+    Modified:   output/publication-analysis/batch-correction-limma/plot-counts/genes-of-interest/MLYCD-subsetted-plot-counts.png
+    Modified:   output/publication-analysis/batch-correction-limma/plot-counts/genes-of-interest/MMAA-subsetted-plot-counts.png
+    Modified:   output/publication-analysis/batch-correction-limma/plot-counts/genes-of-interest/MMACHC-subsetted-plot-counts.png
+    Modified:   output/publication-analysis/batch-correction-limma/plot-counts/genes-of-interest/MYH9-subsetted-plot-counts.png
+    Modified:   output/publication-analysis/batch-correction-limma/plot-counts/genes-of-interest/NLRP3-subsetted-plot-counts.png
+    Modified:   output/publication-analysis/batch-correction-limma/plot-counts/genes-of-interest/NR3C1-subsetted-plot-counts.png
+    Modified:   output/publication-analysis/batch-correction-limma/plot-counts/genes-of-interest/NUP42-subsetted-plot-counts.png
+    Modified:   output/publication-analysis/batch-correction-limma/plot-counts/genes-of-interest/OXTR-subsetted-plot-counts.png
+    Modified:   output/publication-analysis/batch-correction-limma/plot-counts/genes-of-interest/P2RX7-subsetted-plot-counts.png
+    Modified:   output/publication-analysis/batch-correction-limma/plot-counts/genes-of-interest/PCK2-subsetted-plot-counts.png
+    Modified:   output/publication-analysis/batch-correction-limma/plot-counts/genes-of-interest/PGM1-subsetted-plot-counts.png
+    Modified:   output/publication-analysis/batch-correction-limma/plot-counts/genes-of-interest/POLG-subsetted-plot-counts.png
+    Modified:   output/publication-analysis/batch-correction-limma/plot-counts/genes-of-interest/PTPN22-subsetted-plot-counts.png
+    Modified:   output/publication-analysis/batch-correction-limma/plot-counts/genes-of-interest/SLC12A3-subsetted-plot-counts.png
+    Modified:   output/publication-analysis/batch-correction-limma/plot-counts/genes-of-interest/SLC25A20-subsetted-plot-counts.png
+    Modified:   output/publication-analysis/batch-correction-limma/plot-counts/genes-of-interest/SLC7A9-subsetted-plot-counts.png
+    Modified:   output/publication-analysis/batch-correction-limma/plot-counts/genes-of-interest/SMCR8-subsetted-plot-counts.png
+    Modified:   output/publication-analysis/batch-correction-limma/plot-counts/genes-of-interest/SURF1-subsetted-plot-counts.png
+    Modified:   output/publication-analysis/batch-correction-limma/plot-counts/genes-of-interest/SYT6-subsetted-plot-counts.png
+    Modified:   output/publication-analysis/batch-correction-limma/plot-counts/genes-of-interest/TACO1-subsetted-plot-counts.png
+    Modified:   output/publication-analysis/batch-correction-limma/plot-counts/genes-of-interest/TNF-subsetted-plot-counts.png
+    Modified:   output/publication-analysis/batch-correction-limma/plot-counts/genes-of-interest/TOMM7-subsetted-plot-counts.png
+    Modified:   output/publication-analysis/batch-correction-limma/plot-counts/genes-of-interest/UCP2-subsetted-plot-counts.png
+    Modified:   output/publication-analysis/batch-correction-limma/plot-counts/genes-of-interest/VIPR2-subsetted-plot-counts.png
+    Modified:   output/publication-analysis/batch-correction-limma/plot-counts/genes-of-interest/faceted_genes_of_interest_plot_counts.png
+    Modified:   output/publication-analysis/batch-correction-limma/plot-counts/genes-of-interest/genes_of_interest_plot_counts_signals.csv
+    Modified:   output/publication-analysis/counts_vst_limma_subsetted.csv
+    Modified:   output/publication-analysis/counts_vst_subsetted.csv
+    Modified:   output/publication-analysis/publication-analysis.RData
+    Modified:   output/publication-analysis/res_aff_vs_unaff_df_sub_genename.csv
+    Modified:   output/publication-analysis/res_aff_vs_unaff_df_sub_genename_05.csv
+    Modified:   output/publication-analysis/res_aff_vs_unaff_df_sub_genename_padj1.csv
+    Modified:   output/publication-analysis/res_aff_vs_unaff_df_sub_genename_padj1_lfc1.csv
+    Modified:   output/publication-analysis/res_aff_vs_unaff_significant_subsetted_mygene.csv
+    Modified:   output/publication-analysis/res_aff_vs_unaff_significant_subsetted_samples.csv
+    Modified:   output/publication-analysis/res_aff_vs_unaff_sub.csv
+    Modified:   output/publication-analysis/subsetted-analysis-volcano-plot.png
+    Modified:   output/spta1-analysis/spta1-condition-analysis.RData
 
 </code></pre>
 <p>
@@ -442,7 +568,6 @@ have uncommitted changes.
 <hr>
 </div>
 <div id="versions" class="tab-pane fade">
-
 <p>
 These are the previous versions of the repository in which changes were
 made to the R Markdown (<code>analysis/index.Rmd</code>) and HTML
@@ -472,6 +597,74 @@ Message
 </tr>
 </thead>
 <tbody>
+<tr>
+<td>
+Rmd
+</td>
+<td>
+<a href="https://github.com/uab-cgds-worthey/mecfs-dge-analysis/blob/1373f8e34f1d048e21230fe2d9d890856d36c89c/analysis/index.Rmd" target="_blank">1373f8e</a>
+</td>
+<td>
+sdhutchins
+</td>
+<td>
+2025-07-15
+</td>
+<td>
+Changes to Category.
+</td>
+</tr>
+<tr>
+<td>
+Rmd
+</td>
+<td>
+<a href="https://github.com/uab-cgds-worthey/mecfs-dge-analysis/blob/2dbd69c426b53824be5bd9d8ad8f71a2603d67ee/analysis/index.Rmd" target="_blank">2dbd69c</a>
+</td>
+<td>
+sdhutchins
+</td>
+<td>
+2025-07-07
+</td>
+<td>
+Update index.Rmd.
+</td>
+</tr>
+<tr>
+<td>
+Rmd
+</td>
+<td>
+<a href="https://github.com/uab-cgds-worthey/mecfs-dge-analysis/blob/01889df0642bdb81bf6ee7369da6e24298467dd2/analysis/index.Rmd" target="_blank">01889df</a>
+</td>
+<td>
+Brandon M. Wilk
+</td>
+<td>
+2024-12-06
+</td>
+<td>
+Remove archived analyses.
+</td>
+</tr>
+<tr>
+<td>
+html
+</td>
+<td>
+<a href="https://rawcdn.githack.com/uab-cgds-worthey/mecfs-dge-analysis/05f55021fba95b95fe55b566cf65f894df83adb1/docs/index.html" target="_blank">05f5502</a>
+</td>
+<td>
+sdhutchins
+</td>
+<td>
+2023-08-16
+</td>
+<td>
+Build site.
+</td>
+</tr>
 <tr>
 <td>
 html
@@ -802,13 +995,51 @@ Start workflowr project.
 </div>
 </div>
 </div>
-<p>This site hosts differential gene expression analysis performed by
-CGDS on ME/CFS Patients.</p>
+<p>This site presents a differential gene expression analysis conducted
+by CGDS on 23 individuals diagnosed with ME/CFS using bulk RNA-seq.</p>
+<p>Data was processed with the <a
+href="https://nf-co.re/rnaseq">nf-core/rnaseq</a> pipeline and
+quantified using Salmon to identify transcriptional changes related to
+immune and metabolic dysregulation.</p>
+<p>The site was built with <a
+href="https://jdblischak.github.io/workflowr/">workflowr</a> to ensure
+transparency and reproducibility.</p>
+<div id="study-design-and-differential-expression-results"
+class="section level2">
+<h2>Study Design and Differential Expression Results</h2>
 <ol style="list-style-type: decimal">
-<li><a href="background.html">View the project’s background</a></li>
-<li><a href="analysis.html">Differential Gene Expression (DGE)
-Analysis</a></li>
+<li><a href="background.html">Background: Study Overview and
+Methods</a><br />
+</li>
+<li><a href="subsetted-condition-analysis.html">Subsetted Differential
+Gene Expression (DGE) Analysis</a></li>
 </ol>
+</div>
+<div id="results-and-data-availability" class="section level2">
+<h2>Results and Data Availability</h2>
+<ul>
+<li>Figures, statistics, and annotations from this analysis are
+presented in the pages above.<br />
+</li>
+<li>Input files were generated via Salmon quantification and are located
+in the <code>data/star-salmon</code> directory of the GitHub
+repository.<br />
+</li>
+<li>You can also browse the full source code and workflow on <a
+href="https://github.com/uab-cgds-worthey/mecfs-dge-analysis">GitHub</a>.</li>
+</ul>
+</div>
+<div id="license" class="section level2">
+<h2>License</h2>
+<p>This project is licensed under the <a
+href="https://github.com/uab-cgds-worthey/mecfs-dge-analysis/blob/main/LICENSE">GNU
+General Public License v3.0</a>.</p>
+</div>
+</div>
+</div>
+</div>
+</div>
+</div>
 
 
 <!-- Adjust MathJax settings so that all math formulae are shown using
