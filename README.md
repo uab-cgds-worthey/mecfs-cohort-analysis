@@ -10,6 +10,7 @@ cause of ME/CFS is not well understood, but evidence suggests a genetic predispo
 system leading to an overactive immune response.
 
 ## Installation
+
 This project uses the `renv` package to manage R package dependencies
 to ensure that the analysis can be reproduced.
 
@@ -51,21 +52,31 @@ installed.
 
 #### Installing Workflowr
 
-This repo depends on the `workflowr` package for managing the analysis workflow and generating reports. If you encounter issues follow below instructions:
+This repo depends on the `workflowr` package for managing the analysis workflow and generating reports. If you encounter
+issues, follow the instructions below:
 
 ##### Windows
+
+1. Install Rtools.
+
+##### Windows
+
 1. Install Rtools.
 2. Restart R.
 3. Then run:
 
 ```r
-renv::install("git2r", type = "binary")
-renv::install("workflowr")
-```
-##### macOS:
-1. Open Terminal and run:
-   `brew install libgit2 libssh2 openssl`
+##### macOS
 
+1. Open Terminal and run:
+
+   `brew install libgit2 libssh2 openssl`
+##### macOS:
+##### Linux (Ubuntu/Debian)
+
+1. In Terminal, run:
+
+   `sudo apt-get install libgit2-dev libssh2-1-dev libssl-dev`
 2. Then in R: `renv::install("workflowr")`
 
 ##### Linux (Ubuntu/Debian):
