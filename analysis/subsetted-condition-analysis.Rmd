@@ -14,7 +14,7 @@ editor_options:
 knitr::opts_chunk$set(echo = TRUE, warning = FALSE, message = FALSE)
 ```
 
-# Load libraries
+## Load libraries
 
 Ensure you have followed instructions in the readme on activating the renv environment.
 
@@ -43,8 +43,8 @@ library(ComplexHeatmap)
 ```
 
 ```{r, include=FALSE}
+# Load custom functions
 source("code/helpers.R", local = knitr::knit_global())
-# or sys.source("your-script.R", envir = knitr::knit_global())
 ```
 
 ## Data Import
@@ -59,7 +59,7 @@ row.names(sample_metadata) <- sample_metadata$ID
 counts <- read_tsv("data/star-salmon/salmon_merged_gene_counts_length_scaled.tsv")
 
 # Import variants of interest
-genes_of_interest <- read_csv("data/Prioritized_Genes_From_WGS_2024_11_19.csv")
+genes_of_interest <- read_csv("data/Prioritized_Genes_From_WGS_2025_06_18.csv")
 genes_of_interest <- unique(genes_of_interest$Genes)
 genes_of_interest <- genes_of_interest[!is.na(genes_of_interest)]
 
@@ -89,7 +89,7 @@ sample_metadata$Batch <- factor(sample_metadata$Batch)
 sample_metadata$Sex <- factor(sample_metadata$Sex)
 sample_metadata$Ancestry <- factor(sample_metadata$Ancestry)
 sample_metadata$Category <- factor(sample_metadata$Category)
-sample_metadata$OverallCategory <- factor(sample_metadata$`Overall category assigned`)
+sample_metadata$Subgroup <- factor(sample_metadata$Subgroup)
 
 # Account for Batch and Affected Status
 dds <- DESeqDataSetFromMatrix(
@@ -122,7 +122,7 @@ dds <- DESeq(dds)
 counts_norm <- counts(dds, normalized = TRUE)
 ```
 
-### Data transformation and visualization
+### Data transformation
 
 Perform count data transformation by variance stabilizing transformation (vst) on normalized counts.
 
@@ -158,7 +158,9 @@ vsd_limma <- vsd
 assay(vsd_limma) <- counts_vst_limma
 ```
 
-### Sample distances heatmap
+### Data Visualization
+
+#### Sample distances heatmap
 
 This code calculates sample-to-sample distances from the batch-effect corrected VST data, organizes the distances into a matrix, and visualizes the results as a heatmap for quality control.
 
@@ -184,7 +186,7 @@ pheatmap(sample_dist_matrix_all,
 )
 ```
 
-### Principal Components Analysis
+#### Principal Components Analysis & Visualization
 
 This code prepares data for PCA analysis, computes principal components using batch-effect corrected VST data, and generates a PCA plot to visualize sample clustering based on specified metadata variables.
 
@@ -207,42 +209,42 @@ print(pca_plot)
 ```
 
 The below PCA plot highlights overall categories, affected status, and batch information for each sample.
-```{r, principal-components-analysis-overallcategory}
+```{r, principal-components-analysis-category}
 # Prepare PCA data
 pca_results <- prepare_pca_data(
   vsd_data = vsd_limma,
-  intgroup = c("Batch", "Affected", "OverallCategory")
+  intgroup = c("Batch", "Affected", "Category")
 )
 
 # Generate PCA plot
 pca_plot <- generate_pca_plot(
   pca_data = pca_results$pca_data,
   percent_var = pca_results$percent_var,
-  colour = "OverallCategory", fill = "Affected", shape = "Batch"
+  colour = "Category", fill = "Affected", shape = "Batch"
 )
 
 # Display the plot
-print(pca_plot)
+pca_plot
 ```
 
-### Heatmap of all genes, top 50  & top 100 genes
+#### Heatmaps of Genes with Highest Variance
 
 ```{r, heatmap-colors, out.height="570px", out.width ="800px"}
 # Specify annotation colors by columns
 # Use RColorBrewer::brewer.pal(n=10, name="Set1")
-overall_category_colors <- c(
-  "ENE" = "#BFDFBF", # Magenta
-  "IMM" = "#EEBFEE", # Light green
-  "SOL" = "#FFFF33", # Mustard yellow
-  "STR" = "#BFBFFF", # Brown
-  "N/A" = "darkgray" # Dark grey
+category_colors <- c(
+  ENE        = "#3C8031",  # Energy Production and Metabolism (green)
+  STR        = "#1F57C3",  # Muscle Structure and Stability (blue)
+  RBC        = "#C9302C",  # RBC Membrane Integrity (red)
+  SOL        = "#9B2FAE",  # Solute Transport and Ion Homeostasis (purple)
+  IMM        = "#FFB000",  # IMM (assigned amber-gold)
+  Unaffected = "#808080"   # Neutral gray
 )
 
-
 ann_colors <- list(
-  Batch = c(B1 = "purple", B2 = "firebrick", B3 = "yellow"),
-  Affected = c(Affected = "green", Unaffected = "navy"),
-  OverallCategory = overall_category_colors
+  Batch = c(B1 = "#c38b1f", B2 = "#c31f57", B3 = "#1fc38b"),
+  Affected = c(Affected = "#800000", Unaffected = "#010080"),
+  Category = category_colors
 )
 ```
 
@@ -250,7 +252,7 @@ This is a heatmap of the top 50 genes with the highest variance across samples
 
 ```{r, top50-heatmap-batch-combined, out.height="570px", out.width ="800px"}
 # Parameters for the function
-annotation_columns <- c("Batch", "Affected", "OverallCategory")
+annotation_columns <- c("Batch", "Affected", "Category")
 annotation_colors <- ann_colors # Predefined annotation colors
 
 # Generate the heatmap for the top 50 variable genes
@@ -300,9 +302,9 @@ summary(res_aff_vs_unaff_sub)
 
 This code generates a heatmap for significantly differentially expressed genes (DEGs) with an adjusted `p-value < 0.1` and `|log2 fold change| ≥ 1`. It uses metadata annotations for grouping and color-coding.
 
-```{r, significant-genes-deseq-subsetted-overallcategory-lfc1, out.height="570px", out.width ="800px"}
+```{r, significant-genes-deseq-subsetted-category-lfc1, out.height="570px", out.width ="800px"}
 # Parameters for the function
-annotation_columns <- c("Affected", "OverallCategory")
+annotation_columns <- c("Affected", "Category")
 annotation_colors <- ann_colors # Predefined annotation colors
 output_file <- "output/publication-analysis/Supplemental Figure 4. DEGs (Padj < 0.1).png"
 
@@ -319,11 +321,11 @@ generate_significant_genes_heatmap(
 
 This code generates a heatmap for significantly differentially expressed genes (DEGs) with an adjusted `p-value < 0.05` and `|log2 fold change| ≥ 1`. It uses metadata annotations for grouping and color-coding.
 
-```{r, significant-genes-deseq-subsetted-overallcategory-padj05-lfc1, out.height="570px", out.width ="800px"}
+```{r, significant-genes-deseq-subsetted-category-padj05-lfc1, out.height="570px", out.width ="800px"}
 # Parameters for the function
-annotation_columns <- c("Affected", "OverallCategory")
+annotation_columns <- c("Affected", "Category")
 annotation_colors <- ann_colors # Predefined annotation colors
-output_file <- "output/publication-analysis/Supplemental Figure 4. Significant DEGs.png"
+output_file <- "output/publication-analysis/Supplemental Figure 4. Significant DEGs (Padj < 0.05).png"
 
 # Generate the heatmap for significant genes
 generate_significant_genes_heatmap(
@@ -373,7 +375,7 @@ write.csv(
 )
 ```
 
-## Volcano Plot
+#### Volcano Plot
 
 This code generates a volcano plot to visualize the distribution of differentially expressed genes (DEGs) and highlights selected genes and applying thresholds for significance and fold change.
 
@@ -440,7 +442,7 @@ my_gene_data_unique <- as.data.frame(my_gene_data) %>%
   dplyr::distinct(query, .keep_all = TRUE)
 ```
 
-## MA Plot and Significant Gene Analysis
+#### MA Plot and Significant Gene Analysis
 
 This code generates an MA plot to visualize the differential expression results, identifies significant genes, combines these with detailed gene annotations, and saves the results to CSV files.
 
@@ -477,7 +479,7 @@ write.csv(significant_data, file = "output/publication-analysis/res_aff_vs_unaff
 write.csv(combined_data, file = "output/publication-analysis/res_aff_vs_unaff_significant_subsetted_mygene.csv", row.names = FALSE)
 ```
 
-## Expression of Candidate Genes
+##### Expression of Candidate Genes
 
 Below is a table of expression of the genes identified during our WGS analysis.
 
@@ -500,38 +502,107 @@ missing_genes <- setdiff(subset_gene_info$Ensembl_ID, filtered_by_interest$Ensem
 
 corresponding_gene_names <- subset_gene_info$gene_name[subset_gene_info$Ensembl_ID %in% missing_genes]
 
-missing_gene_counts <- counts[row.names(counts) %in% missing_genes, ]
+# Add this to get the counts and assign gene names as rownames
+missing_gene_counts <- counts[rownames(counts) %in% missing_genes, ]
+
+missing_gene_map <- subset_gene_info[match(rownames(missing_gene_counts), subset_gene_info$Ensembl_ID), "gene_name"]
+
+rownames(missing_gene_counts) <- missing_gene_map
+
+# Save Missing Genes As CSV
+write.csv(missing_gene_counts,
+          file = "output/publication-analysis/missing_genes_interest_counts.csv")
 
 paged_table(filtered_by_interest, options = list(rows.print = 15))
 
 paged_table(filtered_counts, options = list(rows.print = 15))
 ```
 
-## STRINGdb Network Visualization
+#### STRINGdb Network Visualization
 
 This code visualizes a protein-protein interaction network for significant DEGs using STRINGdb. It includes mapping DEGs, adding differential expression color codes, and generating a network plot.
 
 ```{r, stringdb-network-significant}
-# Initialize STRINGdb for human (species code: 9606)
-string_db <- STRINGdb$new(version = "11.5", species = 9606, score_threshold = 100, network_type = "full", input_directory = "")
+library(igraph)
 
-# Map significant DEGs to STRINGdb using the 'name' column; remove unmatched entries
-mapped_degs <- string_db$map(significant_data, "name", removeUnmappedRows = TRUE)
+library(STRINGdb)
+library(igraph)
 
-# Extract the first 29 STRING IDs for network visualization
-hits <- mapped_degs$STRING_id[1:29]
+# STRINGdb setup
+string_db <- STRINGdb$new(version = "11.5", species = 9606,
+                          score_threshold = 100, network_type = "full",
+                          input_directory = "")
 
-# Add log fold change as color-coded data for DEGs
-mapped_degs_dec <- string_db$add_diff_exp_color(mapped_degs, logFcColStr = "lfc")
+# Combine DEGs and genes of interest
+all_genes <- unique(c(significant_data$name, genes_of_interest))
 
-# Submit the DEG data with color annotations to STRINGdb and get the payload ID
-payload_id <- string_db$post_payload(mapped_degs_dec$STRING_id, colors = mapped_degs_dec$color)
+# Map to STRING IDs
+mapped_all <- string_db$map(data.frame(name = all_genes), "name", removeUnmappedRows = TRUE)
 
-# Plot the protein-protein interaction network with the color-coded DEGs
-string_db$plot_network(hits, payload_id = payload_id)
+# Label type
+mapped_all$type <- ifelse(mapped_all$name %in% significant_data$name, "DEG", "variant")
+
+# Merge logFC from DEGs
+mapped_all$lfc <- significant_data$lfc[match(mapped_all$name, significant_data$name)]
+
+# Manually rescale lfc to [0,1]
+lfc_vals <- mapped_all$lfc
+lfc_min <- min(lfc_vals, na.rm = TRUE)
+lfc_max <- max(lfc_vals, na.rm = TRUE)
+
+lfc_scaled <- if (lfc_max == lfc_min) {
+  rep(0.5, length(lfc_vals))
+} else {
+  (lfc_vals - lfc_min) / (lfc_max - lfc_min)
+}
+
+# Create color palette and assign
+color_fun <- colorRampPalette(c("blue", "white", "firebrick"))
+deg_colors <- color_fun(100)[as.numeric(cut(lfc_scaled, breaks = 100))]
+mapped_all$color <- ifelse(mapped_all$type == "variant", "moccasin", deg_colors)
+
+# Build graph from all mapped STRING IDs
+full_graph <- string_db$get_graph()
+graph_all <- induced_subgraph(full_graph, vids = mapped_all$STRING_id)
+graph_all <- simplify(graph_all, remove.loops = TRUE, remove.multiple = TRUE)
+
+# Keep all DEGs
+deg_ids <- mapped_all$STRING_id[mapped_all$type == "DEG"]
+
+# From variant-only genes, keep top 20 by degree
+variant_ids <- mapped_all$STRING_id[mapped_all$type == "variant"]
+variant_ids_in_graph <- intersect(variant_ids, V(graph_all)$name)
+variant_degrees <- degree(graph_all, v = variant_ids_in_graph)
+top_variant_ids <- names(sort(variant_degrees, decreasing = TRUE))[1:10]
+
+# Final node set = all DEGs + top variant genes
+final_ids <- unique(c(deg_ids, top_variant_ids))
+graph <- induced_subgraph(graph_all, vids = final_ids)
+
+# Reapply aesthetics
+label_map <- setNames(mapped_all$name, mapped_all$STRING_id)
+color_map <- setNames(mapped_all$color, mapped_all$STRING_id)
+
+V(graph)$label <- label_map[V(graph)$name]
+V(graph)$color <- color_map[V(graph)$name]
+V(graph)$frame.color <- "white"
+V(graph)$label.color <- "black"
+V(graph)$size <- 8
+
+# Layout
+layout <- layout_with_fr(graph, niter = 2000, area = vcount(graph)^3)
+
+# Save plot
+png("output/publication-analysis/mecfs_deg_variant_network.png", width = 1600, height = 1000, res = 300)
+plot(graph,
+     vertex.label.cex = 0.75,
+     edge.color = "black",
+     edge.width = 1,
+     layout = layout)
+dev.off()
 ```
 
-## Genes of Interest Plot Counts
+#### Genes of Interest Plot Counts
 
 ```{r, generate-plot-counts-genes-interest-subsetted}
 # List of gene names to remove or keep
@@ -570,7 +641,7 @@ write.csv(gene_results_df, file_name, row.names = FALSE)
 # Prepare the heatmap data
 mat3 <- assay(vsd_limma)[filtered_without_spta1_genes$Ensembl_ID, ]
 rownames(mat3) <- gene_info$gene_name[match(filtered_without_spta1_genes$Ensembl_ID, gene_info$Ensembl_ID)]
-df_sub <- as.data.frame(colData(vsd_limma)[, c("Affected", "OverallCategory")])
+df_sub <- as.data.frame(colData(vsd_limma)[, c("Affected", "Category")])
 
 # Create the heatmap
 create_heatmap(
@@ -583,7 +654,7 @@ create_heatmap(
 ```
 
 
-## SPTA1 Genes of Interest
+### SPTA1 Genes of Interest
 
 ```{r, generate-plot-counts-genes-interest-spta1}
 # Define the output path
@@ -609,7 +680,7 @@ write.csv(gene_results_df, file_name, row.names = FALSE)
 # Prepare data for the heatmap
 mat_spta1 <- assay(vsd_limma)[spta1_genes_only$Ensembl_ID, ]
 rownames(mat_spta1) <- gene_info$gene_name[match(spta1_genes_only$Ensembl_ID, gene_info$Ensembl_ID)]
-annotation_data <- as.data.frame(colData(vsd_limma)[, c("Affected", "OverallCategory")])
+annotation_data <- as.data.frame(colData(vsd_limma)[, c("Affected", "Category")])
 
 # Generate a heatmap for SPTA1 genes
 create_heatmap(
@@ -622,7 +693,7 @@ create_heatmap(
 ```
 
 
-## Significant Genes Plot Counts
+### Significant Genes Plot Counts
 
 ```{r, generate-plot-counts-genes-significant}
 # Define the output path
@@ -650,7 +721,7 @@ rownames(mat_significant) <- res_aff_vs_unaff_df_genename_padj05_lfc1$gene_name[
   res_aff_vs_unaff_df_genename_padj05_lfc1$Ensembl_ID,
   res_aff_vs_unaff_df_genename_padj05_lfc1$Ensembl_ID
 )]
-annotation_data <- as.data.frame(colData(vsd_limma)[, c("Affected", "OverallCategory")])
+annotation_data <- as.data.frame(colData(vsd_limma)[, c("Affected", "Category")])
 
 # Generate a heatmap for significant genes
 create_heatmap(
@@ -662,7 +733,7 @@ create_heatmap(
 )
 ```
 
-### Save data
+## Save data
 
 ```{r, save-data}
 save.image(file = "output/publication-analysis/publication-analysis.RData")

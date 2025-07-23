@@ -18,24 +18,7 @@ knitr::opts_chunk$set(echo = TRUE, warning = FALSE, message = FALSE)
 
 Ensure you have all necessary libraries installed and load the helper code.
 
-At a later date, `renv` will be integrated to ensure reproducibility of this analysis.
-
-Use the below code to install these packages:
-
-```
-# Install packages from CRAN
-install.packages(c("tidyverse", "RColorBrewer", "pheatmap", "gprofiler2", "plotly", "ggupset", 
-                   "data.table", "lubridate", "reshape2", "viridis", "scales", "cowplot", 
-                   "patchwork", "ggrepel", "ggpubr", "forcats", "readxl", "openxlsx", 
-                   "rmarkdown"))
-
-# Install packages from Bioconductor
-install.packages("BiocManager")
-BiocManager::install(c("DESeq2", "genefilter", "limma", "biomaRt", "mygene", 
-                       "edgeR", "ComplexHeatmap", "clusterProfiler", "AnnotationDbi", 
-                       "pathview", "org.Hs.eg.db", "ReactomePA", "DOSE", "enrichR", 
-                       "STRINGdb"))
-```
+`renv` has been integrated to ensure reproducibility of this analysis.
 
 ```{r, load libraries, warning = FALSE, message = FALSE}
 library(tidyverse) # Available via CRAN
@@ -78,7 +61,8 @@ row.names(sample_metadata) <- sample_metadata$ID
 counts <- read_tsv("data/star-salmon/salmon_merged_gene_counts_length_scaled.tsv")
 
 # Import variants of interest
-genes_of_interest <- read_csv("data/Prioritized_Genes_From_WGS_2024_11_19.csv")
+#genes_of_interest <- read_csv("data/Prioritized_Genes_From_WGS_2024_11_19.csv")
+genes_of_interest <- read_csv("data/Prioritized_Genes_From_WGS_2025_06_18.csv")
 genes_of_interest <- unique(genes_of_interest$Genes)
 genes_of_interest <- genes_of_interest[!is.na(genes_of_interest)]
 
@@ -103,9 +87,8 @@ sample_metadata$Affected <- factor(sample_metadata$Affected)
 sample_metadata$Batch <- factor(sample_metadata$Batch)
 sample_metadata$Sex <- factor(sample_metadata$Sex)
 sample_metadata$Ancestry <- factor(sample_metadata$Ancestry)
-sample_metadata$SubCategory <- factor(sample_metadata$SubCategory)
+sample_metadata$Subgroup <- factor(sample_metadata$Subgroup)
 sample_metadata$Category <- factor(sample_metadata$Category)
-sample_metadata$OverallCategory <- factor(sample_metadata$`Overall category assigned`)
 
 # Account for Family later but batch is accounted for
 # Accounting for another factor seems to be an issue.
@@ -201,14 +184,14 @@ ggplot(pca_data_all, aes(PC1, PC2)) +
 pca_data_all <- plotPCA(vsd_limma,
   intgroup = c(
     "Affected", "Sex",
-    "OverallCategory"
+    "Category"
   ),
   returnData = TRUE
 )
 percent_var_all <- round(100 * attr(pca_data_all, "percentVar"))
 
 ggplot(pca_data_all, aes(PC1, PC2)) +
-  geom_point(aes(colour = OverallCategory, fill = Sex, shape = Affected), size = 4) +
+  geom_point(aes(colour = Category, fill = Sex, shape = Affected), size = 4) +
   scale_shape_manual(values = c(21, 22, 23)) +
   scale_fill_manual(values = c("white", "gray")) +
   geom_text(aes(label = name), vjust = -1, hjust = 0.65, size = 5) +
@@ -224,59 +207,18 @@ ggplot(pca_data_all, aes(PC1, PC2)) +
 # Specify annotation colors by columns
 # Use RColorBrewer::brewer.pal(n=10, name="Set1")
 category_colors <- c(
-  "Autoimmune disorder" = "#B3DE69",
-  "Immunodeficiency" = "#FFFFB3",
-  "Channelopathy" = "#BEBADA",
-  "Inflammatory disorder" = "#FB8072",
-  "Metabolic disorder" = "#80B1D3",
-  "Mitochondrial disorder" = "#FCCDE5",
-  "Neurologic disorder" = "#D9D9D9",
-  "Myasthenic disorder" = "#FDB462",
-  "Neuropathy" = "#8DD3C7",
-  "Unaffected" = "darkgrey"
+  ENE        = "#3C8031",  # Energy Production and Metabolism (green)
+  STR        = "#1F57C3",  # Muscle Structure and Stability (blue)
+  RBC        = "#C9302C",  # RBC Membrane Integrity (red)
+  SOL        = "#9B2FAE",  # Solute Transport and Ion Homeostasis (purple)
+  IMM        = "#FFB000",  # IMM (assigned amber-gold)
+  Unaffected = "#808080"   # Neutral gray
 )
 
-combined_category_colors <- c(
-  "E" = "#E41A1C", # Dark green
-  "C-I" = "#377EB8", # Dark orange
-  "E-I" = "#4DAF4A", # Light purple
-  "C" = "#984EA3", # Magenta
-  "I" = "#FF7F00", # Light green
-  "C-E" = "#FFFF33", # Mustard yellow
-  "S" = "#F781BF", # Brown
-  "Unaffected" = "darkgray" # Dark grey
-)
-
-overall_category_colors <- c(
-  "ENE" = "#BFDFBF", # Magenta
-  "IMM" = "#EEBFEE", # Light green
-  "SOL" = "#FFFF33", # Mustard yellow
-  "STR" = "#BFBFFF", # Brown
-  "N/A" = "darkgray" # Dark grey
-)
-
-# Specify colors
 ann_colors <- list(
-  Batch = c(B1 = "purple", B2 = "firebrick", B3 = "yellow"),
-  Affected = c(Affected = "green", Unaffected = "navy"),
-  SubCategory = category_colors,
-  Category = combined_category_colors,
-  OverallCategory = overall_category_colors
-)
-
-ann_colors2 <- list(
-  Batch = c(B1 = "purple", B2 = "firebrick", B3 = "yellow"),
-  Affected = c(Affected = "green", Unaffected = "navy"),
-  SubCategory = category_colors,
-  Category = combined_category_colors
-)
-
-ann_colors3 <- list(
-  Batch = c(B1 = "purple", B2 = "firebrick", B3 = "yellow"),
-  Affected = c(Affected = "green", Unaffected = "navy"),
-  SubCategory = category_colors,
-  Category = combined_category_colors,
-  OverallCategory = overall_category_colors
+  Batch = c(B1 = "#c38b1f", B2 = "#c31f57", B3 = "#1fc38b"),
+  Affected = c(Affected = "#800000", Unaffected = "#010080"),
+  Category = category_colors
 )
 ```
 
@@ -286,7 +228,7 @@ This is a heatmap of the top 50 genes with the highest variance across samples
 top_var_genes <- head(order(-rowVars(assay(vsd_limma))), 50)
 mat <- assay(vsd_limma)[top_var_genes, ]
 mat <- mat - rowMeans(mat)
-df <- as.data.frame(colData(vsd_limma)[, c("Batch", "Affected", "OverallCategory")])
+df <- as.data.frame(colData(vsd_limma)[, c("Batch", "Affected", "Category")])
 
 ensembl_to_gene <- setNames(gene_info$gene_name, gene_info$Ensembl_ID)
 
@@ -300,7 +242,7 @@ new_row_names <- ensembl_to_gene[current_ensembl_ids]
 rownames(mat) <- new_row_names
 
 ComplexHeatmap::pheatmap(mat,
-  annotation_col = df, annotation_colors = ann_colors3,
+  annotation_col = df, annotation_colors = ann_colors,
   fontsize = 5, angle_col = c("0")
 )
 ```
@@ -354,12 +296,12 @@ topgenes_aff_vs_unaff_05 <- topgenes_aff_vs_unaff_05[order(res_aff_vs_unaff_df$p
 
 df <- df <- colData(vsd_limma) %>%
   as.data.frame() %>%
-  dplyr::select(OverallCategory)
+  dplyr::select(Category)
 
 ComplexHeatmap::pheatmap(topgenes_aff_vs_unaff_05, color = colorRampPalette(rev(brewer.pal(
   n = 9, name =
     "RdYlBu"
-)))(50), annotation_col = df, annotation_colors = ann_colors3, fontsize = 7, angle_col = c("0"), cellheight = 10, cellwidth = 24, border_color = "black", heatmap_legend_param = list(
+)))(50), annotation_col = df, annotation_colors = ann_colors, fontsize = 7, angle_col = c("0"), cellheight = 10, cellwidth = 24, border_color = "black", heatmap_legend_param = list(
   title = ""
 ))
 ```
@@ -503,7 +445,16 @@ missing_genes <- setdiff(subset_gene_info$Ensembl_ID, filtered_by_interest$Ensem
 
 corresponding_gene_names <- subset_gene_info$gene_name[subset_gene_info$Ensembl_ID %in% missing_genes]
 
-missing_gene_counts <- counts[row.names(counts) %in% missing_genes, ]
+# Add this to get the counts and assign gene names as rownames
+missing_gene_counts <- counts[rownames(counts) %in% missing_genes, ]
+
+missing_gene_map <- subset_gene_info[match(rownames(missing_gene_counts), subset_gene_info$Ensembl_ID), "gene_name"]
+
+rownames(missing_gene_counts) <- missing_gene_map
+
+# Save Missing Genes As CSV
+write.csv(missing_gene_counts,
+          file = "output/all-samples-analysis/missing_genes_interest_counts.csv")
 
 paged_table(filtered_by_interest, options = list(rows.print = 15))
 
@@ -724,7 +675,7 @@ Below is a heatmap highlighting the expression of our genes of interest across b
 # Prepare data for the heatmap
 mat3 <- assay(vsd_limma)[filtered_without_genes$Ensembl_ID, ]
 rownames(mat3) <- gene_info$gene_name[match(filtered_without_genes$Ensembl_ID, gene_info$Ensembl_ID)]
-df <- as.data.frame(colData(vsd_limma)[, c("Affected", "OverallCategory")])
+df <- as.data.frame(colData(vsd_limma)[, c("Affected", "Category")])
 
 # Set up color palette
 color_palette <- colorRampPalette(rev(brewer.pal(n = 9, name = "RdYlBu")))(50)
@@ -738,7 +689,7 @@ draw(ComplexHeatmap::pheatmap(
   mat = mat3,
   color = colorRampPalette(rev(brewer.pal(n = 9, name = "RdYlBu")))(50),
   annotation_col = df,
-  annotation_colors = ann_colors3,
+  annotation_colors = ann_colors,
   fontsize = 6,
   angle_col = c("0"),
   cellheight = 10, # Set cell height
@@ -886,7 +837,7 @@ Below is a heatmap highlighting the expression of our genes of interest across b
 # Prepare data for the heatmap
 mat4 <- assay(vsd_limma)[filtered_with_only_genes$Ensembl_ID, ]
 rownames(mat4) <- gene_info$gene_name[match(filtered_with_only_genes$Ensembl_ID, gene_info$Ensembl_ID)]
-df <- as.data.frame(colData(vsd_limma)[, c("Affected", "OverallCategory")])
+df <- as.data.frame(colData(vsd_limma)[, c("Affected", "Category")])
 
 # Set up color palette
 color_palette <- colorRampPalette(rev(brewer.pal(n = 9, name = "RdYlBu")))(50)
@@ -900,7 +851,7 @@ draw(ComplexHeatmap::pheatmap(
   mat = mat4,
   color = colorRampPalette(rev(brewer.pal(n = 9, name = "RdYlBu")))(50),
   annotation_col = df,
-  annotation_colors = ann_colors3,
+  annotation_colors = ann_colors,
   fontsize = 6,
   angle_col = c("0"),
   cellheight = 10, # Set cell height
@@ -1048,7 +999,7 @@ Below is a heatmap highlighting the expression of our genes of interest across b
 # Prepare data for the heatmap
 mat5 <- assay(vsd_limma)[filtered_with_only_madd_genes$Ensembl_ID, ]
 rownames(mat5) <- gene_info$gene_name[match(filtered_with_only_madd_genes$Ensembl_ID, gene_info$Ensembl_ID)]
-df <- as.data.frame(colData(vsd_limma)[, c("Affected", "OverallCategory")])
+df <- as.data.frame(colData(vsd_limma)[, c("Affected", "Category")])
 
 # Set up color palette
 color_palette <- colorRampPalette(rev(brewer.pal(n = 9, name = "RdYlBu")))(50)
@@ -1062,7 +1013,7 @@ draw(ComplexHeatmap::pheatmap(
   mat = mat5,
   color = colorRampPalette(rev(brewer.pal(n = 9, name = "RdYlBu")))(50),
   annotation_col = df,
-  annotation_colors = ann_colors3,
+  annotation_colors = ann_colors,
   fontsize = 6,
   angle_col = c("0"),
   cellheight = 10, # Set cell height
@@ -1211,7 +1162,7 @@ Below is a heatmap highlighting the expression of our genes of interest across b
 # Prepare data for the heatmap
 mat6 <- assay(vsd_limma)[filtered_with_only_mito_genes$Ensembl_ID, ]
 rownames(mat6) <- gene_info$gene_name[match(filtered_with_only_mito_genes$Ensembl_ID, gene_info$Ensembl_ID)]
-df <- as.data.frame(colData(vsd_limma)[, c("Affected", "OverallCategory")])
+df <- as.data.frame(colData(vsd_limma)[, c("Affected", "Category")])
 
 # Set up color palette
 color_palette <- colorRampPalette(rev(brewer.pal(n = 9, name = "RdYlBu")))(50)
@@ -1225,7 +1176,7 @@ draw(ComplexHeatmap::pheatmap(
   mat = mat6,
   color = colorRampPalette(rev(brewer.pal(n = 9, name = "RdYlBu")))(50),
   annotation_col = df,
-  annotation_colors = ann_colors3,
+  annotation_colors = ann_colors,
   fontsize = 6,
   angle_col = c("0"),
   cellheight = 10, # Set cell height
@@ -1389,7 +1340,7 @@ all_genes_data <- res_aff_vs_unaff_df_genename %>%
 # Prepare the heatmap data
 all_mat <- assay(vsd_limma)[all_genes_data$Ensembl_ID, ]
 rownames(all_mat) <- gene_info$gene_name[match(all_genes_data$Ensembl_ID, gene_info$Ensembl_ID)]
-df_sub <- as.data.frame(colData(vsd_limma)[, c("Affected", "OverallCategory")])
+df_sub <- as.data.frame(colData(vsd_limma)[, c("Affected", "Category")])
 
 png(file_name, width = 16, height = 26, units = "in", res = 1200)
 draw(
@@ -1426,7 +1377,7 @@ all_genes_data <- res_aff_vs_unaff_df_genename %>%
 # Prepare the heatmap data
 all_mat <- assay(vsd_limma)[all_genes_data$Ensembl_ID, ]
 rownames(all_mat) <- gene_info$gene_name[match(all_genes_data$Ensembl_ID, gene_info$Ensembl_ID)]
-df_sub <- as.data.frame(colData(vsd_limma)[, c("Affected", "OverallCategory")])
+df_sub <- as.data.frame(colData(vsd_limma)[, c("Affected", "Category")])
 
 png(file_name, width = 16, height = 26, units = "in", res = 1200)
 draw(

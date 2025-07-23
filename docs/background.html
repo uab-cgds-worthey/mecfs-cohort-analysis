@@ -13,10 +13,10 @@
 
 <title>Background</title>
 
-<script src="site_libs/header-attrs-2.24/header-attrs.js"></script>
+<script src="site_libs/header-attrs-2.27/header-attrs.js"></script>
 <script src="site_libs/jquery-3.6.0/jquery-3.6.0.min.js"></script>
 <meta name="viewport" content="width=device-width, initial-scale=1" />
-<link href="site_libs/bootstrap-3.3.5/css/journal.min.css" rel="stylesheet" />
+<link href="site_libs/bootstrap-3.3.5/css/sandstone.min.css" rel="stylesheet" />
 <script src="site_libs/bootstrap-3.3.5/js/bootstrap.min.js"></script>
 <script src="site_libs/bootstrap-3.3.5/shim/html5shiv.min.js"></script>
 <script src="site_libs/bootstrap-3.3.5/shim/respond.min.js"></script>
@@ -32,8 +32,11 @@
 <script src="site_libs/navigation-1.1/tabsets.js"></script>
 <link href="site_libs/highlightjs-9.12.0/textmate.css" rel="stylesheet" />
 <script src="site_libs/highlightjs-9.12.0/highlight.js"></script>
-<link href="site_libs/font-awesome-6.4.0/css/all.min.css" rel="stylesheet" />
-<link href="site_libs/font-awesome-6.4.0/css/v4-shims.min.css" rel="stylesheet" />
+<link href="site_libs/font-awesome-6.4.2/css/all.min.css" rel="stylesheet" />
+<link href="site_libs/font-awesome-6.4.2/css/v4-shims.min.css" rel="stylesheet" />
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Arimo:ital,wght@0,400..700;1,400..700&family=Noto+Sans:ital,wght@0,100..900;1,100..900&family=Roboto:ital,wght@0,100..900;1,100..900&display=swap" rel="stylesheet">
 
 <link rel="icon" href="https://github.com/workflowr/workflowr-assets/raw/main/img/reproducible.png">
 <!-- Add a small amount of space between sections. -->
@@ -70,6 +73,7 @@ if (window.hljs) {
 
 
 
+<link rel="stylesheet" href="custom.css" type="text/css" />
 
 
 
@@ -268,19 +272,16 @@ $(document).ready(function () {
   </a>
   <ul class="dropdown-menu" role="menu">
     <li>
-      <a href="condition-analysis.html">By Condition</a>
-    </li>
-    <li>
-      <a href="tier-analysis.html">By Tier</a>
-    </li>
-    <li>
-      <a href="batch-analysis.html">By Batch</a>
+      <a href="subsetted-condition-analysis.html">Subsetted Analysis</a>
     </li>
   </ul>
 </li>
       </ul>
       <ul class="nav navbar-nav navbar-right">
         <li>
+  <a href="contact.html">Contact</a>
+</li>
+<li>
   <a href="https://github.com/uab-cgds-worthey/mecfs-dge-analysis">
     <span class="fa fa-github"></span>
      
@@ -324,7 +325,7 @@ class="glyphicon glyphicon-ok text-success" aria-hidden="true"></span>
 <div class="tab-content">
 <div id="summary" class="tab-pane fade in active">
 <p>
-<strong>Last updated:</strong> 2023-08-16
+<strong>Last updated:</strong> 2025-07-16
 </p>
 <p>
 <strong>Checks:</strong> <span
@@ -342,7 +343,7 @@ title="This is the local directory in which the code in this file was executed."
 This reproducible <a href="https://rmarkdown.rstudio.com">R Markdown</a>
 analysis was created with <a
   href="https://github.com/workflowr/workflowr">workflowr</a> (version
-1.7.0). The <em>Checks</em> tab describes the reproducibility checks
+1.7.1). The <em>Checks</em> tab describes the reproducibility checks
 that were applied when the results were created. The <em>Past
 versions</em> tab lists the development history.
 </p>
@@ -371,15 +372,15 @@ results.</p>
 <div class="panel panel-default">
 <div class="panel-heading">
 <p class="panel-title">
-<a data-toggle="collapse" data-parent="#workflowr-checks" href="#strongRepositoryversionstrongahrefhttpsgithubcomuabcgdswortheymecfsdgeanalysistreef22d1e242164ce86f8775e3aa24a8fcda5e056bdtargetblankf22d1e2a">
+<a data-toggle="collapse" data-parent="#workflowr-checks" href="#strongRepositoryversionstrongahrefhttpsgithubcomuabcgdswortheymecfsdgeanalysistree87e90606f12df10ff122c1a8702802116df6b2a6targetblank87e9060a">
 <span class="glyphicon glyphicon-ok text-success"
 aria-hidden="true"></span> <strong>Repository version:</strong>
-<a href="https://github.com/uab-cgds-worthey/mecfs-dge-analysis/tree/f22d1e242164ce86f8775e3aa24a8fcda5e056bd" target="_blank">f22d1e2</a>
+<a href="https://github.com/uab-cgds-worthey/mecfs-dge-analysis/tree/87e90606f12df10ff122c1a8702802116df6b2a6" target="_blank">87e9060</a>
 </a>
 </p>
 </div>
 <div
-id="strongRepositoryversionstrongahrefhttpsgithubcomuabcgdswortheymecfsdgeanalysistreef22d1e242164ce86f8775e3aa24a8fcda5e056bdtargetblankf22d1e2a"
+id="strongRepositoryversionstrongahrefhttpsgithubcomuabcgdswortheymecfsdgeanalysistree87e90606f12df10ff122c1a8702802116df6b2a6targetblank87e9060a"
 class="panel-collapse collapse">
 <div class="panel-body">
 <p>
@@ -389,7 +390,7 @@ reproducibility.
 </p>
 <p>
 The results in this page were generated with repository version
-<a href="https://github.com/uab-cgds-worthey/mecfs-dge-analysis/tree/f22d1e242164ce86f8775e3aa24a8fcda5e056bd" target="_blank">f22d1e2</a>.
+<a href="https://github.com/uab-cgds-worthey/mecfs-dge-analysis/tree/87e90606f12df10ff122c1a8702802116df6b2a6" target="_blank">87e9060</a>.
 See the <em>Past versions</em> tab to see a history of the changes made
 to the R Markdown and HTML files.
 </p>
@@ -407,28 +408,24 @@ Ignored files:
     Ignored:    .DS_Store
     Ignored:    .Rhistory
     Ignored:    .Rproj.user/
-    Ignored:    analysis/figure/
-    Ignored:    output/batch-correction-limma/
-
-Untracked files:
-    Untracked:  code/edit_metadata.R
-    Untracked:  data/MECFS_RNAseq_metadata_2023_08_16.csv
-    Untracked:  data/MECFS_RNAseq_metadata_2023_08_17.csv
-    Untracked:  output/batch-analysis.RData
-    Untracked:  output/condition-analysis.RData
-    Untracked:  output/counts_vst2.csv
-    Untracked:  output/res_batch.csv
-    Untracked:  output/results_tier.csv
-    Untracked:  output/results_tier_1_vs_2.csv
-    Untracked:  output/results_tier_1_vs_3.csv
-
-Unstaged changes:
-    Modified:   README.md
-    Deleted:    analysis/analysis.Rmd
-    Deleted:    analysis/initial-analysis.Rmd
-    Modified:   code/helpers.R
-    Modified:   data/MECFS_RNAseq_metadata_2023_06_23.csv
-    Modified:   output/counts_vst_limma.csv
+    Ignored:    .github/.DS_Store
+    Ignored:    .test/
+    Ignored:    analysis/.DS_Store
+    Ignored:    analysis/head.html
+    Ignored:    configs/
+    Ignored:    data/.DS_Store
+    Ignored:    notebooks/
+    Ignored:    output/.DS_Store
+    Ignored:    output/all-samples-analysis/.DS_Store
+    Ignored:    output/all-samples-analysis/batch-correction-limma/
+    Ignored:    output/publication-analysis/.DS_Store
+    Ignored:    output/publication-analysis/batch-correction-limma/plot-counts/.DS_Store
+    Ignored:    output/spta1-analysis/batch-correction-limma/
+    Ignored:    output/subgroup-hpp-analysis/.DS_Store
+    Ignored:    renv/.DS_Store
+    Ignored:    renv/library/
+    Ignored:    renv/staging/
+    Ignored:    src/
 
 </code></pre>
 <p>
@@ -443,7 +440,6 @@ have uncommitted changes.
 <hr>
 </div>
 <div id="versions" class="tab-pane fade">
-
 <p>
 These are the previous versions of the repository in which changes were
 made to the R Markdown (<code>analysis/background.Rmd</code>) and HTML
@@ -474,6 +470,108 @@ Message
 </tr>
 </thead>
 <tbody>
+<tr>
+<td>
+Rmd
+</td>
+<td>
+<a href="https://github.com/uab-cgds-worthey/mecfs-dge-analysis/blob/87e90606f12df10ff122c1a8702802116df6b2a6/analysis/background.Rmd" target="_blank">87e9060</a>
+</td>
+<td>
+sdhutchins
+</td>
+<td>
+2025-07-16
+</td>
+<td>
+Remove heading.
+</td>
+</tr>
+<tr>
+<td>
+html
+</td>
+<td>
+<a href="https://rawcdn.githack.com/uab-cgds-worthey/mecfs-dge-analysis/eb546cdfe007b1886a97fa450f5cfcc2edc6d0f7/docs/background.html" target="_blank">eb546cd</a>
+</td>
+<td>
+sdhutchins
+</td>
+<td>
+2025-07-15
+</td>
+<td>
+Build site.
+</td>
+</tr>
+<tr>
+<td>
+Rmd
+</td>
+<td>
+<a href="https://github.com/uab-cgds-worthey/mecfs-dge-analysis/blob/1373f8e34f1d048e21230fe2d9d890856d36c89c/analysis/background.Rmd" target="_blank">1373f8e</a>
+</td>
+<td>
+sdhutchins
+</td>
+<td>
+2025-07-15
+</td>
+<td>
+Changes to Category.
+</td>
+</tr>
+<tr>
+<td>
+Rmd
+</td>
+<td>
+<a href="https://github.com/uab-cgds-worthey/mecfs-dge-analysis/blob/8e529df0c9dc12180f1b1c7e74618eb3e58ab946/analysis/background.Rmd" target="_blank">8e529df</a>
+</td>
+<td>
+sdhutchins
+</td>
+<td>
+2024-12-23
+</td>
+<td>
+Remove unused section.
+</td>
+</tr>
+<tr>
+<td>
+Rmd
+</td>
+<td>
+<a href="https://github.com/uab-cgds-worthey/mecfs-dge-analysis/blob/01889df0642bdb81bf6ee7369da6e24298467dd2/analysis/background.Rmd" target="_blank">01889df</a>
+</td>
+<td>
+Brandon M. Wilk
+</td>
+<td>
+2024-12-06
+</td>
+<td>
+Remove archived analyses.
+</td>
+</tr>
+<tr>
+<td>
+html
+</td>
+<td>
+<a href="https://rawcdn.githack.com/uab-cgds-worthey/mecfs-dge-analysis/05f55021fba95b95fe55b566cf65f894df83adb1/docs/background.html" target="_blank">05f5502</a>
+</td>
+<td>
+sdhutchins
+</td>
+<td>
+2023-08-16
+</td>
+<td>
+Build site.
+</td>
+</tr>
 <tr>
 <td>
 html
@@ -770,63 +868,37 @@ wflow_publish("analysis/")
 </div>
 </div>
 </div>
-<div id="abstract" class="section level1">
-<h1>Abstract</h1>
 <p>Myalgic Encephalomyelitis/Chronic Fatigue Syndrome (ME/CFS) is a
-severely disabling, chronic illness that affects approximately 1-3
-million Americans. ME/CFS can be briefly described as presenting with
-severe unrelenting fatigue,widespread unexplained pain, general malaise
-or feelings of illness described as flu-like,post-exertional malaise
-syndrome which is characterized by the drastic reduction in physical and
-mental ability following exertion of any kind, GI and digestive
-problems,mental fogginess, and cardio-pulmonary abnormalities. The cause
-of ME/CFS is not well understood. The majority of ME/CFS patients can
-recall a time of either sudden onset of dysfunction from an illness or a
-gradual decline in function, and this most often occurs in adulthood.
-Many biological abnormalities have been identified in ME/CFS patients,
-such as altered cytokine responses indicating increased systemic
-inflammation, altered metabolic profiling, dysregulation of the immune
-system, and neuroinflammation. Despite a delay in initiation of genetic
-studies, there is now a growing body of knowledge indicating an
-underlying genetic predisposition. Studies have shown that having a
-family member with ME/CFS is one of the strongest predictive factors for
-the presence of disease; first-degree relatives of affected individuals
-were found to be three times more likely to develop ME/CFS than
-controls. We hypothesized that ME/CFS is a genetically inherited disease
-that results in disrupted metabolic regulation of the immune system,thus
-resulting in an inappropriately activated immune system.</p>
-</div>
-<div id="methods" class="section level1">
-<h1>Methods</h1>
-<p>We performed WGS on 23 ME/CFS patients with 10 first degree relative
-healthy controls. We utilized our custom WGS analysis software, Codicem,
-for interpretation of the data. Our methods, which have been used to
-uncover the genetic causes of disease in thousands of patients, support
-identification of all categories of molecular variation including genic
-and regulatory, protein-coding and non-protein coding, small variants
-and larger structural variants (SVs, including more complex types of
-rearrangements), chromosomal abnormalities, repeat expansions, mobile
-element insertions, and variants in regulatory regions that alter
-expression. In addition, we have used a variety of existing tools to
-perform network analyses of candidate loci identified inME/CFS patients.
-We have extracted pharmacogenomics data from these patients which can be
-applied towards better choices in prescribed drugs. We have also
-collected RNA samples on 10 ME/CFS patients for expression analysis and
-immune repertoire sequencing.</p>
-<div id="performing-wgs-analysis" class="section level2">
-<h2>Performing WGS Analysis</h2>
-</div>
-<div id="performing-bulk-rnaseq-analysis" class="section level2">
-<h2>Performing Bulk RNASeq Analysis</h2>
-<p>We have collected RNA samples on 29 ME/CFS patients for expression
-analysis and performed bulk RNA sequencing via Vantage.</p>
-<p>Our lab uses nf-core’s rnaseq pipeline for secondary analysis which
-we’ve modified to work on the cluster, Cheaha, that we use.</p>
+chronic, disabling illness affecting an estimated 1–3 million Americans.
+It is marked by persistent fatigue, post-exertional malaise, cognitive
+impairment, pain, and a range of immune, metabolic, and neurological
+symptoms.</p>
+<p>Onset often follows infection or occurs gradually in adulthood.
+Research has identified biological abnormalities in ME/CFS, including
+immune dysregulation, altered cytokine profiles, metabolic dysfunction,
+and neuroinflammation.</p>
+<p>Family studies suggest a genetic component, with first-degree
+relatives of ME/CFS patients at increased risk.</p>
+<div id="methods" class="section level2">
+<h2>Methods</h2>
+<div id="bulk-rna-seq-analysis" class="section level3">
+<h3>Bulk RNA-Seq Analysis</h3>
+<p>Peripheral blood RNA was collected from 29 ME/CFS patients for
+transcriptomic profiling. Bulk RNA sequencing was performed by
+Vantage.</p>
+<p>We used the <a href="https://nf-co.re/rnaseq">nf-core/rnaseq</a>
+pipeline for secondary analysis. This pipeline was modified to run on
+UAB’s Cheaha high-performance computing cluster.</p>
 <div class="float">
 <img
 src="https://raw.githubusercontent.com/nf-core/rnaseq/3.12.0/docs/images/nf-core-rnaseq_metro_map_grey.png"
 alt="nf-core rnaseq map" />
 <div class="figcaption">nf-core rnaseq map</div>
+</div>
+</div>
+</div>
+</div>
+</div>
 </div>
 </div>
 </div>

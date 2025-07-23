@@ -12,11 +12,16 @@ navbar:
     - text: Subsetted Analysis
       href: subsetted-condition-analysis.html
   right:
+  - text: Contact
+    href: contact.html
   - icon: fa-github
     href: https://github.com/uab-cgds-worthey/mecfs-dge-analysis
 output:
   workflowr::wflow_html:
     toc: yes
     toc_float: yes
-    theme: journal
+    theme: sandstone
     highlight: textmate
+    css: custom.css
+    includes:
+      in_header: head.html
