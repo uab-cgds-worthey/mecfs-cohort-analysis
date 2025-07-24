@@ -17,6 +17,7 @@ analysis/site_libs/
 
 # Ignore all .RData files in output directories
 output/**/*.RData
+*.RData
 
 # Ignore all PNGs from batch-correction-limma (recursively)
 output/**/batch-correction-limma/**/*.png
