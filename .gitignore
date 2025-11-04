@@ -1,4 +1,4 @@
-# R-specific files
+# RStudio project files
 .Rproj.user/
 .Rhistory
 .RData
@@ -8,18 +8,17 @@
 # macOS-specific files
 .DS_Store
 
-# Analysis artifacts
-analysis/figure/
-analysis/*.png
-analysis/*.html
-analysis/*_cache/
-analysis/site_libs/
+# VSCode-specific files
+.vscode
 
-# Ignore all .RData files in output directories
-output/**/*.RData
-*.RData
+# Environments
+.env
+.venv
+env/
+venv/
+ENV/
+env.bak/
+venv.bak/
 
-# Ignore all PNGs from batch-correction-limma (recursively)
-output/**/batch-correction-limma/**/*.png
-
-
+# Jupyter Notebook
+.ipynb_checkpoints
