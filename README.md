@@ -1,12 +1,17 @@
 # ME/CFS N-of-1
 
-This repository contains multiple complementary analyses of the Ramsey award ME/CFS cohort, including differential gene expression analysis and phenotypic comparison studies.
+This repository contains multiple complementary analyses of the Ramsey award ME/CFS cohort, including differential
+gene expression analysis and phenotypic comparison studies.
 
 ## Background
 
-Myalgic Encephalomyelitis/Chronic Fatigue Syndrome (ME/CFS) is a chronic and debilitating illness affecting millions of individuals worldwide. It is characterized by severe fatigue, pain, flu-like symptoms, and cognitive issues. The cause of ME/CFS is not well understood, but evidence suggests a genetic predisposition and dysregulation of the immune system leading to an overactive immune response.
+Myalgic Encephalomyelitis/Chronic Fatigue Syndrome (ME/CFS) is a chronic and debilitating illness affecting millions of
+ individuals worldwide. It is characterized by severe fatigue, pain, flu-like symptoms, and cognitive issues. The cause
+ of ME/CFS is not well understood, but evidence suggests a genetic predisposition and dysregulation of the immune
+ system leading to an overactive immune response.
 
 This repository hosts analyses that explore:
+
 - Differential gene expression patterns in ME/CFS patients
 - Phenotypic overlap between ME/CFS and other diseases
 - Patient phenotypic similarity and clustering
@@ -23,13 +28,16 @@ This repository hosts analyses that explore:
 ### Requirements
 
 **For Differential Gene Expression Analysis:**
+
 - R ([v4.5.1](https://cran.r-project.org/bin/macosx/big-sur-x86_64/base/R-4.5.1-x86_64.pkg) or later)
 - RStudio (v2025.05.1+513 or later)
 
 **For Phenotypic Comparison Analysis:**
+
 - Anaconda3 or Mamba
 
 **Common Requirements:**
+
 - Git v2.0+
 
 ### Setup
@@ -50,28 +58,31 @@ For detailed setup instructions for each analysis, see the README files in their
 
 ### Differential Gene Expression Analysis
 
-The differential gene expression analysis examines transcriptional changes in a cohort of 23 patients diagnosed with ME/CFS using bulk RNA-seq. The analysis identifies genes that are differentially expressed between affected and unaffected conditions, and explores subgroup-specific patterns.
+The differential gene expression analysis examines transcriptional changes in a cohort of 23 patients diagnosed with
+ME/CFS using bulk RNA-seq. The analysis identifies genes that are differentially expressed between
+affected and unaffected conditions, and explores subgroup-specific patterns.
 
 Located in [`dge-analysis/`](dge-analysis/).
 
 For detailed documentation including setup, input data, workflow instructions, and results, see [`dge-analysis/README.md`](dge-analysis/README.md).
 
-#### Results
+#### Results: Differential Gene Expression
 
 - Results and figures can be found in the `dge-analysis/docs/` folder
 - Viewable online at: [https://uab-cgds-worthey.github.io/mecfs-dge-analysis/](https://uab-cgds-worthey.github.io/mecfs-dge-analysis/)
 
 ### Phenotypic Comparison Analysis
 
-A collection of diseases found in the Ramsey award ME/CFS cohort, phenotypes of ME/CFS and those diseases, and analysis scripts for the comparison and visualization of phenotypes between diseases.
+A collection of diseases found in the Ramsey award ME/CFS cohort, phenotypes of ME/CFS and those diseases, and
+analysis scripts for the comparison and visualization of phenotypes between diseases.
 
-Located in [`phenotypic-analysis/`]().
+Located in
 
 For detailed documentation including setup, tools, and workflow instructions, see the phenotypic analysis README when available.
 
-#### Results
+#### Results: Phenotypic Comparison
 
-- Results and figures can be found in 
+- Results and figures can be found in
 
 ## Authors
 
