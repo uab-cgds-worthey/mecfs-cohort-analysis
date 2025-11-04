@@ -1,0 +1,23 @@
+# R-specific files
+.Rproj.user/
+.Rhistory
+.RData
+.Ruserdata
+.Rapp.history
+
+# macOS-specific files
+.DS_Store
+
+# Analysis artifacts
+analysis/figure/
+analysis/*.png
+analysis/*.html
+analysis/*_cache/
+analysis/site_libs/
+
+# Ignore all .RData files in output directories
+output/**/*.RData
+*.RData
+
+# Ignore all PNGs from batch-correction-limma (recursively)
+output/**/batch-correction-limma/**/*.png
