@@ -51,7 +51,8 @@ cd mecfs-dge-analysis/
 
 For detailed setup instructions for each analysis, see the README files in their respective directories:
 
-- **Differential Gene Expression Analysis:** See [`dge-analysis/README.md`](dge-analysis/README.md) for detailed R/renv setup instructions
+- **Differential Gene Expression Analysis:** See [`dge-analysis/README.md`](dge-analysis/README.md) for detailed
+R/renv setup instructions
 - **Phenotypic Comparison Analysis:** See the phenotypic comparison documentation for conda/mamba environment setup instructions
 
 ## Analyses
