@@ -1,23 +1,35 @@
-# ME/CFS-Differential-Gene-Expression-Analysis
+# ME/CFS N-of-1
 
-This repository hosts the differential gene expression analysis of a cohort of 23 patients diagnosed with ME/CFS.
+This repository contains multiple complementary analyses of the Ramsey award ME/CFS cohort, including differential gene expression analysis and phenotypic comparison studies.
 
 ## Background
 
-Myalgic Encephalomyelitis/Chronic Fatigue Syndrome (ME/CFS) is a chronic and debilitating illness affecting millions
-of individuals worldwide. It is characterized by severe fatigue, pain, flu-like symptoms, and cognitive issues. The
-cause of ME/CFS is not well understood, but evidence suggests a genetic predisposition and dysregulation of the immune
-system leading to an overactive immune response.
+Myalgic Encephalomyelitis/Chronic Fatigue Syndrome (ME/CFS) is a chronic and debilitating illness affecting millions of individuals worldwide. It is characterized by severe fatigue, pain, flu-like symptoms, and cognitive issues. The cause of ME/CFS is not well understood, but evidence suggests a genetic predisposition and dysregulation of the immune system leading to an overactive immune response.
+
+This repository hosts analyses that explore:
+- Differential gene expression patterns in ME/CFS patients
+- Phenotypic overlap between ME/CFS and other diseases
+- Patient phenotypic similarity and clustering
+- Disease enrichment analyses
+
+## Repository Structure
+
+- `dge-analysis/` - Differential gene expression analysis using R
+- `phenotypic-analysis/` - Phenotypic comparison analysis
+- `configs/` - Configuration files for analysis environments
 
 ## Installation
 
-This project uses the `renv` package to manage R package dependencies
-to ensure that the analysis can be reproduced.
-
 ### Requirements
 
+**For Differential Gene Expression Analysis:**
 - R ([v4.5.1](https://cran.r-project.org/bin/macosx/big-sur-x86_64/base/R-4.5.1-x86_64.pkg) or later)
 - RStudio (v2025.05.1+513 or later)
+
+**For Phenotypic Comparison Analysis:**
+- Anaconda3 or Mamba
+
+**Common Requirements:**
 - Git v2.0+
 
 ### Setup
@@ -29,88 +41,42 @@ git clone https://github.com/uab-cgds-worthey/mecfs-dge-analysis.git
 cd mecfs-dge-analysis/
 ```
 
-### Restoring the Environment
+For detailed setup instructions for each analysis, see the README files in their respective directories:
 
-Open this project in RStudio. Upon opening, `renv` should automatically install.
+- **Differential Gene Expression Analysis:** See [`dge-analysis/README.md`](dge-analysis/README.md) for detailed R/renv setup instructions
+- **Phenotypic Comparison Analysis:** See the phenotypic comparison documentation for conda/mamba environment setup instructions
 
-:warning: If `renv` does not install automatically, run the following command in your R console:
+## Analyses
 
-```r
-install.packages('renv')
-```
+### Differential Gene Expression Analysis
 
-:warning: If you get the message `One or more packages recorded in the lockfile are not installed` in your R console,
-then proceed with the instructions below:
+The differential gene expression analysis examines transcriptional changes in a cohort of 23 patients diagnosed with ME/CFS using bulk RNA-seq. The analysis identifies genes that are differentially expressed between affected and unaffected conditions, and explores subgroup-specific patterns.
 
-```r
-# Restore the R environment
-renv::restore()
-```
+Located in [`dge-analysis/`](dge-analysis/).
 
-The `renv::restore()` command will install any packages that were not initially
-installed.
+For detailed documentation including setup, input data, workflow instructions, and results, see [`dge-analysis/README.md`](dge-analysis/README.md).
 
-#### Installing Workflowr
+#### Results
 
-This repo depends on the `workflowr` package for managing the analysis workflow and generating reports.
-If you encounter issues, follow the instructions below:
+- Results and figures can be found in the `dge-analysis/docs/` folder
+- Viewable online at: [https://uab-cgds-worthey.github.io/mecfs-dge-analysis/](https://uab-cgds-worthey.github.io/mecfs-dge-analysis/)
 
-##### Windows
+### Phenotypic Comparison Analysis
 
-1. Install Rtools.
-2. Restart R.
-3. Then run:
+A collection of diseases found in the Ramsey award ME/CFS cohort, phenotypes of ME/CFS and those diseases, and analysis scripts for the comparison and visualization of phenotypes between diseases.
 
-```r
-renv::install("git2r", type = "binary")
-renv::install("workflowr")
-```
+Located in [`phenotypic-analysis/`]().
 
-##### macOS
+For detailed documentation including setup, tools, and workflow instructions, see the phenotypic analysis README when available.
 
-1. Open Terminal and run: `brew install libgit2 libssh2 openssl`
-2. Then in R: `renv::install("workflowr")`
+#### Results
 
-##### Linux (Ubuntu/Debian)
+- Results and figures can be found in 
 
-1. In Terminal, run: `sudo apt-get install libgit2-dev libssh2-1-dev libssl-dev`
+## Authors
 
-2. Then in R: `renv::install("workflowr")`
-
-## Analysis
-
-This project has been created using the `workflowr` template. The analysis and associated code are an extension and
-modification of [Dr. Gurpreet Kaur's](https://github.com/gurpreet-bioinfo) previous work and guidance.
-The Rmarkdown files for the analysis are located in the `analysis` folder.
-
-### Input data
-
-Our data input is generated by the [nf-core/rnaseq pipeline](https://github.com/nf-core/rnaseq) using Salmon, which
-estimates gene-level counts corrected for transcript length bias.
-
-Input file: [salmon_merged_gene_counts_length_scaled](data/star-salmon/salmon_merged_gene_counts_length_scaled.tsv)
-
-### Rerunning the workflow
-
-To rerun the entire workflow (and visualize the entire analysis including PCA plots, MA plots, and heatmaps), open the
-project in RStudio and run the following commands in your R console:
-
-```r
-# Load the workflowr library
-library(workflowr)
-
-# Rebuild the workflow R site to view all figures in the browser
-wflow_build("analysis/*.Rmd")
-wflow_view()
-```
-
-## Results
-
-Results (including figures generated for the publication) can be found in the `docs` folder or viewable at [this website](https://uab-cgds-worthey.github.io/mecfs-dge-analysis/).
-
-## Author
-
-Shaurita D. Hutchins [:email:](mailto:sdhutchins@uab.edu) | Graduate Research Assistant
+- Shaurita D. Hutchins [:email:](mailto:sdhutchins@uab.edu) | PhD Candidate
+- Brandon M. Wilk [:email:](mailto:bwilk777@uab.edu) | PhD Candidate
 
 ## License
 
