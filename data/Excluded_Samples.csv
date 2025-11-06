@@ -1,7 +1,0 @@
-ID,Family,Gender,Relation,Category,CombinedCategory,Affected,Study_group,Seq,Batch,Replicate,RIN,RIN Analysis Error,Disease Group,Tier,Sex,Ancestry,SubCategory,Reason(s) Excluded
-8,g,M,Proband,NA,Metabolism,Affected,MECFS,50M,B2,NA,NA,NA,Mitochondrial Disorder,1,M,White,Myasthenic disorder,
-12,j,F,Proband/Mother,NA,Immune-Transporter,Affected,MECFS,50M,B2,NA,NA,NA,Immunodeficiency/Autoinflammatory Diseases,1,F,White,Autoimmune disorder,
-19,r,F,Proband,NA,Transporter-Metabolism,Affected,MECFS,50M,B2,NA,NA,NA,Gitelman Syndrome,1,F,White,Channelopathy,
-21,s,F,Proband/Mother,NA,Cytoskeletal,Affected,MECFS,50M,B3,NA,8,NA,Stromme syndrome,2,F,White,Neurologic disorder,
-23,s,F,Proband,NA,Cytoskeletal,Affected,MECFS,50M,B3,NA,8.4,NA,Stromme syndrome,2,F,White,Neurologic disorder,
-27,w,F,Proband,NA,Transporter-Immune-Metabolism,Affected,MECFS,50M,B1,NA,10,NA,Unknown,3,F,White,Channelopathy,

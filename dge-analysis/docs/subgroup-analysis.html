@@ -1,0 +1,1559 @@
+<!DOCTYPE html>
+
+<html>
+
+<head>
+
+<meta charset="utf-8" />
+<meta name="generator" content="pandoc" />
+<meta http-equiv="X-UA-Compatible" content="IE=EDGE" />
+
+
+<meta name="author" content="Shaurita D. Hutchins" />
+
+
+<title>Subgroup vs Unaffected Differential Gene Expression (DGE) Analysis</title>
+
+<script src="site_libs/header-attrs-2.27/header-attrs.js"></script>
+<script src="site_libs/jquery-3.6.0/jquery-3.6.0.min.js"></script>
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<link href="site_libs/bootstrap-3.3.5/css/sandstone.min.css" rel="stylesheet" />
+<script src="site_libs/bootstrap-3.3.5/js/bootstrap.min.js"></script>
+<script src="site_libs/bootstrap-3.3.5/shim/html5shiv.min.js"></script>
+<script src="site_libs/bootstrap-3.3.5/shim/respond.min.js"></script>
+<style>h1 {font-size: 34px;}
+       h1.title {font-size: 38px;}
+       h2 {font-size: 30px;}
+       h3 {font-size: 24px;}
+       h4 {font-size: 18px;}
+       h5 {font-size: 16px;}
+       h6 {font-size: 12px;}
+       code {color: inherit; background-color: rgba(0, 0, 0, 0.04);}
+       pre:not([class]) { background-color: white }</style>
+<script src="site_libs/jqueryui-1.13.2/jquery-ui.min.js"></script>
+<link href="site_libs/tocify-1.9.1/jquery.tocify.css" rel="stylesheet" />
+<script src="site_libs/tocify-1.9.1/jquery.tocify.js"></script>
+<script src="site_libs/navigation-1.1/tabsets.js"></script>
+<script src="site_libs/navigation-1.1/codefolding.js"></script>
+<link href="site_libs/highlightjs-9.12.0/textmate.css" rel="stylesheet" />
+<script src="site_libs/highlightjs-9.12.0/highlight.js"></script>
+<link href="site_libs/pagedtable-1.1/css/pagedtable.css" rel="stylesheet" />
+<script src="site_libs/pagedtable-1.1/js/pagedtable.js"></script>
+<link href="site_libs/font-awesome-6.4.2/css/all.min.css" rel="stylesheet" />
+<link href="site_libs/font-awesome-6.4.2/css/v4-shims.min.css" rel="stylesheet" />
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Arimo:ital,wght@0,400..700;1,400..700&family=Noto+Sans:ital,wght@0,100..900;1,100..900&family=Roboto:ital,wght@0,100..900;1,100..900&display=swap" rel="stylesheet">
+
+<link rel="icon" href="https://github.com/workflowr/workflowr-assets/raw/main/img/reproducible.png">
+<!-- Add a small amount of space between sections. -->
+<style type="text/css">
+div.section {
+  padding-top: 12px;
+}
+</style>
+
+
+
+<style type="text/css">
+  code{white-space: pre-wrap;}
+  span.smallcaps{font-variant: small-caps;}
+  span.underline{text-decoration: underline;}
+  div.column{display: inline-block; vertical-align: top; width: 50%;}
+  div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
+  ul.task-list{list-style: none;}
+    </style>
+
+<style type="text/css">code{white-space: pre;}</style>
+<script type="text/javascript">
+if (window.hljs) {
+  hljs.configure({languages: []});
+  hljs.initHighlightingOnLoad();
+  if (document.readyState && document.readyState === "complete") {
+    window.setTimeout(function() { hljs.initHighlighting(); }, 0);
+  }
+}
+</script>
+
+
+
+
+
+
+<link rel="stylesheet" href="custom.css" type="text/css" />
+
+
+
+<style type = "text/css">
+.main-container {
+  max-width: 940px;
+  margin-left: auto;
+  margin-right: auto;
+}
+img {
+  max-width:100%;
+}
+.tabbed-pane {
+  padding-top: 12px;
+}
+.html-widget {
+  margin-bottom: 20px;
+}
+button.code-folding-btn:focus {
+  outline: none;
+}
+summary {
+  display: list-item;
+}
+details > summary > p:only-child {
+  display: inline;
+}
+pre code {
+  padding: 0;
+}
+</style>
+
+
+<style type="text/css">
+.dropdown-submenu {
+  position: relative;
+}
+.dropdown-submenu>.dropdown-menu {
+  top: 0;
+  left: 100%;
+  margin-top: -6px;
+  margin-left: -1px;
+  border-radius: 0 6px 6px 6px;
+}
+.dropdown-submenu:hover>.dropdown-menu {
+  display: block;
+}
+.dropdown-submenu>a:after {
+  display: block;
+  content: " ";
+  float: right;
+  width: 0;
+  height: 0;
+  border-color: transparent;
+  border-style: solid;
+  border-width: 5px 0 5px 5px;
+  border-left-color: #cccccc;
+  margin-top: 5px;
+  margin-right: -10px;
+}
+.dropdown-submenu:hover>a:after {
+  border-left-color: #adb5bd;
+}
+.dropdown-submenu.pull-left {
+  float: none;
+}
+.dropdown-submenu.pull-left>.dropdown-menu {
+  left: -100%;
+  margin-left: 10px;
+  border-radius: 6px 0 6px 6px;
+}
+</style>
+
+<script type="text/javascript">
+// manage active state of menu based on current page
+$(document).ready(function () {
+  // active menu anchor
+  href = window.location.pathname
+  href = href.substr(href.lastIndexOf('/') + 1)
+  if (href === "")
+    href = "index.html";
+  var menuAnchor = $('a[href="' + href + '"]');
+
+  // mark the anchor link active (and if it's in a dropdown, also mark that active)
+  var dropdown = menuAnchor.closest('li.dropdown');
+  if (window.bootstrap) { // Bootstrap 4+
+    menuAnchor.addClass('active');
+    dropdown.find('> .dropdown-toggle').addClass('active');
+  } else { // Bootstrap 3
+    menuAnchor.parent().addClass('active');
+    dropdown.addClass('active');
+  }
+
+  // Navbar adjustments
+  var navHeight = $(".navbar").first().height() + 15;
+  var style = document.createElement('style');
+  var pt = "padding-top: " + navHeight + "px; ";
+  var mt = "margin-top: -" + navHeight + "px; ";
+  var css = "";
+  // offset scroll position for anchor links (for fixed navbar)
+  for (var i = 1; i <= 6; i++) {
+    css += ".section h" + i + "{ " + pt + mt + "}\n";
+  }
+  style.innerHTML = "body {" + pt + "padding-bottom: 40px; }\n" + css;
+  document.head.appendChild(style);
+});
+</script>
+
+<!-- tabsets -->
+
+<style type="text/css">
+.tabset-dropdown > .nav-tabs {
+  display: inline-table;
+  max-height: 500px;
+  min-height: 44px;
+  overflow-y: auto;
+  border: 1px solid #ddd;
+  border-radius: 4px;
+}
+
+.tabset-dropdown > .nav-tabs > li.active:before, .tabset-dropdown > .nav-tabs.nav-tabs-open:before {
+  content: "\e259";
+  font-family: 'Glyphicons Halflings';
+  display: inline-block;
+  padding: 10px;
+  border-right: 1px solid #ddd;
+}
+
+.tabset-dropdown > .nav-tabs.nav-tabs-open > li.active:before {
+  content: "\e258";
+  font-family: 'Glyphicons Halflings';
+  border: none;
+}
+
+.tabset-dropdown > .nav-tabs > li.active {
+  display: block;
+}
+
+.tabset-dropdown > .nav-tabs > li > a,
+.tabset-dropdown > .nav-tabs > li > a:focus,
+.tabset-dropdown > .nav-tabs > li > a:hover {
+  border: none;
+  display: inline-block;
+  border-radius: 4px;
+  background-color: transparent;
+}
+
+.tabset-dropdown > .nav-tabs.nav-tabs-open > li {
+  display: block;
+  float: none;
+}
+
+.tabset-dropdown > .nav-tabs > li {
+  display: none;
+}
+</style>
+
+<!-- code folding -->
+<style type="text/css">
+.code-folding-btn { margin-bottom: 4px; }
+</style>
+
+
+
+<style type="text/css">
+
+#TOC {
+  margin: 25px 0px 20px 0px;
+}
+@media (max-width: 768px) {
+#TOC {
+  position: relative;
+  width: 100%;
+}
+}
+
+@media print {
+.toc-content {
+  /* see https://github.com/w3c/csswg-drafts/issues/4434 */
+  float: right;
+}
+}
+
+.toc-content {
+  padding-left: 30px;
+  padding-right: 40px;
+}
+
+div.main-container {
+  max-width: 1200px;
+}
+
+div.tocify {
+  width: 20%;
+  max-width: 260px;
+  max-height: 85%;
+}
+
+@media (min-width: 768px) and (max-width: 991px) {
+  div.tocify {
+    width: 25%;
+  }
+}
+
+@media (max-width: 767px) {
+  div.tocify {
+    width: 100%;
+    max-width: none;
+  }
+}
+
+.tocify ul, .tocify li {
+  line-height: 20px;
+}
+
+.tocify-subheader .tocify-item {
+  font-size: 0.90em;
+}
+
+.tocify .list-group-item {
+  border-radius: 0px;
+}
+
+
+</style>
+
+
+
+</head>
+
+<body>
+
+
+<div class="container-fluid main-container">
+
+
+<!-- setup 3col/9col grid for toc_float and main content  -->
+<div class="row">
+<div class="col-xs-12 col-sm-4 col-md-3">
+<div id="TOC" class="tocify">
+</div>
+</div>
+
+<div class="toc-content col-xs-12 col-sm-8 col-md-9">
+
+
+
+
+<div class="navbar navbar-default  navbar-fixed-top" role="navigation">
+  <div class="container">
+    <div class="navbar-header">
+      <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-bs-toggle="collapse" data-target="#navbar" data-bs-target="#navbar">
+        <span class="icon-bar"></span>
+        <span class="icon-bar"></span>
+        <span class="icon-bar"></span>
+      </button>
+      <a class="navbar-brand" href="index.html">mecfs-dge-analysis</a>
+    </div>
+    <div id="navbar" class="navbar-collapse collapse">
+      <ul class="nav navbar-nav">
+        <li>
+  <a href="index.html">Home</a>
+</li>
+<li>
+  <a href="background.html">Background</a>
+</li>
+<li class="dropdown">
+  <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+    Analysis
+     
+    <span class="caret"></span>
+  </a>
+  <ul class="dropdown-menu" role="menu">
+    <li>
+      <a href="subsetted-condition-analysis.html">Subsetted Analysis</a>
+    </li>
+  </ul>
+</li>
+      </ul>
+      <ul class="nav navbar-nav navbar-right">
+        <li>
+  <a href="contact.html">Contact</a>
+</li>
+<li>
+  <a href="https://github.com/uab-cgds-worthey/mecfs-dge-analysis">
+    <span class="fa fa-github"></span>
+     
+  </a>
+</li>
+      </ul>
+    </div><!--/.nav-collapse -->
+  </div><!--/.container -->
+</div><!--/.navbar -->
+
+<div id="header">
+
+<div class="btn-group pull-right float-right">
+<button type="button" class="btn btn-default btn-xs btn-secondary btn-sm dropdown-toggle" data-toggle="dropdown" data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false"><span>Code</span> <span class="caret"></span></button>
+<ul class="dropdown-menu dropdown-menu-right" style="min-width: 50px;">
+<li><a id="rmd-show-all-code" href="#">Show All Code</a></li>
+<li><a id="rmd-hide-all-code" href="#">Hide All Code</a></li>
+</ul>
+</div>
+
+
+
+<h1 class="title toc-ignore">Subgroup vs Unaffected Differential Gene
+Expression (DGE) Analysis</h1>
+<h4 class="author">Shaurita D. Hutchins</h4>
+<h4 class="date">Last updated on 2025-07-15</h4>
+
+</div>
+
+
+<p>
+<button type="button" class="btn btn-default btn-workflowr btn-workflowr-report" data-toggle="collapse" data-target="#workflowr-report">
+<span class="glyphicon glyphicon-list" aria-hidden="true"></span>
+workflowr <span class="glyphicon glyphicon-ok text-success"
+aria-hidden="true"></span>
+</button>
+</p>
+<div id="workflowr-report" class="collapse">
+<ul class="nav nav-tabs">
+<li class="active">
+<a data-toggle="tab" href="#summary">Summary</a>
+</li>
+<li>
+<a data-toggle="tab" href="#checks"> Checks <span
+class="glyphicon glyphicon-ok text-success" aria-hidden="true"></span>
+</a>
+</li>
+<li>
+<a data-toggle="tab" href="#versions">Past versions</a>
+</li>
+</ul>
+<div class="tab-content">
+<div id="summary" class="tab-pane fade in active">
+<p>
+<strong>Last updated:</strong> 2025-07-15
+</p>
+<p>
+<strong>Checks:</strong> <span
+class="glyphicon glyphicon-ok text-success" aria-hidden="true"></span> 7
+<span class="glyphicon glyphicon-exclamation-sign text-danger"
+aria-hidden="true"></span> 0
+</p>
+<p>
+<strong>Knit directory:</strong> <code>mecfs-dge-analysis/</code> <span
+class="glyphicon glyphicon-question-sign" aria-hidden="true"
+title="This is the local directory in which the code in this file was executed.">
+</span>
+</p>
+<p>
+This reproducible <a href="https://rmarkdown.rstudio.com">R Markdown</a>
+analysis was created with <a
+  href="https://github.com/workflowr/workflowr">workflowr</a> (version
+1.7.1). The <em>Checks</em> tab describes the reproducibility checks
+that were applied when the results were created. The <em>Past
+versions</em> tab lists the development history.
+</p>
+<hr>
+</div>
+<div id="checks" class="tab-pane fade">
+<div id="workflowr-checks" class="panel-group">
+<div class="panel panel-default">
+<div class="panel-heading">
+<p class="panel-title">
+<a data-toggle="collapse" data-parent="#workflowr-checks" href="#strongRMarkdownfilestronguptodate">
+<span class="glyphicon glyphicon-ok text-success"
+aria-hidden="true"></span> <strong>R Markdown file:</strong> up-to-date
+</a>
+</p>
+</div>
+<div id="strongRMarkdownfilestronguptodate"
+class="panel-collapse collapse">
+<div class="panel-body">
+<p>Great! Since the R Markdown file has been committed to the Git
+repository, you know the exact version of the code that produced these
+results.</p>
+</div>
+</div>
+</div>
+<div class="panel panel-default">
+<div class="panel-heading">
+<p class="panel-title">
+<a data-toggle="collapse" data-parent="#workflowr-checks" href="#strongEnvironmentstrongempty">
+<span class="glyphicon glyphicon-ok text-success"
+aria-hidden="true"></span> <strong>Environment:</strong> empty </a>
+</p>
+</div>
+<div id="strongEnvironmentstrongempty" class="panel-collapse collapse">
+<div class="panel-body">
+<p>Great job! The global environment was empty. Objects defined in the
+global environment can affect the analysis in your R Markdown file in
+unknown ways. For reproduciblity it’s best to always run the code in an
+empty environment.</p>
+</div>
+</div>
+</div>
+<div class="panel panel-default">
+<div class="panel-heading">
+<p class="panel-title">
+<a data-toggle="collapse" data-parent="#workflowr-checks" href="#strongSeedstrongcodesetseed20230618code">
+<span class="glyphicon glyphicon-ok text-success"
+aria-hidden="true"></span> <strong>Seed:</strong>
+<code>set.seed(20230618)</code> </a>
+</p>
+</div>
+<div id="strongSeedstrongcodesetseed20230618code"
+class="panel-collapse collapse">
+<div class="panel-body">
+<p>The command <code>set.seed(20230618)</code> was run prior to running
+the code in the R Markdown file. Setting a seed ensures that any results
+that rely on randomness, e.g. subsampling or permutations, are
+reproducible.</p>
+</div>
+</div>
+</div>
+<div class="panel panel-default">
+<div class="panel-heading">
+<p class="panel-title">
+<a data-toggle="collapse" data-parent="#workflowr-checks" href="#strongSessioninformationstrongrecorded">
+<span class="glyphicon glyphicon-ok text-success"
+aria-hidden="true"></span> <strong>Session information:</strong>
+recorded </a>
+</p>
+</div>
+<div id="strongSessioninformationstrongrecorded"
+class="panel-collapse collapse">
+<div class="panel-body">
+<p>Great job! Recording the operating system, R version, and package
+versions is critical for reproducibility.</p>
+</div>
+</div>
+</div>
+<div class="panel panel-default">
+<div class="panel-heading">
+<p class="panel-title">
+<a data-toggle="collapse" data-parent="#workflowr-checks" href="#strongCachestrongnone">
+<span class="glyphicon glyphicon-ok text-success"
+aria-hidden="true"></span> <strong>Cache:</strong> none </a>
+</p>
+</div>
+<div id="strongCachestrongnone" class="panel-collapse collapse">
+<div class="panel-body">
+<p>Nice! There were no cached chunks for this analysis, so you can be
+confident that you successfully produced the results during this
+run.</p>
+</div>
+</div>
+</div>
+<div class="panel panel-default">
+<div class="panel-heading">
+<p class="panel-title">
+<a data-toggle="collapse" data-parent="#workflowr-checks" href="#strongFilepathsstrongrelative">
+<span class="glyphicon glyphicon-ok text-success"
+aria-hidden="true"></span> <strong>File paths:</strong> relative </a>
+</p>
+</div>
+<div id="strongFilepathsstrongrelative" class="panel-collapse collapse">
+<div class="panel-body">
+<p>Great job! Using relative paths to the files within your workflowr
+project makes it easier to run your code on other machines.</p>
+</div>
+</div>
+</div>
+<div class="panel panel-default">
+<div class="panel-heading">
+<p class="panel-title">
+<a data-toggle="collapse" data-parent="#workflowr-checks" href="#strongRepositoryversionstrongahrefhttpsgithubcomuabcgdswortheymecfsdgeanalysistree1373f8e34f1d048e21230fe2d9d890856d36c89ctargetblank1373f8ea">
+<span class="glyphicon glyphicon-ok text-success"
+aria-hidden="true"></span> <strong>Repository version:</strong>
+<a href="https://github.com/uab-cgds-worthey/mecfs-dge-analysis/tree/1373f8e34f1d048e21230fe2d9d890856d36c89c" target="_blank">1373f8e</a>
+</a>
+</p>
+</div>
+<div
+id="strongRepositoryversionstrongahrefhttpsgithubcomuabcgdswortheymecfsdgeanalysistree1373f8e34f1d048e21230fe2d9d890856d36c89ctargetblank1373f8ea"
+class="panel-collapse collapse">
+<div class="panel-body">
+<p>
+Great! You are using Git for version control. Tracking code development
+and connecting the code version to the results is critical for
+reproducibility.
+</p>
+<p>
+The results in this page were generated with repository version
+<a href="https://github.com/uab-cgds-worthey/mecfs-dge-analysis/tree/1373f8e34f1d048e21230fe2d9d890856d36c89c" target="_blank">1373f8e</a>.
+See the <em>Past versions</em> tab to see a history of the changes made
+to the R Markdown and HTML files.
+</p>
+<p>
+Note that you need to be careful to ensure that all relevant files for
+the analysis have been committed to Git prior to generating the results
+(you can use <code>wflow_publish</code> or
+<code>wflow_git_commit</code>). workflowr only checks the R Markdown
+file, but you know if there are other scripts or data files that it
+depends on. Below is the status of the Git repository when the results
+were generated:
+</p>
+<pre><code>
+Ignored files:
+    Ignored:    .DS_Store
+    Ignored:    .Rhistory
+    Ignored:    .Rproj.user/
+    Ignored:    .github/.DS_Store
+    Ignored:    .test/
+    Ignored:    analysis/.DS_Store
+    Ignored:    analysis/head.html
+    Ignored:    configs/
+    Ignored:    data/.DS_Store
+    Ignored:    notebooks/
+    Ignored:    output/.DS_Store
+    Ignored:    output/all-samples-analysis/.DS_Store
+    Ignored:    output/all-samples-analysis/all-condition-analysis.RData
+    Ignored:    output/all-samples-analysis/batch-correction-limma/
+    Ignored:    output/publication-analysis/.DS_Store
+    Ignored:    output/publication-analysis/batch-correction-limma/plot-counts/padj-05/
+    Ignored:    output/publication-analysis/batch-correction-limma/plot-counts/spta1-genes-of-interest/
+    Ignored:    output/spta1-analysis/batch-correction-limma/plot-counts/spta1-genes-of-interest/
+    Ignored:    renv/.DS_Store
+    Ignored:    renv/library/
+    Ignored:    renv/staging/
+    Ignored:    src/
+
+Untracked files:
+    Untracked:  output/all-samples-analysis/Supplemental Figure 3. Genes of Interest Heatmap.png
+    Untracked:  output/all-samples-analysis/missing_genes_interest_counts.csv
+    Untracked:  output/publication-analysis/Supplemental Figure 4. Significant DEGs (Padj < 0.05).png
+    Untracked:  output/publication-analysis/Supplemental Figure 4. Significant DEGs (Padj < 0.1).png.png
+    Untracked:  output/publication-analysis/mecfs_deg_variant_network.png
+    Untracked:  output/publication-analysis/missing_genes_interest_counts.csv
+    Untracked:  output/subgroup-chrn-analysis/
+    Untracked:  output/subgroup-hpp-analysis/
+    Untracked:  output/subgroup-ion_channel-analysis/
+    Untracked:  output/subgroup-mito-analysis/
+    Untracked:  output/subgroup-rbc-analysis/
+
+Unstaged changes:
+    Deleted:    analysis/spta1-analysis.Rmd
+    Modified:   code/helpers.R
+    Modified:   data/Prioritized_Genes_From_WGS_2025_06_18.csv
+    Modified:   output/all-samples-analysis/all-genes-heatmap.png
+    Modified:   output/all-samples-analysis/analysis-volcano-plot.png
+    Modified:   output/all-samples-analysis/counts_vst.csv
+    Modified:   output/all-samples-analysis/counts_vst_limma.csv
+    Modified:   output/all-samples-analysis/genes_of_interest_heatmap.png
+    Modified:   output/all-samples-analysis/genes_of_interest_plot_counts_signals.csv
+    Modified:   output/all-samples-analysis/madd_genes_of_interest.csv
+    Modified:   output/all-samples-analysis/madd_genes_of_interest_heatmap.png
+    Modified:   output/all-samples-analysis/mito_genes_of_interest.csv
+    Modified:   output/all-samples-analysis/mito_genes_of_interest_heatmap.png
+    Modified:   output/all-samples-analysis/mito_genes_of_interest_plot_counts_signals.csv
+    Modified:   output/all-samples-analysis/other_genes_of_interest.csv
+    Modified:   output/all-samples-analysis/res_aff_vs_unaff.csv
+    Modified:   output/all-samples-analysis/res_aff_vs_unaff_df_genename.csv
+    Modified:   output/all-samples-analysis/res_aff_vs_unaff_significant_mygene.csv
+    Modified:   output/all-samples-analysis/res_aff_vs_unaff_significant_samples.csv
+    Modified:   output/all-samples-analysis/res_spta1_vs_unaff_df_genename_05.csv
+    Modified:   output/all-samples-analysis/res_spta1_vs_unaff_df_genename_padj05_lfc1.csv
+    Modified:   output/all-samples-analysis/res_spta1_vs_unaff_df_genename_padj1.csv
+    Modified:   output/all-samples-analysis/res_spta1_vs_unaff_df_genename_padj1_lfc1.csv
+    Modified:   output/all-samples-analysis/significant_plot_counts_signals.csv
+    Modified:   output/all-samples-analysis/slc4a1_genes_of_interest.csv
+    Modified:   output/all-samples-analysis/slc4a1_genes_of_interest_heatmap.png
+    Modified:   output/all-samples-analysis/slc4a1_genes_of_interest_plot_counts_signals.csv
+    Modified:   output/all-samples-analysis/stringdb_combined_enrichment.csv
+    Modified:   output/publication-analysis/Supplemental Figure 4. DEGs (Padj < 0.1).png
+    Deleted:    output/publication-analysis/Supplemental Figure 4. Significant DEGs.png
+    Modified:   output/publication-analysis/Supplemental Table 5. Significant Differentially Expressed Genes.csv
+    Modified:   output/publication-analysis/batch-correction-limma/plot-counts/genes-of-interest/ACACB-subsetted-plot-counts.png
+    Modified:   output/publication-analysis/batch-correction-limma/plot-counts/genes-of-interest/ACADM-subsetted-plot-counts.png
+    Modified:   output/publication-analysis/batch-correction-limma/plot-counts/genes-of-interest/ACADVL-subsetted-plot-counts.png
+    Modified:   output/publication-analysis/batch-correction-limma/plot-counts/genes-of-interest/ADM2-subsetted-plot-counts.png
+    Modified:   output/publication-analysis/batch-correction-limma/plot-counts/genes-of-interest/ADORA2A-subsetted-plot-counts.png
+    Modified:   output/publication-analysis/batch-correction-limma/plot-counts/genes-of-interest/ADORA2B-subsetted-plot-counts.png
+    Modified:   output/publication-analysis/batch-correction-limma/plot-counts/genes-of-interest/ADRB2-subsetted-plot-counts.png
+    Modified:   output/publication-analysis/batch-correction-limma/plot-counts/genes-of-interest/ATP1A1-subsetted-plot-counts.png
+    Modified:   output/publication-analysis/batch-correction-limma/plot-counts/genes-of-interest/CALCB-subsetted-plot-counts.png
+    Modified:   output/publication-analysis/batch-correction-limma/plot-counts/genes-of-interest/CCR5-subsetted-plot-counts.png
+    Modified:   output/publication-analysis/batch-correction-limma/plot-counts/genes-of-interest/CHRFAM7A-subsetted-plot-counts.png
+    Modified:   output/publication-analysis/batch-correction-limma/plot-counts/genes-of-interest/COL6A3-subsetted-plot-counts.png
+    Modified:   output/publication-analysis/batch-correction-limma/plot-counts/genes-of-interest/COMT-subsetted-plot-counts.png
+    Modified:   output/publication-analysis/batch-correction-limma/plot-counts/genes-of-interest/CPT1A-subsetted-plot-counts.png
+    Modified:   output/publication-analysis/batch-correction-limma/plot-counts/genes-of-interest/CPT1B-subsetted-plot-counts.png
+    Modified:   output/publication-analysis/batch-correction-limma/plot-counts/genes-of-interest/CPT1C-subsetted-plot-counts.png
+    Modified:   output/publication-analysis/batch-correction-limma/plot-counts/genes-of-interest/CUBN-subsetted-plot-counts.png
+    Modified:   output/publication-analysis/batch-correction-limma/plot-counts/genes-of-interest/CYTH2-subsetted-plot-counts.png
+    Modified:   output/publication-analysis/batch-correction-limma/plot-counts/genes-of-interest/DENND1A-subsetted-plot-counts.png
+    Modified:   output/publication-analysis/batch-correction-limma/plot-counts/genes-of-interest/DMXL2-subsetted-plot-counts.png
+    Modified:   output/publication-analysis/batch-correction-limma/plot-counts/genes-of-interest/ELOVL4-subsetted-plot-counts.png
+    Modified:   output/publication-analysis/batch-correction-limma/plot-counts/genes-of-interest/ENO3-subsetted-plot-counts.png
+    Modified:   output/publication-analysis/batch-correction-limma/plot-counts/genes-of-interest/ETFB-subsetted-plot-counts.png
+    Modified:   output/publication-analysis/batch-correction-limma/plot-counts/genes-of-interest/FKBP5-subsetted-plot-counts.png
+    Modified:   output/publication-analysis/batch-correction-limma/plot-counts/genes-of-interest/G6PD-subsetted-plot-counts.png
+    Modified:   output/publication-analysis/batch-correction-limma/plot-counts/genes-of-interest/GABRB3-subsetted-plot-counts.png
+    Modified:   output/publication-analysis/batch-correction-limma/plot-counts/genes-of-interest/GIPR-subsetted-plot-counts.png
+    Modified:   output/publication-analysis/batch-correction-limma/plot-counts/genes-of-interest/GLYCTK-subsetted-plot-counts.png
+    Modified:   output/publication-analysis/batch-correction-limma/plot-counts/genes-of-interest/GPNMB-subsetted-plot-counts.png
+    Modified:   output/publication-analysis/batch-correction-limma/plot-counts/genes-of-interest/HADHA-subsetted-plot-counts.png
+    Modified:   output/publication-analysis/batch-correction-limma/plot-counts/genes-of-interest/HSPA1A-subsetted-plot-counts.png
+    Modified:   output/publication-analysis/batch-correction-limma/plot-counts/genes-of-interest/HTR6-subsetted-plot-counts.png
+    Modified:   output/publication-analysis/batch-correction-limma/plot-counts/genes-of-interest/IDO1-subsetted-plot-counts.png
+    Modified:   output/publication-analysis/batch-correction-limma/plot-counts/genes-of-interest/IFNG-subsetted-plot-counts.png
+    Modified:   output/publication-analysis/batch-correction-limma/plot-counts/genes-of-interest/IL10-subsetted-plot-counts.png
+    Modified:   output/publication-analysis/batch-correction-limma/plot-counts/genes-of-interest/IL6-subsetted-plot-counts.png
+    Modified:   output/publication-analysis/batch-correction-limma/plot-counts/genes-of-interest/KLHL7-subsetted-plot-counts.png
+    Modified:   output/publication-analysis/batch-correction-limma/plot-counts/genes-of-interest/LMBRD1-subsetted-plot-counts.png
+    Modified:   output/publication-analysis/batch-correction-limma/plot-counts/genes-of-interest/MADD-subsetted-plot-counts.png
+    Modified:   output/publication-analysis/batch-correction-limma/plot-counts/genes-of-interest/MAPK1-subsetted-plot-counts.png
+    Modified:   output/publication-analysis/batch-correction-limma/plot-counts/genes-of-interest/MCCC1-subsetted-plot-counts.png
+    Modified:   output/publication-analysis/batch-correction-limma/plot-counts/genes-of-interest/MCCC2-subsetted-plot-counts.png
+    Modified:   output/publication-analysis/batch-correction-limma/plot-counts/genes-of-interest/MINPP1-subsetted-plot-counts.png
+    Modified:   output/publication-analysis/batch-correction-limma/plot-counts/genes-of-interest/MLYCD-subsetted-plot-counts.png
+    Modified:   output/publication-analysis/batch-correction-limma/plot-counts/genes-of-interest/MMAA-subsetted-plot-counts.png
+    Modified:   output/publication-analysis/batch-correction-limma/plot-counts/genes-of-interest/MMACHC-subsetted-plot-counts.png
+    Modified:   output/publication-analysis/batch-correction-limma/plot-counts/genes-of-interest/MYH9-subsetted-plot-counts.png
+    Modified:   output/publication-analysis/batch-correction-limma/plot-counts/genes-of-interest/NLRP3-subsetted-plot-counts.png
+    Modified:   output/publication-analysis/batch-correction-limma/plot-counts/genes-of-interest/NR3C1-subsetted-plot-counts.png
+    Modified:   output/publication-analysis/batch-correction-limma/plot-counts/genes-of-interest/NUP42-subsetted-plot-counts.png
+    Modified:   output/publication-analysis/batch-correction-limma/plot-counts/genes-of-interest/OXTR-subsetted-plot-counts.png
+    Modified:   output/publication-analysis/batch-correction-limma/plot-counts/genes-of-interest/P2RX7-subsetted-plot-counts.png
+    Modified:   output/publication-analysis/batch-correction-limma/plot-counts/genes-of-interest/PCK2-subsetted-plot-counts.png
+    Modified:   output/publication-analysis/batch-correction-limma/plot-counts/genes-of-interest/PGM1-subsetted-plot-counts.png
+    Modified:   output/publication-analysis/batch-correction-limma/plot-counts/genes-of-interest/POLG-subsetted-plot-counts.png
+    Modified:   output/publication-analysis/batch-correction-limma/plot-counts/genes-of-interest/PTPN22-subsetted-plot-counts.png
+    Modified:   output/publication-analysis/batch-correction-limma/plot-counts/genes-of-interest/SLC12A3-subsetted-plot-counts.png
+    Modified:   output/publication-analysis/batch-correction-limma/plot-counts/genes-of-interest/SLC25A20-subsetted-plot-counts.png
+    Modified:   output/publication-analysis/batch-correction-limma/plot-counts/genes-of-interest/SLC7A9-subsetted-plot-counts.png
+    Modified:   output/publication-analysis/batch-correction-limma/plot-counts/genes-of-interest/SMCR8-subsetted-plot-counts.png
+    Modified:   output/publication-analysis/batch-correction-limma/plot-counts/genes-of-interest/SURF1-subsetted-plot-counts.png
+    Modified:   output/publication-analysis/batch-correction-limma/plot-counts/genes-of-interest/SYT6-subsetted-plot-counts.png
+    Modified:   output/publication-analysis/batch-correction-limma/plot-counts/genes-of-interest/TACO1-subsetted-plot-counts.png
+    Modified:   output/publication-analysis/batch-correction-limma/plot-counts/genes-of-interest/TNF-subsetted-plot-counts.png
+    Modified:   output/publication-analysis/batch-correction-limma/plot-counts/genes-of-interest/TOMM7-subsetted-plot-counts.png
+    Modified:   output/publication-analysis/batch-correction-limma/plot-counts/genes-of-interest/UCP2-subsetted-plot-counts.png
+    Modified:   output/publication-analysis/batch-correction-limma/plot-counts/genes-of-interest/VIPR2-subsetted-plot-counts.png
+    Modified:   output/publication-analysis/batch-correction-limma/plot-counts/genes-of-interest/faceted_genes_of_interest_plot_counts.png
+    Modified:   output/publication-analysis/batch-correction-limma/plot-counts/genes-of-interest/genes_of_interest_plot_counts_signals.csv
+    Modified:   output/publication-analysis/counts_vst_limma_subsetted.csv
+    Modified:   output/publication-analysis/counts_vst_subsetted.csv
+    Modified:   output/publication-analysis/publication-analysis.RData
+    Modified:   output/publication-analysis/res_aff_vs_unaff_df_sub_genename.csv
+    Modified:   output/publication-analysis/res_aff_vs_unaff_df_sub_genename_05.csv
+    Modified:   output/publication-analysis/res_aff_vs_unaff_df_sub_genename_padj1.csv
+    Modified:   output/publication-analysis/res_aff_vs_unaff_df_sub_genename_padj1_lfc1.csv
+    Modified:   output/publication-analysis/res_aff_vs_unaff_significant_subsetted_mygene.csv
+    Modified:   output/publication-analysis/res_aff_vs_unaff_significant_subsetted_samples.csv
+    Modified:   output/publication-analysis/res_aff_vs_unaff_sub.csv
+    Modified:   output/publication-analysis/subsetted-analysis-volcano-plot.png
+    Modified:   output/spta1-analysis/spta1-condition-analysis.RData
+
+</code></pre>
+<p>
+Note that any generated files, e.g. HTML, png, CSS, etc., are not
+included in this status report because it is ok for generated content to
+have uncommitted changes.
+</p>
+</div>
+</div>
+</div>
+</div>
+<hr>
+</div>
+<div id="versions" class="tab-pane fade">
+<p>
+These are the previous versions of the repository in which changes were
+made to the R Markdown (<code>analysis/subgroup-analysis.Rmd</code>) and
+HTML (<code>docs/subgroup-analysis.html</code>) files. If you’ve
+configured a remote Git repository (see <code>?wflow_git_remote</code>),
+click on the hyperlinks in the table below to view the files as they
+were in that past version.
+</p>
+<div class="table-responsive">
+<table class="table table-condensed table-hover">
+<thead>
+<tr>
+<th>
+File
+</th>
+<th>
+Version
+</th>
+<th>
+Author
+</th>
+<th>
+Date
+</th>
+<th>
+Message
+</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>
+Rmd
+</td>
+<td>
+<a href="https://github.com/uab-cgds-worthey/mecfs-dge-analysis/blob/1373f8e34f1d048e21230fe2d9d890856d36c89c/analysis/subgroup-analysis.Rmd" target="_blank">1373f8e</a>
+</td>
+<td>
+sdhutchins
+</td>
+<td>
+2025-07-15
+</td>
+<td>
+Changes to Category.
+</td>
+</tr>
+</tbody>
+</table>
+</div>
+<hr>
+</div>
+</div>
+</div>
+<div id="dge-analysis-setup" class="section level1">
+<h1>DGE Analysis Setup</h1>
+<p>Ensure you have all necessary libraries installed and load the helper
+code.</p>
+<pre class="r"><code>library(tidyverse) # Available via CRAN
+library(DESeq2) # Available via Bioconductor
+library(RColorBrewer) # Available via CRAN
+library(pheatmap) # Available via CRAN
+library(genefilter) # Available via Bioconductor
+library(limma) # Available via Bioconductor
+library(gprofiler2) # Available via CRAN
+library(biomaRt) # Available via Bioconductor
+library(plotly) # Available via CRAN
+library(ggpubr) # Available via CRAN
+library(rmarkdown) # Available via CRAN
+library(clusterProfiler) # Available via Bioconductor
+library(org.Hs.eg.db) # Available via Bioconductor
+library(ggrepel) # Available via CRAN
+library(ReactomePA) # Available via Bioconductor
+library(mygene) # Available via Bioconductor
+library(DOSE) # Available via Bioconductor
+library(enrichR) # Available via Bioconductor
+library(STRINGdb) # Available via Bioconductor
+library(EnhancedVolcano)
+library(ComplexHeatmap)</code></pre>
+<div id="data-import" class="section level2">
+<h2>Data Import</h2>
+<p>We will be importing counts data from the star-salmon pipeline and
+our metadata for the project which is hosted on Box. This also ensures
+data is properly ordered by sample id.</p>
+<pre class="r"><code># Set subgroup name from RMarkdown parameter
+subgroup_name &lt;- params$subgroup_name
+subgroup_lower &lt;- tolower(subgroup_name)
+outpath_var &lt;- paste0(&quot;subgroup-&quot;, subgroup_lower, &quot;-analysis&quot;)
+
+# Load metadata and counts
+sample_metadata &lt;- read_csv(&quot;data/Metadata_2024_11_20.csv&quot;)
+row.names(sample_metadata) &lt;- sample_metadata$ID
+counts &lt;- read_tsv(&quot;data/star-salmon/salmon_merged_gene_counts_length_scaled.tsv&quot;)
+
+# Load genes of interest
+genes_of_interest &lt;- read_csv(&quot;data/Prioritized_Genes_From_WGS_2024_11_19.csv&quot;) %&gt;%
+  pull(Genes) %&gt;%
+  unique() %&gt;%
+  na.omit()
+genes_of_interest &lt;- unique(c(genes_of_interest, &quot;CHI3L1&quot;))
+
+# Process counts
+counts &lt;- data.frame(counts, row.names = 1, check.names = FALSE)
+counts$Ensembl_ID &lt;- row.names(counts)
+drop &lt;- c(&quot;Ensembl_ID&quot;, &quot;gene_name&quot;)
+gene_info &lt;- counts[, drop]
+counts &lt;- counts[, !(names(counts) %in% drop)]
+
+# Identify affected subgroup members
+sample_metadata &lt;- sample_metadata %&gt;%
+  mutate(Subgroup_list = strsplit(Subgroup, &quot;,&quot;)) %&gt;%
+  mutate(in_subgroup = purrr::map_lgl(Subgroup_list, ~ subgroup_name %in% trimws(.))) %&gt;%
+  mutate(group = dplyr::case_when(
+    in_subgroup ~ subgroup_name,
+    Subgroup == &quot;Unaffected&quot; ~ &quot;Unaffected&quot;,
+    TRUE ~ NA_character_
+  )) %&gt;%
+  filter(!is.na(group))
+
+# Align metadata and counts
+sample_metadata$ID &lt;- as.character(sample_metadata$ID)
+filtered_sample_ids &lt;- sample_metadata$ID
+counts &lt;- counts[, colnames(counts) %in% filtered_sample_ids, drop = FALSE]
+counts &lt;- counts[, match(sample_metadata$ID, colnames(counts))]
+
+# Safety check: ensure order match
+stopifnot(all(colnames(counts) == sample_metadata$ID))
+
+# Retrieve gene annotations
+genes_biomart &lt;- retrieve_gene_info(values = gene_info$Ensembl_ID,
+                                    filters = &quot;ensembl_gene_id_version&quot;)</code></pre>
+</div>
+<div id="deseq2-analysis" class="section level2">
+<h2>DESeq2 Analysis</h2>
+<pre class="r"><code># Ensure relevant columns are factors
+sample_metadata &lt;- sample_metadata %&gt;%
+  mutate(
+    Family = factor(Family),
+    Affected = factor(Affected),
+    Batch = factor(Batch),
+    Sex = factor(Sex),
+    Ancestry = factor(Ancestry),
+    Category = factor(Category),
+    group = factor(group)  # key design variable: subgroup vs. Unaffected
+  )
+
+# Create DESeqDataSet using group as the main condition
+dds &lt;- DESeqDataSetFromMatrix(
+  countData = round(counts),
+  colData = sample_metadata,
+  design = ~ Batch + group
+)
+
+# Pre-filtering: keep genes with sufficient total counts
+keep &lt;- rowSums(counts(dds)) &gt;= 50
+dds &lt;- dds[keep, ]
+
+# Run DESeq
+dds &lt;- DESeq(dds)
+
+# Normalize counts
+counts_norm &lt;- counts(dds, normalized = TRUE)</code></pre>
+<div id="data-transformation-and-visualization" class="section level3">
+<h3>Data transformation and visualization</h3>
+<p>Perform count data transformation by variance stabilizing
+transformation (vst) on normalized counts.</p>
+<pre class="r"><code>vsd &lt;- vst(dds, blind = FALSE)</code></pre>
+</div>
+<div id="batch-correction-with-limma" class="section level3">
+<h3>Batch correction with limma</h3>
+<pre class="r"><code># Create output directory if it doesn&#39;t exist
+dir.create(file.path(&quot;output&quot;, outpath_var), recursive = TRUE, showWarnings = FALSE)
+
+# Extract VST-normalized counts
+counts_vst &lt;- assay(vsd)
+write.csv(counts_vst, file.path(&quot;output&quot;, outpath_var, &quot;counts_vst.csv&quot;))
+
+# Construct design matrix using group
+mm &lt;- model.matrix(~ Batch + group, colData(vsd))
+
+# Remove batch effect
+counts_vst_limma &lt;- limma::removeBatchEffect(
+  counts_vst,
+  batch = vsd$Batch,
+  design = mm
+)</code></pre>
+<pre><code>Coefficients not estimable: batch1 batch2 </code></pre>
+<pre class="r"><code># Save corrected matrix
+write.csv(counts_vst_limma, file = file.path(&quot;output&quot;, outpath_var, &quot;counts_vst_limma.csv&quot;))
+
+# Store back in DESeqTransform object
+vsd_limma &lt;- vsd
+assay(vsd_limma) &lt;- counts_vst_limma</code></pre>
+</div>
+<div id="sample-distances-heatmap" class="section level3">
+<h3>Sample distances heatmap</h3>
+<pre class="r"><code># Compute sample distance matrix from VST + batch-corrected expression
+sample_dists_all &lt;- dist(t(assay(vsd_limma)))
+sample_dist_matrix_all &lt;- as.matrix(sample_dists_all)
+
+# Label rows and columns using Batch and group
+rownames(sample_dist_matrix_all) &lt;- paste(vsd_limma$Batch, vsd_limma$group, sep = &quot; | &quot;)
+colnames(sample_dist_matrix_all) &lt;- paste(vsd_limma$ID, vsd_limma$group, sep = &quot; | &quot;)
+
+# Define color palette
+colors &lt;- colorRampPalette(rev(brewer.pal(9, &quot;Blues&quot;)))(255)
+
+# Plot distance heatmap
+pheatmap(sample_dist_matrix_all,
+  clustering_distance_rows = sample_dists_all,
+  clustering_distance_cols = sample_dists_all,
+  col = colors
+)</code></pre>
+<p><img src="figure/subgroup-analysis.Rmd/sample-dist-heatmap-1.png" width="672" style="display: block; margin: auto;" /></p>
+</div>
+<div id="principal-components-analysis" class="section level3">
+<h3>Principal Components Analysis</h3>
+<p>Our below PCA shows that there does not seem to be a batch-related
+effect occurring after using limma. However, we can see that our 3 male
+samples are grouping. Given this knowledge, removing them from
+downstream analyses is the best option.</p>
+<pre class="r"><code>pca_data_all &lt;- plotPCA(vsd_limma,
+  intgroup = c(&quot;Batch&quot;, &quot;Variant&quot;),
+  returnData = TRUE
+)
+percent_var_all &lt;- round(100 * attr(pca_data_all, &quot;percentVar&quot;))
+
+ggplot(pca_data_all, aes(PC1, PC2)) +
+  geom_point(aes(colour = Variant, shape = Batch), size = 4) +
+  xlab(paste0(&quot;PC1: &quot;, percent_var_all[1], &quot;% variance&quot;)) +
+  ylab(paste0(&quot;PC2: &quot;, percent_var_all[2], &quot;% variance&quot;)) +
+  coord_fixed()</code></pre>
+<p><img src="figure/subgroup-analysis.Rmd/principal-components-analysis-all-1.png" width="672" style="display: block; margin: auto;" /></p>
+<pre class="r"><code># Run PCA on VST-transformed, batch-corrected data
+pca_data_all &lt;- plotPCA(vsd_limma,
+  intgroup = c(&quot;group&quot;),
+  returnData = TRUE
+)
+percent_var_all &lt;- round(100 * attr(pca_data_all, &quot;percentVar&quot;))
+
+# Plot PCA with subgroup annotations
+ggplot(pca_data_all, aes(PC1, PC2)) +
+  geom_point(aes(colour = group), size = 5) +
+  scale_colour_manual(
+    values = c(
+      &quot;#1b9e77&quot;, &quot;#d95f02&quot;, &quot;#7570b3&quot;, &quot;#e7298a&quot;, &quot;#66a61e&quot;,
+      &quot;#e6ab02&quot;, &quot;#a6761d&quot;, &quot;#666666&quot;
+    ),
+    name = &quot;Group&quot;
+  ) +
+  geom_text_repel(aes(label = name), size = 3) +
+  xlab(paste0(&quot;PC1: &quot;, percent_var_all[1], &quot;% variance&quot;)) +
+  ylab(paste0(&quot;PC2: &quot;, percent_var_all[2], &quot;% variance&quot;)) +
+  ggthemes::theme_clean()</code></pre>
+<p><img src="figure/subgroup-analysis.Rmd/principal-components-analysis-category-1.png" width="672" style="display: block; margin: auto;" /></p>
+<pre class="r"><code># Define custom annotation colors for heatmaps or pheatmap plots
+study_group_colors &lt;- c(
+  &quot;ENE&quot; = &quot;#BFDFBF&quot;,   # Light green
+  &quot;IMM&quot; = &quot;#EEBFEE&quot;,   # Light purple
+  &quot;SOL&quot; = &quot;#FFFF33&quot;,   # Yellow
+  &quot;STR&quot; = &quot;#BFBFFF&quot;,   # Light blue
+  &quot;RBC&quot; = &quot;#FFD700&quot;,   # Gold
+  &quot;N/A&quot; = &quot;darkgray&quot;
+)
+
+group_colors &lt;- c(
+  &quot;Potassium&quot; = &quot;#80B1D3&quot;,
+  &quot;HPP&quot; = &quot;#FB8072&quot;,
+  &quot;Ion_Channel&quot; = &quot;#FDB462&quot;,
+  &quot;CHRN&quot; = &quot;#B3DE69&quot;,
+  &quot;RBC&quot; = &quot;#BC80BD&quot;,
+  &quot;Mito&quot; = &quot;#CCEBC5&quot;,
+  &quot;Unaffected&quot; = &quot;gray40&quot;
+)
+
+ann_colors &lt;- list(
+  Batch = c(B1 = &quot;purple&quot;, B2 = &quot;firebrick&quot;, B3 = &quot;goldenrod&quot;),
+  Affected = c(Affected = &quot;green4&quot;, Unaffected = &quot;navy&quot;),
+  Study_group = study_group_colors,
+  group = group_colors
+)</code></pre>
+</div>
+<div id="comparisoncontrast-of-spta1-affected-vs-unaffected"
+class="section level3">
+<h3>Comparison/Contrast of SPTA1 Affected vs Unaffected</h3>
+<pre class="r"><code># Perform differential expression analysis for selected subgroup vs Unaffected
+res_subgroup_vs_unaff &lt;- results(dds, contrast = c(&quot;group&quot;, subgroup_name, &quot;Unaffected&quot;))
+
+# Define output file path
+res_file_name &lt;- file.path(&quot;output&quot;, outpath_var, paste0(&quot;res_&quot;, subgroup_lower, &quot;_vs_unaff.csv&quot;))
+
+# Process and save results
+res_subgroup_vs_unaff_df &lt;- process_and_save_results(res_subgroup_vs_unaff, res_file_name)
+
+# Sort by adjusted p-value
+res_subgroup_vs_unaff_df &lt;- arrange(res_subgroup_vs_unaff_df, padj)
+
+# Filter: padj &lt; 0.05
+res_subgroup_vs_unaff_df_05 &lt;- subset(res_subgroup_vs_unaff_df, padj &lt; 0.05)
+
+# Filter: padj &lt; 0.1
+res_subgroup_vs_unaff_df_1 &lt;- subset(res_subgroup_vs_unaff_df, padj &lt; 0.1)
+
+# Further filter: padj &lt; 0.1 &amp; |log2FC| ≥ 1
+res_subgroup_vs_unaff_df_padj1_lfc1 &lt;- subset(
+  res_subgroup_vs_unaff_df_1,
+  abs(log2FoldChange) &gt;= 1
+)
+
+# Further filter: padj &lt; 0.05 &amp; |log2FC| ≥ 1
+res_subgroup_vs_unaff_df_padj05_lfc1 &lt;- subset(
+  res_subgroup_vs_unaff_df_05,
+  abs(log2FoldChange) &gt;= 1
+)
+
+# Print summary
+summary(res_subgroup_vs_unaff)</code></pre>
+<pre><code>
+out of 21035 with nonzero total read count
+adjusted p-value &lt; 0.1
+LFC &gt; 0 (up)       : 2, 0.0095%
+LFC &lt; 0 (down)     : 0, 0%
+outliers [1]       : 92, 0.44%
+low counts [2]     : 0, 0%
+(mean count &lt; 5)
+[1] see &#39;cooksCutoff&#39; argument of ?results
+[2] see &#39;independentFiltering&#39; argument of ?results</code></pre>
+</div>
+</div>
+<div id="heatmap-of-significant-genes" class="section level2">
+<h2>Heatmap of Significant Genes</h2>
+<pre class="r"><code># Ensure results are ordered by adjusted p-value
+res_subgroup_vs_unaff_df &lt;- res_subgroup_vs_unaff_df[order(res_subgroup_vs_unaff_df$padj), ]
+
+# Get top significant genes with padj &lt; 0.1 and |log2FC| ≥ 1
+topgenes_byensemblid &lt;- rownames(res_subgroup_vs_unaff_df_padj1_lfc1)
+
+# Subset normalized matrix
+topgenes_mat &lt;- assay(vsd_limma)[topgenes_byensemblid, , drop = FALSE]
+
+# Normalize expression by row (gene) mean
+if (nrow(topgenes_mat) == 1) {
+  topgenes_mat &lt;- topgenes_mat - mean(topgenes_mat)
+} else {
+  topgenes_mat &lt;- topgenes_mat - rowMeans(topgenes_mat)
+}
+
+# Map Ensembl IDs to gene symbols
+ensembl_to_gene &lt;- setNames(gene_info$gene_name, gene_info$Ensembl_ID)
+rownames(topgenes_mat) &lt;- ensembl_to_gene[rownames(topgenes_mat)]
+
+# Re-order matrix by significance
+topgenes_mat &lt;- topgenes_mat[order(res_subgroup_vs_unaff_df$padj[topgenes_byensemblid]), , drop = FALSE]
+
+# Prepare annotation dataframe
+annotation_df &lt;- colData(vsd_limma) %&gt;%
+  as.data.frame() %&gt;%
+  dplyr::select(group, Affected)
+
+# Define output path using lowercase subgroup name
+outpath_subgroup &lt;- paste0(&quot;subgroup-&quot;, tolower(subgroup_name), &quot;-analysis&quot;)
+
+# Ensure the directory exists
+if (!dir.exists(file.path(&quot;output&quot;, outpath_subgroup))) {
+  dir.create(file.path(&quot;output&quot;, outpath_subgroup), recursive = TRUE)
+}
+
+# Save heatmap to PNG
+heatmap_file &lt;- file.path(&quot;output&quot;, outpath_subgroup, paste0(subgroup_name, &quot;_padj1_heatmap.png&quot;))
+
+png(heatmap_file, width = 14, height = 10, units = &quot;in&quot;, res = 1200)
+
+ComplexHeatmap::pheatmap(
+  topgenes_mat,
+  color = colorRampPalette(rev(brewer.pal(n = 9, name = &quot;RdYlBu&quot;)))(50),
+  annotation_col = annotation_df,
+  annotation_colors = ann_colors,
+  fontsize = 7,
+  angle_col = c(&quot;0&quot;),
+  cellheight = 10,
+  cellwidth = 24,
+  border_color = &quot;black&quot;,
+  heatmap_legend_param = list(title = &quot;&quot;)
+)
+
+dev.off()</code></pre>
+<pre><code>quartz_off_screen 
+                2 </code></pre>
+<pre class="r"><code># Order results by adjusted p-value
+res_subgroup_vs_unaff_df &lt;- res_subgroup_vs_unaff_df[order(res_subgroup_vs_unaff_df$padj), ]
+
+# Get top significant genes with |log2FoldChange| &gt;= 1 and padj &lt; 0.05
+topgenes_byensemblid &lt;- rownames(res_subgroup_vs_unaff_df_padj05_lfc1)
+
+# Extract matrix subset
+topgenes_subgroup_vs_unaff_05 &lt;- assay(vsd_limma)[topgenes_byensemblid, , drop = FALSE]
+
+# Normalize each row by subtracting its mean
+if (nrow(topgenes_subgroup_vs_unaff_05) == 1) {
+  topgenes_subgroup_vs_unaff_05 &lt;- topgenes_subgroup_vs_unaff_05 - mean(topgenes_subgroup_vs_unaff_05)
+} else {
+  topgenes_subgroup_vs_unaff_05 &lt;- topgenes_subgroup_vs_unaff_05 - rowMeans(topgenes_subgroup_vs_unaff_05)
+}
+
+# Map Ensembl IDs to gene names
+ensembl_to_gene &lt;- setNames(gene_info$gene_name, gene_info$Ensembl_ID)
+current_ensembl_ids &lt;- rownames(topgenes_subgroup_vs_unaff_05)
+new_row_names &lt;- ensembl_to_gene[current_ensembl_ids]
+rownames(topgenes_subgroup_vs_unaff_05) &lt;- new_row_names
+
+# Order by significance
+topgenes_subgroup_vs_unaff_05 &lt;- topgenes_subgroup_vs_unaff_05[order(res_subgroup_vs_unaff_df$padj[topgenes_byensemblid]), , drop = FALSE]
+
+# Prepare sample annotation
+df &lt;- colData(vsd_limma) %&gt;%
+  as.data.frame() %&gt;%
+  dplyr::select(group)
+
+# Define output path using lowercase subgroup name
+outpath_subgroup &lt;- paste0(&quot;subgroup-&quot;, tolower(subgroup_name), &quot;-analysis&quot;)
+
+# Ensure the directory exists
+if (!dir.exists(file.path(&quot;output&quot;, outpath_subgroup))) {
+  dir.create(file.path(&quot;output&quot;, outpath_subgroup), recursive = TRUE)
+}
+
+# Define file name
+heatmap_file &lt;- file.path(&quot;output&quot;, outpath_subgroup, paste0(subgroup_name, &quot;_significant_padj05_heatmap.png&quot;))
+
+# Save heatmap to PNG
+png(heatmap_file, width = 10, height = 8, units = &quot;in&quot;, res = 300)
+ComplexHeatmap::pheatmap(
+  topgenes_subgroup_vs_unaff_05,
+  color = colorRampPalette(rev(brewer.pal(n = 9, name = &quot;RdYlBu&quot;)))(50),
+  annotation_col = df,
+  annotation_colors = ann_colors,
+  fontsize = 7,
+  angle_col = c(&quot;0&quot;),
+  cellheight = 10,
+  cellwidth = 24,
+  border_color = &quot;black&quot;,
+  heatmap_legend_param = list(title = &quot;&quot;)
+)
+dev.off()</code></pre>
+<pre><code>quartz_off_screen 
+                2 </code></pre>
+<pre class="r"><code># Extract relevant columns from genes_biomart (first and last columns)
+gb_df &lt;- genes_biomart[, c(1, ncol(genes_biomart))]
+
+# Copy results dataframe to add gene annotations
+res_subgroup_vs_unaff_df_genename &lt;- res_subgroup_vs_unaff_df
+
+# Add Ensembl IDs as a new column
+res_subgroup_vs_unaff_df_genename$Ensembl_ID &lt;- row.names(res_subgroup_vs_unaff_df)
+
+# Merge gene annotation information from gene_info using Ensembl IDs
+res_subgroup_vs_unaff_df_genename &lt;- merge(
+  x = res_subgroup_vs_unaff_df_genename,
+  y = gene_info,
+  by = &quot;Ensembl_ID&quot;,
+  all.x = TRUE
+)
+
+# Reorder columns to place gene_name and Ensembl_ID at the front
+res_subgroup_vs_unaff_df_genename &lt;- res_subgroup_vs_unaff_df_genename[
+  ,
+  c(&quot;gene_name&quot;, &quot;Ensembl_ID&quot;, setdiff(names(res_subgroup_vs_unaff_df_genename), c(&quot;gene_name&quot;, &quot;Ensembl_ID&quot;)))
+]
+
+# Sort the dataframe by adjusted p-value (padj)
+res_subgroup_vs_unaff_df_genename &lt;- res_subgroup_vs_unaff_df_genename[
+  order(res_subgroup_vs_unaff_df_genename$padj),
+]
+
+# Define output file path for the annotated results
+res_file_genename &lt;- file.path(
+  &quot;output&quot;, outpath_var,
+  &quot;res_subgroup_vs_unaff_df_genename.csv&quot;
+)
+
+# Save the annotated results to a CSV file
+write.csv(res_subgroup_vs_unaff_df_genename, file = res_file_genename, row.names = FALSE)</code></pre>
+</div>
+<div id="volcano-plot" class="section level2">
+<h2>Volcano Plot</h2>
+<pre class="r"><code># Parameters for the function
+res_data &lt;- res_subgroup_vs_unaff_df_genename
+gene_labels &lt;- &quot;gene_name&quot;
+x_col &lt;- &quot;log2FoldChange&quot;
+y_col &lt;- &quot;padj&quot;
+select_genes &lt;- &quot;&quot;
+xlab_text &lt;- bquote(~ Log[2] ~ &quot;fold change&quot;)
+ylab_text &lt;- bquote(~ -Log[10] ~ &quot;padj&quot;)
+xlim_range &lt;- c(-25, 25)
+ylim_range &lt;- c(0, 7)
+output_volcano_file &lt;- file.path(&quot;output&quot;, outpath_var, paste0(&quot;volcano-plot-&quot;, tolower(subgroup_name), &quot;.png&quot;))
+
+# Generate and save the volcano plot
+generate_volcano_plot(
+  res_data = res_data, gene_labels = gene_labels, x_col = x_col,
+  y_col = y_col, select_genes = select_genes, xlab_text = xlab_text,
+  ylab_text = ylab_text, p_cutoff = 0.05, fc_cutoff = 1.0,
+  xlim_range = xlim_range, ylim_range = ylim_range,
+  output_file = output_volcano_file
+)</code></pre>
+<p><img src="figure/subgroup-analysis.Rmd/volcano-plot-1.png" width="1600px" height="1000px" style="display: block; margin: auto;" /></p>
+<pre class="r"><code># Process and save the data
+process_and_save_filtered_results(res_subgroup_vs_unaff_df_genename,
+  padj_threshold = 0.05, lfc_threshold = NULL,
+  outpath = outpath_var,
+  filename = paste0(&quot;res_&quot;, subgroup_lower, &quot;_vs_unaff_df_genename_05.csv&quot;)
+)
+
+process_and_save_filtered_results(res_subgroup_vs_unaff_df_genename,
+  padj_threshold = 0.05, lfc_threshold = 1,
+  outpath = outpath_var,
+  filename = paste0(&quot;res_&quot;, subgroup_lower, &quot;_vs_unaff_df_genename_padj05_lfc1.csv&quot;)
+)
+
+process_and_save_filtered_results(res_subgroup_vs_unaff_df_genename,
+  padj_threshold = 0.1, lfc_threshold = NULL,
+  outpath = outpath_var,
+  filename = paste0(&quot;res_&quot;, subgroup_lower, &quot;_vs_unaff_df_genename_padj1.csv&quot;)
+)
+
+process_and_save_filtered_results(res_subgroup_vs_unaff_df_genename,
+  padj_threshold = 0.1, lfc_threshold = 1,
+  outpath = outpath_var,
+  filename = paste0(&quot;res_&quot;, subgroup_lower, &quot;_vs_unaff_df_genename_padj1_lfc1.csv&quot;)
+)</code></pre>
+<pre class="r"><code># Filter gene names that are not Ensembl IDs
+filtered_gene_names &lt;- res_subgroup_vs_unaff_df_genename$gene_name[!grepl(&quot;^ENS&quot;, res_subgroup_vs_unaff_df_genename$gene_name)]
+
+# Generate MA plot
+maplot &lt;- generate_ma_plot(
+  data = res_subgroup_vs_unaff_df,
+  genenames = as.vector(res_subgroup_vs_unaff_df_genename$gene_name),
+  main_title = paste0(subgroup_name, &quot; vs Unaffected MA Plot&quot;),
+  top_genes = 30
+)
+maplot</code></pre>
+<p><img src="figure/subgroup-analysis.Rmd/maplot-samples-1.png" width="672" style="display: block; margin: auto;" /></p>
+<pre class="r"><code># Extract significant genes from the MA plot
+significant_data &lt;- maplot$data %&gt;%
+  filter(grepl(&quot;Up|Down&quot;, sig)) %&gt;%
+  mutate(direction = ifelse(grepl(&quot;Up&quot;, sig), &quot;Up&quot;, &quot;Down&quot;)) %&gt;%
+  dplyr::select(-sig)
+
+# Display a paged table of significant genes
+paged_table(as.data.frame(significant_data), options = list(rows.print = 30))</code></pre>
+<div data-pagedtable="false">
+<script data-pagedtable-source type="application/json">
+{"columns":[{"label":["name"],"name":[1],"type":["chr"],"align":["left"]},{"label":["mean"],"name":[2],"type":["dbl"],"align":["right"]},{"label":["lfc"],"name":[3],"type":["dbl"],"align":["right"]},{"label":["padj"],"name":[4],"type":["dbl"],"align":["right"]},{"label":["direction"],"name":[5],"type":["chr"],"align":["left"]}],"data":[{"1":"XIST","2":"15.75876","3":"15.24772","4":"0.000839867","5":"Up"}],"options":{"columns":{"min":{},"max":[10]},"rows":{"min":[30],"max":[30]},"pages":{}}}
+  </script>
+</div>
+<pre class="r"><code># Save significant genes to CSV
+output_maplot_siggenes &lt;- file.path(
+  &quot;output&quot;, outpath_var,
+  paste0(&quot;res_&quot;, subgroup_lower, &quot;_vs_unaff_siggenes.csv&quot;)
+)
+write.csv(significant_data, file = output_maplot_siggenes, row.names = FALSE)</code></pre>
+<pre class="r"><code># Initialize STRINGdb
+string_db &lt;- STRINGdb$new(
+  version = &quot;11.5&quot;,
+  species = 9606,
+  score_threshold = 100,
+  network_type = &quot;full&quot;,
+  input_directory = &quot;&quot;
+)
+
+# Map significant genes to STRING IDs
+mapped_degs &lt;- string_db$map(significant_data, &quot;name&quot;, removeUnmappedRows = TRUE)</code></pre>
+<pre><code>Warning:  we couldn&#39;t map to STRING 100% of your identifiers</code></pre>
+<pre class="r"><code>if (nrow(mapped_degs) &gt; 0) {
+  # Limit to top 29 STRING IDs
+  hits &lt;- head(mapped_degs$STRING_id, 29)
+  
+  # Add logFC-based coloring
+  mapped_degs_dec &lt;- string_db$add_diff_exp_color(mapped_degs, logFcColStr = &quot;lfc&quot;)
+  
+  # Generate payload and plot network
+  payload_id &lt;- string_db$post_payload(mapped_degs_dec$STRING_id, colors = mapped_degs_dec$color)
+  string_db$plot_network(hits, payload_id = payload_id)
+} else {
+  message(&quot;No STRING IDs mapped — skipping STRING network plot.&quot;)
+}</code></pre>
+<div id="save-data" class="section level3">
+<h3>Save data</h3>
+<pre class="r"><code>outpath_subgroup &lt;- paste0(&quot;subgroup-&quot;, tolower(subgroup_name), &quot;-analysis&quot;)
+
+save.image(file = file.path(&quot;output&quot;, outpath_subgroup, paste0(subgroup_name, &quot;-subgroup-analysis.RData&quot;)))</code></pre>
+<br>
+<p>
+<button type="button" class="btn btn-default btn-workflowr btn-workflowr-sessioninfo" data-toggle="collapse" data-target="#workflowr-sessioninfo" style="display: block;">
+<span class="glyphicon glyphicon-wrench" aria-hidden="true"></span>
+Session information
+</button>
+</p>
+<div id="workflowr-sessioninfo" class="collapse">
+<pre class="r"><code>sessionInfo()</code></pre>
+<pre><code>R version 4.4.0 (2024-04-24)
+Platform: x86_64-apple-darwin20
+Running under: macOS 15.5
+
+Matrix products: default
+BLAS:   /Library/Frameworks/R.framework/Versions/4.4-x86_64/Resources/lib/libRblas.0.dylib 
+LAPACK: /Library/Frameworks/R.framework/Versions/4.4-x86_64/Resources/lib/libRlapack.dylib;  LAPACK version 3.12.0
+
+locale:
+[1] en_US.UTF-8/en_US.UTF-8/en_US.UTF-8/C/en_US.UTF-8/en_US.UTF-8
+
+time zone: America/Chicago
+tzcode source: internal
+
+attached base packages:
+[1] grid      stats4    stats     graphics  grDevices datasets  utils    
+[8] methods   base     
+
+other attached packages:
+ [1] ComplexHeatmap_2.20.0       EnhancedVolcano_1.22.0     
+ [3] STRINGdb_2.16.4             enrichR_3.2                
+ [5] DOSE_3.30.1                 mygene_1.40.0              
+ [7] txdbmaker_1.0.1             GenomicFeatures_1.56.0     
+ [9] ReactomePA_1.48.0           ggrepel_0.9.5              
+[11] org.Hs.eg.db_3.19.1         AnnotationDbi_1.66.0       
+[13] clusterProfiler_4.12.0      rmarkdown_2.27             
+[15] ggpubr_0.6.0                plotly_4.10.4              
+[17] biomaRt_2.60.1              gprofiler2_0.2.3           
+[19] limma_3.60.3                genefilter_1.86.0          
+[21] pheatmap_1.0.12             RColorBrewer_1.1-3         
+[23] DESeq2_1.44.0               SummarizedExperiment_1.34.0
+[25] Biobase_2.64.0              MatrixGenerics_1.16.0      
+[27] matrixStats_1.3.0           GenomicRanges_1.56.1       
+[29] GenomeInfoDb_1.40.1         IRanges_2.38.1             
+[31] S4Vectors_0.42.1            BiocGenerics_0.50.0        
+[33] lubridate_1.9.3             forcats_1.0.0              
+[35] stringr_1.5.1               dplyr_1.1.4                
+[37] purrr_1.0.2                 readr_2.1.5                
+[39] tidyr_1.3.1                 tibble_3.2.1               
+[41] ggplot2_3.5.1               tidyverse_2.0.0            
+[43] workflowr_1.7.1            
+
+loaded via a namespace (and not attached):
+  [1] fs_1.6.4                 bitops_1.0-7             enrichplot_1.24.0       
+  [4] doParallel_1.0.17        HDO.db_0.99.1            httr_1.4.7              
+  [7] tools_4.4.0              backports_1.5.0          utf8_1.2.4              
+ [10] R6_2.5.1                 lazyeval_0.2.2           GetoptLong_1.0.5        
+ [13] withr_3.0.2              graphite_1.50.0          prettyunits_1.2.0       
+ [16] gridExtra_2.3            textshaping_0.4.0        cli_3.6.3               
+ [19] scatterpie_0.2.3         labeling_0.4.3           sass_0.4.9              
+ [22] systemfonts_1.1.0        Rsamtools_2.20.0         yulab.utils_0.1.4       
+ [25] gson_0.1.0               foreign_0.8-86           WriteXLS_6.6.0          
+ [28] plotrix_3.8-4            rstudioapi_0.16.0        RSQLite_2.3.7           
+ [31] shape_1.4.6.1            generics_0.1.3           gridGraphics_0.5-1      
+ [34] BiocIO_1.14.0            vroom_1.6.5              gtools_3.9.5            
+ [37] car_3.1-2                GO.db_3.19.1             Matrix_1.7-0            
+ [40] fansi_1.0.6              abind_1.4-5              lifecycle_1.0.4         
+ [43] whisker_0.4.1            yaml_2.3.9               carData_3.0-5           
+ [46] gplots_3.1.3.1           qvalue_2.36.0            SparseArray_1.4.8       
+ [49] BiocFileCache_2.12.0     blob_1.2.4               promises_1.3.3          
+ [52] crayon_1.5.3             lattice_0.22-6           cowplot_1.1.3           
+ [55] annotate_1.82.0          KEGGREST_1.44.1          pillar_1.9.0            
+ [58] knitr_1.48               fgsea_1.30.0             rjson_0.2.21            
+ [61] codetools_0.2-20         fastmatch_1.1-4          glue_1.7.0              
+ [64] getPass_0.2-4            ggfun_0.1.5              data.table_1.15.4       
+ [67] vctrs_0.6.5              png_0.1-8                treeio_1.28.0           
+ [70] gtable_0.3.5             gsubfn_0.7               cachem_1.1.0            
+ [73] xfun_0.45                S4Arrays_1.4.1           tidygraph_1.3.1         
+ [76] survival_3.5-8           iterators_1.0.14         statmod_1.5.0           
+ [79] nlme_3.1-164             ggtree_3.12.0            bit64_4.0.5             
+ [82] progress_1.2.3           filelock_1.0.3           rprojroot_2.0.4         
+ [85] bslib_0.9.0              KernSmooth_2.23-22       rpart_4.1.23            
+ [88] colorspace_2.1-0         DBI_1.2.3                Hmisc_5.1-3             
+ [91] nnet_7.3-19              tidyselect_1.2.1         processx_3.8.4          
+ [94] chron_2.3-61             bit_4.0.5                compiler_4.4.0          
+ [97] curl_5.2.1               git2r_0.33.0             httr2_1.0.1             
+[100] graph_1.82.0             htmlTable_2.4.2          xml2_1.3.6              
+[103] DelayedArray_0.30.1      shadowtext_0.1.3         rtracklayer_1.64.0      
+[106] caTools_1.18.2           checkmate_2.3.1          scales_1.3.0            
+[109] callr_3.7.6              rappdirs_0.3.3           digest_0.6.36           
+[112] XVector_0.44.0           htmltools_0.5.8.1        pkgconfig_2.0.3         
+[115] base64enc_0.1-3          highr_0.11               dbplyr_2.5.0            
+[118] fastmap_1.2.0            ggthemes_5.1.0           GlobalOptions_0.1.2     
+[121] rlang_1.1.4              htmlwidgets_1.6.4        UCSC.utils_1.0.0        
+[124] farver_2.1.2             jquerylib_0.1.4          jsonlite_1.8.8          
+[127] BiocParallel_1.38.0      GOSemSim_2.30.0          RCurl_1.98-1.16         
+[130] magrittr_2.0.3           Formula_1.2-5            GenomeInfoDbData_1.2.12 
+[133] ggplotify_0.1.2          patchwork_1.2.0          munsell_0.5.1           
+[136] Rcpp_1.0.12              proto_1.0.0              ape_5.8                 
+[139] viridis_0.6.5            sqldf_0.4-11             stringi_1.8.4           
+[142] ggraph_2.2.1             zlibbioc_1.50.0          MASS_7.3-60.2           
+[145] plyr_1.8.9               parallel_4.4.0           Biostrings_2.72.1       
+[148] graphlayouts_1.1.1       splines_4.4.0            hash_2.2.6.3            
+[151] circlize_0.4.16          hms_1.1.3                locfit_1.5-9.10         
+[154] ps_1.7.7                 igraph_2.1.4             ggsignif_0.6.4          
+[157] reshape2_1.4.4           XML_3.99-0.17            evaluate_1.0.4          
+[160] renv_1.0.7               BiocManager_1.30.23      foreach_1.5.2           
+[163] tzdb_0.4.0               tweenr_2.0.3             httpuv_1.6.15           
+[166] polyclip_1.10-6          clue_0.3-65              ggforce_0.4.2           
+[169] broom_1.0.6              xtable_1.8-4             restfulr_0.0.15         
+[172] reactome.db_1.88.0       tidytree_0.4.6           rstatix_0.7.2           
+[175] later_1.3.2              ragg_1.3.2               viridisLite_0.4.2       
+[178] aplot_0.2.3              memoise_2.0.1            GenomicAlignments_1.40.0
+[181] cluster_2.1.6            timechange_0.3.0        </code></pre>
+</div>
+</div>
+</div>
+</div>
+</div>
+</div>
+</div>
+</div>
+</div>
+
+
+<!-- Adjust MathJax settings so that all math formulae are shown using
+TeX fonts only; see
+https://docs.mathjax.org/en/latest/web/configuration.html. This will make
+the presentation more consistent at the cost of the webpage sometimes
+taking slightly longer to load. Note that this only works because the
+footer is added to webpages before the MathJax javascript. -->
+<script type="text/x-mathjax-config">
+  MathJax.Hub.Config({
+    "HTML-CSS": { availableFonts: ["TeX"] }
+  });
+</script>
+
+
+
+
+</div>
+</div>
+
+</div>
+
+<script>
+
+// add bootstrap table styles to pandoc tables
+function bootstrapStylePandocTables() {
+  $('tr.odd').parent('tbody').parent('table').addClass('table table-condensed');
+}
+$(document).ready(function () {
+  bootstrapStylePandocTables();
+});
+
+
+</script>
+
+<!-- tabsets -->
+
+<script>
+$(document).ready(function () {
+  window.buildTabsets("TOC");
+});
+
+$(document).ready(function () {
+  $('.tabset-dropdown > .nav-tabs > li').click(function () {
+    $(this).parent().toggleClass('nav-tabs-open');
+  });
+});
+</script>
+
+<!-- code folding -->
+<script>
+$(document).ready(function () {
+  window.initializeCodeFolding("hide" === "show");
+});
+</script>
+
+<script>
+$(document).ready(function ()  {
+
+    // temporarily add toc-ignore selector to headers for the consistency with Pandoc
+    $('.unlisted.unnumbered').addClass('toc-ignore')
+
+    // move toc-ignore selectors from section div to header
+    $('div.section.toc-ignore')
+        .removeClass('toc-ignore')
+        .children('h1,h2,h3,h4,h5').addClass('toc-ignore');
+
+    // establish options
+    var options = {
+      selectors: "h1,h2,h3",
+      theme: "bootstrap3",
+      context: '.toc-content',
+      hashGenerator: function (text) {
+        return text.replace(/[.\\/?&!#<>]/g, '').replace(/\s/g, '_');
+      },
+      ignoreSelector: ".toc-ignore",
+      scrollTo: 0
+    };
+    options.showAndHide = true;
+    options.smoothScroll = true;
+
+    // tocify
+    var toc = $("#TOC").tocify(options).data("toc-tocify");
+});
+</script>
+
+<!-- dynamically load mathjax for compatibility with self-contained -->
+<script>
+  (function () {
+    var script = document.createElement("script");
+    script.type = "text/javascript";
+    script.src  = "https://mathjax.rstudio.com/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML";
+    document.getElementsByTagName("head")[0].appendChild(script);
+  })();
+</script>
+
+</body>
+</html>
