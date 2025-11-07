@@ -41,8 +41,9 @@ leverage the relationship structure of the human phenotype ontology (HPO) for se
 analyses described below.
 
 ### Avatar Disease Enrichment Ranking
-
+<!-- markdown-link-check-disable -->
 MECFS diagnosis criteria outlined in [Carruthers et. al (2011)](https://doi.org/10.1111/j.1365-2796.2011.02428.x)
+<!-- markdown-link-check-enable -->
 were [converted to HPO terms](data/mecfs-phenotypes.tsv) per diagnostic group and then used
 to compute all possible minimal combinations that met Carruthers et. al (2011) diagnostic criteria, refered to as
 MECFS phenotypic avatars or just avatars. These avatars could be used for similarity measurements with participants
