@@ -83,13 +83,16 @@ For detailed documentation including setup, input data, workflow instructions, a
 A collection of diseases found in the Ramsey award ME/CFS cohort, phenotypes of ME/CFS and those diseases, and
 analysis scripts for the comparison and visualization of phenotypes between diseases.
 
-Located in
+Located in [`phenotypic-analysis/`](phenotypic-analysis/)
 
-For detailed documentation including setup, tools, and workflow instructions, see the phenotypic analysis README when available.
+For detailed documentation including setup, tools, notebooks, and analysis instructions, see
+[`phenotypic-analysis/README.md`](phenotypic-analysis/README.md).
 
 #### Results: Phenotypic Comparison
 
-- Results and figures can be found in
+- Results and figures can be found in [`phenotypic-analysis/data/results/`](phenotypic-analysis/data/results/)
+- Carruthers ME/CFS diagnositic creteria as HPO terms is defined in
+  [phenotypic-analysis/data/mecfs-phenotypes.tsv](phenotypic-analysis/data/mecfs-phenotypes.tsv)
 
 ## Authors
 
