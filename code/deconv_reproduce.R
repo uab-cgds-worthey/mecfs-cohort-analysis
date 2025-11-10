@@ -3,7 +3,7 @@
 # Author: Shaurita D. Hutchins
 # Description: Comprehensive immune deconvolution and visualization workflow
 # Input: CIBERSORTx_Job2_Results.csv
-# ID map: id_map.csv (PaperID <-> CGDSID)
+# ID map: id_map.csv (PaperID <-> CGDSID)Y
 # Metadata: Metadata_2024_11_20.csv (with ID column)
 # Run details:
 # - LM22 leukocyte signature (547 genes)
