@@ -24,8 +24,8 @@ The site was built with [workflowr](https://jdblischak.github.io/workflowr/) to 
 
 - Figures, statistics, and annotations from this analysis are presented in the pages above.  
 - Input files were generated via Salmon quantification and are located in the `data/star-salmon` directory of the GitHub repository.  
-- You can also browse the full source code and workflow on [GitHub](https://github.com/uab-cgds-worthey/mecfs-dge-analysis).
+- You can also browse the full source code and workflow on [GitHub](https://github.com/uab-cgds-worthey/mecfs-cohort-analysis).
 
 ## License
 
-This project is licensed under the [GNU General Public License v3.0](https://github.com/uab-cgds-worthey/mecfs-dge-analysis/blob/main/LICENSE).
+This project is licensed under the [GNU General Public License v3.0](https://github.com/uab-cgds-worthey/mecfs-cohort-analysis/blob/main/LICENSE).
