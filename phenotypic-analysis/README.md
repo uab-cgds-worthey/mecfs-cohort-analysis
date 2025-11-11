@@ -53,8 +53,20 @@ across all avatars.
 Deeper explination of the analytical process and computation used can be found in the
 [avatar_enrichment Jupyter notebook](notebooks/avatar_enrichment.ipynb).
 
-The resulting table of rank enriched diseases from MECFS avatars will be saved to
+The resulting table of ranked enriched diseases from MECFS avatars will be saved to
 [the results directory in an Excel file](data/results/Supp.%20Table%20-%20MECFS%20avatars%20and%20ranked%20disease%20enrichment%20table.xlsx).
+
+### Cohort Disease Enrichment Ranking
+
+Participant phenotypes were derived from symptoms noted by each participant in an in-take survey and stored per
+participant in [a CSV file in this analysis](data/mecfs-samples/patient_hpo_summaries.csv). Like the avatars these
+were used for finding the most enriched (phenotypically overrepresented) diseases across the cohort.
+
+Deeper explination of the analytical process and computation used can be found in the
+[avatar_enrichment Jupyter notebook](notebooks/avatar_enrichment.ipynb).
+
+The resulting table of ranked enriched diseases from the cohort will be saved to
+[the results directory in an Excel file](data/results/Supp.%20Table%20-%20MECFS%20participants%20ranked%20disease%20enrichment%20table.xlsx)
 
 ### Cohort Phenotypes
 
