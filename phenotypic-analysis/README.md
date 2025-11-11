@@ -58,4 +58,4 @@ The resulting table of rank enriched diseases from MECFS avatars will be saved t
 
 ### Cohort Phenotypes
 
-This analysis focuses on looking at participant phenotypic similarity. TBD.
+This analysis focuses on looking at participant phenotypic similarity unsing a binary encoding of phenotype terms.
