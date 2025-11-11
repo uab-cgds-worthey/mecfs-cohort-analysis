@@ -1,5 +1,5 @@
 name: "mecfs-dge-analysis"
-output_dir: ../docs
+output_dir: ../../docs
 navbar:
   title: "mecfs-dge-analysis"
   left:
