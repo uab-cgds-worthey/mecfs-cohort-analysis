@@ -25,8 +25,8 @@ to ensure that the analysis can be reproduced.
 Installation starts with fetching the Git repo and cloning it:
 
 ```bash
-git clone https://github.com/uab-cgds-worthey/mecfs-dge-analysis.git
-cd mecfs-dge-analysis/dge-analysis/
+git clone https://github.com/uab-cgds-worthey/mecfs-cohort-analysis.git
+cd mecfs-cohort-analysis/dge-analysis/
 ```
 
 ### Restoring the Environment
@@ -106,7 +106,7 @@ wflow_view()
 
 ## Results
 
-Results (including figures generated for the publication) can be found in the `docs` folder or viewable at [this website](https://uab-cgds-worthey.github.io/mecfs-dge-analysis/).
+Results (including figures generated for the publication) can be found in the `docs` folder or viewable at [this website](https://uab-cgds-worthey.github.io/mecfs-cohort-analysis/).
 
 ## Author
 

@@ -15,8 +15,8 @@ scripts for the comparison and visualization of phenotypes b/w diseases.
 Installation starts with fetching the Git repo and cloning it
 
 ```sh
-git clone https://github.com/uab-cgds-worthey/mecfs-dge-analysis.git
-cd mecfs-dge-analysis/phenotypic-analysis/
+git clone https://github.com/uab-cgds-worthey/mecfs-cohort-analysis.git
+cd mecfs-cohort-analysis/phenotypic-analysis/
 ```
 
 then the conda environment can built from the cloned repo's root directory like
@@ -58,4 +58,4 @@ The resulting table of rank enriched diseases from MECFS avatars will be saved t
 
 ### Cohort Phenotypes
 
-This analysis focuses on looking at participant phenotypic similarity. TBD.
+This analysis focuses on looking at participant phenotypic similarity unsing a binary encoding of phenotype terms.
