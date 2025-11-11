@@ -1,0 +1,36 @@
+HPO ID	Phenotype description	Regions of pathophysiology
+HP:0030973	Postexertional symptom exacerbation	PENE
+HP:0012432	Chronic fatigue	PENE
+HP:0003388	Easy fatigability	PENE
+HP:0025377	Triggered by exertion	PENE
+HP:0100543	Cognitive impairment	Neurocognitive
+HP:0033687	Short term memory impairment	Neurocognitive
+HP:0002315	Headache	Pain
+HP:0012534	Dysesthesia	Pain
+HP:0012531	Pain	Pain
+HP:0012532	Chronic pain	Pain
+HP:0025282	Dull pain	Pain
+HP:0002360	Sleep disturbance	Sleep
+HP:0030512	Difficulty adjusting to changes in luminance	Neurosensory
+HP:5200058	Sensory hypersensitivity	Neurosensory
+HP:0001324	Muscle weakness	Neurosensory
+HP:0002370	Poor coordination	Neurosensory
+HP:0000246	Sinusitis	Immune-Intestinal
+HP:0002716	Lymphadenopathy	Immune-Intestinal
+HP:0033050	Pharyngalgia	Immune-Intestinal
+HP:0004429	Recurrent viral infections	Immune-Intestinal
+HP:0033628	Bowel irritability	Immune-Intestinal
+HP:0002017	Nausea and vomiting	Immune-Intestinal
+HP:0002027	Abdominal pain	Immune-Intestinal
+HP:0000012	Urinary urgency	Immune-Intestinal
+HP:0000017	Nocturia	Immune-Intestinal
+HP:0012537	Food intolerance, non-allergic food hypersensitivity	Immune-Intestinal
+HP:0001962	Palpitations	Energy
+HP:0012173	Orthostatic tachycardia	Energy
+HP:0002321	Vertigo	Energy
+HP:0002098	Respiratory distress	Energy
+HP:0030196	Fatigable weakness of respiratory muscles	Energy
+HP:0005968	Temperature instability	Energy
+HP:0001289	Confusion	Neurocognitive
+HP:0002487	Hyperkinetic movements	Neurosensory
+HP:0011964	Intermittent painful muscle spasms	Neurosensory

@@ -1,0 +1,17 @@
+name: mecfs-pheno
+
+channels:
+  - conda-forge
+
+dependencies:
+  - python=3.10
+  - pandas=2.0.3
+  - scipy
+  - ray-core
+  - jupyter
+  - openpyxl
+  - jinja2
+  - matplotlib=3.8.0
+  - seaborn=0.13.0
+  - pip:
+      - hpo3==1.4.0
