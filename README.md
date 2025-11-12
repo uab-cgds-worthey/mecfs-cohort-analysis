@@ -1,4 +1,4 @@
-# ME/CFS N-of-1
+# ME/CFS Cohort Analysis
 
 <!-- markdown-link-check-disable -->
 
