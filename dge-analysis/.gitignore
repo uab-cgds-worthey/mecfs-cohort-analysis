@@ -21,3 +21,4 @@ output/**/*.RData
 
 # Ignore all PNGs from batch-correction-limma (recursively)
 output/**/batch-correction-limma/**/*.png
+output/all-samples-analysis/
