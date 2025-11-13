@@ -76,7 +76,7 @@ affected and unaffected conditions, and explores subgroup-specific patterns.
 
 Located in [`dge-analysis/`](dge-analysis/).
 
-For detailed documentation including setup, input data, workflow instructions, and results, see [`dge-analysis/README.md`](dge-analysis/README.md).
+For detailed documentation including setup, input data, workflow instructions, and results, see [`dge-analysis/README.md`](dge-analysis/README.md). A complete version of the analysis described in the publication is provided as an `.RData` file, available for [download](https://s3.lts.rc.uab.edu/cgds-public/mecfs-cohort-analysis/publication-analysis.RData) and direct use in R with the `load("path/to/rdata")` function.
 
 #### Results: Differential Gene Expression
 
