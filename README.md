@@ -5,6 +5,7 @@
 [![R lintr](https://github.com/uab-cgds-worthey/mecfs-cohort-analysis/actions/workflows/lintr.yaml/badge.svg)](https://github.com/uab-cgds-worthey/mecfs-cohort-analysis/actions/workflows/lintr.yaml)
 [![DGE Results Deployment](https://github.com/uab-cgds-worthey/mecfs-cohort-analysis/actions/workflows/pages/pages-build-deployment/badge.svg)](https://github.com/uab-cgds-worthey/mecfs-cohort-analysis/actions/workflows/pages/pages-build-deployment)
 [![Linting - Markdown,Shell](https://github.com/uab-cgds-worthey/mecfs-cohort-analysis/actions/workflows/linting.yml/badge.svg)](https://github.com/uab-cgds-worthey/mecfs-cohort-analysis/actions/workflows/linting.yml)
+[![DOI](https://zenodo.org/badge/654322604.svg)](https://doi.org/10.5281/zenodo.17612945)
 
 <!-- markdown-link-check-enable -->
 
