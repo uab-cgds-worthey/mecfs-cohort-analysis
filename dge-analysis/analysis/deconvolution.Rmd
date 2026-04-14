@@ -15,7 +15,7 @@ editor_options:
 
 ```{r, setup, include=FALSE}
 knitr::opts_chunk$set(echo = TRUE, warning = FALSE, message = FALSE)
-out_dir <- file.path("..", "output", "deconvolution")
+out_dir <- file.path("output", "deconvolution")
 dir.create(out_dir, recursive = TRUE, showWarnings = FALSE)
 ```
 
