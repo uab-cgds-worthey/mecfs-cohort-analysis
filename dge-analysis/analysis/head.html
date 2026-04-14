@@ -1,3 +1,14 @@
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Arimo:ital,wght@0,400..700;1,400..700&family=Noto+Sans:ital,wght@0,100..900;1,100..900&family=Roboto:ital,wght@0,100..900;1,100..900&display=swap" rel="stylesheet">
+<script>
+// workflowr uses Bootstrap 4 data attributes; bslib uses Bootstrap 5, which expects data-bs-*
+document.addEventListener("DOMContentLoaded", function() {
+  document.querySelectorAll("[data-toggle=\"collapse\"]").forEach(function(el) {
+    if (el.getAttribute("data-target")) {
+      el.setAttribute("data-bs-toggle", "collapse");
+      el.setAttribute("data-bs-target", el.getAttribute("data-target"));
+    }
+  });
+});
+</script>
