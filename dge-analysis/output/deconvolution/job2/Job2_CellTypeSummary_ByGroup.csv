@@ -1,0 +1,45 @@
+CellType,Affected,mean,sd,n
+B cells memory,Affected,0.002586072637349139,0.007112002604967487,22
+B cells memory,Unaffected,5.318866822242015e-4,8.06940025832794e-4,7
+B cells naive,Affected,0.05980173322471559,0.032032523419949284,22
+B cells naive,Unaffected,0.03896894868290184,0.027804251353968922,7
+Dendritic cells activated,Affected,0.0010497875912376259,0.001489532331953907,22
+Dendritic cells activated,Unaffected,7.421766116161856e-5,1.9636147432249988e-4,7
+Dendritic cells resting,Affected,0,0,22
+Dendritic cells resting,Unaffected,0,0,7
+Eosinophils,Affected,0,0,22
+Eosinophils,Unaffected,0,0,7
+Macrophages M0,Affected,0.006523852462137027,0.009595200671591819,22
+Macrophages M0,Unaffected,0.006695116201770854,0.011853710447952668,7
+Macrophages M1,Affected,0,0,22
+Macrophages M1,Unaffected,0,0,7
+Macrophages M2,Affected,3.086043809768998e-5,1.4474828520846054e-4,22
+Macrophages M2,Unaffected,0,0,7
+Mast cells activated,Affected,0,0,22
+Mast cells activated,Unaffected,0,0,7
+Mast cells resting,Affected,0.013858341014622877,0.005371579546917372,22
+Mast cells resting,Unaffected,0.017909547587517973,0.007816950445193994,7
+Monocytes,Affected,0.17653695746123071,0.028304023410602234,22
+Monocytes,Unaffected,0.20462863986270285,0.03130157116390851,7
+NK cells activated,Affected,0,0,22
+NK cells activated,Unaffected,0,0,7
+NK cells resting,Affected,0.09962078109426138,0.020482292924080218,22
+NK cells resting,Unaffected,0.1175038493030825,0.037271978331226675,7
+Neutrophils,Affected,0.33158649258338896,0.07864153202345345,22
+Neutrophils,Unaffected,0.3318224195684733,0.12191674879218767,7
+Plasma cells,Affected,0.001718065419394956,0.0021268655750420226,22
+Plasma cells,Unaffected,0.003051093820557154,0.0046038521272650425,7
+T cells CD4 memory activated,Affected,0.0013782756992708283,0.00224371643329099,22
+T cells CD4 memory activated,Unaffected,1.7749048023331143e-4,4.695956707787675e-4,7
+T cells CD4 memory resting,Affected,0.1442108245593743,0.03246891589848278,22
+T cells CD4 memory resting,Unaffected,0.13279755798582818,0.05341574177566189,7
+T cells CD4 naive,Affected,0.12321891154762755,0.03811653025656922,22
+T cells CD4 naive,Unaffected,0.1001074041527181,0.047562886580733224,7
+T cells CD8,Affected,0.03777795853494547,0.01954439397306949,22
+T cells CD8,Unaffected,0.045441897624959225,0.051262823557944884,7
+T cells follicular helper,Affected,0,0,22
+T cells follicular helper,Unaffected,0,0,7
+T cells gamma delta,Affected,0,0,22
+T cells gamma delta,Unaffected,0,0,7
+T cells regulatory (Tregs),Affected,1.0108573234585365e-4,4.741341120882848e-4,22
+T cells regulatory (Tregs),Unaffected,2.899303858690371e-4,7.670836985304676e-4,7
