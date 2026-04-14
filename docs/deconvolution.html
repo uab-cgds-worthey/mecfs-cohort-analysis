@@ -1,0 +1,1956 @@
+<!DOCTYPE html>
+
+<html>
+
+<head>
+
+<meta charset="utf-8" />
+<meta name="generator" content="pandoc" />
+<meta http-equiv="X-UA-Compatible" content="IE=EDGE" />
+
+
+<meta name="author" content="Shaurita D. Hutchins" />
+
+
+<title>Bulk RNA-seq Deconvolution with CIBERSORTx</title>
+
+<script src="site_libs/header-attrs-2.29/header-attrs.js"></script>
+<script src="site_libs/jquery-3.6.0/jquery-3.6.0.min.js"></script>
+<meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no" />
+<link href="site_libs/bootstrap-5.3.1/bootstrap.min.css" rel="stylesheet" />
+<script src="site_libs/bootstrap-5.3.1/bootstrap.bundle.min.js"></script>
+<script src="site_libs/bs3compat-0.9.0/transition.js"></script>
+<script src="site_libs/bs3compat-0.9.0/tabs.js"></script>
+<script src="site_libs/bs3compat-0.9.0/bs3compat.js"></script>
+<script src="site_libs/jqueryui-1.13.2/jquery-ui.min.js"></script>
+<link href="site_libs/tocify-1.9.1/jquery.tocify.css" rel="stylesheet" />
+<script src="site_libs/tocify-1.9.1/jquery.tocify.js"></script>
+<script src="site_libs/navigation-1.1/tabsets.js"></script>
+<script src="site_libs/navigation-1.1/codefolding.js"></script>
+<link href="site_libs/highlightjs-9.12.0/textmate.css" rel="stylesheet" />
+<script src="site_libs/highlightjs-9.12.0/highlight.js"></script>
+<link href="site_libs/font-awesome-6.5.2/css/all.min.css" rel="stylesheet" />
+<link href="site_libs/font-awesome-6.5.2/css/v4-shims.min.css" rel="stylesheet" />
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Arimo:ital,wght@0,400..700;1,400..700&family=Noto+Sans:ital,wght@0,100..900;1,100..900&family=Roboto:ital,wght@0,100..900;1,100..900&display=swap" rel="stylesheet">
+<script>
+// workflowr uses Bootstrap 4 data attributes; bslib uses Bootstrap 5, which expects data-bs-*
+document.addEventListener("DOMContentLoaded", function() {
+  document.querySelectorAll("[data-toggle=\"collapse\"]").forEach(function(el) {
+    if (el.getAttribute("data-target")) {
+      el.setAttribute("data-bs-toggle", "collapse");
+      el.setAttribute("data-bs-target", el.getAttribute("data-target"));
+    }
+  });
+});
+</script>
+
+<link rel="icon" href="https://github.com/workflowr/workflowr-assets/raw/main/img/reproducible.png">
+<!-- Add a small amount of space between sections. -->
+<style type="text/css">
+div.section {
+  padding-top: 12px;
+}
+</style>
+
+
+
+<style type="text/css">
+  code{white-space: pre-wrap;}
+  span.smallcaps{font-variant: small-caps;}
+  span.underline{text-decoration: underline;}
+  div.column{display: inline-block; vertical-align: top; width: 50%;}
+  div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
+  ul.task-list{list-style: none;}
+    </style>
+
+<style type="text/css">code{white-space: pre;}</style>
+<script type="text/javascript">
+if (window.hljs) {
+  hljs.configure({languages: []});
+  hljs.initHighlightingOnLoad();
+  if (document.readyState && document.readyState === "complete") {
+    window.setTimeout(function() { hljs.initHighlighting(); }, 0);
+  }
+}
+</script>
+
+
+
+
+
+
+
+
+
+<style type = "text/css">
+.main-container {
+  max-width: 940px;
+  margin-left: auto;
+  margin-right: auto;
+}
+img {
+  max-width:100%;
+}
+.tabbed-pane {
+  padding-top: 12px;
+}
+.html-widget {
+  margin-bottom: 20px;
+}
+button.code-folding-btn:focus {
+  outline: none;
+}
+summary {
+  display: list-item;
+}
+details > summary > p:only-child {
+  display: inline;
+}
+pre code {
+  padding: 0;
+}
+</style>
+
+
+<style type="text/css">
+.dropdown-submenu {
+  position: relative;
+}
+.dropdown-submenu>.dropdown-menu {
+  top: 0;
+  left: 100%;
+  margin-top: -6px;
+  margin-left: -1px;
+  border-radius: 0 6px 6px 6px;
+}
+.dropdown-submenu:hover>.dropdown-menu {
+  display: block;
+}
+.dropdown-submenu>a:after {
+  display: block;
+  content: " ";
+  float: right;
+  width: 0;
+  height: 0;
+  border-color: transparent;
+  border-style: solid;
+  border-width: 5px 0 5px 5px;
+  border-left-color: #cccccc;
+  margin-top: 5px;
+  margin-right: -10px;
+}
+.dropdown-submenu:hover>a:after {
+  border-left-color: #adb5bd;
+}
+.dropdown-submenu.pull-left {
+  float: none;
+}
+.dropdown-submenu.pull-left>.dropdown-menu {
+  left: -100%;
+  margin-left: 10px;
+  border-radius: 6px 0 6px 6px;
+}
+</style>
+
+<script type="text/javascript">
+// manage active state of menu based on current page
+$(document).ready(function () {
+  // active menu anchor
+  href = window.location.pathname
+  href = href.substr(href.lastIndexOf('/') + 1)
+  if (href === "")
+    href = "index.html";
+  var menuAnchor = $('a[href="' + href + '"]');
+
+  // mark the anchor link active (and if it's in a dropdown, also mark that active)
+  var dropdown = menuAnchor.closest('li.dropdown');
+  if (window.bootstrap) { // Bootstrap 4+
+    menuAnchor.addClass('active');
+    dropdown.find('> .dropdown-toggle').addClass('active');
+  } else { // Bootstrap 3
+    menuAnchor.parent().addClass('active');
+    dropdown.addClass('active');
+  }
+
+  // Navbar adjustments
+  var navHeight = $(".navbar").first().height() + 15;
+  var style = document.createElement('style');
+  var pt = "padding-top: " + navHeight + "px; ";
+  var mt = "margin-top: -" + navHeight + "px; ";
+  var css = "";
+  // offset scroll position for anchor links (for fixed navbar)
+  for (var i = 1; i <= 6; i++) {
+    css += ".section h" + i + "{ " + pt + mt + "}\n";
+  }
+  style.innerHTML = "body {" + pt + "padding-bottom: 40px; }\n" + css;
+  document.head.appendChild(style);
+});
+</script>
+
+<!-- tabsets -->
+
+<style type="text/css">
+.tabset-dropdown > .nav-tabs {
+  display: inline-table;
+  max-height: 500px;
+  min-height: 44px;
+  overflow-y: auto;
+  border: 1px solid #ddd;
+  border-radius: 4px;
+}
+
+.tabset-dropdown > .nav-tabs > li.active:before, .tabset-dropdown > .nav-tabs.nav-tabs-open:before {
+  content: "\e259";
+  font-family: 'Glyphicons Halflings';
+  display: inline-block;
+  padding: 10px;
+  border-right: 1px solid #ddd;
+}
+
+.tabset-dropdown > .nav-tabs.nav-tabs-open > li.active:before {
+  content: "\e258";
+  font-family: 'Glyphicons Halflings';
+  border: none;
+}
+
+.tabset-dropdown > .nav-tabs > li.active {
+  display: block;
+}
+
+.tabset-dropdown > .nav-tabs > li > a,
+.tabset-dropdown > .nav-tabs > li > a:focus,
+.tabset-dropdown > .nav-tabs > li > a:hover {
+  border: none;
+  display: inline-block;
+  border-radius: 4px;
+  background-color: transparent;
+}
+
+.tabset-dropdown > .nav-tabs.nav-tabs-open > li {
+  display: block;
+  float: none;
+}
+
+.tabset-dropdown > .nav-tabs > li {
+  display: none;
+}
+</style>
+
+<!-- code folding -->
+<style type="text/css">
+.code-folding-btn { margin-bottom: 4px; }
+</style>
+
+
+
+<style type="text/css">
+
+#TOC {
+  margin: 25px 0px 20px 0px;
+}
+@media (max-width: 768px) {
+#TOC {
+  position: relative;
+  width: 100%;
+}
+}
+
+@media print {
+.toc-content {
+  /* see https://github.com/w3c/csswg-drafts/issues/4434 */
+  float: right;
+}
+}
+
+.toc-content {
+  padding-left: 30px;
+  padding-right: 40px;
+}
+
+div.main-container {
+  max-width: 1200px;
+}
+
+div.tocify {
+  width: 20%;
+  max-width: 260px;
+  max-height: 85%;
+}
+
+@media (min-width: 768px) and (max-width: 991px) {
+  div.tocify {
+    width: 25%;
+  }
+}
+
+@media (max-width: 767px) {
+  div.tocify {
+    width: 100%;
+    max-width: none;
+  }
+}
+
+.tocify ul, .tocify li {
+  line-height: 20px;
+}
+
+.tocify-subheader .tocify-item {
+  font-size: 0.90em;
+}
+
+.tocify .list-group-item {
+  border-radius: 0px;
+}
+
+
+</style>
+
+
+
+</head>
+
+<body>
+
+
+<div class="container-fluid main-container">
+
+
+<!-- setup 3col/9col grid for toc_float and main content  -->
+<div class="row">
+<div class="col-xs-12 col-sm-4 col-md-3">
+<div id="TOC" class="tocify">
+</div>
+</div>
+
+<div class="toc-content col-xs-12 col-sm-8 col-md-9">
+
+
+
+
+<div class="navbar navbar-default  navbar-fixed-top" role="navigation">
+  <div class="container">
+    <div class="navbar-header">
+      <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-bs-toggle="collapse" data-target="#navbar" data-bs-target="#navbar">
+        <span class="icon-bar"></span>
+        <span class="icon-bar"></span>
+        <span class="icon-bar"></span>
+      </button>
+      <a class="navbar-brand" href="index.html">ME/CFS DGE Analysis</a>
+    </div>
+    <div id="navbar" class="navbar-collapse collapse">
+      <ul class="nav navbar-nav">
+        <li>
+  <a href="index.html">Home</a>
+</li>
+<li>
+  <a href="background.html">Background</a>
+</li>
+<li class="dropdown">
+  <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+    Analysis
+     
+    <span class="caret"></span>
+  </a>
+  <ul class="dropdown-menu" role="menu">
+    <li>
+      <a href="subsetted-condition-analysis.html">Subsetted Analysis</a>
+    </li>
+    <li>
+      <a href="deconvolution.html">Deconvolution Analysis</a>
+    </li>
+    <li>
+      <a href="subgroup-analysis.html">Subgroup Analysis</a>
+    </li>
+  </ul>
+</li>
+      </ul>
+      <ul class="nav navbar-nav navbar-right">
+        <li>
+  <a href="contact.html">Contact</a>
+</li>
+<li>
+  <a href="https://github.com/uab-cgds-worthey/mecfs-dge-analysis">
+    <span class="fa fa-github"></span>
+     
+  </a>
+</li>
+      </ul>
+    </div><!--/.nav-collapse -->
+  </div><!--/.container -->
+</div><!--/.navbar -->
+
+<div id="header">
+
+<div class="btn-group pull-right float-right">
+<button type="button" class="btn btn-default btn-xs btn-secondary btn-sm dropdown-toggle" data-toggle="dropdown" data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false"><span>Code</span> <span class="caret"></span></button>
+<ul class="dropdown-menu dropdown-menu-right" style="min-width: 50px;">
+<li><a id="rmd-show-all-code" href="#">Show All Code</a></li>
+<li><a id="rmd-hide-all-code" href="#">Hide All Code</a></li>
+</ul>
+</div>
+
+
+
+<h1 class="title toc-ignore">Bulk RNA-seq Deconvolution with
+CIBERSORTx</h1>
+<h4 class="author">Shaurita D. Hutchins</h4>
+<h4 class="date">Last updated on 2026-04-14</h4>
+
+</div>
+
+
+<p>
+<button type="button" class="btn btn-default btn-workflowr btn-workflowr-report" data-toggle="collapse" data-target="#workflowr-report">
+<span class="glyphicon glyphicon-list" aria-hidden="true"></span>
+workflowr <span class="glyphicon glyphicon-ok text-success"
+aria-hidden="true"></span>
+</button>
+</p>
+<div id="workflowr-report" class="collapse">
+<ul class="nav nav-tabs">
+<li class="active">
+<a data-toggle="tab" href="#summary">Summary</a>
+</li>
+<li>
+<a data-toggle="tab" href="#checks"> Checks <span
+class="glyphicon glyphicon-ok text-success" aria-hidden="true"></span>
+</a>
+</li>
+<li>
+<a data-toggle="tab" href="#versions">Past versions</a>
+</li>
+</ul>
+<div class="tab-content">
+<div id="summary" class="tab-pane fade in active">
+<p>
+<strong>Last updated:</strong> 2026-04-14
+</p>
+<p>
+<strong>Checks:</strong> <span
+class="glyphicon glyphicon-ok text-success" aria-hidden="true"></span> 7
+<span class="glyphicon glyphicon-exclamation-sign text-danger"
+aria-hidden="true"></span> 0
+</p>
+<p>
+<strong>Knit directory:</strong> <code>dge-analysis/</code> <span
+class="glyphicon glyphicon-question-sign" aria-hidden="true"
+title="This is the local directory in which the code in this file was executed.">
+</span>
+</p>
+<p>
+This reproducible <a href="https://rmarkdown.rstudio.com">R Markdown</a>
+analysis was created with <a
+  href="https://github.com/workflowr/workflowr">workflowr</a> (version
+1.7.1). The <em>Checks</em> tab describes the reproducibility checks
+that were applied when the results were created. The <em>Past
+versions</em> tab lists the development history.
+</p>
+<hr>
+</div>
+<div id="checks" class="tab-pane fade">
+<div id="workflowr-checks" class="panel-group">
+<div class="panel panel-default">
+<div class="panel-heading">
+<p class="panel-title">
+<a data-toggle="collapse" data-parent="#workflowr-checks" href="#strongRMarkdownfilestronguptodate">
+<span class="glyphicon glyphicon-ok text-success"
+aria-hidden="true"></span> <strong>R Markdown file:</strong> up-to-date
+</a>
+</p>
+</div>
+<div id="strongRMarkdownfilestronguptodate"
+class="panel-collapse collapse">
+<div class="panel-body">
+<p>Great! Since the R Markdown file has been committed to the Git
+repository, you know the exact version of the code that produced these
+results.</p>
+</div>
+</div>
+</div>
+<div class="panel panel-default">
+<div class="panel-heading">
+<p class="panel-title">
+<a data-toggle="collapse" data-parent="#workflowr-checks" href="#strongEnvironmentstrongempty">
+<span class="glyphicon glyphicon-ok text-success"
+aria-hidden="true"></span> <strong>Environment:</strong> empty </a>
+</p>
+</div>
+<div id="strongEnvironmentstrongempty" class="panel-collapse collapse">
+<div class="panel-body">
+<p>Great job! The global environment was empty. Objects defined in the
+global environment can affect the analysis in your R Markdown file in
+unknown ways. For reproduciblity it’s best to always run the code in an
+empty environment.</p>
+</div>
+</div>
+</div>
+<div class="panel panel-default">
+<div class="panel-heading">
+<p class="panel-title">
+<a data-toggle="collapse" data-parent="#workflowr-checks" href="#strongSeedstrongcodesetseed20230618code">
+<span class="glyphicon glyphicon-ok text-success"
+aria-hidden="true"></span> <strong>Seed:</strong>
+<code>set.seed(20230618)</code> </a>
+</p>
+</div>
+<div id="strongSeedstrongcodesetseed20230618code"
+class="panel-collapse collapse">
+<div class="panel-body">
+<p>The command <code>set.seed(20230618)</code> was run prior to running
+the code in the R Markdown file. Setting a seed ensures that any results
+that rely on randomness, e.g. subsampling or permutations, are
+reproducible.</p>
+</div>
+</div>
+</div>
+<div class="panel panel-default">
+<div class="panel-heading">
+<p class="panel-title">
+<a data-toggle="collapse" data-parent="#workflowr-checks" href="#strongSessioninformationstrongrecorded">
+<span class="glyphicon glyphicon-ok text-success"
+aria-hidden="true"></span> <strong>Session information:</strong>
+recorded </a>
+</p>
+</div>
+<div id="strongSessioninformationstrongrecorded"
+class="panel-collapse collapse">
+<div class="panel-body">
+<p>Great job! Recording the operating system, R version, and package
+versions is critical for reproducibility.</p>
+</div>
+</div>
+</div>
+<div class="panel panel-default">
+<div class="panel-heading">
+<p class="panel-title">
+<a data-toggle="collapse" data-parent="#workflowr-checks" href="#strongCachestrongnone">
+<span class="glyphicon glyphicon-ok text-success"
+aria-hidden="true"></span> <strong>Cache:</strong> none </a>
+</p>
+</div>
+<div id="strongCachestrongnone" class="panel-collapse collapse">
+<div class="panel-body">
+<p>Nice! There were no cached chunks for this analysis, so you can be
+confident that you successfully produced the results during this
+run.</p>
+</div>
+</div>
+</div>
+<div class="panel panel-default">
+<div class="panel-heading">
+<p class="panel-title">
+<a data-toggle="collapse" data-parent="#workflowr-checks" href="#strongFilepathsstrongrelative">
+<span class="glyphicon glyphicon-ok text-success"
+aria-hidden="true"></span> <strong>File paths:</strong> relative </a>
+</p>
+</div>
+<div id="strongFilepathsstrongrelative" class="panel-collapse collapse">
+<div class="panel-body">
+<p>Great job! Using relative paths to the files within your workflowr
+project makes it easier to run your code on other machines.</p>
+</div>
+</div>
+</div>
+<div class="panel panel-default">
+<div class="panel-heading">
+<p class="panel-title">
+<a data-toggle="collapse" data-parent="#workflowr-checks" href="#strongRepositoryversionstrongahrefhttpsgithubcomuabcgdswortheymecfscohortanalysistree27aedd74b7b6dc0720da2618bb937b4203a252eftargetblank27aedd7a">
+<span class="glyphicon glyphicon-ok text-success"
+aria-hidden="true"></span> <strong>Repository version:</strong>
+<a href="https://github.com/uab-cgds-worthey/mecfs-cohort-analysis/tree/27aedd74b7b6dc0720da2618bb937b4203a252ef" target="_blank">27aedd7</a>
+</a>
+</p>
+</div>
+<div
+id="strongRepositoryversionstrongahrefhttpsgithubcomuabcgdswortheymecfscohortanalysistree27aedd74b7b6dc0720da2618bb937b4203a252eftargetblank27aedd7a"
+class="panel-collapse collapse">
+<div class="panel-body">
+<p>
+Great! You are using Git for version control. Tracking code development
+and connecting the code version to the results is critical for
+reproducibility.
+</p>
+<p>
+The results in this page were generated with repository version
+<a href="https://github.com/uab-cgds-worthey/mecfs-cohort-analysis/tree/27aedd74b7b6dc0720da2618bb937b4203a252ef" target="_blank">27aedd7</a>.
+See the <em>Past versions</em> tab to see a history of the changes made
+to the R Markdown and HTML files.
+</p>
+<p>
+Note that you need to be careful to ensure that all relevant files for
+the analysis have been committed to Git prior to generating the results
+(you can use <code>wflow_publish</code> or
+<code>wflow_git_commit</code>). workflowr only checks the R Markdown
+file, but you know if there are other scripts or data files that it
+depends on. Below is the status of the Git repository when the results
+were generated:
+</p>
+<pre><code>
+Ignored files:
+    Ignored:    .DS_Store
+    Ignored:    .github/.DS_Store
+    Ignored:    dge-analysis/.DS_Store
+    Ignored:    dge-analysis/.Rhistory
+    Ignored:    dge-analysis/.Rproj.user/
+    Ignored:    dge-analysis/.cursor/
+    Ignored:    dge-analysis/AGENTS.md
+    Ignored:    dge-analysis/analysis/.DS_Store
+    Ignored:    dge-analysis/data/.DS_Store
+    Ignored:    dge-analysis/output/.DS_Store
+    Ignored:    dge-analysis/output/all-samples-analysis/
+    Ignored:    dge-analysis/output/deconvolution/
+    Ignored:    dge-analysis/output/publication-analysis/publication-analysis.RData
+    Ignored:    dge-analysis/output/subgroup-chrn-analysis/CHRN-subgroup-analysis.RData
+    Ignored:    dge-analysis/output/subgroup-hpp-analysis/HPP-subgroup-analysis.RData
+    Ignored:    dge-analysis/output/subgroup-ion_channel-analysis/Ion_Channel-subgroup-analysis.RData
+    Ignored:    dge-analysis/output/subgroup-mito-analysis/Mito-subgroup-analysis.RData
+    Ignored:    dge-analysis/output/subgroup-potassium-analysis/
+    Ignored:    dge-analysis/output/subgroup-rbc-analysis/RBC-subgroup-analysis.RData
+    Ignored:    dge-analysis/renv/.DS_Store
+    Ignored:    dge-analysis/renv/library/
+    Ignored:    dge-analysis/renv/staging/
+    Ignored:    phenotypic-analysis/.DS_Store
+    Ignored:    variant-findings-plot/.DS_Store
+
+Untracked files:
+    Untracked:  dge-analysis/data/CIBERSORTx_Job1_output/
+    Untracked:  dge-analysis/data/CIBERSORTx_Job2_output/
+    Untracked:  dge-analysis/data/id_map.csv
+    Untracked:  dge-analysis/output/publication-analysis/degs_padj_0.1.png
+    Untracked:  dge-analysis/output/publication-analysis/supplemental_figure_4_significant_degs_padj_.05.png
+    Untracked:  output/
+
+Unstaged changes:
+    Modified:   dge-analysis/analysis/_site.yml
+    Modified:   dge-analysis/analysis/custom.css
+    Modified:   dge-analysis/analysis/head.html
+    Modified:   dge-analysis/code/helpers.R
+    Modified:   dge-analysis/output/publication-analysis/Supplemental Table 5. Significant Differentially Expressed Genes.csv
+    Modified:   dge-analysis/output/publication-analysis/batch-correction-limma/plot-counts/genes-of-interest/ACACB-subsetted-plot-counts.png
+    Modified:   dge-analysis/output/publication-analysis/batch-correction-limma/plot-counts/genes-of-interest/ACADM-subsetted-plot-counts.png
+    Modified:   dge-analysis/output/publication-analysis/batch-correction-limma/plot-counts/genes-of-interest/ACADVL-subsetted-plot-counts.png
+    Modified:   dge-analysis/output/publication-analysis/batch-correction-limma/plot-counts/genes-of-interest/ADM2-subsetted-plot-counts.png
+    Modified:   dge-analysis/output/publication-analysis/batch-correction-limma/plot-counts/genes-of-interest/ADORA2A-subsetted-plot-counts.png
+    Modified:   dge-analysis/output/publication-analysis/batch-correction-limma/plot-counts/genes-of-interest/ADORA2B-subsetted-plot-counts.png
+    Modified:   dge-analysis/output/publication-analysis/batch-correction-limma/plot-counts/genes-of-interest/ADRB2-subsetted-plot-counts.png
+    Modified:   dge-analysis/output/publication-analysis/batch-correction-limma/plot-counts/genes-of-interest/ATP1A1-subsetted-plot-counts.png
+    Modified:   dge-analysis/output/publication-analysis/batch-correction-limma/plot-counts/genes-of-interest/CALCB-subsetted-plot-counts.png
+    Modified:   dge-analysis/output/publication-analysis/batch-correction-limma/plot-counts/genes-of-interest/CCR5-subsetted-plot-counts.png
+    Modified:   dge-analysis/output/publication-analysis/batch-correction-limma/plot-counts/genes-of-interest/CHRFAM7A-subsetted-plot-counts.png
+    Modified:   dge-analysis/output/publication-analysis/batch-correction-limma/plot-counts/genes-of-interest/COL6A3-subsetted-plot-counts.png
+    Modified:   dge-analysis/output/publication-analysis/batch-correction-limma/plot-counts/genes-of-interest/COMT-subsetted-plot-counts.png
+    Modified:   dge-analysis/output/publication-analysis/batch-correction-limma/plot-counts/genes-of-interest/CPT1A-subsetted-plot-counts.png
+    Modified:   dge-analysis/output/publication-analysis/batch-correction-limma/plot-counts/genes-of-interest/CPT1B-subsetted-plot-counts.png
+    Modified:   dge-analysis/output/publication-analysis/batch-correction-limma/plot-counts/genes-of-interest/CPT1C-subsetted-plot-counts.png
+    Modified:   dge-analysis/output/publication-analysis/batch-correction-limma/plot-counts/genes-of-interest/CUBN-subsetted-plot-counts.png
+    Modified:   dge-analysis/output/publication-analysis/batch-correction-limma/plot-counts/genes-of-interest/CYTH2-subsetted-plot-counts.png
+    Modified:   dge-analysis/output/publication-analysis/batch-correction-limma/plot-counts/genes-of-interest/DENND1A-subsetted-plot-counts.png
+    Modified:   dge-analysis/output/publication-analysis/batch-correction-limma/plot-counts/genes-of-interest/DMXL2-subsetted-plot-counts.png
+    Modified:   dge-analysis/output/publication-analysis/batch-correction-limma/plot-counts/genes-of-interest/ELOVL4-subsetted-plot-counts.png
+    Modified:   dge-analysis/output/publication-analysis/batch-correction-limma/plot-counts/genes-of-interest/ENO3-subsetted-plot-counts.png
+    Modified:   dge-analysis/output/publication-analysis/batch-correction-limma/plot-counts/genes-of-interest/ETFB-subsetted-plot-counts.png
+    Modified:   dge-analysis/output/publication-analysis/batch-correction-limma/plot-counts/genes-of-interest/FCRL1-subsetted-plot-counts.png
+    Modified:   dge-analysis/output/publication-analysis/batch-correction-limma/plot-counts/genes-of-interest/FKBP5-subsetted-plot-counts.png
+    Modified:   dge-analysis/output/publication-analysis/batch-correction-limma/plot-counts/genes-of-interest/G6PD-subsetted-plot-counts.png
+    Modified:   dge-analysis/output/publication-analysis/batch-correction-limma/plot-counts/genes-of-interest/GABRB3-subsetted-plot-counts.png
+    Modified:   dge-analysis/output/publication-analysis/batch-correction-limma/plot-counts/genes-of-interest/GIPR-subsetted-plot-counts.png
+    Modified:   dge-analysis/output/publication-analysis/batch-correction-limma/plot-counts/genes-of-interest/GLYCTK-subsetted-plot-counts.png
+    Modified:   dge-analysis/output/publication-analysis/batch-correction-limma/plot-counts/genes-of-interest/GMPPB-subsetted-plot-counts.png
+    Modified:   dge-analysis/output/publication-analysis/batch-correction-limma/plot-counts/genes-of-interest/GPNMB-subsetted-plot-counts.png
+    Modified:   dge-analysis/output/publication-analysis/batch-correction-limma/plot-counts/genes-of-interest/HADHA-subsetted-plot-counts.png
+    Modified:   dge-analysis/output/publication-analysis/batch-correction-limma/plot-counts/genes-of-interest/HSPA1A-subsetted-plot-counts.png
+    Modified:   dge-analysis/output/publication-analysis/batch-correction-limma/plot-counts/genes-of-interest/HTR6-subsetted-plot-counts.png
+    Modified:   dge-analysis/output/publication-analysis/batch-correction-limma/plot-counts/genes-of-interest/IDO1-subsetted-plot-counts.png
+    Modified:   dge-analysis/output/publication-analysis/batch-correction-limma/plot-counts/genes-of-interest/IFNG-subsetted-plot-counts.png
+    Modified:   dge-analysis/output/publication-analysis/batch-correction-limma/plot-counts/genes-of-interest/IL10-subsetted-plot-counts.png
+    Modified:   dge-analysis/output/publication-analysis/batch-correction-limma/plot-counts/genes-of-interest/IL6-subsetted-plot-counts.png
+    Modified:   dge-analysis/output/publication-analysis/batch-correction-limma/plot-counts/genes-of-interest/KLHL7-subsetted-plot-counts.png
+    Modified:   dge-analysis/output/publication-analysis/batch-correction-limma/plot-counts/genes-of-interest/LMBRD1-subsetted-plot-counts.png
+    Modified:   dge-analysis/output/publication-analysis/batch-correction-limma/plot-counts/genes-of-interest/MADD-subsetted-plot-counts.png
+    Modified:   dge-analysis/output/publication-analysis/batch-correction-limma/plot-counts/genes-of-interest/MAPK1-subsetted-plot-counts.png
+    Modified:   dge-analysis/output/publication-analysis/batch-correction-limma/plot-counts/genes-of-interest/MCCC1-subsetted-plot-counts.png
+    Modified:   dge-analysis/output/publication-analysis/batch-correction-limma/plot-counts/genes-of-interest/MCCC2-subsetted-plot-counts.png
+    Modified:   dge-analysis/output/publication-analysis/batch-correction-limma/plot-counts/genes-of-interest/MINPP1-subsetted-plot-counts.png
+    Modified:   dge-analysis/output/publication-analysis/batch-correction-limma/plot-counts/genes-of-interest/MLYCD-subsetted-plot-counts.png
+    Modified:   dge-analysis/output/publication-analysis/batch-correction-limma/plot-counts/genes-of-interest/MMAA-subsetted-plot-counts.png
+    Modified:   dge-analysis/output/publication-analysis/batch-correction-limma/plot-counts/genes-of-interest/MMACHC-subsetted-plot-counts.png
+    Modified:   dge-analysis/output/publication-analysis/batch-correction-limma/plot-counts/genes-of-interest/MYH9-subsetted-plot-counts.png
+    Modified:   dge-analysis/output/publication-analysis/batch-correction-limma/plot-counts/genes-of-interest/NLRP3-subsetted-plot-counts.png
+    Modified:   dge-analysis/output/publication-analysis/batch-correction-limma/plot-counts/genes-of-interest/NR3C1-subsetted-plot-counts.png
+    Modified:   dge-analysis/output/publication-analysis/batch-correction-limma/plot-counts/genes-of-interest/NUP42-subsetted-plot-counts.png
+    Modified:   dge-analysis/output/publication-analysis/batch-correction-limma/plot-counts/genes-of-interest/OXTR-subsetted-plot-counts.png
+    Modified:   dge-analysis/output/publication-analysis/batch-correction-limma/plot-counts/genes-of-interest/P2RX7-subsetted-plot-counts.png
+    Modified:   dge-analysis/output/publication-analysis/batch-correction-limma/plot-counts/genes-of-interest/PCK2-subsetted-plot-counts.png
+    Modified:   dge-analysis/output/publication-analysis/batch-correction-limma/plot-counts/genes-of-interest/PGM1-subsetted-plot-counts.png
+    Modified:   dge-analysis/output/publication-analysis/batch-correction-limma/plot-counts/genes-of-interest/POLG-subsetted-plot-counts.png
+    Modified:   dge-analysis/output/publication-analysis/batch-correction-limma/plot-counts/genes-of-interest/PTPN22-subsetted-plot-counts.png
+    Modified:   dge-analysis/output/publication-analysis/batch-correction-limma/plot-counts/genes-of-interest/SLC12A3-subsetted-plot-counts.png
+    Modified:   dge-analysis/output/publication-analysis/batch-correction-limma/plot-counts/genes-of-interest/SLC25A20-subsetted-plot-counts.png
+    Modified:   dge-analysis/output/publication-analysis/batch-correction-limma/plot-counts/genes-of-interest/SLC7A9-subsetted-plot-counts.png
+    Modified:   dge-analysis/output/publication-analysis/batch-correction-limma/plot-counts/genes-of-interest/SMCR8-subsetted-plot-counts.png
+    Modified:   dge-analysis/output/publication-analysis/batch-correction-limma/plot-counts/genes-of-interest/SURF1-subsetted-plot-counts.png
+    Modified:   dge-analysis/output/publication-analysis/batch-correction-limma/plot-counts/genes-of-interest/SYT6-subsetted-plot-counts.png
+    Modified:   dge-analysis/output/publication-analysis/batch-correction-limma/plot-counts/genes-of-interest/TACO1-subsetted-plot-counts.png
+    Modified:   dge-analysis/output/publication-analysis/batch-correction-limma/plot-counts/genes-of-interest/TNF-subsetted-plot-counts.png
+    Modified:   dge-analysis/output/publication-analysis/batch-correction-limma/plot-counts/genes-of-interest/TOMM7-subsetted-plot-counts.png
+    Modified:   dge-analysis/output/publication-analysis/batch-correction-limma/plot-counts/genes-of-interest/UCP2-subsetted-plot-counts.png
+    Modified:   dge-analysis/output/publication-analysis/batch-correction-limma/plot-counts/genes-of-interest/VIPR2-subsetted-plot-counts.png
+    Modified:   dge-analysis/output/publication-analysis/batch-correction-limma/plot-counts/genes-of-interest/faceted_genes_of_interest_plot_counts.png
+    Modified:   dge-analysis/output/publication-analysis/batch-correction-limma/plot-counts/padj-05/CBX3P2-subsetted-plot-counts.png
+    Modified:   dge-analysis/output/publication-analysis/batch-correction-limma/plot-counts/padj-05/CD248-subsetted-plot-counts.png
+    Modified:   dge-analysis/output/publication-analysis/batch-correction-limma/plot-counts/padj-05/DEFA1-subsetted-plot-counts.png
+    Modified:   dge-analysis/output/publication-analysis/batch-correction-limma/plot-counts/padj-05/ENSG00000142539-subsetted-plot-counts.png
+    Modified:   dge-analysis/output/publication-analysis/batch-correction-limma/plot-counts/padj-05/ENSG00000224610-subsetted-plot-counts.png
+    Modified:   dge-analysis/output/publication-analysis/batch-correction-limma/plot-counts/padj-05/ENSG00000225544-subsetted-plot-counts.png
+    Modified:   dge-analysis/output/publication-analysis/batch-correction-limma/plot-counts/padj-05/ENSG00000254732-subsetted-plot-counts.png
+    Modified:   dge-analysis/output/publication-analysis/batch-correction-limma/plot-counts/padj-05/ENSG00000267793-subsetted-plot-counts.png
+    Modified:   dge-analysis/output/publication-analysis/batch-correction-limma/plot-counts/padj-05/ENSG00000273162-subsetted-plot-counts.png
+    Modified:   dge-analysis/output/publication-analysis/batch-correction-limma/plot-counts/padj-05/ENSG00000285505-subsetted-plot-counts.png
+    Modified:   dge-analysis/output/publication-analysis/batch-correction-limma/plot-counts/padj-05/ENSG00000289694-subsetted-plot-counts.png
+    Modified:   dge-analysis/output/publication-analysis/batch-correction-limma/plot-counts/padj-05/F8A2-subsetted-plot-counts.png
+    Modified:   dge-analysis/output/publication-analysis/batch-correction-limma/plot-counts/padj-05/FSCN2-subsetted-plot-counts.png
+    Modified:   dge-analysis/output/publication-analysis/batch-correction-limma/plot-counts/padj-05/KCNQ5-subsetted-plot-counts.png
+    Modified:   dge-analysis/output/publication-analysis/batch-correction-limma/plot-counts/padj-05/KLHL4-subsetted-plot-counts.png
+    Modified:   dge-analysis/output/publication-analysis/batch-correction-limma/plot-counts/padj-05/LRRN3-subsetted-plot-counts.png
+    Modified:   dge-analysis/output/publication-analysis/batch-correction-limma/plot-counts/padj-05/MED14OS-subsetted-plot-counts.png
+    Modified:   dge-analysis/output/publication-analysis/batch-correction-limma/plot-counts/padj-05/MPPED2-subsetted-plot-counts.png
+    Modified:   dge-analysis/output/publication-analysis/batch-correction-limma/plot-counts/padj-05/ODF3-subsetted-plot-counts.png
+    Modified:   dge-analysis/output/publication-analysis/batch-correction-limma/plot-counts/padj-05/PIK3R3-subsetted-plot-counts.png
+    Modified:   dge-analysis/output/publication-analysis/batch-correction-limma/plot-counts/padj-05/POLR3G-subsetted-plot-counts.png
+    Modified:   dge-analysis/output/publication-analysis/batch-correction-limma/plot-counts/padj-05/RNU1-3-subsetted-plot-counts.png
+    Modified:   dge-analysis/output/publication-analysis/batch-correction-limma/plot-counts/padj-05/RNVU1-18-subsetted-plot-counts.png
+    Modified:   dge-analysis/output/publication-analysis/batch-correction-limma/plot-counts/padj-05/SLC4A10-subsetted-plot-counts.png
+    Modified:   dge-analysis/output/publication-analysis/batch-correction-limma/plot-counts/padj-05/SNTG2-subsetted-plot-counts.png
+    Modified:   dge-analysis/output/publication-analysis/batch-correction-limma/plot-counts/padj-05/TBC1D3G-subsetted-plot-counts.png
+    Modified:   dge-analysis/output/publication-analysis/batch-correction-limma/plot-counts/padj-05/TBC1D3K-subsetted-plot-counts.png
+    Modified:   dge-analysis/output/publication-analysis/batch-correction-limma/plot-counts/padj-05/TMC1-subsetted-plot-counts.png
+    Modified:   dge-analysis/output/publication-analysis/batch-correction-limma/plot-counts/padj-05/XGY2-subsetted-plot-counts.png
+    Modified:   dge-analysis/output/publication-analysis/batch-correction-limma/plot-counts/padj-05/ZNF683-subsetted-plot-counts.png
+    Modified:   dge-analysis/output/publication-analysis/batch-correction-limma/plot-counts/padj-05/faceted_genes_of_interest_plot_counts.png
+    Modified:   dge-analysis/output/publication-analysis/batch-correction-limma/plot-counts/spta1-genes-of-interest/AHSP-subsetted-plot-counts.png
+    Modified:   dge-analysis/output/publication-analysis/batch-correction-limma/plot-counts/spta1-genes-of-interest/EPB42-subsetted-plot-counts.png
+    Modified:   dge-analysis/output/publication-analysis/batch-correction-limma/plot-counts/spta1-genes-of-interest/GYPA-subsetted-plot-counts.png
+    Modified:   dge-analysis/output/publication-analysis/batch-correction-limma/plot-counts/spta1-genes-of-interest/GYPB-subsetted-plot-counts.png
+    Modified:   dge-analysis/output/publication-analysis/batch-correction-limma/plot-counts/spta1-genes-of-interest/GYPE-subsetted-plot-counts.png
+    Modified:   dge-analysis/output/publication-analysis/batch-correction-limma/plot-counts/spta1-genes-of-interest/HEMGN-subsetted-plot-counts.png
+    Modified:   dge-analysis/output/publication-analysis/batch-correction-limma/plot-counts/spta1-genes-of-interest/KEL-subsetted-plot-counts.png
+    Modified:   dge-analysis/output/publication-analysis/batch-correction-limma/plot-counts/spta1-genes-of-interest/RHAG-subsetted-plot-counts.png
+    Modified:   dge-analysis/output/publication-analysis/batch-correction-limma/plot-counts/spta1-genes-of-interest/SLC4A1-subsetted-plot-counts.png
+    Modified:   dge-analysis/output/publication-analysis/batch-correction-limma/plot-counts/spta1-genes-of-interest/SPTA1-subsetted-plot-counts.png
+    Modified:   dge-analysis/output/publication-analysis/batch-correction-limma/plot-counts/spta1-genes-of-interest/SPTB-subsetted-plot-counts.png
+    Modified:   dge-analysis/output/publication-analysis/batch-correction-limma/plot-counts/spta1-genes-of-interest/SPTBN5-subsetted-plot-counts.png
+    Modified:   dge-analysis/output/publication-analysis/batch-correction-limma/plot-counts/spta1-genes-of-interest/faceted_genes_of_interest_plot_counts.png
+    Modified:   dge-analysis/output/publication-analysis/counts_vst_limma_subsetted.csv
+    Modified:   dge-analysis/output/publication-analysis/counts_vst_subsetted.csv
+    Modified:   dge-analysis/output/publication-analysis/res_aff_vs_unaff_df_sub_genename.csv
+    Modified:   dge-analysis/output/publication-analysis/res_aff_vs_unaff_df_sub_genename_05.csv
+    Modified:   dge-analysis/output/publication-analysis/res_aff_vs_unaff_df_sub_genename_padj1.csv
+    Modified:   dge-analysis/output/publication-analysis/res_aff_vs_unaff_df_sub_genename_padj1_lfc1.csv
+    Modified:   dge-analysis/output/publication-analysis/res_aff_vs_unaff_significant_subsetted_mygene.csv
+    Modified:   dge-analysis/output/publication-analysis/res_aff_vs_unaff_significant_subsetted_samples.csv
+    Modified:   dge-analysis/output/publication-analysis/res_aff_vs_unaff_sub.csv
+    Modified:   dge-analysis/output/publication-analysis/subsetted-analysis-volcano-plot.png
+    Modified:   dge-analysis/output/subgroup-chrn-analysis/counts_vst.csv
+    Modified:   dge-analysis/output/subgroup-chrn-analysis/counts_vst_limma.csv
+    Modified:   dge-analysis/output/subgroup-chrn-analysis/res_chrn_vs_unaff.csv
+    Modified:   dge-analysis/output/subgroup-chrn-analysis/res_chrn_vs_unaff_df_genename_05.csv
+    Modified:   dge-analysis/output/subgroup-chrn-analysis/res_chrn_vs_unaff_df_genename_padj05_lfc1.csv
+    Modified:   dge-analysis/output/subgroup-chrn-analysis/res_chrn_vs_unaff_df_genename_padj1.csv
+    Modified:   dge-analysis/output/subgroup-chrn-analysis/res_chrn_vs_unaff_df_genename_padj1_lfc1.csv
+    Modified:   dge-analysis/output/subgroup-chrn-analysis/res_chrn_vs_unaff_siggenes.csv
+    Modified:   dge-analysis/output/subgroup-chrn-analysis/res_subgroup_vs_unaff_df_genename.csv
+    Modified:   dge-analysis/output/subgroup-hpp-analysis/counts_vst.csv
+    Modified:   dge-analysis/output/subgroup-hpp-analysis/counts_vst_limma.csv
+    Modified:   dge-analysis/output/subgroup-hpp-analysis/res_hpp_vs_unaff.csv
+    Modified:   dge-analysis/output/subgroup-hpp-analysis/res_hpp_vs_unaff_df_genename_05.csv
+    Modified:   dge-analysis/output/subgroup-hpp-analysis/res_hpp_vs_unaff_df_genename_padj05_lfc1.csv
+    Modified:   dge-analysis/output/subgroup-hpp-analysis/res_hpp_vs_unaff_df_genename_padj1.csv
+    Modified:   dge-analysis/output/subgroup-hpp-analysis/res_hpp_vs_unaff_df_genename_padj1_lfc1.csv
+    Modified:   dge-analysis/output/subgroup-hpp-analysis/res_hpp_vs_unaff_siggenes.csv
+    Modified:   dge-analysis/output/subgroup-hpp-analysis/res_subgroup_vs_unaff_df_genename.csv
+    Modified:   dge-analysis/output/subgroup-ion_channel-analysis/counts_vst.csv
+    Modified:   dge-analysis/output/subgroup-ion_channel-analysis/counts_vst_limma.csv
+    Modified:   dge-analysis/output/subgroup-ion_channel-analysis/res_ion_channel_vs_unaff.csv
+    Modified:   dge-analysis/output/subgroup-ion_channel-analysis/res_ion_channel_vs_unaff_df_genename_05.csv
+    Modified:   dge-analysis/output/subgroup-ion_channel-analysis/res_ion_channel_vs_unaff_df_genename_padj05_lfc1.csv
+    Modified:   dge-analysis/output/subgroup-ion_channel-analysis/res_ion_channel_vs_unaff_df_genename_padj1.csv
+    Modified:   dge-analysis/output/subgroup-ion_channel-analysis/res_ion_channel_vs_unaff_df_genename_padj1_lfc1.csv
+    Modified:   dge-analysis/output/subgroup-ion_channel-analysis/res_ion_channel_vs_unaff_siggenes.csv
+    Modified:   dge-analysis/output/subgroup-ion_channel-analysis/res_subgroup_vs_unaff_df_genename.csv
+    Modified:   dge-analysis/output/subgroup-mito-analysis/counts_vst.csv
+    Modified:   dge-analysis/output/subgroup-mito-analysis/counts_vst_limma.csv
+    Modified:   dge-analysis/output/subgroup-mito-analysis/res_mito_vs_unaff.csv
+    Modified:   dge-analysis/output/subgroup-mito-analysis/res_mito_vs_unaff_df_genename_05.csv
+    Modified:   dge-analysis/output/subgroup-mito-analysis/res_mito_vs_unaff_df_genename_padj05_lfc1.csv
+    Modified:   dge-analysis/output/subgroup-mito-analysis/res_mito_vs_unaff_df_genename_padj1.csv
+    Modified:   dge-analysis/output/subgroup-mito-analysis/res_mito_vs_unaff_df_genename_padj1_lfc1.csv
+    Modified:   dge-analysis/output/subgroup-mito-analysis/res_mito_vs_unaff_siggenes.csv
+    Modified:   dge-analysis/output/subgroup-mito-analysis/res_subgroup_vs_unaff_df_genename.csv
+    Modified:   dge-analysis/output/subgroup-rbc-analysis/counts_vst.csv
+    Modified:   dge-analysis/output/subgroup-rbc-analysis/counts_vst_limma.csv
+    Modified:   dge-analysis/output/subgroup-rbc-analysis/res_rbc_vs_unaff.csv
+    Modified:   dge-analysis/output/subgroup-rbc-analysis/res_rbc_vs_unaff_df_genename_05.csv
+    Modified:   dge-analysis/output/subgroup-rbc-analysis/res_rbc_vs_unaff_df_genename_padj05_lfc1.csv
+    Modified:   dge-analysis/output/subgroup-rbc-analysis/res_rbc_vs_unaff_df_genename_padj1.csv
+    Modified:   dge-analysis/output/subgroup-rbc-analysis/res_rbc_vs_unaff_df_genename_padj1_lfc1.csv
+    Modified:   dge-analysis/output/subgroup-rbc-analysis/res_rbc_vs_unaff_siggenes.csv
+    Modified:   dge-analysis/output/subgroup-rbc-analysis/res_subgroup_vs_unaff_df_genename.csv
+    Modified:   dge-analysis/output/subgroup-rbc-analysis/volcano-plot-rbc.png
+    Modified:   dge-analysis/renv.lock
+
+</code></pre>
+<p>
+Note that any generated files, e.g. HTML, png, CSS, etc., are not
+included in this status report because it is ok for generated content to
+have uncommitted changes.
+</p>
+</div>
+</div>
+</div>
+</div>
+<hr>
+</div>
+<div id="versions" class="tab-pane fade">
+<p>
+These are the previous versions of the repository in which changes were
+made to the R Markdown
+(<code>dge-analysis/analysis/deconvolution.Rmd</code>) and HTML
+(<code>docs/deconvolution.html</code>) files. If you’ve configured a
+remote Git repository (see <code>?wflow_git_remote</code>), click on the
+hyperlinks in the table below to view the files as they were in that
+past version.
+</p>
+<div class="table-responsive">
+<table class="table table-condensed table-hover">
+<thead>
+<tr>
+<th>
+File
+</th>
+<th>
+Version
+</th>
+<th>
+Author
+</th>
+<th>
+Date
+</th>
+<th>
+Message
+</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>
+Rmd
+</td>
+<td>
+<a href="https://github.com/uab-cgds-worthey/mecfs-cohort-analysis/blob/27aedd74b7b6dc0720da2618bb937b4203a252ef/dge-analysis/analysis/deconvolution.Rmd" target="_blank">27aedd7</a>
+</td>
+<td>
+sdhutchins
+</td>
+<td>
+2026-04-14
+</td>
+<td>
+Add deconvolution and publication PCA plots.
+</td>
+</tr>
+</tbody>
+</table>
+</div>
+<hr>
+</div>
+</div>
+</div>
+<div id="overview" class="section level2">
+<h2>Overview</h2>
+<p><a href="https://cibersortx.stanford.edu/">CIBERSORTx</a> deconvolves
+bulk RNA-seq into estimated cell-type proportions and, in Group Mode,
+gene expression profiles (GEPs) per cell type. A GEP row is a gene; a
+column is a cell type; the value is imputed expression for that gene in
+that type.</p>
+<p>Job 1 (Group Mode) supplies exported fractions, GEP matrices, and
+gene-by-cell-type q-values. This document only reads those files; it
+does not call the CIBERSORTx web app.</p>
+<p>Job 2 (LM22 fractions) uses the 547-gene LM22 signature, 1000
+permutations, B-mode batch correction, and <code>QN = FALSE</code>. LM22
+means the published leukocyte reference; fractions are the per-sample
+estimated abundances we join to metadata for group comparisons
+(<code>Affected</code>, <code>Category</code>, and related fields).</p>
+<p>The page walks through Job 1 summaries first, then Job 2 loading and
+contrasts.</p>
+</div>
+<div id="salmon-matrix-cibersortx-input" class="section level2">
+<h2>Salmon matrix (CIBERSORTx input)</h2>
+<p>CIBERSORTx expects one row per gene symbol. The script below
+collapses duplicate gene rows and drops all-zero expression rows. It is
+documentation only and does not run when you knit this Rmd.</p>
+<pre class="python"><code>import pandas as pd
+
+infile = &quot;input/salmon.merged.gene_counts_length_scaled.tsv&quot;
+
+# Load TSV
+df = pd.read_csv(infile, sep=&quot;\t&quot;)
+
+# Drop the first column
+df = df.drop(columns=df.columns[0])
+
+# Drop duplicates based on the new first column
+df = df.drop_duplicates(subset=df.columns[0], keep=&quot;first&quot;)
+
+# Remove rows (after the header) where all numeric columns are 0 or 0.0
+df = df.loc[~(df.iloc[:, 1:].eq(0).all(axis=1))]
+
+# Save cleaned file
+df.to_csv(&quot;input/salmon.merged.gene_counts_length_scaled_cleaned.tsv&quot;, sep=&quot;\t&quot;, index=False)</code></pre>
+</div>
+<div id="load-libraries" class="section level2">
+<h2>Load libraries</h2>
+<p>Follow the project README (for example <code>renv</code>) before
+running this analysis.</p>
+<pre class="r"><code>library(tidyverse)
+library(pheatmap)
+library(clusterProfiler)
+library(org.Hs.eg.db)</code></pre>
+</div>
+<div id="job-1-group-mode" class="section level2">
+<h2>Job 1: Group mode</h2>
+</div>
+<div id="import-cibersortx-tables" class="section level2">
+<h2>Import CIBERSORTx tables</h2>
+<p>The helper <code>pick_first_existing()</code> accepts whichever Job 1
+filename CIBERSORTx produced (for example <code>GEPs.txt</code> vs
+<code>GEPs_Filtered.txt</code>). Missing required files stop the knit
+with an explicit error.</p>
+<pre class="r"><code>prefix &lt;- &quot;data/CIBERSORTx_Job1_output/CIBERSORTxGEP_Job1_&quot;
+
+pick_first_existing &lt;- function(paths) {
+  ok &lt;- file.exists(paths)
+  if (!any(ok)) return(NULL)
+  paths[which(ok)[1]]
+}
+
+fractions_file &lt;- paste0(prefix, &quot;Fractions.txt&quot;)
+geps_file &lt;- pick_first_existing(paste0(prefix, c(&quot;GEPs.txt&quot;, &quot;GEPs_Filtered.txt&quot;)))
+qvals_file &lt;- pick_first_existing(paste0(
+  prefix,
+  c(&quot;GEPs_Qvals.txt&quot;, &quot;GEPs_Pvals.txt&quot;, &quot;Qvalues.txt&quot;, &quot;Qvals.txt&quot;, &quot;Pvalues.txt&quot;)
+))
+
+if (is.null(geps_file)) {
+  stop(&quot;No GEP file found (GEPs.txt or GEPs_Filtered.txt) under &quot;, prefix, &quot;; getwd()=&quot;, getwd())
+}
+if (is.null(qvals_file)) {
+  stop(&quot;No q-value/p-value matrix found under &quot;, prefix, &quot;; getwd()=&quot;, getwd())
+}</code></pre>
+<p><code>Fractions.txt</code> contains one row per bulk sample, and the
+numeric columns are estimated proportions per cell type (plus CIBERSORTx
+diagnostics where present).</p>
+<pre class="r"><code>fractions &lt;- read.table(fractions_file, sep = &quot;\t&quot;, header = TRUE, check.names = FALSE)
+colnames(fractions)[1] &lt;- &quot;SampleID&quot;
+fraction_cols &lt;- setdiff(colnames(fractions), c(&quot;SampleID&quot;, &quot;P-value&quot;, &quot;Correlation&quot;, &quot;RMSE&quot;))
+fractions &lt;- fractions %&gt;% mutate(across(all_of(fraction_cols), as.numeric))
+str(fractions)</code></pre>
+<pre><code>&#39;data.frame&#39;:   29 obs. of  26 variables:
+ $ SampleID                    : chr  &quot;LW001974&quot; &quot;LW001975&quot; &quot;LW001976&quot; &quot;LW001977&quot; ...
+ $ B cells naive               : num  0.1375 0.0939 0.049 0.0274 0.099 ...
+ $ B cells memory              : num  0 0 0.0177 0 0 ...
+ $ Plasma cells                : num  0 0.02999 0.00657 0 0 ...
+ $ T cells CD8                 : num  0.0305 0.0707 0.0529 0.0396 0.0144 ...
+ $ T cells CD4 naive           : num  0.1386 0.0576 0.1432 0.0994 0.1136 ...
+ $ T cells CD4 memory resting  : num  0.129 0.233 0.136 0.143 0.202 ...
+ $ T cells CD4 memory activated: num  0.01166 0 0.00609 0 0 ...
+ $ T cells follicular helper   : num  0 0 0 0 0 0 0 0 0 0 ...
+ $ T cells regulatory (Tregs)  : num  0 0 0 0 0 ...
+ $ T cells gamma delta         : num  0 0 0 0 0 0 0 0 0 0 ...
+ $ NK cells resting            : num  0.0919 0.1175 0.0729 0.1084 0.104 ...
+ $ NK cells activated          : num  0 0 0 0 0 ...
+ $ Monocytes                   : num  0.152 0.184 0.164 0.263 0.142 ...
+ $ Macrophages M0              : num  0.0213 0 0 0 0 ...
+ $ Macrophages M1              : num  0 0 0 0 0 0 0 0 0 0 ...
+ $ Macrophages M2              : num  0 0 0 0 0 0 0 0 0 0 ...
+ $ Dendritic cells resting     : num  0 0 0 0 0 0 0 0 0 0 ...
+ $ Dendritic cells activated   : num  0.00884 0 0 0 0.00385 ...
+ $ Mast cells resting          : num  0 0.00935 0.00372 0.02677 0.01318 ...
+ $ Mast cells activated        : num  0 0 0 0 0 0 0 0 0 0 ...
+ $ Eosinophils                 : num  0 0 0 0 0 0 0 0 0 0 ...
+ $ Neutrophils                 : num  0.278 0.205 0.347 0.292 0.308 ...
+ $ P-value                     : int  9999 9999 9999 9999 9999 9999 9999 9999 9999 9999 ...
+ $ Correlation                 : num  0.404 0.468 0.567 0.568 0.453 ...
+ $ RMSE                        : num  0.922 0.884 0.823 0.822 0.896 ...</code></pre>
+<pre class="r"><code>dim(fractions)</code></pre>
+<pre><code>[1] 29 26</code></pre>
+<p>We read the GEP and q-value tables with matching row (gene) and
+column (cell type) names so that a significant call always pairs the
+same gene with the same cell type in both matrices.</p>
+<pre class="r"><code>geps &lt;- read.delim(geps_file, row.names = 1, check.names = FALSE)
+qvals &lt;- read.delim(qvals_file, row.names = 1, check.names = FALSE)
+dim(geps)</code></pre>
+<pre><code>[1] 37484    10</code></pre>
+<pre class="r"><code>dim(qvals)</code></pre>
+<pre><code>[1] 37484    10</code></pre>
+</div>
+<div id="cell-type-proportions" class="section level2">
+<h2>Cell-type proportions</h2>
+<p>Summarize each cell type’s proportion across samples as mean and SD
+so the bar plot shows typical whole-blood composition under Job 1, not
+per-sample variation yet.</p>
+<pre class="r"><code>fractions_summary &lt;- fractions %&gt;%
+  pivot_longer(all_of(fraction_cols), names_to = &quot;CellType&quot;, values_to = &quot;Proportion&quot;) %&gt;%
+  group_by(CellType) %&gt;%
+  summarise(
+    mean_prop = mean(Proportion, na.rm = TRUE),
+    sd_prop = sd(Proportion, na.rm = TRUE),
+    .groups = &quot;drop&quot;
+  ) %&gt;%
+  arrange(desc(mean_prop))
+
+fractions_summary</code></pre>
+<pre><code># A tibble: 22 × 3
+   CellType                   mean_prop sd_prop
+   &lt;chr&gt;                          &lt;dbl&gt;   &lt;dbl&gt;
+ 1 Neutrophils                  0.338   0.103  
+ 2 Monocytes                    0.185   0.0401 
+ 3 T cells CD4 memory resting   0.136   0.0469 
+ 4 T cells CD4 naive            0.123   0.0498 
+ 5 NK cells resting             0.0874  0.0312 
+ 6 B cells naive                0.0561  0.0364 
+ 7 T cells CD8                  0.0436  0.0337 
+ 8 Mast cells resting           0.0144  0.0120 
+ 9 Macrophages M0               0.00449 0.00883
+10 Plasma cells                 0.00302 0.00569
+# ℹ 12 more rows</code></pre>
+<p>Bar height is mean estimated proportion; error bars are not shown
+here (see the summary table for SD).</p>
+<pre class="r"><code>ggplot(fractions_summary, aes(x = reorder(CellType, -mean_prop), y = mean_prop, fill = CellType)) +
+  geom_col() +
+  labs(x = &quot;Cell type&quot;, y = &quot;Mean estimated proportion&quot;) +
+  theme_bw() +
+  theme(axis.text.x = element_text(angle = 45, hjust = 1))</code></pre>
+<p><img src="figure/deconvolution.Rmd/plot%20proportions-1.png" width="960" style="display: block; margin: auto;" /></p>
+</div>
+<div id="significant-genes-and-heatmap" class="section level2">
+<h2>Significant genes and heatmap</h2>
+<p>Keep gene–cell type pairs with q &lt; 0.05, then within each cell
+type take the top 50 genes by GEP expression so the heatmap highlights
+strong, statistically supported signals, not every row of the
+matrix.</p>
+<pre class="r"><code>sig_genes &lt;- qvals %&gt;%
+  rownames_to_column(&quot;Gene&quot;) %&gt;%
+  pivot_longer(-Gene, names_to = &quot;CellType&quot;, values_to = &quot;qval&quot;) %&gt;%
+  filter(qval &lt; 0.05) %&gt;%
+  left_join(
+    geps %&gt;%
+      rownames_to_column(&quot;Gene&quot;) %&gt;%
+      pivot_longer(-Gene, names_to = &quot;CellType&quot;, values_to = &quot;Expr&quot;),
+    by = c(&quot;Gene&quot;, &quot;CellType&quot;)
+  )
+
+top_genes &lt;- sig_genes %&gt;%
+  group_by(CellType) %&gt;%
+  top_n(50, Expr) %&gt;%
+  distinct(Gene, CellType, .keep_all = TRUE)</code></pre>
+<p>Row scaling (<code>scale = "row"</code>) means each gene is centered
+to compare relative highs and lows across cell types, not absolute
+TPM-like units.</p>
+<pre class="r"><code>gene_subset &lt;- intersect(rownames(geps), unique(top_genes$Gene))
+
+if (length(gene_subset) == 0) {
+  warning(&quot;No matching genes for heatmap; check gene IDs.&quot;)
+} else {
+  mat &lt;- geps[rownames(geps) %in% gene_subset, ]
+  mat[!is.finite(mat)] &lt;- 0
+  pheatmap(
+    mat,
+    scale = &quot;row&quot;,
+    clustering_distance_cols = &quot;correlation&quot;,
+    show_rownames = FALSE,
+    main = &quot;Top expressed genes across cell types&quot;
+  )
+}</code></pre>
+</div>
+<div id="go-enrichment" class="section level2">
+<h2>GO enrichment</h2>
+<p><code>enrichGO(..., ont = "BP")</code> tests whether the gene list
+for each cell type overlaps known biological process terms more than
+chance; adjusted p-values rank pathways.</p>
+<pre class="r"><code>enrichment_results &lt;- list()
+
+for (ct in unique(top_genes$CellType)) {
+  genes_ct &lt;- top_genes %&gt;% filter(CellType == ct) %&gt;% pull(Gene)
+  if (length(genes_ct) == 0) next
+
+  ego &lt;- enrichGO(
+    gene = genes_ct,
+    OrgDb = org.Hs.eg.db,
+    keyType = &quot;SYMBOL&quot;,
+    ont = &quot;BP&quot;,
+    pAdjustMethod = &quot;BH&quot;,
+    qvalueCutoff = 0.05
+  )
+  enrichment_results[[ct]] &lt;- ego
+  print(head(ego@result[, c(&quot;Description&quot;, &quot;p.adjust&quot;)], 5))
+}</code></pre>
+<p>The dotplot is one representative cell type (first non-empty
+enrichment object); open the printed tables above for others.</p>
+<pre class="r"><code>if (length(enrichment_results) &gt; 0) {
+  dotplot(enrichment_results[[1]], showCategory = 10)
+}</code></pre>
+</div>
+<div id="save-outputs-job-1" class="section level2">
+<h2>Save outputs (Job 1)</h2>
+<p>Write CSV summaries so Job 1 results are usable outside this R
+session (<code>output/deconvolution/</code>).</p>
+<pre class="r"><code>write_csv(fractions_summary, file.path(out_dir, &quot;Job1_CellTypeProportionSummary.csv&quot;))
+write_csv(top_genes, file.path(out_dir, &quot;Job1_TopGenes_PerCellType.csv&quot;))</code></pre>
+</div>
+<div id="cibersortx-job-2-lm22-whole-blood" class="section level2">
+<h2>CIBERSORTx Job 2: LM22 whole blood</h2>
+<p>Job 2 chunks mirror the standalone LM22 script. They load fractions,
+merge IDs and metadata, then run category and affected-status
+comparisons and plots.</p>
+<pre class="r"><code>library(tidyverse)
+library(MASS)
+library(FSA)
+library(ggpubr)
+library(RColorBrewer)
+library(pheatmap)</code></pre>
+<p><code>CGDSID</code> is the CIBERSORTx sample key;
+<code>id_map.csv</code> maps it to <code>SampleID</code> in the study
+metadata. <code>df</code> is the analysis-ready table: LM22 proportions
+plus all metadata columns.</p>
+<pre class="r"><code>out_dir_job2 &lt;- file.path(out_dir, &quot;job2&quot;)
+dir.create(out_dir_job2, recursive = TRUE, showWarnings = FALSE)
+
+fractions &lt;- read_csv(&quot;data/CIBERSORTx_Job2_output/CIBERSORTx_Job2_Results.csv&quot;, show_col_types = FALSE)
+colnames(fractions)[1] &lt;- &quot;CGDSID&quot;
+celltype_cols &lt;- setdiff(colnames(fractions), c(&quot;CGDSID&quot;, &quot;P-value&quot;, &quot;Correlation&quot;, &quot;RMSE&quot;))
+fractions &lt;- fractions %&gt;% mutate(across(all_of(celltype_cols), as.numeric))
+
+id_map &lt;- read_csv(&quot;data/id_map.csv&quot;, show_col_types = FALSE) %&gt;%
+  dplyr::select(PaperID, CGDSID) %&gt;%
+  dplyr::filter(!is.na(PaperID) &amp; !is.na(CGDSID)) %&gt;%
+  dplyr::rename(SampleID = PaperID)
+
+fractions &lt;- fractions %&gt;%
+  left_join(id_map, by = &quot;CGDSID&quot;) %&gt;%
+  relocate(SampleID, .before = CGDSID)
+
+if (any(is.na(fractions$SampleID))) {
+  warning(&quot;Some CGDSIDs were not found in id_map.csv&quot;)
+  print(fractions %&gt;% dplyr::filter(is.na(SampleID)) %&gt;% dplyr::select(CGDSID))
+}
+
+meta &lt;- read_csv(&quot;data/Metadata_2024_11_20.csv&quot;, show_col_types = FALSE)
+df &lt;- fractions %&gt;% left_join(meta, by = c(&quot;SampleID&quot; = &quot;ID&quot;))
+
+write_csv(df, file.path(out_dir_job2, &quot;Job2_CellTypeProportions_Merged.csv&quot;))</code></pre>
+</div>
+<div id="category-based-contrasts" class="section level2">
+<h2>Category-based contrasts</h2>
+<p><code>Category</code> is the metadata grouping variable for this
+block (change <code>group_var</code> if you need another column). Tables
+and tests describe whether LM22 proportions differ across Category
+levels.</p>
+<pre class="r"><code>group_var &lt;- &quot;Category&quot;
+
+if (!group_var %in% names(df)) stop(paste(&quot;Grouping variable&quot;, group_var, &quot;not found in metadata.&quot;))
+if (any(is.na(df[[group_var]]))) warning(&quot;Some samples missing group information.&quot;)
+
+summary_stats_category &lt;- df %&gt;%
+  pivot_longer(all_of(celltype_cols), names_to = &quot;CellType&quot;, values_to = &quot;Proportion&quot;) %&gt;%
+  group_by(CellType, .data[[group_var]]) %&gt;%
+  summarise(
+    mean = mean(Proportion, na.rm = TRUE),
+    sd = sd(Proportion, na.rm = TRUE),
+    n = sum(!is.na(Proportion)),
+    .groups = &quot;drop&quot;
+  )
+
+summary_stats_category</code></pre>
+<pre><code># A tibble: 132 × 5
+   CellType       Category       mean        sd     n
+   &lt;chr&gt;          &lt;chr&gt;         &lt;dbl&gt;     &lt;dbl&gt; &lt;int&gt;
+ 1 B cells memory ENE        0.000961  0.00193      6
+ 2 B cells memory IMM        0.00131   0.00262      4
+ 3 B cells memory RBC        0.00525   0.0125       6
+ 4 B cells memory SOL        0.00288   0.00644      5
+ 5 B cells memory STR        0        NA            1
+ 6 B cells memory Unaffected 0.000532  0.000807     7
+ 7 B cells naive  ENE        0.0663    0.0286       6
+ 8 B cells naive  IMM        0.0447    0.0162       4
+ 9 B cells naive  RBC        0.0733    0.0446       6
+10 B cells naive  SOL        0.0525    0.0302       5
+# ℹ 122 more rows</code></pre>
+<pre class="r"><code>write_csv(summary_stats_category, file.path(out_dir_job2, paste0(&quot;Job2_CellTypeSummary_By_&quot;, group_var, &quot;.csv&quot;)))</code></pre>
+<p>This chunk performs per-cell-type non-parametric tests by Category,
+applies BH correction, and writes omnibus and Dunn post hoc outputs.</p>
+<pre class="r"><code>message(paste(&quot;Running non-parametric tests for&quot;, group_var, &quot;...&quot;))
+
+df_test_category &lt;- df %&gt;% filter(!is.na(.data[[group_var]]))
+test_results_category &lt;- tibble(CellType = character(), p = numeric(), test = character())
+
+for (ct in celltype_cols) {
+  tmp &lt;- df_test_category %&gt;%
+    dplyr::select(all_of(group_var), all_of(ct)) %&gt;%
+    dplyr::filter(!is.na(.data[[group_var]]), !is.na(.data[[ct]]))
+
+  n_groups &lt;- length(unique(tmp[[group_var]]))
+
+  if (n_groups == 2 &amp;&amp; all(table(tmp[[group_var]]) &gt; 1)) {
+    pval &lt;- tryCatch(
+      stats::wilcox.test(tmp[[ct]] ~ tmp[[group_var]])$p.value,
+      error = function(e) NA_real_
+    )
+    test_results_category &lt;- bind_rows(
+      test_results_category,
+      tibble(CellType = ct, p = pval, test = &quot;Mann-Whitney U&quot;)
+    )
+
+  } else if (n_groups &gt; 2 &amp;&amp; all(table(tmp[[group_var]]) &gt; 1)) {
+    pval_kw &lt;- tryCatch(
+      stats::kruskal.test(tmp[[ct]] ~ tmp[[group_var]])$p.value,
+      error = function(e) NA_real_
+    )
+
+    dunn_res &lt;- tryCatch(
+      FSA::dunnTest(tmp[[ct]] ~ tmp[[group_var]], method = &quot;bh&quot;)$res,
+      error = function(e) NULL
+    )
+
+    if (!is.null(dunn_res)) {
+      dunn_res &lt;- dunn_res %&gt;%
+        mutate(
+          CellType = ct,
+          test = &quot;Kruskal-Wallis + Dunn&quot;,
+          comparison = Contrast
+        ) %&gt;%
+        rename(p = P.unadj, p.adj = P.adj)
+      write_csv(dunn_res, file.path(out_dir_job2, paste0(&quot;Job2_DunnResults_&quot;, ct, &quot;_By_&quot;, group_var, &quot;.csv&quot;)))
+    }
+
+    test_results_category &lt;- bind_rows(
+      test_results_category,
+      tibble(CellType = ct, p = pval_kw, test = &quot;Kruskal-Wallis&quot;)
+    )
+  }
+}
+
+test_results_category &lt;- test_results_category %&gt;%
+  mutate(
+    p.adj = p.adjust(p, method = &quot;BH&quot;),
+    significance = case_when(
+      is.na(p.adj) ~ &quot;&quot;,
+      p.adj &lt; 0.001 ~ &quot;***&quot;,
+      p.adj &lt; 0.01 ~ &quot;**&quot;,
+      p.adj &lt; 0.05 ~ &quot;*&quot;,
+      TRUE ~ &quot;ns&quot;
+    )
+  )
+
+test_results_category</code></pre>
+<pre><code># A tibble: 0 × 5
+# ℹ 5 variables: CellType &lt;chr&gt;, p &lt;dbl&gt;, test &lt;chr&gt;, p.adj &lt;dbl&gt;,
+#   significance &lt;chr&gt;</code></pre>
+<pre class="r"><code>write_csv(test_results_category, file.path(out_dir_job2, paste0(&quot;Job2_GroupComparisonResults_By_&quot;, group_var, &quot;.csv&quot;)))</code></pre>
+<p>We fit the Category-based ordered logistic model on quartiled
+neutrophil proportions and print both coefficients and odds ratios.</p>
+<pre class="r"><code>df_quart &lt;- df_test_category %&gt;%
+  mutate(across(all_of(celltype_cols), ~ ntile(., 4), .names = &quot;{.col}_quart&quot;))
+
+if (length(unique(df_quart$Category)) &gt;= 2 &amp;&amp; length(unique(df_quart$Sex)) &gt;= 2) {
+  model &lt;- polr(as.factor(Neutrophils_quart) ~ Category + Sex, data = df_quart, Hess = TRUE)
+
+  print(summary(model))
+  print(exp(coef(model)))
+}</code></pre>
+<pre><code>Call:
+polr(formula = as.factor(Neutrophils_quart) ~ Category + Sex, 
+    data = df_quart, Hess = TRUE)
+
+Coefficients:
+                      Value Std. Error   t value
+CategoryIMM         1.46130  1.337e+00 1.093e+00
+CategoryRBC         0.08858  1.083e+00 8.178e-02
+CategorySOL         1.30304  1.087e+00 1.198e+00
+CategorySTR        17.44210  7.117e-07 2.451e+07
+CategoryUnaffected  0.25565  1.091e+00 2.343e-01
+SexM                1.50347  1.207e+00 1.246e+00
+
+Intercepts:
+    Value         Std. Error    t value      
+1|2       -0.2948        0.8277       -0.3562
+2|3        0.9113        0.8506        1.0714
+3|4        2.1685        0.9337        2.3224
+
+Residual Deviance: 73.65708 
+AIC: 91.65708 
+       CategoryIMM        CategoryRBC        CategorySOL        CategorySTR 
+      4.311565e+00       1.092617e+00       3.680472e+00       3.758449e+07 
+CategoryUnaffected               SexM 
+      1.291294e+00       4.497272e+00 </code></pre>
+<p>This panel plot shows cell-type-specific proportion differences by
+Category with significance annotations from the test results.</p>
+<pre class="r"><code>plot_df &lt;- df_test_category %&gt;%
+  pivot_longer(all_of(celltype_cols), names_to = &quot;CellType&quot;, values_to = &quot;Proportion&quot;)
+
+sig_df &lt;- test_results_category %&gt;%
+  dplyr::mutate(
+    group1 = levels(factor(df_test_category$Category))[1],
+    group2 = levels(factor(df_test_category$Category))[2],
+    y.position = 1.05 * max(plot_df$Proportion, na.rm = TRUE)
+  ) %&gt;%
+  dplyr::select(CellType, group1, group2, p.adj, significance, y.position) %&gt;%
+  dplyr::rename(p = p.adj)
+
+p &lt;- ggpubr::ggboxplot(
+  plot_df,
+  x = &quot;Category&quot;,
+  y = &quot;Proportion&quot;,
+  fill = &quot;Category&quot;,
+  outlier.shape = NA
+) +
+  facet_wrap(~ CellType, scales = &quot;free_y&quot;, ncol = 4) +
+  ggpubr::stat_pvalue_manual(
+    sig_df,
+    label = &quot;significance&quot;,
+    tip.length = 0.01,
+    bracket.size = 0.3,
+    hide.ns = TRUE
+  ) +
+  labs(
+    title = &quot;CIBERSORTx LM22 Immune Cell Proportions by Category&quot;,
+    subtitle = &quot;Boxplots with Mann-Whitney / Kruskal-Wallis significance annotations&quot;,
+    y = &quot;Estimated Proportion&quot;,
+    x = NULL
+  ) +
+  theme_bw() +
+  theme(
+    strip.text = element_text(size = 9, face = &quot;bold&quot;),
+    axis.text.x = element_text(angle = 45, hjust = 1),
+    legend.position = &quot;bottom&quot;
+  )
+
+p</code></pre>
+<p><img src="figure/deconvolution.Rmd/job2%20category%20boxplots-1.png" width="960" style="display: block; margin: auto;" /></p>
+<pre class="r"><code>ggsave(file.path(out_dir_job2, &quot;Job2_CellType_Boxplots_byCategory.png&quot;), p, width = 10, height = 8, dpi = 300)</code></pre>
+</div>
+<div id="affected-status-contrasts" class="section level2">
+<h2>Affected-status contrasts</h2>
+<p>These tables use the same LM22 proportions as above, grouped by
+<code>Affected</code> instead of <code>Category</code>. Each table row
+gives mean, SD, and n for a cell type within Affected or Unaffected.</p>
+<pre class="r"><code>if (any(is.na(df$Affected))) warning(&quot;Some samples missing group information.&quot;)
+
+summary_stats_affected &lt;- df %&gt;%
+  pivot_longer(all_of(celltype_cols), names_to = &quot;CellType&quot;, values_to = &quot;Proportion&quot;) %&gt;%
+  group_by(CellType, Affected) %&gt;%
+  summarise(
+    mean = mean(Proportion, na.rm = TRUE),
+    sd = sd(Proportion, na.rm = TRUE),
+    n = sum(!is.na(Proportion)),
+    .groups = &quot;drop&quot;
+  )
+
+summary_stats_affected</code></pre>
+<pre><code># A tibble: 44 × 5
+   CellType                  Affected        mean       sd     n
+   &lt;chr&gt;                     &lt;chr&gt;          &lt;dbl&gt;    &lt;dbl&gt; &lt;int&gt;
+ 1 B cells memory            Affected   0.00259   0.00711     22
+ 2 B cells memory            Unaffected 0.000532  0.000807     7
+ 3 B cells naive             Affected   0.0598    0.0320      22
+ 4 B cells naive             Unaffected 0.0390    0.0278       7
+ 5 Dendritic cells activated Affected   0.00105   0.00149     22
+ 6 Dendritic cells activated Unaffected 0.0000742 0.000196     7
+ 7 Dendritic cells resting   Affected   0         0           22
+ 8 Dendritic cells resting   Unaffected 0         0            7
+ 9 Eosinophils               Affected   0         0           22
+10 Eosinophils               Unaffected 0         0            7
+# ℹ 34 more rows</code></pre>
+<pre class="r"><code>write_csv(summary_stats_affected, file.path(out_dir_job2, &quot;Job2_CellTypeSummary_ByGroup.csv&quot;))</code></pre>
+<p>This chunk runs Mann-Whitney comparisons for each cell type between
+Affected and Unaffected groups and adds BH-adjusted significance
+labels.</p>
+<pre class="r"><code>message(&quot;Running non-parametric group comparisons (Mann-Whitney U)...&quot;)
+
+df_test_affected &lt;- df %&gt;% dplyr::filter(!is.na(Affected))
+test_results_affected &lt;- tibble::tibble(CellType = character(), p = numeric())
+
+for (ct in celltype_cols) {
+  tmp &lt;- df_test_affected %&gt;%
+    dplyr::select(Affected, !!sym(ct)) %&gt;%
+    dplyr::filter(!is.na(Affected), !is.na(!!sym(ct)))
+
+  if (length(unique(tmp$Affected)) == 2 &amp;&amp;
+      all(table(tmp$Affected) &gt; 1)) {
+
+    pval &lt;- tryCatch({
+      stats::wilcox.test(tmp[[ct]] ~ tmp$Affected)$p.value
+    }, error = function(e) NA_real_)
+
+    test_results_affected &lt;- dplyr::bind_rows(
+      test_results_affected,
+      tibble::tibble(CellType = ct, p = pval)
+    )
+  }
+}
+
+test_results_affected &lt;- test_results_affected %&gt;%
+  dplyr::mutate(
+    p.adj = p.adjust(p, method = &quot;BH&quot;),
+    significance = dplyr::case_when(
+      is.na(p.adj) ~ &quot;&quot;,
+      p.adj &lt; 0.001 ~ &quot;***&quot;,
+      p.adj &lt; 0.01 ~ &quot;**&quot;,
+      p.adj &lt; 0.05 ~ &quot;*&quot;,
+      TRUE ~ &quot;ns&quot;
+    )
+  )
+
+test_results_affected</code></pre>
+<pre><code># A tibble: 22 × 4
+   CellType                           p   p.adj significance
+   &lt;chr&gt;                          &lt;dbl&gt;   &lt;dbl&gt; &lt;chr&gt;       
+ 1 B cells naive                  0.149   0.543 &quot;ns&quot;        
+ 2 B cells memory                 0.686   0.878 &quot;ns&quot;        
+ 3 Plasma cells                   0.978   1     &quot;ns&quot;        
+ 4 T cells CD8                    0.702   0.878 &quot;ns&quot;        
+ 5 T cells CD4 naive              0.181   0.543 &quot;ns&quot;        
+ 6 T cells CD4 memory resting     0.901   1     &quot;ns&quot;        
+ 7 T cells CD4 memory activated   0.226   0.564 &quot;ns&quot;        
+ 8 T cells follicular helper    NaN     NaN     &quot;&quot;          
+ 9 T cells regulatory (Tregs)     0.451   0.846 &quot;ns&quot;        
+10 T cells gamma delta          NaN     NaN     &quot;&quot;          
+# ℹ 12 more rows</code></pre>
+<pre class="r"><code>readr::write_csv(test_results_affected, file.path(out_dir_job2, &quot;Job2_GroupComparisonResults.csv&quot;))</code></pre>
+<p>We fit the ordered logistic model using quartiled neutrophil
+proportions against Affected status and Sex.</p>
+<pre class="r"><code>df_quart &lt;- df_test_affected %&gt;%
+  mutate(across(all_of(celltype_cols), ~ ntile(., 4), .names = &quot;{.col}_quart&quot;))
+
+model &lt;- polr(as.factor(Neutrophils_quart) ~ Affected + Sex, data = df_quart, Hess = TRUE)
+summary(model)</code></pre>
+<pre><code>Call:
+polr(formula = as.factor(Neutrophils_quart) ~ Affected + Sex, 
+    data = df_quart, Hess = TRUE)
+
+Coefficients:
+                     Value Std. Error t value
+AffectedUnaffected -0.3962     0.9014 -0.4395
+SexM                1.0904     1.1761  0.9271
+
+Intercepts:
+    Value   Std. Error t value
+1|2 -0.9412  0.4535    -2.0755
+2|3  0.1215  0.4141     0.2934
+3|4  1.2015  0.4821     2.4921
+
+Residual Deviance: 79.38353 
+AIC: 89.38353 </code></pre>
+<pre class="r"><code>exp(coef(model))</code></pre>
+<pre><code>AffectedUnaffected               SexM 
+         0.6729055          2.9753320 </code></pre>
+<p>This faceted boxplot visualizes Affected-group differences per cell
+type with significance stars from the tested contrasts.</p>
+<pre class="r"><code>plot_df &lt;- df_test_affected %&gt;%
+  tidyr::pivot_longer(all_of(celltype_cols), names_to = &quot;CellType&quot;, values_to = &quot;Proportion&quot;)
+
+sig_df &lt;- test_results_affected %&gt;%
+  dplyr::mutate(
+    group1 = &quot;Unaffected&quot;,
+    group2 = &quot;Affected&quot;,
+    y.position = 1.05 * max(plot_df$Proportion, na.rm = TRUE)
+  ) %&gt;%
+  dplyr::select(CellType, group1, group2, p.adj, significance, y.position) %&gt;%
+  dplyr::rename(p = p.adj)
+
+p &lt;- ggpubr::ggboxplot(
+  plot_df,
+  x = &quot;Affected&quot;,
+  y = &quot;Proportion&quot;,
+  fill = &quot;Affected&quot;,
+  palette = c(&quot;#4575b4&quot;, &quot;#d73027&quot;),
+  outlier.shape = NA
+) +
+  facet_wrap(~ CellType, scales = &quot;free_y&quot;, ncol = 4) +
+  ggpubr::stat_pvalue_manual(
+    sig_df,
+    label = &quot;significance&quot;,
+    tip.length = 0.01,
+    bracket.size = 0.3,
+    hide.ns = TRUE
+  ) +
+  labs(
+    title = &quot;CIBERSORTx LM22 Immune Cell Proportions by Affected Status&quot;,
+    subtitle = &quot;Boxplots with Mann-Whitney significance annotations&quot;,
+    y = &quot;Estimated Proportion&quot;,
+    x = NULL
+  ) +
+  theme_bw() +
+  theme(
+    strip.text = element_text(size = 9, face = &quot;bold&quot;),
+    axis.text.x = element_text(angle = 45, hjust = 1),
+    legend.position = &quot;bottom&quot;
+  )
+
+print(p)</code></pre>
+<p><img src="figure/deconvolution.Rmd/job2%20affected%20boxplots-1.png" width="960" style="display: block; margin: auto;" /></p>
+<pre class="r"><code>ggplot2::ggsave(file.path(out_dir_job2, &quot;Job2_CellType_Boxplots_with_Significance.png&quot;), p, width = 10, height = 8, dpi = 300)</code></pre>
+</div>
+<div id="sample-level-composition-plots" class="section level2">
+<h2>Sample-level composition plots</h2>
+<p>In the stacked bar charts, each bar sums to height 1 per sample, and
+each segment height is that sample’s LM22 fraction for a cell type.
+Samples are ordered within Affected so you can scan homogeneous runs of
+composition.</p>
+<pre class="r"><code>palette22 &lt;- colorRampPalette(brewer.pal(12, &quot;Set3&quot;))(22)
+
+plot_df &lt;- df %&gt;%
+  pivot_longer(all_of(celltype_cols), names_to = &quot;CellType&quot;, values_to = &quot;Proportion&quot;) %&gt;%
+  group_by(SampleID, Affected, CellType) %&gt;%
+  summarise(Proportion = mean(Proportion, na.rm = TRUE), .groups = &quot;drop&quot;)
+
+plot_df &lt;- plot_df %&gt;%
+  arrange(Affected, SampleID) %&gt;%
+  mutate(SampleID = factor(SampleID, levels = unique(SampleID)))
+
+g_affected &lt;- ggplot(plot_df, aes(x = SampleID, y = Proportion, fill = CellType)) +
+  geom_bar(stat = &quot;identity&quot;, width = 0.8, color = &quot;white&quot;, size = 0.1) +
+  scale_fill_manual(values = palette22) +
+  labs(
+    title = &quot;CIBERSORTx LM22 Immune Composition per Sample&quot;,
+    subtitle = &quot;Samples grouped by clinical status (Affected vs Unaffected)&quot;,
+    y = &quot;Relative proportion&quot;,
+    x = &quot;Sample ID&quot;,
+    fill = &quot;Cell type&quot;
+  ) +
+  theme_bw(base_size = 11) +
+  theme(
+    axis.text.x = element_text(angle = 90, vjust = 0.5, hjust = 1, size = 7, color = &quot;grey20&quot;),
+    axis.title.y = element_text(size = 10),
+    panel.grid.major.x = element_blank(),
+    panel.grid.minor.x = element_blank(),
+    strip.text = element_text(face = &quot;bold&quot;, size = 10),
+    legend.position = &quot;right&quot;,
+    legend.title = element_text(face = &quot;bold&quot;, size = 9),
+    legend.text = element_text(size = 8)
+  ) +
+  geom_vline(
+    xintercept = length(unique(plot_df$SampleID[plot_df$Affected == &quot;Unaffected&quot;])) + 0.5,
+    color = &quot;black&quot;,
+    linewidth = 0.6,
+    linetype = &quot;dashed&quot;
+  ) +
+  annotate(
+    &quot;text&quot;,
+    x = length(unique(plot_df$SampleID[plot_df$Affected == &quot;Unaffected&quot;])) / 2,
+    y = 1.05,
+    label = &quot;Unaffected&quot;,
+    fontface = &quot;bold&quot;,
+    size = 3.5
+  ) +
+  annotate(
+    &quot;text&quot;,
+    x = length(unique(plot_df$SampleID[plot_df$Affected == &quot;Unaffected&quot;])) +
+      length(unique(plot_df$SampleID[plot_df$Affected == &quot;Affected&quot;])) / 2,
+    y = 1.05,
+    label = &quot;Affected&quot;,
+    fontface = &quot;bold&quot;,
+    size = 3.5
+  )
+
+g_affected</code></pre>
+<p><img src="figure/deconvolution.Rmd/job2%20affected%20stacked-bar-1.png" width="1056" style="display: block; margin: auto;" /></p>
+<pre class="r"><code>ggsave(file.path(out_dir_job2, &quot;Job2_StackedBar_By_Affected.png&quot;), g_affected, width = 11, height = 7, dpi = 300)</code></pre>
+<p>This stacked bar chart repeats the same composition view but grouped
+and labeled by Category.</p>
+<pre class="r"><code>palette22 &lt;- colorRampPalette(brewer.pal(12, &quot;Set3&quot;))(22)
+
+plot_df &lt;- df %&gt;%
+  pivot_longer(all_of(celltype_cols), names_to = &quot;CellType&quot;, values_to = &quot;Proportion&quot;) %&gt;%
+  group_by(SampleID, Category, CellType) %&gt;%
+  summarise(Proportion = mean(Proportion, na.rm = TRUE), .groups = &quot;drop&quot;) %&gt;%
+  arrange(Category, SampleID) %&gt;%
+  mutate(SampleID = factor(SampleID, levels = unique(SampleID)))
+
+g_category &lt;- ggplot(plot_df, aes(x = SampleID, y = Proportion, fill = CellType)) +
+  geom_bar(stat = &quot;identity&quot;, width = 0.8, color = &quot;white&quot;, size = 0.1) +
+  scale_fill_manual(values = palette22) +
+  labs(
+    title = &quot;CIBERSORTx LM22 Immune Composition per Sample&quot;,
+    subtitle = &quot;Samples grouped by Category&quot;,
+    y = &quot;Relative proportion&quot;,
+    x = &quot;Sample ID&quot;,
+    fill = &quot;Cell type&quot;
+  ) +
+  theme_bw(base_size = 11) +
+  theme(
+    axis.text.x = element_text(angle = 90, vjust = 0.5, hjust = 1, size = 7, color = &quot;grey20&quot;),
+    axis.title.y = element_text(size = 10),
+    panel.grid.major.x = element_blank(),
+    panel.grid.minor.x = element_blank(),
+    legend.position = &quot;right&quot;,
+    legend.title = element_text(face = &quot;bold&quot;, size = 9),
+    legend.text = element_text(size = 8)
+  ) +
+  {
+    cat_counts &lt;- plot_df %&gt;%
+      distinct(SampleID, Category) %&gt;%
+      count(Category) %&gt;%
+      mutate(x_mid = cumsum(n) - n / 2, x_div = cumsum(n) + 0.5)
+
+    list(
+      geom_vline(
+        data = cat_counts[-nrow(cat_counts), ],
+        aes(xintercept = x_div),
+        color = &quot;black&quot;,
+        linewidth = 0.6,
+        linetype = &quot;dashed&quot;
+      ),
+      geom_text(
+        data = cat_counts,
+        aes(x = x_mid, y = 1.05, label = Category),
+        fontface = &quot;bold&quot;,
+        size = 3.5,
+        inherit.aes = FALSE
+      )
+    )
+  }
+
+g_category</code></pre>
+<p><img src="figure/deconvolution.Rmd/job2%20category%20stacked-bar-1.png" width="1056" style="display: block; margin: auto;" /></p>
+<pre class="r"><code>ggsave(file.path(out_dir_job2, &quot;Job2_StackedBar_By_Category.png&quot;), g_category, width = 11, height = 7, dpi = 300)</code></pre>
+</div>
+<div id="multivariate-summaries" class="section level2">
+<h2>Multivariate summaries</h2>
+<p>PCA on fraction columns treats each sample as a vector of cell-type
+proportions; <code>scale. = TRUE</code> gives each cell type equal
+weight. Constant columns (zero variance) are dropped so
+<code>prcomp()</code> does not fail.</p>
+<pre class="r"><code>group_var &lt;- &quot;Category&quot;
+
+pca_data &lt;- df %&gt;% dplyr::select(all_of(celltype_cols)) %&gt;% drop_na()
+constant_cols &lt;- names(which(apply(pca_data, 2, sd, na.rm = TRUE) == 0))
+
+if (length(constant_cols) &gt; 0) {
+  message(&quot;Removing constant columns from PCA: &quot;, paste(constant_cols, collapse = &quot;, &quot;))
+  pca_data &lt;- pca_data %&gt;% dplyr::select(-all_of(constant_cols))
+}
+
+if (nrow(pca_data) &gt; 2 &amp;&amp; ncol(pca_data) &gt; 1) {
+  pca_res &lt;- prcomp(pca_data, scale. = TRUE)
+
+  pca_df &lt;- as.data.frame(pca_res$x[, 1:2]) %&gt;%
+    mutate(
+      SampleID = df$SampleID[complete.cases(pca_data)],
+      Group = df[[group_var]][complete.cases(pca_data)]
+    )
+
+  pca_plot &lt;- ggplot(pca_df, aes(PC1, PC2, color = Group, label = SampleID)) +
+    geom_point(size = 3, alpha = 0.9) +
+    ggrepel::geom_text_repel(size = 2.8, max.overlaps = 20, segment.color = &quot;grey50&quot;) +
+    theme_bw() +
+    labs(
+      title = paste(&quot;PCA of CIBERSORTx Immune Cell Proportions by&quot;, group_var),
+      subtitle = &quot;Each point represents one individual sample&quot;,
+      x = paste0(&quot;PC1 (&quot;, round(summary(pca_res)$importance[2,1] * 100, 1), &quot;% variance)&quot;),
+      y = paste0(&quot;PC2 (&quot;, round(summary(pca_res)$importance[2,2] * 100, 1), &quot;% variance)&quot;)
+    ) +
+    theme(
+      legend.position = &quot;bottom&quot;,
+      legend.title = element_text(face = &quot;bold&quot;),
+      plot.title = element_text(face = &quot;bold&quot;)
+    )
+
+  pca_plot
+  ggsave(file.path(out_dir_job2, paste0(&quot;Job2_PCA_By_&quot;, group_var, &quot;_Labeled.png&quot;)),
+         pca_plot, width = 8, height = 6, dpi = 300)
+} else {
+  warning(&quot;Not enough variable cell types for PCA.&quot;)
+}</code></pre>
+<p>This chunk computes a Spearman correlation matrix across immune cell
+types and displays the clustered heatmap.</p>
+<pre class="r"><code>df_corr &lt;- df %&gt;%
+  dplyr::select(all_of(celltype_cols)) %&gt;%
+  dplyr::select(where(is.numeric))
+
+df_corr &lt;- df_corr[, apply(df_corr, 2, function(x) var(x, na.rm = TRUE) &gt; 0.0 &amp; sum(!is.na(x)) &gt; 2)]
+
+corr_matrix &lt;- suppressWarnings(cor(df_corr, method = &quot;spearman&quot;, use = &quot;pairwise.complete.obs&quot;))
+corr_matrix[is.na(corr_matrix)] &lt;- 0
+
+pheatmap(
+  corr_matrix,
+  color = colorRampPalette(c(&quot;navy&quot;, &quot;white&quot;, &quot;firebrick3&quot;))(50),
+  display_numbers = TRUE,
+  number_format = &quot;%.2f&quot;,
+  fontsize_number = 8,
+  cluster_rows = TRUE,
+  cluster_cols = TRUE,
+  main = paste(&quot;Spearman Correlation Between Immune Cell Types (&quot;, group_var, &quot;)&quot;, sep = &quot;&quot;)
+)</code></pre>
+<p><img src="figure/deconvolution.Rmd/job2%20correlation%20heatmap-1.png" width="672" style="display: block; margin: auto;" /></p>
+<p>Here we z-score cell-type fractions across samples and plot a
+Category-annotated heatmap for relative composition patterns.</p>
+<pre class="r"><code>z_mat &lt;- df %&gt;%
+  dplyr::select(SampleID, all_of(celltype_cols)) %&gt;%
+  tibble::column_to_rownames(&quot;SampleID&quot;) %&gt;%
+  as.matrix()
+
+z_mat &lt;- scale(z_mat)
+stopifnot(is.numeric(z_mat))
+z_mat[!is.finite(z_mat)] &lt;- 0
+
+annotation_df &lt;- df %&gt;%
+  dplyr::select(SampleID, Category) %&gt;%
+  dplyr::filter(!is.na(Category)) %&gt;%
+  dplyr::distinct(SampleID, .keep_all = TRUE)
+rownames(annotation_df) &lt;- annotation_df$SampleID
+annotation_df &lt;- as.data.frame(annotation_df[&quot;Category&quot;])
+annotation_df$Category &lt;- as.factor(annotation_df$Category)
+
+common_samples &lt;- intersect(rownames(z_mat), rownames(annotation_df))
+z_mat &lt;- z_mat[common_samples, , drop = FALSE]
+annotation_df &lt;- annotation_df[common_samples, , drop = FALSE]
+
+pheatmap(
+  t(z_mat),
+  annotation_col = annotation_df,
+  color = colorRampPalette(c(&quot;navy&quot;, &quot;white&quot;, &quot;firebrick3&quot;))(50),
+  cluster_cols = TRUE,
+  cluster_rows = TRUE,
+  show_colnames = TRUE,
+  show_rownames = TRUE,
+  fontsize_row = 8,
+  fontsize_col = 7,
+  border_color = NA,
+  main = paste(&quot;Z-score of CIBERSORTx LM22 Cell Types by&quot;, group_var)
+)</code></pre>
+<p><img src="figure/deconvolution.Rmd/job2%20zscore%20heatmap-1.png" width="768" style="display: block; margin: auto;" /></p>
+<p>This final distribution plot shows overall predicted cell-frequency
+patterns per cell type using violin and embedded boxplots.</p>
+<pre class="r"><code>plot_df &lt;- df %&gt;%
+  pivot_longer(all_of(celltype_cols), names_to = &quot;CellType&quot;, values_to = &quot;Proportion&quot;) %&gt;%
+  dplyr::filter(!is.na(Proportion))
+
+median_order &lt;- plot_df %&gt;%
+  group_by(CellType) %&gt;%
+  summarise(median_val = median(Proportion, na.rm = TRUE)) %&gt;%
+  arrange(desc(median_val)) %&gt;%
+  pull(CellType)
+
+plot_df$CellType &lt;- factor(plot_df$CellType, levels = median_order)
+
+fill_color &lt;- &quot;#A6CEE3&quot;
+box_color &lt;- &quot;#1F78B4&quot;
+
+p &lt;- ggplot(plot_df, aes(x = CellType, y = Proportion)) +
+  geom_violin(fill = fill_color, color = &quot;gray40&quot;, width = 0.9, scale = &quot;width&quot;, alpha = 0.9) +
+  geom_boxplot(width = 0.12, color = &quot;black&quot;, fill = box_color, outlier.shape = NA, alpha = 0.7) +
+  labs(
+    title = &quot;Predicted relative frequency of immune cell types in whole blood&quot;,
+    x = &quot;Immune cell type&quot;,
+    y = &quot;Predicted relative frequency&quot;
+  ) +
+  theme_bw(base_size = 11) +
+  theme(
+    axis.text.x = element_text(angle = 45, hjust = 1, size = 9),
+    axis.text.y = element_text(size = 9),
+    panel.grid.major.x = element_blank(),
+    panel.grid.minor = element_blank(),
+    panel.border = element_blank(),
+    plot.title = element_text(face = &quot;bold&quot;, hjust = 0.5, size = 12),
+    axis.title = element_text(size = 10)
+  )
+
+p</code></pre>
+<p><img src="figure/deconvolution.Rmd/job2%20violin%20boxplot-1.png" width="816" style="display: block; margin: auto;" /></p>
+<pre class="r"><code>ggsave(file.path(out_dir_job2, &quot;Job2_ViolinBoxplot_CellFrequencies.png&quot;), p, width = 8.5, height = 4.5, dpi = 300)</code></pre>
+<br>
+<p>
+<button type="button" class="btn btn-default btn-workflowr btn-workflowr-sessioninfo" data-toggle="collapse" data-target="#workflowr-sessioninfo" style="display: block;">
+<span class="glyphicon glyphicon-wrench" aria-hidden="true"></span>
+Session information
+</button>
+</p>
+<div id="workflowr-sessioninfo" class="collapse">
+<pre class="r"><code>sessionInfo()</code></pre>
+<pre><code>R version 4.5.1 (2025-06-13)
+Platform: aarch64-apple-darwin20
+Running under: macOS Tahoe 26.3
+
+Matrix products: default
+BLAS:   /Library/Frameworks/R.framework/Versions/4.5-arm64/Resources/lib/libRblas.0.dylib 
+LAPACK: /Library/Frameworks/R.framework/Versions/4.5-arm64/Resources/lib/libRlapack.dylib;  LAPACK version 3.12.1
+
+locale:
+[1] en_US.UTF-8/en_US.UTF-8/en_US.UTF-8/C/en_US.UTF-8/en_US.UTF-8
+
+time zone: America/Chicago
+tzcode source: internal
+
+attached base packages:
+[1] stats4    stats     graphics  grDevices datasets  utils     methods  
+[8] base     
+
+other attached packages:
+ [1] RColorBrewer_1.1-3     ggpubr_0.6.1           FSA_0.10.1            
+ [4] MASS_7.3-65            org.Hs.eg.db_3.21.0    AnnotationDbi_1.70.0  
+ [7] IRanges_2.42.0         S4Vectors_0.46.0       Biobase_2.68.0        
+[10] BiocGenerics_0.54.0    generics_0.1.4         clusterProfiler_4.16.0
+[13] pheatmap_1.0.13        lubridate_1.9.4        forcats_1.0.0         
+[16] stringr_1.5.1          dplyr_1.1.4            purrr_1.1.0           
+[19] readr_2.1.5            tidyr_1.3.1            tibble_3.3.0          
+[22] ggplot2_3.5.2          tidyverse_2.0.0        workflowr_1.7.1       
+
+loaded via a namespace (and not attached):
+  [1] rstudioapi_0.17.1       jsonlite_2.0.0          magrittr_2.0.3         
+  [4] ggtangle_0.0.7          farver_2.1.2            rmarkdown_2.29         
+  [7] ragg_1.4.0              fs_1.6.6                vctrs_0.6.5            
+ [10] memoise_2.0.1           ggtree_3.16.3           rstatix_0.7.2          
+ [13] htmltools_0.5.8.1       broom_1.0.8             Formula_1.2-5          
+ [16] gridGraphics_0.5-1      sass_0.4.10             bslib_0.9.0            
+ [19] plyr_1.8.9              cachem_1.1.0            whisker_0.4.1          
+ [22] igraph_2.1.4            lifecycle_1.0.4         pkgconfig_2.0.3        
+ [25] Matrix_1.7-3            R6_2.6.1                fastmap_1.2.0          
+ [28] gson_0.1.0              GenomeInfoDbData_1.2.14 digest_0.6.37          
+ [31] aplot_0.2.8             enrichplot_1.28.4       colorspace_2.1-1       
+ [34] patchwork_1.3.1         ps_1.9.1                rprojroot_2.1.0        
+ [37] textshaping_1.0.1       RSQLite_2.4.2           labeling_0.4.3         
+ [40] timechange_0.3.0        abind_1.4-8             httr_1.4.7             
+ [43] compiler_4.5.1          bit64_4.6.0-1           withr_3.0.2            
+ [46] backports_1.5.0         BiocParallel_1.42.1     carData_3.0-5          
+ [49] DBI_1.2.3               R.utils_2.13.0          ggsignif_0.6.4         
+ [52] tools_4.5.1             ape_5.8-1               httpuv_1.6.16          
+ [55] R.oo_1.27.1             glue_1.8.0              callr_3.7.6            
+ [58] nlme_3.1-168            GOSemSim_2.34.0         promises_1.3.3         
+ [61] grid_4.5.1              getPass_0.2-4           reshape2_1.4.4         
+ [64] fgsea_1.34.2            gtable_0.3.6            tzdb_0.5.0             
+ [67] R.methodsS3_1.8.2       data.table_1.17.8       hms_1.1.3              
+ [70] car_3.1-3               utf8_1.2.6              XVector_0.48.0         
+ [73] ggrepel_0.9.6           pillar_1.11.0           yulab.utils_0.2.0      
+ [76] vroom_1.6.5             later_1.4.2             splines_4.5.1          
+ [79] treeio_1.32.0           lattice_0.22-7          renv_1.1.4             
+ [82] bit_4.6.0               tidyselect_1.2.1        GO.db_3.21.0           
+ [85] Biostrings_2.76.0       knitr_1.50              git2r_0.36.2           
+ [88] xfun_0.52               stringi_1.8.7           UCSC.utils_1.4.0       
+ [91] lazyeval_0.2.2          ggfun_0.2.0             yaml_2.3.10            
+ [94] evaluate_1.0.4          codetools_0.2-20        qvalue_2.40.0          
+ [97] BiocManager_1.30.26     ggplotify_0.1.2         cli_3.6.5              
+[100] systemfonts_1.2.3       processx_3.8.6          jquerylib_0.1.4        
+[103] Rcpp_1.1.0              GenomeInfoDb_1.44.0     png_0.1-8              
+[106] parallel_4.5.1          blob_1.2.4              DOSE_4.2.0             
+[109] tidytree_0.4.6          scales_1.4.0            crayon_1.5.3           
+[112] rlang_1.1.6             cowplot_1.2.0           fastmatch_1.1-6        
+[115] KEGGREST_1.48.1        </code></pre>
+</div>
+</div>
+</div>
+</div>
+</div>
+</div>
+</div>
+
+
+<!-- Adjust MathJax settings so that all math formulae are shown using
+TeX fonts only; see
+https://docs.mathjax.org/en/latest/web/configuration.html. This will make
+the presentation more consistent at the cost of the webpage sometimes
+taking slightly longer to load. Note that this only works because the
+footer is added to webpages before the MathJax javascript. -->
+<script type="text/x-mathjax-config">
+  MathJax.Hub.Config({
+    "HTML-CSS": { availableFonts: ["TeX"] }
+  });
+</script>
+
+
+
+
+</div>
+</div>
+
+</div>
+
+<script>
+
+// add bootstrap table styles to pandoc tables
+function bootstrapStylePandocTables() {
+  $('tr.odd').parent('tbody').parent('table').addClass('table table-condensed');
+}
+$(document).ready(function () {
+  bootstrapStylePandocTables();
+});
+
+
+</script>
+
+<!-- tabsets -->
+
+<script>
+$(document).ready(function () {
+  window.buildTabsets("TOC");
+});
+
+$(document).ready(function () {
+  $('.tabset-dropdown > .nav-tabs > li').click(function () {
+    $(this).parent().toggleClass('nav-tabs-open');
+  });
+});
+</script>
+
+<!-- code folding -->
+<script>
+$(document).ready(function () {
+  window.initializeCodeFolding("hide" === "show");
+});
+</script>
+
+<script>
+$(document).ready(function ()  {
+
+    // temporarily add toc-ignore selector to headers for the consistency with Pandoc
+    $('.unlisted.unnumbered').addClass('toc-ignore')
+
+    // move toc-ignore selectors from section div to header
+    $('div.section.toc-ignore')
+        .removeClass('toc-ignore')
+        .children('h1,h2,h3,h4,h5').addClass('toc-ignore');
+
+    // establish options
+    var options = {
+      selectors: "h1,h2,h3",
+      theme: "bootstrap3",
+      context: '.toc-content',
+      hashGenerator: function (text) {
+        return text.replace(/[.\\/?&!#<>]/g, '').replace(/\s/g, '_');
+      },
+      ignoreSelector: ".toc-ignore",
+      scrollTo: 0
+    };
+    options.showAndHide = true;
+    options.smoothScroll = true;
+
+    // tocify
+    var toc = $("#TOC").tocify(options).data("toc-tocify");
+});
+</script>
+
+<!-- dynamically load mathjax for compatibility with self-contained -->
+<script>
+  (function () {
+    var script = document.createElement("script");
+    script.type = "text/javascript";
+    script.src  = "https://mathjax.rstudio.com/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML";
+    document.getElementsByTagName("head")[0].appendChild(script);
+  })();
+</script>
+
+</body>
+</html>
