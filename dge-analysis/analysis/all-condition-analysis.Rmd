@@ -12,13 +12,19 @@ editor_options:
 
 ```{r, setup, include=FALSE}
 knitr::opts_chunk$set(echo = TRUE, warning = FALSE, message = FALSE)
+all_samples_output_dir <- file.path("output", "all-samples-analysis")
+dir.create(all_samples_output_dir, recursive = TRUE, showWarnings = FALSE)
 ```
+
+# Overview
+
+This notebook fits Affected vs Unaffected with `~ Batch + Affected` on all samples in the metadata (no removal of related individuals). The [subsetted analysis](subsetted-condition-analysis.html) applies the same model after excluding one member per multiplex family so independence assumptions are less strained for inference.
+
+Outputs here go to `output/all-samples-analysis/` and support exploratory comparisons; publication-style inference follows the subsetted page.
 
 # DGE Analysis Setup
 
-Ensure you have all necessary libraries installed and load the helper code.
-
-`renv` has been integrated to ensure reproducibility of this analysis.
+Load libraries and `code/helpers.R` with `renv` active so package versions match the project lockfile.
 
 ```{r, load libraries, warning = FALSE, message = FALSE}
 library(tidyverse) # Available via CRAN
@@ -46,13 +52,11 @@ library(ComplexHeatmap)
 
 ```{r, include=FALSE}
 source("code/helpers.R", local = knitr::knit_global())
-# or sys.source("your-script.R", envir = knitr::knit_global())
 ```
 
 ## Data Import
 
-We will be importing counts data from the star-salmon pipeline and our metadata 
-for the project which is hosted on Box. This also ensures data is properly ordered by sample id.
+Counts come from star-salmon; metadata is the project CSV in `data/`. `check_order()` aligns matrix columns with metadata rows by sample ID.
 
 ```{r, import data}
 # Import counts and metadata
@@ -80,6 +84,8 @@ genes_biomart <- retrieve_gene_info(values = gene_info$Ensembl_ID, filters = "en
 ```
 
 ## DESeq2 Analysis
+
+DESeq2 tests differential expression on counts with `~ Batch + Affected` so batch is a nuisance term and Affected carries the scientific contrast. Size factors, dispersions, and Wald statistics follow the standard pipeline (see subsetted write-up for interpretation).
 
 ```{r, start analysis}
 sample_metadata$Family <- factor(sample_metadata$Family)
@@ -110,7 +116,7 @@ counts_norm <- counts(dds, normalized = TRUE)
 
 ### Data transformation and visualization
 
-Perform count data transformation by variance stabilizing transformation (vst) on normalized counts.
+`vst()` produces a variance-stable matrix for PCA and heatmaps; it does not replace the count-based model for p-values.
 
 ```{r, vsd}
 vsd <- vst(dds, blind = FALSE)
@@ -118,9 +124,11 @@ vsd <- vst(dds, blind = FALSE)
 
 ### Batch correction with limma
 
+`removeBatchEffect()` on the VST matrix removes Batch for plotting while retaining Affected structure when the design includes both.
+
 ```{r, limma}
 counts_vst <- assay(vsd)
-write.csv(counts_vst, file = "output/all-samples-analysis/counts_vst.csv")
+write.csv(counts_vst, file = file.path(all_samples_output_dir, "counts_vst.csv"))
 mm <- model.matrix(~ Batch + Affected, colData(vsd))
 
 counts_vst_limma <- limma::removeBatchEffect(counts_vst,
@@ -128,13 +136,15 @@ counts_vst_limma <- limma::removeBatchEffect(counts_vst,
   design = mm
 )
 
-write.csv(counts_vst_limma, file = "output/all-samples-analysis/counts_vst_limma.csv")
+write.csv(counts_vst_limma, file = file.path(all_samples_output_dir, "counts_vst_limma.csv"))
 
 vsd_limma <- vsd
 assay(vsd_limma) <- counts_vst_limma
 ```
 
 ### Sample distances heatmap
+
+Euclidean distance on batch-corrected VST; darker tiles mean more similar expression profiles.
 
 ```{r, sample-dist-heatmap}
 sample_dists_all <- dist(t(assay(vsd_limma)))
@@ -155,9 +165,7 @@ pheatmap(sample_dist_matrix_all,
 
 ### Principal Components Analysis
 
-Our below PCA shows that there does not seem to be a batch-related effect 
-occurring after using limma. However, we can see that our 3 male samples are 
-grouping. Given this knowledge, removing them from downstream analyses is the best option.
+On batch-corrected VST, PCs do not separate batches cleanly, which is what we want after `removeBatchEffect()`. The three male samples partially separate from most females on these PCs, so sex structure is visible in exploratory space. The subsetted analysis applies a different restriction: it keeps one sample per multiplex family (see that page for excluded IDs), which is the rule used for publication-style inference.
 
 ```{r, principal-components-analysis-all}
 pca_data_all <- plotPCA(vsd_limma,
@@ -202,6 +210,8 @@ ggplot(pca_data_all, aes(PC1, PC2)) +
 ```
 
 ### Heatmap of all genes, top 50  & top 100 genes
+
+We define annotation colors and summarize the most variable genes to visualize major expression structure across the cohort.
 
 ```{r, heatmap-colors, out.height="570px", out.width ="800px"}
 # Specify annotation colors by columns
@@ -250,6 +260,8 @@ ComplexHeatmap::pheatmap(mat,
 
 ### Comparison/Contrast of Affected_Affected_vs_Unaffected 
 
+This contrast estimates differential expression between affected and unaffected groups under the fitted model.
+
 ```{r}
 res_aff_vs_unaff <- results(dds, contrast = c("Affected", "Affected", "Unaffected"))
 res_aff_vs_unaff_df <- process_and_save_results(
@@ -269,6 +281,7 @@ summary(res_aff_vs_unaff)
 
 ## Heatmap of Significant Genes
 
+This heatmap focuses on statistically significant genes to show direction and consistency of expression changes across samples.
 
 ```{r, significant-genes-deseq-lfc1, out.height="800px", out.width ="1200px"}
 # Assuming 'res_aff_vs_unaff_df' has a column 'padj' for adjusted p-values or 'pvalue' for p-values
@@ -318,6 +331,9 @@ write.csv(res_aff_vs_unaff_df_genename, file = "output/all-samples-analysis/res_
 ```
 
 ## Volcano Plot
+
+The volcano plot combines effect size and adjusted significance to prioritize genes with strong and reliable differences.
+
 ```{r, volcano-plot, out.height="1000px", out.width ="1600px"}
 ev <- EnhancedVolcano(res_aff_vs_unaff_df_genename,
   lab = res_aff_vs_unaff_df_genename$gene_name,
@@ -488,6 +504,8 @@ write.csv(combined_enrichment, enrich_file_name, row.names = FALSE)
 
 
 ## Genes of Interest Plot Counts
+
+Here we scrutinize predefined biologically relevant genes with per-gene count plots and summary heatmaps.
 
 ```{r, generate-plot-counts-genes-interest}
 # Create an empty list to store the results for each gene
@@ -706,6 +724,8 @@ dev.off()
 
 ## Additional Interesting Genes
 
+This section isolates the RBC-focused candidate subset to inspect whether the same case-control patterns persist in a narrower panel.
+
 ```{r, additonal-plot-counts-genes-interest}
 # Create an empty list to store the results for each gene
 gene_results_list <- list()
@@ -867,6 +887,8 @@ dev.off()
 ```
 
 ## Only MADD Genes
+
+We dissect the MADD-related candidate set separately to test whether this pathway-specific signature is coherent across samples.
 
 ```{r, generate-plot-counts-genes-interest-madd}
 # Create an empty list to store the results for each gene
@@ -1031,6 +1053,8 @@ dev.off()
 
 ## Only MITO Genes
 
+We assess the mitochondrial candidate set separately to evaluate whether energy metabolism genes show coordinated case-control shifts.
+
 ```{r, generate-plot-counts-genes-interest-mito}
 # Create an empty list to store the results for each gene
 gene_results_list <- list()
@@ -1193,6 +1217,8 @@ dev.off()
 
 ## Significant Genes Plot Counts
 
+This section provides per-sample count views for significant DEGs to validate effect direction and identify outlier-driven signals.
+
 ```{r, generate-plot-counts-genes-significant}
 # Create an empty list to store the results for each gene
 results_list <- list()
@@ -1326,6 +1352,7 @@ write.csv(results_df, file_name, row.names = FALSE)
 
 ## Heatmap of All Genes
 
+This aggregate heatmap combines key gene sets into one view to compare global expression patterns across affected status and category.
 
 ```{r, heatmap-of-all}
 all_genes <- unique(c(blood_genes, madd_genes, mito_genes, filtered_by_interest$gene_name, significant_data$name))
@@ -1361,6 +1388,8 @@ dev.off()
 ```
 
 ## Heatmap of Genes of Interest
+
+This focused heatmap summarizes the curated gene list used in the manuscript to support interpretation of biologically motivated targets.
 
 ```{r, heatmap-of-all-samples-genes-of-interest}
 genes_of_interest <- read_csv("data/Manually_Curated_Genes_List_2024_12_05.csv")
@@ -1399,6 +1428,8 @@ dev.off()
 
 
 ### Save data
+
+We save the workspace so every intermediate object can be revisited for reproducibility and downstream checks.
 
 ```{r, save-data}
 save.image(file = "output/all-samples-analysis/all-condition-analysis.RData")

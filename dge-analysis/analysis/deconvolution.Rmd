@@ -1,0 +1,826 @@
+---
+title: "Bulk RNA-seq Deconvolution with CIBERSORTx"
+author: "Shaurita D. Hutchins"
+date: "`r format(Sys.Date(), 'Last updated on %Y-%m-%d')`"
+output:
+  workflowr::wflow_html:
+    toc: true
+    toc_depth: 3
+    toc_float: true
+    code_folding: hide
+code_download: true
+editor_options:
+  chunk_output_type: console
+---
+
+```{r, setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE, warning = FALSE, message = FALSE)
+out_dir <- file.path("..", "output", "deconvolution")
+dir.create(out_dir, recursive = TRUE, showWarnings = FALSE)
+```
+
+## Overview
+
+[CIBERSORTx](https://cibersortx.stanford.edu/) deconvolves bulk RNA-seq into estimated cell-type proportions and, in Group Mode, gene expression profiles (GEPs) per cell type. A GEP row is a gene; a column is a cell type; the value is imputed expression for that gene in that type.
+
+Job 1 (Group Mode) supplies exported fractions, GEP matrices, and gene-by-cell-type q-values. This document only reads those files; it does not call the CIBERSORTx web app.
+
+Job 2 (LM22 fractions) uses the 547-gene LM22 signature, 1000 permutations, B-mode batch correction, and `QN = FALSE`. LM22 means the published leukocyte reference; fractions are the per-sample estimated abundances we join to metadata for group comparisons (`Affected`, `Category`, and related fields).
+
+The page walks through Job 1 summaries first, then Job 2 loading and contrasts.
+
+## Salmon matrix (CIBERSORTx input)
+
+CIBERSORTx expects one row per gene symbol. The script below collapses duplicate gene rows and drops all-zero expression rows. It is documentation only and does not run when you knit this Rmd.
+
+```python
+import pandas as pd
+
+infile = "input/salmon.merged.gene_counts_length_scaled.tsv"
+
+# Load TSV
+df = pd.read_csv(infile, sep="\t")
+
+# Drop the first column
+df = df.drop(columns=df.columns[0])
+
+# Drop duplicates based on the new first column
+df = df.drop_duplicates(subset=df.columns[0], keep="first")
+
+# Remove rows (after the header) where all numeric columns are 0 or 0.0
+df = df.loc[~(df.iloc[:, 1:].eq(0).all(axis=1))]
+
+# Save cleaned file
+df.to_csv("input/salmon.merged.gene_counts_length_scaled_cleaned.tsv", sep="\t", index=False)
+```
+
+## Load libraries
+
+Follow the project README (for example `renv`) before running this analysis.
+
+```{r, load libraries, warning = FALSE, message = FALSE}
+library(tidyverse)
+library(pheatmap)
+library(clusterProfiler)
+library(org.Hs.eg.db)
+```
+
+## Job 1: Group mode
+
+## Import CIBERSORTx tables
+
+The helper `pick_first_existing()` accepts whichever Job 1 filename CIBERSORTx produced (for example `GEPs.txt` vs `GEPs_Filtered.txt`). Missing required files stop the knit with an explicit error.
+
+```{r, import paths}
+prefix <- "data/CIBERSORTx_Job1_output/CIBERSORTxGEP_Job1_"
+
+pick_first_existing <- function(paths) {
+  ok <- file.exists(paths)
+  if (!any(ok)) return(NULL)
+  paths[which(ok)[1]]
+}
+
+fractions_file <- paste0(prefix, "Fractions.txt")
+geps_file <- pick_first_existing(paste0(prefix, c("GEPs.txt", "GEPs_Filtered.txt")))
+qvals_file <- pick_first_existing(paste0(
+  prefix,
+  c("GEPs_Qvals.txt", "GEPs_Pvals.txt", "Qvalues.txt", "Qvals.txt", "Pvalues.txt")
+))
+
+if (is.null(geps_file)) {
+  stop("No GEP file found (GEPs.txt or GEPs_Filtered.txt) under ", prefix, "; getwd()=", getwd())
+}
+if (is.null(qvals_file)) {
+  stop("No q-value/p-value matrix found under ", prefix, "; getwd()=", getwd())
+}
+```
+
+`Fractions.txt` contains one row per bulk sample, and the numeric columns are estimated proportions per cell type (plus CIBERSORTx diagnostics where present).
+
+```{r, import fractions}
+fractions <- read.table(fractions_file, sep = "\t", header = TRUE, check.names = FALSE)
+colnames(fractions)[1] <- "SampleID"
+fraction_cols <- setdiff(colnames(fractions), c("SampleID", "P-value", "Correlation", "RMSE"))
+fractions <- fractions %>% mutate(across(all_of(fraction_cols), as.numeric))
+str(fractions)
+dim(fractions)
+```
+
+We read the GEP and q-value tables with matching row (gene) and column (cell type) names so that a significant call always pairs the same gene with the same cell type in both matrices.
+
+```{r, import geps}
+geps <- read.delim(geps_file, row.names = 1, check.names = FALSE)
+qvals <- read.delim(qvals_file, row.names = 1, check.names = FALSE)
+dim(geps)
+dim(qvals)
+```
+
+## Cell-type proportions
+
+Summarize each cell type’s proportion across samples as mean and SD so the bar plot shows typical whole-blood composition under Job 1, not per-sample variation yet.
+
+```{r, summarize fractions}
+fractions_summary <- fractions %>%
+  pivot_longer(all_of(fraction_cols), names_to = "CellType", values_to = "Proportion") %>%
+  group_by(CellType) %>%
+  summarise(
+    mean_prop = mean(Proportion, na.rm = TRUE),
+    sd_prop = sd(Proportion, na.rm = TRUE),
+    .groups = "drop"
+  ) %>%
+  arrange(desc(mean_prop))
+
+fractions_summary
+```
+
+Bar height is mean estimated proportion; error bars are not shown here (see the summary table for SD).
+
+```{r, plot proportions, fig.width = 10, fig.height = 5}
+ggplot(fractions_summary, aes(x = reorder(CellType, -mean_prop), y = mean_prop, fill = CellType)) +
+  geom_col() +
+  labs(x = "Cell type", y = "Mean estimated proportion") +
+  theme_bw() +
+  theme(axis.text.x = element_text(angle = 45, hjust = 1))
+```
+
+## Significant genes and heatmap
+
+Keep gene–cell type pairs with q &lt; 0.05, then within each cell type take the top 50 genes by GEP expression so the heatmap highlights strong, statistically supported signals, not every row of the matrix.
+
+```{r, significant genes}
+sig_genes <- qvals %>%
+  rownames_to_column("Gene") %>%
+  pivot_longer(-Gene, names_to = "CellType", values_to = "qval") %>%
+  filter(qval < 0.05) %>%
+  left_join(
+    geps %>%
+      rownames_to_column("Gene") %>%
+      pivot_longer(-Gene, names_to = "CellType", values_to = "Expr"),
+    by = c("Gene", "CellType")
+  )
+
+top_genes <- sig_genes %>%
+  group_by(CellType) %>%
+  top_n(50, Expr) %>%
+  distinct(Gene, CellType, .keep_all = TRUE)
+```
+
+Row scaling (`scale = "row"`) means each gene is centered to compare relative highs and lows across cell types, not absolute TPM-like units.
+
+```{r, heatmap, fig.width = 9, fig.height = 8}
+gene_subset <- intersect(rownames(geps), unique(top_genes$Gene))
+
+if (length(gene_subset) == 0) {
+  warning("No matching genes for heatmap; check gene IDs.")
+} else {
+  mat <- geps[rownames(geps) %in% gene_subset, ]
+  mat[!is.finite(mat)] <- 0
+  pheatmap(
+    mat,
+    scale = "row",
+    clustering_distance_cols = "correlation",
+    show_rownames = FALSE,
+    main = "Top expressed genes across cell types"
+  )
+}
+```
+
+## GO enrichment
+
+`enrichGO(..., ont = "BP")` tests whether the gene list for each cell type overlaps known biological process terms more than chance; adjusted p-values rank pathways.
+
+```{r, go enrichment}
+enrichment_results <- list()
+
+for (ct in unique(top_genes$CellType)) {
+  genes_ct <- top_genes %>% filter(CellType == ct) %>% pull(Gene)
+  if (length(genes_ct) == 0) next
+
+  ego <- enrichGO(
+    gene = genes_ct,
+    OrgDb = org.Hs.eg.db,
+    keyType = "SYMBOL",
+    ont = "BP",
+    pAdjustMethod = "BH",
+    qvalueCutoff = 0.05
+  )
+  enrichment_results[[ct]] <- ego
+  print(head(ego@result[, c("Description", "p.adjust")], 5))
+}
+```
+
+The dotplot is one representative cell type (first non-empty enrichment object); open the printed tables above for others.
+
+```{r, dotplot, fig.width = 8, fig.height = 6}
+if (length(enrichment_results) > 0) {
+  dotplot(enrichment_results[[1]], showCategory = 10)
+}
+```
+
+## Save outputs (Job 1)
+
+Write CSV summaries so Job 1 results are usable outside this R session (`output/deconvolution/`).
+
+```{r, save outputs}
+write_csv(fractions_summary, file.path(out_dir, "Job1_CellTypeProportionSummary.csv"))
+write_csv(top_genes, file.path(out_dir, "Job1_TopGenes_PerCellType.csv"))
+```
+
+## CIBERSORTx Job 2: LM22 whole blood
+
+Job 2 chunks mirror the standalone LM22 script. They load fractions, merge IDs and metadata, then run category and affected-status comparisons and plots.
+
+```{r, job2 libraries, warning = FALSE, message = FALSE}
+library(tidyverse)
+library(MASS)
+library(FSA)
+library(ggpubr)
+library(RColorBrewer)
+library(pheatmap)
+```
+
+`CGDSID` is the CIBERSORTx sample key; `id_map.csv` maps it to `SampleID` in the study metadata. `df` is the analysis-ready table: LM22 proportions plus all metadata columns.
+
+```{r, job2 shared load}
+out_dir_job2 <- file.path(out_dir, "job2")
+dir.create(out_dir_job2, recursive = TRUE, showWarnings = FALSE)
+
+fractions <- read_csv("data/CIBERSORTx_Job2_output/CIBERSORTx_Job2_Results.csv", show_col_types = FALSE)
+colnames(fractions)[1] <- "CGDSID"
+celltype_cols <- setdiff(colnames(fractions), c("CGDSID", "P-value", "Correlation", "RMSE"))
+fractions <- fractions %>% mutate(across(all_of(celltype_cols), as.numeric))
+
+id_map <- read_csv("data/id_map.csv", show_col_types = FALSE) %>%
+  dplyr::select(PaperID, CGDSID) %>%
+  dplyr::filter(!is.na(PaperID) & !is.na(CGDSID)) %>%
+  dplyr::rename(SampleID = PaperID)
+
+fractions <- fractions %>%
+  left_join(id_map, by = "CGDSID") %>%
+  relocate(SampleID, .before = CGDSID)
+
+if (any(is.na(fractions$SampleID))) {
+  warning("Some CGDSIDs were not found in id_map.csv")
+  print(fractions %>% dplyr::filter(is.na(SampleID)) %>% dplyr::select(CGDSID))
+}
+
+meta <- read_csv("data/Metadata_2024_11_20.csv", show_col_types = FALSE)
+df <- fractions %>% left_join(meta, by = c("SampleID" = "ID"))
+
+write_csv(df, file.path(out_dir_job2, "Job2_CellTypeProportions_Merged.csv"))
+```
+
+## Category-based contrasts
+
+`Category` is the metadata grouping variable for this block (change `group_var` if you need another column). Tables and tests describe whether LM22 proportions differ across Category levels.
+
+```{r, job2 category summary}
+group_var <- "Category"
+
+if (!group_var %in% names(df)) stop(paste("Grouping variable", group_var, "not found in metadata."))
+if (any(is.na(df[[group_var]]))) warning("Some samples missing group information.")
+
+summary_stats_category <- df %>%
+  pivot_longer(all_of(celltype_cols), names_to = "CellType", values_to = "Proportion") %>%
+  group_by(CellType, .data[[group_var]]) %>%
+  summarise(
+    mean = mean(Proportion, na.rm = TRUE),
+    sd = sd(Proportion, na.rm = TRUE),
+    n = sum(!is.na(Proportion)),
+    .groups = "drop"
+  )
+
+summary_stats_category
+write_csv(summary_stats_category, file.path(out_dir_job2, paste0("Job2_CellTypeSummary_By_", group_var, ".csv")))
+```
+
+This chunk performs per-cell-type non-parametric tests by Category, applies BH correction, and writes omnibus and Dunn post hoc outputs.
+
+```{r, job2 category tests}
+message(paste("Running non-parametric tests for", group_var, "..."))
+
+df_test_category <- df %>% filter(!is.na(.data[[group_var]]))
+test_results_category <- tibble(CellType = character(), p = numeric(), test = character())
+
+for (ct in celltype_cols) {
+  tmp <- df_test_category %>%
+    dplyr::select(all_of(group_var), all_of(ct)) %>%
+    dplyr::filter(!is.na(.data[[group_var]]), !is.na(.data[[ct]]))
+
+  n_groups <- length(unique(tmp[[group_var]]))
+
+  if (n_groups == 2 && all(table(tmp[[group_var]]) > 1)) {
+    pval <- tryCatch(
+      stats::wilcox.test(tmp[[ct]] ~ tmp[[group_var]])$p.value,
+      error = function(e) NA_real_
+    )
+    test_results_category <- bind_rows(
+      test_results_category,
+      tibble(CellType = ct, p = pval, test = "Mann-Whitney U")
+    )
+
+  } else if (n_groups > 2 && all(table(tmp[[group_var]]) > 1)) {
+    pval_kw <- tryCatch(
+      stats::kruskal.test(tmp[[ct]] ~ tmp[[group_var]])$p.value,
+      error = function(e) NA_real_
+    )
+
+    dunn_res <- tryCatch(
+      FSA::dunnTest(tmp[[ct]] ~ tmp[[group_var]], method = "bh")$res,
+      error = function(e) NULL
+    )
+
+    if (!is.null(dunn_res)) {
+      dunn_res <- dunn_res %>%
+        mutate(
+          CellType = ct,
+          test = "Kruskal-Wallis + Dunn",
+          comparison = Contrast
+        ) %>%
+        rename(p = P.unadj, p.adj = P.adj)
+      write_csv(dunn_res, file.path(out_dir_job2, paste0("Job2_DunnResults_", ct, "_By_", group_var, ".csv")))
+    }
+
+    test_results_category <- bind_rows(
+      test_results_category,
+      tibble(CellType = ct, p = pval_kw, test = "Kruskal-Wallis")
+    )
+  }
+}
+
+test_results_category <- test_results_category %>%
+  mutate(
+    p.adj = p.adjust(p, method = "BH"),
+    significance = case_when(
+      is.na(p.adj) ~ "",
+      p.adj < 0.001 ~ "***",
+      p.adj < 0.01 ~ "**",
+      p.adj < 0.05 ~ "*",
+      TRUE ~ "ns"
+    )
+  )
+
+test_results_category
+write_csv(test_results_category, file.path(out_dir_job2, paste0("Job2_GroupComparisonResults_By_", group_var, ".csv")))
+```
+
+We fit the Category-based ordered logistic model on quartiled neutrophil proportions and print both coefficients and odds ratios.
+
+```{r, job2 category ordered-logit}
+df_quart <- df_test_category %>%
+  mutate(across(all_of(celltype_cols), ~ ntile(., 4), .names = "{.col}_quart"))
+
+if (length(unique(df_quart$Category)) >= 2 && length(unique(df_quart$Sex)) >= 2) {
+  model <- polr(as.factor(Neutrophils_quart) ~ Category + Sex, data = df_quart, Hess = TRUE)
+
+  print(summary(model))
+  print(exp(coef(model)))
+}
+```
+
+This panel plot shows cell-type-specific proportion differences by Category with significance annotations from the test results.
+
+```{r, job2 category boxplots, fig.width = 10, fig.height = 8}
+plot_df <- df_test_category %>%
+  pivot_longer(all_of(celltype_cols), names_to = "CellType", values_to = "Proportion")
+
+sig_df <- test_results_category %>%
+  dplyr::mutate(
+    group1 = levels(factor(df_test_category$Category))[1],
+    group2 = levels(factor(df_test_category$Category))[2],
+    y.position = 1.05 * max(plot_df$Proportion, na.rm = TRUE)
+  ) %>%
+  dplyr::select(CellType, group1, group2, p.adj, significance, y.position) %>%
+  dplyr::rename(p = p.adj)
+
+p <- ggpubr::ggboxplot(
+  plot_df,
+  x = "Category",
+  y = "Proportion",
+  fill = "Category",
+  outlier.shape = NA
+) +
+  facet_wrap(~ CellType, scales = "free_y", ncol = 4) +
+  ggpubr::stat_pvalue_manual(
+    sig_df,
+    label = "significance",
+    tip.length = 0.01,
+    bracket.size = 0.3,
+    hide.ns = TRUE
+  ) +
+  labs(
+    title = "CIBERSORTx LM22 Immune Cell Proportions by Category",
+    subtitle = "Boxplots with Mann-Whitney / Kruskal-Wallis significance annotations",
+    y = "Estimated Proportion",
+    x = NULL
+  ) +
+  theme_bw() +
+  theme(
+    strip.text = element_text(size = 9, face = "bold"),
+    axis.text.x = element_text(angle = 45, hjust = 1),
+    legend.position = "bottom"
+  )
+
+p
+ggsave(file.path(out_dir_job2, "Job2_CellType_Boxplots_byCategory.png"), p, width = 10, height = 8, dpi = 300)
+```
+
+## Affected-status contrasts
+
+These tables use the same LM22 proportions as above, grouped by `Affected` instead of `Category`. Each table row gives mean, SD, and n for a cell type within Affected or Unaffected.
+
+```{r, job2 affected summary}
+if (any(is.na(df$Affected))) warning("Some samples missing group information.")
+
+summary_stats_affected <- df %>%
+  pivot_longer(all_of(celltype_cols), names_to = "CellType", values_to = "Proportion") %>%
+  group_by(CellType, Affected) %>%
+  summarise(
+    mean = mean(Proportion, na.rm = TRUE),
+    sd = sd(Proportion, na.rm = TRUE),
+    n = sum(!is.na(Proportion)),
+    .groups = "drop"
+  )
+
+summary_stats_affected
+write_csv(summary_stats_affected, file.path(out_dir_job2, "Job2_CellTypeSummary_ByGroup.csv"))
+```
+
+This chunk runs Mann-Whitney comparisons for each cell type between Affected and Unaffected groups and adds BH-adjusted significance labels.
+
+```{r, job2 affected tests}
+message("Running non-parametric group comparisons (Mann-Whitney U)...")
+
+df_test_affected <- df %>% dplyr::filter(!is.na(Affected))
+test_results_affected <- tibble::tibble(CellType = character(), p = numeric())
+
+for (ct in celltype_cols) {
+  tmp <- df_test_affected %>%
+    dplyr::select(Affected, !!sym(ct)) %>%
+    dplyr::filter(!is.na(Affected), !is.na(!!sym(ct)))
+
+  if (length(unique(tmp$Affected)) == 2 &&
+      all(table(tmp$Affected) > 1)) {
+
+    pval <- tryCatch({
+      stats::wilcox.test(tmp[[ct]] ~ tmp$Affected)$p.value
+    }, error = function(e) NA_real_)
+
+    test_results_affected <- dplyr::bind_rows(
+      test_results_affected,
+      tibble::tibble(CellType = ct, p = pval)
+    )
+  }
+}
+
+test_results_affected <- test_results_affected %>%
+  dplyr::mutate(
+    p.adj = p.adjust(p, method = "BH"),
+    significance = dplyr::case_when(
+      is.na(p.adj) ~ "",
+      p.adj < 0.001 ~ "***",
+      p.adj < 0.01 ~ "**",
+      p.adj < 0.05 ~ "*",
+      TRUE ~ "ns"
+    )
+  )
+
+test_results_affected
+readr::write_csv(test_results_affected, file.path(out_dir_job2, "Job2_GroupComparisonResults.csv"))
+```
+
+We fit the ordered logistic model using quartiled neutrophil proportions against Affected status and Sex.
+
+```{r, job2 affected ordered-logit}
+df_quart <- df_test_affected %>%
+  mutate(across(all_of(celltype_cols), ~ ntile(., 4), .names = "{.col}_quart"))
+
+model <- polr(as.factor(Neutrophils_quart) ~ Affected + Sex, data = df_quart, Hess = TRUE)
+summary(model)
+exp(coef(model))
+```
+
+This faceted boxplot visualizes Affected-group differences per cell type with significance stars from the tested contrasts.
+
+```{r, job2 affected boxplots, fig.width = 10, fig.height = 8}
+plot_df <- df_test_affected %>%
+  tidyr::pivot_longer(all_of(celltype_cols), names_to = "CellType", values_to = "Proportion")
+
+sig_df <- test_results_affected %>%
+  dplyr::mutate(
+    group1 = "Unaffected",
+    group2 = "Affected",
+    y.position = 1.05 * max(plot_df$Proportion, na.rm = TRUE)
+  ) %>%
+  dplyr::select(CellType, group1, group2, p.adj, significance, y.position) %>%
+  dplyr::rename(p = p.adj)
+
+p <- ggpubr::ggboxplot(
+  plot_df,
+  x = "Affected",
+  y = "Proportion",
+  fill = "Affected",
+  palette = c("#4575b4", "#d73027"),
+  outlier.shape = NA
+) +
+  facet_wrap(~ CellType, scales = "free_y", ncol = 4) +
+  ggpubr::stat_pvalue_manual(
+    sig_df,
+    label = "significance",
+    tip.length = 0.01,
+    bracket.size = 0.3,
+    hide.ns = TRUE
+  ) +
+  labs(
+    title = "CIBERSORTx LM22 Immune Cell Proportions by Affected Status",
+    subtitle = "Boxplots with Mann-Whitney significance annotations",
+    y = "Estimated Proportion",
+    x = NULL
+  ) +
+  theme_bw() +
+  theme(
+    strip.text = element_text(size = 9, face = "bold"),
+    axis.text.x = element_text(angle = 45, hjust = 1),
+    legend.position = "bottom"
+  )
+
+print(p)
+ggplot2::ggsave(file.path(out_dir_job2, "Job2_CellType_Boxplots_with_Significance.png"), p, width = 10, height = 8, dpi = 300)
+```
+
+## Sample-level composition plots
+
+In the stacked bar charts, each bar sums to height 1 per sample, and each segment height is that sample’s LM22 fraction for a cell type. Samples are ordered within Affected so you can scan homogeneous runs of composition.
+
+```{r, job2 affected stacked-bar, fig.width = 11, fig.height = 7}
+palette22 <- colorRampPalette(brewer.pal(12, "Set3"))(22)
+
+plot_df <- df %>%
+  pivot_longer(all_of(celltype_cols), names_to = "CellType", values_to = "Proportion") %>%
+  group_by(SampleID, Affected, CellType) %>%
+  summarise(Proportion = mean(Proportion, na.rm = TRUE), .groups = "drop")
+
+plot_df <- plot_df %>%
+  arrange(Affected, SampleID) %>%
+  mutate(SampleID = factor(SampleID, levels = unique(SampleID)))
+
+g_affected <- ggplot(plot_df, aes(x = SampleID, y = Proportion, fill = CellType)) +
+  geom_bar(stat = "identity", width = 0.8, color = "white", size = 0.1) +
+  scale_fill_manual(values = palette22) +
+  labs(
+    title = "CIBERSORTx LM22 Immune Composition per Sample",
+    subtitle = "Samples grouped by clinical status (Affected vs Unaffected)",
+    y = "Relative proportion",
+    x = "Sample ID",
+    fill = "Cell type"
+  ) +
+  theme_bw(base_size = 11) +
+  theme(
+    axis.text.x = element_text(angle = 90, vjust = 0.5, hjust = 1, size = 7, color = "grey20"),
+    axis.title.y = element_text(size = 10),
+    panel.grid.major.x = element_blank(),
+    panel.grid.minor.x = element_blank(),
+    strip.text = element_text(face = "bold", size = 10),
+    legend.position = "right",
+    legend.title = element_text(face = "bold", size = 9),
+    legend.text = element_text(size = 8)
+  ) +
+  geom_vline(
+    xintercept = length(unique(plot_df$SampleID[plot_df$Affected == "Unaffected"])) + 0.5,
+    color = "black",
+    linewidth = 0.6,
+    linetype = "dashed"
+  ) +
+  annotate(
+    "text",
+    x = length(unique(plot_df$SampleID[plot_df$Affected == "Unaffected"])) / 2,
+    y = 1.05,
+    label = "Unaffected",
+    fontface = "bold",
+    size = 3.5
+  ) +
+  annotate(
+    "text",
+    x = length(unique(plot_df$SampleID[plot_df$Affected == "Unaffected"])) +
+      length(unique(plot_df$SampleID[plot_df$Affected == "Affected"])) / 2,
+    y = 1.05,
+    label = "Affected",
+    fontface = "bold",
+    size = 3.5
+  )
+
+g_affected
+ggsave(file.path(out_dir_job2, "Job2_StackedBar_By_Affected.png"), g_affected, width = 11, height = 7, dpi = 300)
+```
+
+This stacked bar chart repeats the same composition view but grouped and labeled by Category.
+
+```{r, job2 category stacked-bar, fig.width = 11, fig.height = 7}
+palette22 <- colorRampPalette(brewer.pal(12, "Set3"))(22)
+
+plot_df <- df %>%
+  pivot_longer(all_of(celltype_cols), names_to = "CellType", values_to = "Proportion") %>%
+  group_by(SampleID, Category, CellType) %>%
+  summarise(Proportion = mean(Proportion, na.rm = TRUE), .groups = "drop") %>%
+  arrange(Category, SampleID) %>%
+  mutate(SampleID = factor(SampleID, levels = unique(SampleID)))
+
+g_category <- ggplot(plot_df, aes(x = SampleID, y = Proportion, fill = CellType)) +
+  geom_bar(stat = "identity", width = 0.8, color = "white", size = 0.1) +
+  scale_fill_manual(values = palette22) +
+  labs(
+    title = "CIBERSORTx LM22 Immune Composition per Sample",
+    subtitle = "Samples grouped by Category",
+    y = "Relative proportion",
+    x = "Sample ID",
+    fill = "Cell type"
+  ) +
+  theme_bw(base_size = 11) +
+  theme(
+    axis.text.x = element_text(angle = 90, vjust = 0.5, hjust = 1, size = 7, color = "grey20"),
+    axis.title.y = element_text(size = 10),
+    panel.grid.major.x = element_blank(),
+    panel.grid.minor.x = element_blank(),
+    legend.position = "right",
+    legend.title = element_text(face = "bold", size = 9),
+    legend.text = element_text(size = 8)
+  ) +
+  {
+    cat_counts <- plot_df %>%
+      distinct(SampleID, Category) %>%
+      count(Category) %>%
+      mutate(x_mid = cumsum(n) - n / 2, x_div = cumsum(n) + 0.5)
+
+    list(
+      geom_vline(
+        data = cat_counts[-nrow(cat_counts), ],
+        aes(xintercept = x_div),
+        color = "black",
+        linewidth = 0.6,
+        linetype = "dashed"
+      ),
+      geom_text(
+        data = cat_counts,
+        aes(x = x_mid, y = 1.05, label = Category),
+        fontface = "bold",
+        size = 3.5,
+        inherit.aes = FALSE
+      )
+    )
+  }
+
+g_category
+ggsave(file.path(out_dir_job2, "Job2_StackedBar_By_Category.png"), g_category, width = 11, height = 7, dpi = 300)
+```
+
+## Multivariate summaries
+
+PCA on fraction columns treats each sample as a vector of cell-type proportions; `scale. = TRUE` gives each cell type equal weight. Constant columns (zero variance) are dropped so `prcomp()` does not fail.
+
+```{r, job2 pca, fig.width = 8, fig.height = 6}
+group_var <- "Category"
+
+pca_data <- df %>% dplyr::select(all_of(celltype_cols)) %>% drop_na()
+constant_cols <- names(which(apply(pca_data, 2, sd, na.rm = TRUE) == 0))
+
+if (length(constant_cols) > 0) {
+  message("Removing constant columns from PCA: ", paste(constant_cols, collapse = ", "))
+  pca_data <- pca_data %>% dplyr::select(-all_of(constant_cols))
+}
+
+if (nrow(pca_data) > 2 && ncol(pca_data) > 1) {
+  pca_res <- prcomp(pca_data, scale. = TRUE)
+
+  pca_df <- as.data.frame(pca_res$x[, 1:2]) %>%
+    mutate(
+      SampleID = df$SampleID[complete.cases(pca_data)],
+      Group = df[[group_var]][complete.cases(pca_data)]
+    )
+
+  pca_plot <- ggplot(pca_df, aes(PC1, PC2, color = Group, label = SampleID)) +
+    geom_point(size = 3, alpha = 0.9) +
+    ggrepel::geom_text_repel(size = 2.8, max.overlaps = 20, segment.color = "grey50") +
+    theme_bw() +
+    labs(
+      title = paste("PCA of CIBERSORTx Immune Cell Proportions by", group_var),
+      subtitle = "Each point represents one individual sample",
+      x = paste0("PC1 (", round(summary(pca_res)$importance[2,1] * 100, 1), "% variance)"),
+      y = paste0("PC2 (", round(summary(pca_res)$importance[2,2] * 100, 1), "% variance)")
+    ) +
+    theme(
+      legend.position = "bottom",
+      legend.title = element_text(face = "bold"),
+      plot.title = element_text(face = "bold")
+    )
+
+  pca_plot
+  ggsave(file.path(out_dir_job2, paste0("Job2_PCA_By_", group_var, "_Labeled.png")),
+         pca_plot, width = 8, height = 6, dpi = 300)
+} else {
+  warning("Not enough variable cell types for PCA.")
+}
+```
+
+This chunk computes a Spearman correlation matrix across immune cell types and displays the clustered heatmap.
+
+```{r, job2 correlation heatmap, fig.width = 7, fig.height = 6}
+df_corr <- df %>%
+  dplyr::select(all_of(celltype_cols)) %>%
+  dplyr::select(where(is.numeric))
+
+df_corr <- df_corr[, apply(df_corr, 2, function(x) var(x, na.rm = TRUE) > 0.0 & sum(!is.na(x)) > 2)]
+
+corr_matrix <- suppressWarnings(cor(df_corr, method = "spearman", use = "pairwise.complete.obs"))
+corr_matrix[is.na(corr_matrix)] <- 0
+
+pheatmap(
+  corr_matrix,
+  color = colorRampPalette(c("navy", "white", "firebrick3"))(50),
+  display_numbers = TRUE,
+  number_format = "%.2f",
+  fontsize_number = 8,
+  cluster_rows = TRUE,
+  cluster_cols = TRUE,
+  main = paste("Spearman Correlation Between Immune Cell Types (", group_var, ")", sep = "")
+)
+```
+
+Here we z-score cell-type fractions across samples and plot a Category-annotated heatmap for relative composition patterns.
+
+```{r, job2 zscore heatmap, fig.width = 8, fig.height = 6}
+z_mat <- df %>%
+  dplyr::select(SampleID, all_of(celltype_cols)) %>%
+  tibble::column_to_rownames("SampleID") %>%
+  as.matrix()
+
+z_mat <- scale(z_mat)
+stopifnot(is.numeric(z_mat))
+z_mat[!is.finite(z_mat)] <- 0
+
+annotation_df <- df %>%
+  dplyr::select(SampleID, Category) %>%
+  dplyr::filter(!is.na(Category)) %>%
+  dplyr::distinct(SampleID, .keep_all = TRUE)
+rownames(annotation_df) <- annotation_df$SampleID
+annotation_df <- as.data.frame(annotation_df["Category"])
+annotation_df$Category <- as.factor(annotation_df$Category)
+
+common_samples <- intersect(rownames(z_mat), rownames(annotation_df))
+z_mat <- z_mat[common_samples, , drop = FALSE]
+annotation_df <- annotation_df[common_samples, , drop = FALSE]
+
+pheatmap(
+  t(z_mat),
+  annotation_col = annotation_df,
+  color = colorRampPalette(c("navy", "white", "firebrick3"))(50),
+  cluster_cols = TRUE,
+  cluster_rows = TRUE,
+  show_colnames = TRUE,
+  show_rownames = TRUE,
+  fontsize_row = 8,
+  fontsize_col = 7,
+  border_color = NA,
+  main = paste("Z-score of CIBERSORTx LM22 Cell Types by", group_var)
+)
+```
+
+This final distribution plot shows overall predicted cell-frequency patterns per cell type using violin and embedded boxplots.
+
+```{r, job2 violin boxplot, fig.width = 8.5, fig.height = 4.5}
+plot_df <- df %>%
+  pivot_longer(all_of(celltype_cols), names_to = "CellType", values_to = "Proportion") %>%
+  dplyr::filter(!is.na(Proportion))
+
+median_order <- plot_df %>%
+  group_by(CellType) %>%
+  summarise(median_val = median(Proportion, na.rm = TRUE)) %>%
+  arrange(desc(median_val)) %>%
+  pull(CellType)
+
+plot_df$CellType <- factor(plot_df$CellType, levels = median_order)
+
+fill_color <- "#A6CEE3"
+box_color <- "#1F78B4"
+
+p <- ggplot(plot_df, aes(x = CellType, y = Proportion)) +
+  geom_violin(fill = fill_color, color = "gray40", width = 0.9, scale = "width", alpha = 0.9) +
+  geom_boxplot(width = 0.12, color = "black", fill = box_color, outlier.shape = NA, alpha = 0.7) +
+  labs(
+    title = "Predicted relative frequency of immune cell types in whole blood",
+    x = "Immune cell type",
+    y = "Predicted relative frequency"
+  ) +
+  theme_bw(base_size = 11) +
+  theme(
+    axis.text.x = element_text(angle = 45, hjust = 1, size = 9),
+    axis.text.y = element_text(size = 9),
+    panel.grid.major.x = element_blank(),
+    panel.grid.minor = element_blank(),
+    panel.border = element_blank(),
+    plot.title = element_text(face = "bold", hjust = 0.5, size = 12),
+    axis.title = element_text(size = 10)
+  )
+
+p
+ggsave(file.path(out_dir_job2, "Job2_ViolinBoxplot_CellFrequencies.png"), p, width = 8.5, height = 4.5, dpi = 300)
+```

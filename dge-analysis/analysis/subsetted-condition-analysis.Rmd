@@ -6,9 +6,18 @@ output:
     toc_depth: 3
     toc_float: true
     code_folding: hide
+code_download: true
 editor_options:
   chunk_output_type: console
 ---
+
+## Overview
+
+This analysis compares Affected vs Unaffected gene expression after adjusting for Batch.
+
+DESeq2 models raw counts with a negative binomial GLM, estimates dispersions, and yields log2 fold changes and FDR-adjusted p-values (`padj`) for the contrast of interest. That means inference stays on the count scale; transforms below are for visualization and batch removal only.
+
+This document walks through the DESeqDataSet, filtering, `DESeq()`, VST, limma batch correction on VST for plots, and the main figures and tables. Method details: [DESeq2 vignette](https://www.bioconductor.org/packages/release/bioc/vignettes/DESeq2/inst/doc/DESeq2.html).
 
 ```{r, setup, include=FALSE}
 knitr::opts_chunk$set(echo = TRUE, warning = FALSE, message = FALSE)
@@ -40,6 +49,8 @@ library(enrichR) # Available via Bioconductor
 library(STRINGdb) # Available via Bioconductor
 library(EnhancedVolcano)
 library(ComplexHeatmap)
+library(DT)
+library(igraph)
 ```
 
 ```{r, include=FALSE}
@@ -49,8 +60,9 @@ source("code/helpers.R", local = knitr::knit_global())
 
 ## Data Import
 
-We will be importing counts data from the star-salmon pipeline and our metadata 
-for the project which is hosted on Box. This also ensures data is properly ordered by sample id.
+Pass raw (or equivalently scaled) counts into `DESeqDataSetFromMatrix()`. Transformed values are invalid as input because they distort the mean–variance model.
+
+Counts are from star-salmon; metadata lives in `data/`. `check_order()` reorders rows/columns so sample *i* in metadata is column *i* in the matrix, which prevents silent mislabeling.
 
 ```{r, import data}
 # Import counts and metadata
@@ -81,6 +93,18 @@ genes_biomart <- retrieve_gene_info(values = gene_info$Ensembl_ID, filters = "en
 ```
 
 ## DESeq2 Analysis
+
+### The DESeqDataSet and design formula
+
+A DESeqDataSet bundles counts, sample metadata, and the design. `design = ~ Batch + Affected` means each gene’s mean is explained by batch then affected status; `results()` with default settings returns Affected vs Unaffected because `Affected` is last. We still pass an explicit contrast in results for clarity.
+
+### Pre-filtering
+
+Genes with total count &lt; 50 are dropped before `DESeq()` to save time and stabilize dispersion estimation. `results()` still applies DESeq2’s independent filtering on its own; this step is an extra coarse gate.
+
+### Model fitting
+
+`DESeq()` runs size factor estimation, dispersion shrinkage, GLM fit, and Wald tests on the count matrix. Nothing here uses VST or limma; those steps come later for display only.
 
 ```{r, start analysis}
 sample_metadata$Family <- factor(sample_metadata$Family)
@@ -124,7 +148,7 @@ counts_norm <- counts(dds, normalized = TRUE)
 
 ### Data transformation
 
-Perform count data transformation by variance stabilizing transformation (vst) on normalized counts.
+VST maps counts to a scale where variance is roughly flat across means, so PCA and distance heatmaps are not driven only by highly expressed genes. `blind = FALSE` means the transform uses dispersions from the fitted model (preferred when a strong biological contrast exists).
 
 ```{r, vsd}
 vsd <- vst(dds, blind = FALSE)
@@ -132,7 +156,9 @@ vsd <- vst(dds, blind = FALSE)
 
 ### Batch correction with limma
 
-This code performs batch effect correction on variance-stabilized transformed (VST) counts using the Limma package. The corrected counts are then saved and incorporated into the VST object for downstream analysis.
+`removeBatchEffect()` regresses out the `Batch` factor from the VST matrix while preserving the `Affected` signal when you supply the full design. Reported p-values still come from `dds`, not from this corrected matrix.
+
+CSV exports (`counts_vst_*`) archive VST before and after batch removal for supplements and external tools.
 
 ```{r, limma}
 # Extract VST counts from the DESeq2 object
@@ -162,9 +188,9 @@ assay(vsd_limma) <- counts_vst_limma
 
 #### Sample distances heatmap
 
-This code calculates sample-to-sample distances from the batch-effect corrected VST data, organizes the distances into a matrix, and visualizes the results as a heatmap for quality control.
+Distances use batch-corrected VST with samples as vectors across genes. Clustering sorts rows/columns so similar expression profiles sit together; inspect for outliers or residual batch bands.
 
-```{r, sample-dist-heatmap}
+```{r, sample-dist-heatmap, fig.width=8, fig.height=7, out.width="100%"}
 # Compute sample-to-sample distances using the corrected VST data
 sample_dists_all <- dist(t(assay(vsd_limma)))
 
@@ -188,50 +214,39 @@ pheatmap(sample_dist_matrix_all,
 
 #### Principal Components Analysis & Visualization
 
-This code prepares data for PCA analysis, computes principal components using batch-effect corrected VST data, and generates a PCA plot to visualize sample clustering based on specified metadata variables.
+PCA finds axes of greatest variance across genes; `plotPCA` / `prepare_pca_data` use the batch-corrected VST so PC1/PC2 summarize biology after removing batch. Colors encode metadata so you can see whether Affected, Sex, or Batch align with those axes.
 
 ```{r, principal-components-analysis-all}
+affected_colors <- c("Affected" = "firebrick", "Unaffected" = "navy")
+sex_fills <- c("F" = "grey", "M" = "white")
 # Prepare PCA data from the corrected VST data
 # intgroup specifies the metadata variables to include in the PCA
 pca_results <- prepare_pca_data(vsd_data = vsd_limma, intgroup = c("Batch", "Affected", "Sex"))
 
 # Generate a PCA plot with metadata-based coloring, filling, and shaping
-pca_plot <- generate_pca_plot(
+pca_plot1 <- generate_pca_plot(
   pca_data = pca_results$pca_data,
   percent_var = pca_results$percent_var,
   colour = "Affected", # Color by affected status
   fill = "Sex", # Fill by sex
   shape = "Batch" # Shape by batch
-)
+) +
+  scale_color_manual(values = affected_colors, name = "Affected") +
+  scale_fill_manual(values = sex_fills, name = "Sex") +
+  scale_shape_manual(values = c(21, 22, 24), name = "Batch") +
+  labs(
+    x = paste0("PC1: ", round(pca_results$percent_var[1], 1), "% variance"),
+    y = paste0("PC2: ", round(pca_results$percent_var[2], 1), "% variance"),
+    title = "Batch + Affected + Sex"
+  ) + theme_classic()
 
 # Display the PCA plot
-print(pca_plot)
+print(pca_plot1)
 ```
 
-The below PCA plot highlights overall categories, affected status, and batch information for each sample.
+The second PCA plot uses Category for fill instead of Sex, with the same interpretation as the plot above.
 ```{r, principal-components-analysis-category}
-# Prepare PCA data
-pca_results <- prepare_pca_data(
-  vsd_data = vsd_limma,
-  intgroup = c("Batch", "Affected", "Category")
-)
-
-# Generate PCA plot
-pca_plot <- generate_pca_plot(
-  pca_data = pca_results$pca_data,
-  percent_var = pca_results$percent_var,
-  colour = "Category", fill = "Affected", shape = "Batch"
-)
-
-# Display the plot
-pca_plot
-```
-
-#### Heatmaps of Genes with Highest Variance
-
-```{r, heatmap-colors, out.height="570px", out.width ="800px"}
-# Specify annotation colors by columns
-# Use RColorBrewer::brewer.pal(n=10, name="Set1")
+affected_colors <- c("Affected" = "firebrick", "Unaffected" = "navy")
 category_colors <- c(
   ENE        = "#3C8031",  # Energy Production and Metabolism (green)
   STR        = "#1F57C3",  # Muscle Structure and Stability (blue)
@@ -240,17 +255,49 @@ category_colors <- c(
   IMM        = "#FFB000",  # IMM (assigned amber-gold)
   Unaffected = "#808080"   # Neutral gray
 )
+# Prepare PCA data
+pca_results <- prepare_pca_data(
+  vsd_data = vsd_limma,
+  intgroup = c("Batch", "Affected", "Category")
+)
+
+# Generate PCA plot
+pca_plot2 <- generate_pca_plot(
+  pca_data = pca_results$pca_data,
+  percent_var = pca_results$percent_var,
+  colour = "Affected", fill = "Category", shape = "Batch"
+) + scale_color_manual(values = affected_colors, name = "Affected") +
+  scale_fill_manual(values = category_colors, name = "Category") + theme_classic() +
+    labs(
+    title = "Batch + Affected + Category"
+  )
+
+# Display the plot
+pca_plot2
+```
+
+#### Heatmaps of Genes with Highest Variance
+
+`ann_colors` drives column annotation tracks. Top-variance genes are the 50 genes with largest row variance across samples on batch-corrected VST; they are not necessarily differentially expressed, but they show what dominates overall signal.
+
+```{r, heatmap-colors, fig.width=10, fig.height=7, out.width="100%"}
+# Specify annotation colors by columns
+# Use RColorBrewer::brewer.pal(n=10, name="Set1")
+sex_colors <- c(
+  F = "#FF69B4",
+  M = "#1E90FF")
 
 ann_colors <- list(
   Batch = c(B1 = "#c38b1f", B2 = "#c31f57", B3 = "#1fc38b"),
   Affected = c(Affected = "#800000", Unaffected = "#010080"),
-  Category = category_colors
+  Category = category_colors,
+  Sex = sex_colors
 )
 ```
 
-This is a heatmap of the top 50 genes with the highest variance across samples
+Row clustering groups genes with similar patterns; column annotations (Batch, Affected, Category, Sex) show whether those patterns track biology or technical variables.
 
-```{r, top50-heatmap-batch-combined, out.height="570px", out.width ="800px"}
+```{r, top50-heatmap-batch-combined, fig.width=10, fig.height=7, out.width="100%"}
 # Parameters for the function
 annotation_columns <- c("Batch", "Affected", "Category")
 annotation_colors <- ann_colors # Predefined annotation colors
@@ -267,7 +314,7 @@ generate_top_variable_genes_heatmap(
 
 ### Comparison/Contrast of Affected_Affected_vs_Unaffected 
 
-This code performs differential expression analysis between affected and unaffected samples, processes and filters the results, and summarizes the findings based on adjusted p-value and log2 fold change thresholds.
+We performed differential expression analysis between affected and unaffected samples, processed and filtered the results, and saved the findings based on adjusted p-value and log2 fold change thresholds. The full results were saved to a CSV file for further analysis.
 
 ```{r}
 # Perform differential expression analysis for affected vs. unaffected samples
@@ -293,39 +340,24 @@ res_aff_vs_unaff_df_padj1_lfc1_sub <- subset(res_aff_vs_unaff_df_1_sub, log2Fold
 
 # Further filter results with |log2 fold change| >= 1 and adjusted p-value < 0.05
 res_aff_vs_unaff_df_padj05_lfc1_sub <- subset(res_aff_vs_unaff_df_05_sub, log2FoldChange >= 1 | log2FoldChange <= -1)
+```
 
+The summary table below provides an overview of the differential expression analysis results, including counts of genes with significant up- and down-regulation, genes with extreme log2 fold changes, and genes filtered out due to low counts or other criteria.
+
+```{r}
 # Summarize the differential expression results
 summary(res_aff_vs_unaff_sub)
 ```
 
-#### Heatmap of Significant Genes
+#### Heatmap of significant genes
 
-This code generates a heatmap for significantly differentially expressed genes (DEGs) with an adjusted `p-value < 0.1` and `|log2 fold change| ≥ 1`. It uses metadata annotations for grouping and color-coding.
+We have plotted genes that pass our significance and fold-change cutoffs (e.g. padj &lt; 0.1 or 0.05 and |log2 fold change| ≥ 1). Rows are z-scaled per gene so up/down regulation is visible; column annotations (Affected, Category) help read the clusters. The plot uses batch-corrected VST values for display only; the actual statistics come from the DESeq2 results on raw counts.
 
-```{r, significant-genes-deseq-subsetted-category-lfc1, out.height="570px", out.width ="800px"}
+```{r, significant-genes-deseq-subsetted-category-padj05-lfc1, fig.width=10, fig.height=7, out.width='100%'}
 # Parameters for the function
 annotation_columns <- c("Affected", "Category")
 annotation_colors <- ann_colors # Predefined annotation colors
-output_file <- "output/publication-analysis/Supplemental Figure 4. DEGs (Padj < 0.1).png"
-
-# Generate the heatmap for significant genes
-generate_significant_genes_heatmap(
-  vsd_data = vsd_limma,
-  res_data = res_aff_vs_unaff_df_padj1_lfc1_sub, # Significant genes
-  gene_info = gene_info,
-  annotation_columns = annotation_columns,
-  annotation_colors = annotation_colors,
-  output_file = output_file
-)
-```
-
-This code generates a heatmap for significantly differentially expressed genes (DEGs) with an adjusted `p-value < 0.05` and `|log2 fold change| ≥ 1`. It uses metadata annotations for grouping and color-coding.
-
-```{r, significant-genes-deseq-subsetted-category-padj05-lfc1, out.height="570px", out.width ="800px"}
-# Parameters for the function
-annotation_columns <- c("Affected", "Category")
-annotation_colors <- ann_colors # Predefined annotation colors
-output_file <- "output/publication-analysis/Supplemental Figure 4. Significant DEGs (Padj < 0.05).png"
+output_file <- "output/publication-analysis/supplemental_figure_4_significant_degs_padj_.05.png"
 
 # Generate the heatmap for significant genes
 generate_significant_genes_heatmap(
@@ -338,7 +370,26 @@ generate_significant_genes_heatmap(
 )
 ```
 
-This code integrates gene annotations into the differential expression results using Ensembl IDs and reorders the data by adjusted p-values for downstream analysis.
+We also generated a heatmap using a more lenient significance threshold (padj < 0.1) to capture additional genes that may be biologically relevant but did not meet the stricter 0.05 threshold.
+
+```{r, significant-genes-deseq-subsetted-category-lfc1, fig.width=10, fig.height=7, out.width='100%'}
+# Parameters for the function
+annotation_columns <- c("Affected", "Category")
+annotation_colors <- ann_colors # Predefined annotation colors
+output_file <- "output/publication-analysis/degs_padj_0.1.png"
+
+# Generate the heatmap for significant genes
+generate_significant_genes_heatmap(
+  vsd_data = vsd_limma,
+  res_data = res_aff_vs_unaff_df_padj1_lfc1_sub, # Significant genes
+  gene_info = gene_info,
+  annotation_columns = annotation_columns,
+  annotation_colors = annotation_colors,
+  output_file = output_file
+)
+```
+
+We merged gene symbols and other annotations on Ensembl ID and sorted by adjusted p-value so the most significant genes are first in the exported tables. The annotated results were saved to a CSV file containing all genes with their differential expression statistics and gene annotations.
 
 ```{r, all-genes-list-subsetted}
 # Extract relevant columns from the gene information data
@@ -375,17 +426,18 @@ write.csv(
 )
 ```
 
-#### Volcano Plot
+#### Volcano plot
 
-This code generates a volcano plot to visualize the distribution of differentially expressed genes (DEGs) and highlights selected genes and applying thresholds for significance and fold change.
+The volcano plot has log2 fold change on the x-axis and −log10(adjusted p-value) on the y-axis. Points in the upper left or upper right are both significant and strongly up or down. We draw reference lines at our significance and fold-change cutoffs and label all genes that pass those thresholds.
 
-```{r, volcano-plot, out.height="1000px", out.width ="1600px"}
+```{r, volcano-plot, fig.width=14, fig.height=10, out.width="100%"}
 # Parameters for the function
 res_data <- res_aff_vs_unaff_df_sub_genename
 gene_labels <- "gene_name"
 x_col <- "log2FoldChange"
 y_col <- "padj"
-select_genes <- c("SLC4A10", "SNTG2", "KCNQ5", "DEFA1", "CD248", "POLR3G", "ZNF683")
+# Leave empty to label all genes that pass pCutoff and FCcutoff in generate_volcano_plot()
+select_genes <- character(0)
 xlab_text <- bquote(~ Log[2] ~ "fold change")
 ylab_text <- bquote(~ Log[10] ~ "padj")
 xlim_range <- c(-25, 25)
@@ -402,7 +454,7 @@ generate_volcano_plot(
 )
 ```
 
-This code subsets differentially expressed genes (DEGs) by significance thresholds, orders them by adjusted p-values, and saves the results to separate CSV files for further analysis and reporting.
+We subset the results by padj (e.g. &lt; 0.05 or &lt; 0.1) and optionally by |log2 fold change| ≥ 1, sorted by padj, and wrote CSV files for tables and supplements. Multiple filtered result files were generated for different significance thresholds and fold change criteria, including Supplemental Table 5 for publication.
 
 ```{r, significant-with-genename-padj-lfc}
 res_aff_vs_unaff_df_genename_05 <- subset(res_aff_vs_unaff_df_sub_genename, padj < 0.05)
@@ -422,7 +474,7 @@ res_aff_vs_unaff_df_genename_padj1_lfc1 <- res_aff_vs_unaff_df_genename_padj1_lf
 write.csv(res_aff_vs_unaff_df_genename_padj1_lfc1, file = "output/publication-analysis/res_aff_vs_unaff_df_sub_genename_padj1_lfc1.csv")
 ```
 
-This code queries gene symbols from significant DEGs (padj < 0.05) against the mygene.info database to retrieve detailed annotations, ensuring unique results for each gene.
+We queried the [mygene.info](https://mygene.info) API with the symbols of significant DEGs (padj &lt; 0.05) to retrieve symbol, name, and summary for human, then deduplicated by query for the tables.
 
 ```{r, padj-gene-info-subsetted}
 # Extract gene symbols from significant DEGs (Padj < 0.05)
@@ -442,9 +494,9 @@ my_gene_data_unique <- as.data.frame(my_gene_data) %>%
   dplyr::distinct(query, .keep_all = TRUE)
 ```
 
-#### MA Plot and Significant Gene Analysis
+#### MA plot
 
-This code generates an MA plot to visualize the differential expression results, identifies significant genes, combines these with detailed gene annotations, and saves the results to CSV files.
+An MA plot plots the mean of normalized counts (x-axis) vs the log2 fold change (y-axis). It highlights genes with large fold changes at different expression levels and can reveal bias (e.g. LFC trending with mean).
 
 ```{r, maplot-subsetted-samples}
 filtered_gene_names <- res_aff_vs_unaff_df_sub_genename$gene_name[!grepl("^ENS", res_aff_vs_unaff_df_sub_genename$gene_name)]
@@ -470,8 +522,18 @@ combined_data <- inner_join(my_gene_data_unique, significant_data, by = c("query
 combined_data <- combined_data %>%
   dplyr::select(-notfound, -X_id, -X_score) %>%
   rename(gene = query)
+```
 
-paged_table(as.data.frame(significant_data), options = list(rows.print = 30))
+The table below lists all significantly differentially expressed genes identified from the MA plot analysis. Genes were filtered based on adjusted p-value thresholds and log2 fold change criteria, with direction of change (up- or down-regulated) indicated. This table was used to identify candidate genes for further investigation and was exported for downstream analysis and reporting.
+
+```{r}
+DT::datatable(
+  as.data.frame(significant_data),
+  filter = "top",
+  options = list(pageLength = 15, scrollX = TRUE),
+  rownames = FALSE
+)
+
 # Save significant genes
 write.csv(significant_data, file = "output/publication-analysis/res_aff_vs_unaff_significant_subsetted_samples.csv", row.names = FALSE)
 
@@ -479,9 +541,9 @@ write.csv(significant_data, file = "output/publication-analysis/res_aff_vs_unaff
 write.csv(combined_data, file = "output/publication-analysis/res_aff_vs_unaff_significant_subsetted_mygene.csv", row.names = FALSE)
 ```
 
-##### Expression of Candidate Genes
+##### Expression of candidate genes
 
-Below is a table of expression of the genes identified during our WGS analysis.
+We cross-referenced the WGS-prioritized genes (variants of interest) with the DEG results and normalized counts. Tables and count plots for these genes link variant status to expression. Genes missing from the DEG table may be lowly expressed, not significant, or filtered earlier; we still have their counts for inspection. We saved the counts for genes of interest that were not found in the differential expression results to a separate CSV file.
 
 ```{r, genes-of-interest-table-subsetted}
 # Subset gene_info using genes of interest
@@ -512,22 +574,24 @@ rownames(missing_gene_counts) <- missing_gene_map
 # Save Missing Genes As CSV
 write.csv(missing_gene_counts,
           file = "output/publication-analysis/missing_genes_interest_counts.csv")
-
-paged_table(filtered_by_interest, options = list(rows.print = 15))
-
-paged_table(filtered_counts, options = list(rows.print = 15))
 ```
 
-#### STRINGdb Network Visualization
+The table below displays differential expression results for genes of interest that were identified from whole-genome sequencing variant analysis. These genes were cross-referenced with the differential expression results to assess whether variants in these genes were associated with changes in gene expression. The table includes statistical metrics (log2 fold change, p-values, adjusted p-values) and gene annotations to facilitate interpretation of variant-expression relationships.
 
-This code visualizes a protein-protein interaction network for significant DEGs using STRINGdb. It includes mapping DEGs, adding differential expression color codes, and generating a network plot.
+```{r}
+DT::datatable(
+  as.data.frame(filtered_by_interest),
+  filter = "top",
+  options = list(pageLength = 15, scrollX = TRUE),
+  rownames = FALSE
+)
+```
 
-```{r, stringdb-network-significant}
-library(igraph)
+#### STRINGdb network
 
-library(STRINGdb)
-library(igraph)
+We use STRING for known and predicted protein–protein interactions. We map our significant DEGs and genes of interest to STRING IDs, take the induced subgraph for human, and lay it out with Fruchterman–Reingold. Nodes are colored by type (DEG vs variant gene) and for DEGs by log2 fold change (blue down, red up) so we can see expression and interaction context together.
 
+```{r, stringdb-network-significant, fig.width=10, fig.height=7, out.width="100%"}
 # STRINGdb setup
 string_db <- STRINGdb$new(version = "11.5", species = 9606,
                           score_threshold = 100, network_type = "full",
@@ -573,7 +637,7 @@ deg_ids <- mapped_all$STRING_id[mapped_all$type == "DEG"]
 variant_ids <- mapped_all$STRING_id[mapped_all$type == "variant"]
 variant_ids_in_graph <- intersect(variant_ids, V(graph_all)$name)
 variant_degrees <- degree(graph_all, v = variant_ids_in_graph)
-top_variant_ids <- names(sort(variant_degrees, decreasing = TRUE))[1:10]
+top_variant_ids <- names(sort(variant_degrees, decreasing = TRUE))[1:20]
 
 # Final node set = all DEGs + top variant genes
 final_ids <- unique(c(deg_ids, top_variant_ids))
@@ -590,19 +654,31 @@ V(graph)$label.color <- "black"
 V(graph)$size <- 8
 
 # Layout
-layout <- layout_with_fr(graph, niter = 2000, area = vcount(graph)^3)
+# area argument removed; deprecated in igraph 0.8.0 and defunct
+layout <- layout_with_fr(graph, niter = 2000)
 
 # Save plot
-png("output/publication-analysis/mecfs_deg_variant_network.png", width = 1600, height = 1000, res = 300)
 plot(graph,
      vertex.label.cex = 0.75,
      edge.color = "black",
      edge.width = 1,
      layout = layout)
-dev.off()
+title("DEG–Genes of Interest STRING Network", cex.main = 1.5)
+legend(
+  "bottomleft",
+  legend = c("Genes of Interest", "DEGs w/ Low logFC", "DEGs w/ High logFC"),
+  col = c("moccasin", "blue", "firebrick"),
+  pch = 19,
+  pt.cex = 1.75,
+  bty = "n",
+  text.col = "black",
+  inset = 0.02
+)
 ```
 
 #### Genes of Interest Plot Counts
+
+We generated individual count plots and a heatmap for genes of interest identified from WGS variant analysis. Genes were separated into SPTA1-related genes and other genes of interest. Individual plots showing normalized counts across samples were saved for each gene, along with a combined heatmap visualization. All outputs were saved to the specified output directory.
 
 ```{r, generate-plot-counts-genes-interest-subsetted}
 # List of gene names to remove or keep
@@ -632,11 +708,6 @@ results <- process_genes_of_interest(
 
 # Extract the faceted plot and gene results
 faceted_plot <- results$faceted_plot
-gene_results_df <- results$gene_results_df
-
-# Save the gene results to a CSV
-file_name <- file.path(output_path, "genes_of_interest_plot_counts_signals.csv")
-write.csv(gene_results_df, file_name, row.names = FALSE)
 
 # Prepare the heatmap data
 mat3 <- assay(vsd_limma)[filtered_without_spta1_genes$Ensembl_ID, ]
@@ -656,6 +727,8 @@ create_heatmap(
 
 ### SPTA1 Genes of Interest
 
+We generated individual count plots and a heatmap specifically for SPTA1-related genes of interest. These genes were analyzed separately due to their functional relationship with red blood cell membrane integrity. Individual plots and a combined heatmap were saved to the specified output directory.
+
 ```{r, generate-plot-counts-genes-interest-spta1}
 # Define the output path
 output_path <- "output/publication-analysis/batch-correction-limma/plot-counts/spta1-genes-of-interest"
@@ -671,11 +744,6 @@ results <- process_genes_of_interest(
 
 # Extract the faceted plot and gene results
 faceted_plot <- results$faceted_plot
-gene_results_df <- results$gene_results_df
-
-# Save the gene results to a CSV
-file_name <- file.path(output_path, "genes_of_interest_plot_counts_signals.csv")
-write.csv(gene_results_df, file_name, row.names = FALSE)
 
 # Prepare data for the heatmap
 mat_spta1 <- assay(vsd_limma)[spta1_genes_only$Ensembl_ID, ]
@@ -695,6 +763,8 @@ create_heatmap(
 
 ### Significant Genes Plot Counts
 
+We generated individual count plots and a heatmap for all significantly differentially expressed genes (padj < 0.05 and |log2FC| ≥ 1). Individual plots showing normalized counts across samples were saved for each significant gene, along with a combined heatmap visualization. All outputs were saved to the specified output directory.
+
 ```{r, generate-plot-counts-genes-significant}
 # Define the output path
 output_path <- "output/publication-analysis/batch-correction-limma/plot-counts/padj-05"
@@ -709,11 +779,6 @@ results <- process_genes_of_interest(
 
 # Extract the faceted plot and gene results
 faceted_plot <- results$faceted_plot
-gene_results_df <- results$gene_results_df
-
-# Save the gene results to a CSV
-file_name <- file.path(output_path, "significant_genes_plot_counts_signals.csv")
-write.csv(gene_results_df, file_name, row.names = FALSE)
 
 # Prepare data for the heatmap
 mat_significant <- assay(vsd_limma)[res_aff_vs_unaff_df_genename_padj05_lfc1$Ensembl_ID, ]
@@ -735,6 +800,10 @@ create_heatmap(
 
 ## Save data
 
+We saved key analysis objects to an RData file to enable reproducibility and facilitate downstream analysis. The saved objects included: the DESeqDataSet object (dds), variance-stabilized transformed data (vsd), VST count matrix (counts_vst), batch-corrected transformed data (vsd_limma), full differential expression results (res_aff_vs_unaff_sub), and filtered results at padj < 0.1 and |log2FC| ≥ 1 (res_aff_vs_unaff_df_padj1_lfc1_sub) and padj < 0.05 and |log2FC| ≥ 1 (res_aff_vs_unaff_df_padj05_lfc1_sub).
+
 ```{r, save-data}
-save.image(file = "output/publication-analysis/publication-analysis.RData")
+objects_to_save <- c("dds", "vsd", "counts_vst", "vsd_limma", "res_aff_vs_unaff_sub",
+                     "res_aff_vs_unaff_df_padj1_lfc1_sub", "res_aff_vs_unaff_df_padj05_lfc1_sub")
+save(list = objects_to_save, file = "output/publication-analysis/publication-analysis.RData")
 ```
