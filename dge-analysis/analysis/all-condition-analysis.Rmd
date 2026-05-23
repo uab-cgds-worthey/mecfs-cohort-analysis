@@ -570,7 +570,7 @@ write.csv(filtered_with_only_mito_genes, "output/all-samples-analysis/mito_genes
 # Loop through each gene to calculate and plot counts
 for (ensembl_id in filtered_without_genes$Ensembl_ID) {
   d <- plotCounts(dds, gene = ensembl_id, intgroup = "Affected", returnData = TRUE)
-  dp <- plotCounts(dds, gene = ensembl_id, intgroup = "Affected", returnData = TRUE)
+  dp <- d
   gene_name <- filtered_without_genes$gene_name[filtered_without_genes$Ensembl_ID == ensembl_id]
 
   # Calculate the mean and standard deviation of counts within each condition
@@ -736,7 +736,7 @@ gi_all_counts <- data.frame()
 # Loop through each gene to calculate and plot counts
 for (ensembl_id in filtered_with_only_genes$Ensembl_ID) {
   d <- plotCounts(dds, gene = ensembl_id, intgroup = "Affected", returnData = TRUE)
-  dp <- plotCounts(dds, gene = ensembl_id, intgroup = "Affected", returnData = TRUE)
+  dp <- d
   gene_name <- filtered_with_only_genes$gene_name[filtered_with_only_genes$Ensembl_ID == ensembl_id]
 
   # Calculate the mean and standard deviation of counts within each condition
