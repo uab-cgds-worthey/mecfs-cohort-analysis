@@ -307,7 +307,7 @@ rownames(topgenes_aff_vs_unaff_05) <- new_row_names
 # Order the matrix based on significance (most significant to least significant)
 topgenes_aff_vs_unaff_05 <- topgenes_aff_vs_unaff_05[order(res_aff_vs_unaff_df$padj[topgenes_byensemblid]), ]
 
-df <- df <- colData(vsd_limma) %>%
+df <- colData(vsd_limma) %>%
   as.data.frame() %>%
   dplyr::select(Category)
 
