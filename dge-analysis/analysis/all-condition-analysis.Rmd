@@ -286,7 +286,7 @@ This heatmap focuses on statistically significant genes to show direction and co
 ```{r, significant-genes-deseq-lfc1, out.height="800px", out.width ="1200px"}
 # Assuming 'res_aff_vs_unaff_df' has a column 'padj' for adjusted p-values or 'pvalue' for p-values
 # Ensure the row names of 'res_aff_vs_unaff_df' are Ensembl IDs
-res_aff_vs_unaff_df_padj05_lfc1 <- res_aff_vs_unaff_df[order(res_aff_vs_unaff_df_padj05_lfc1$padj), ]
+res_aff_vs_unaff_df_padj05_lfc1 <- res_aff_vs_unaff_df_padj05_lfc1[order(res_aff_vs_unaff_df_padj05_lfc1$padj), ]
 
 # Get the most significant genes based on adjusted p-values and log2foldchange of 1
 topgenes_byensemblid <- rownames(res_aff_vs_unaff_df_padj05_lfc1)
