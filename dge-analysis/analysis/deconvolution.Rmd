@@ -648,7 +648,7 @@ g_category <- ggplot(plot_df, aes(x = SampleID, y = Proportion, fill = CellType)
   {
     cat_counts <- plot_df %>%
       distinct(SampleID, Category) %>%
-      count(Category) %>%
+      dplyr::count(Category) %>%
       mutate(x_mid = cumsum(n) - n / 2, x_div = cumsum(n) + 0.5)
 
     list(
