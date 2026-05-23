@@ -47,10 +47,10 @@ library(mygene) # Available via Bioconductor
 library(DOSE) # Available via Bioconductor
 library(enrichR) # Available via Bioconductor
 library(STRINGdb) # Available via Bioconductor
-library(EnhancedVolcano)
-library(ComplexHeatmap)
-library(DT)
-library(igraph)
+library(EnhancedVolcano) # Available via Bioconductor
+library(ComplexHeatmap) # Available via Bioconductor
+library(DT) # Available via Bioconductor
+library(igraph) 
 ```
 
 ```{r, include=FALSE}
