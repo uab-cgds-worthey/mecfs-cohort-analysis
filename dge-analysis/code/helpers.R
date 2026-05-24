@@ -44,9 +44,12 @@ retrieve_gene_info <- function(values, filters) {
 
   hosts <- c(
     "https://www.ensembl.org",
-    "https://useast.ensembl.org",
-    "https://uswest.ensembl.org",
-    "https://oct2024.archive.ensembl.org"
+    "https://www.ensembl.org?redirect=no",
+    "https://www.useast.ensembl.org",
+    "https://www.uswest.ensembl.org",
+    "https://www.asia.ensembl.org",
+    "https://www.may2025.archive.ensembl.org/",
+    "https://www.oct2024.archive.ensembl.org"
   )
 
   attributes <- c(

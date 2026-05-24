@@ -209,7 +209,7 @@ ggplot(pca_data_all, aes(PC1, PC2)) +
   coord_fixed()
 ```
 
-### Heatmap of all genes, top 50  & top 100 genes
+### Heatmap of all genes, top 50 & top 100 genes
 
 We define annotation colors and summarize the most variable genes to visualize major expression structure across the cohort.
 
@@ -257,8 +257,7 @@ ComplexHeatmap::pheatmap(mat,
 )
 ```
 
-
-### Comparison/Contrast of Affected_Affected_vs_Unaffected 
+### Comparison/Contrast of Affected_Affected_vs_Unaffected
 
 This contrast estimates differential expression between affected and unaffected groups under the fitted model.
 
@@ -277,8 +276,6 @@ res_aff_vs_unaff_df_padj05_lfc1 <- subset(res_aff_vs_unaff_df_05, log2FoldChange
 summary(res_aff_vs_unaff)
 ```
 
-
-
 ## Heatmap of Significant Genes
 
 This heatmap focuses on statistically significant genes to show direction and consistency of expression changes across samples.
@@ -286,7 +283,7 @@ This heatmap focuses on statistically significant genes to show direction and co
 ```{r, significant-genes-deseq-lfc1, out.height="800px", out.width ="1200px"}
 # Assuming 'res_aff_vs_unaff_df' has a column 'padj' for adjusted p-values or 'pvalue' for p-values
 # Ensure the row names of 'res_aff_vs_unaff_df' are Ensembl IDs
-res_aff_vs_unaff_df_padj05_lfc1 <- res_aff_vs_unaff_df[order(res_aff_vs_unaff_df_padj05_lfc1$padj), ]
+res_aff_vs_unaff_df_padj05_lfc1 <- res_aff_vs_unaff_df_padj05_lfc1[order(res_aff_vs_unaff_df_padj05_lfc1$padj), ]
 
 # Get the most significant genes based on adjusted p-values and log2foldchange of 1
 topgenes_byensemblid <- rownames(res_aff_vs_unaff_df_padj05_lfc1)
@@ -307,7 +304,7 @@ rownames(topgenes_aff_vs_unaff_05) <- new_row_names
 # Order the matrix based on significance (most significant to least significant)
 topgenes_aff_vs_unaff_05 <- topgenes_aff_vs_unaff_05[order(res_aff_vs_unaff_df$padj[topgenes_byensemblid]), ]
 
-df <- df <- colData(vsd_limma) %>%
+df <- colData(vsd_limma) %>%
   as.data.frame() %>%
   dplyr::select(Category)
 
@@ -318,7 +315,6 @@ ComplexHeatmap::pheatmap(topgenes_aff_vs_unaff_05, color = colorRampPalette(rev(
   title = ""
 ))
 ```
-
 
 ```{r, all-genes-list}
 gb_df <- genes_biomart[, c(1, ncol(genes_biomart))]
@@ -372,7 +368,6 @@ ev <- ev + ggplot2::coord_cartesian(xlim = c(-25, 25)) +
   ggplot2::scale_y_continuous(breaks = seq(0, 7, 1))
 ggsave(plot = ev, filename = "output/all-samples-analysis/analysis-volcano-plot.png", device = "png", width = 14, dpi = 1200, units = "in", create.dir = TRUE)
 ```
-
 
 ```{r, significant-with-genename-padj-lfc}
 res_aff_vs_unaff_df_genename_05 <- subset(res_aff_vs_unaff_df_genename, padj < 0.05)
@@ -477,7 +472,6 @@ paged_table(filtered_by_interest, options = list(rows.print = 15))
 paged_table(filtered_counts, options = list(rows.print = 15))
 ```
 
-
 ```{r, stringdb-network-combined}
 string_db <- STRINGdb$new(version = "11.5", species = 9606, score_threshold = 200, network_type = "full", input_directory = "")
 
@@ -501,7 +495,6 @@ combined_enrichment <- string_db$get_enrichment(combined_hits)
 enrich_file_name <- "output/all-samples-analysis/stringdb_combined_enrichment.csv"
 write.csv(combined_enrichment, enrich_file_name, row.names = FALSE)
 ```
-
 
 ## Genes of Interest Plot Counts
 
@@ -570,7 +563,7 @@ write.csv(filtered_with_only_mito_genes, "output/all-samples-analysis/mito_genes
 # Loop through each gene to calculate and plot counts
 for (ensembl_id in filtered_without_genes$Ensembl_ID) {
   d <- plotCounts(dds, gene = ensembl_id, intgroup = "Affected", returnData = TRUE)
-  dp <- plotCounts(dds, gene = ensembl_id, intgroup = "Affected", returnData = TRUE)
+  dp <- d
   gene_name <- filtered_without_genes$gene_name[filtered_without_genes$Ensembl_ID == ensembl_id]
 
   # Calculate the mean and standard deviation of counts within each condition
@@ -685,8 +678,6 @@ file_name <- "output/all-samples-analysis/genes_of_interest_plot_counts_signals.
 write.csv(gene_results_df, file_name, row.names = FALSE)
 ```
 
-
-
 Below is a heatmap highlighting the expression of our genes of interest across batch, disease group, and affected status.
 
 ```{r, heatmap-genes-interest, out.width = "1200px"}
@@ -701,7 +692,7 @@ color_palette <- colorRampPalette(rev(brewer.pal(n = 9, name = "RdYlBu")))(50)
 # Specify the number of row clusters
 num_row_clusters <- 3
 
-png("output/all-samples-analysis/genes_of_interest_heatmap.png", width = 12, height = 10, units = "in", res = 1200)
+ragg::agg_png("output/all-samples-analysis/genes_of_interest_heatmap.png", width = 12, height = 10, units = "in", res = 1200)
 
 draw(ComplexHeatmap::pheatmap(
   mat = mat3,
@@ -721,7 +712,6 @@ draw(ComplexHeatmap::pheatmap(
 dev.off()
 ```
 
-
 ## Additional Interesting Genes
 
 This section isolates the RBC-focused candidate subset to inspect whether the same case-control patterns persist in a narrower panel.
@@ -736,7 +726,7 @@ gi_all_counts <- data.frame()
 # Loop through each gene to calculate and plot counts
 for (ensembl_id in filtered_with_only_genes$Ensembl_ID) {
   d <- plotCounts(dds, gene = ensembl_id, intgroup = "Affected", returnData = TRUE)
-  dp <- plotCounts(dds, gene = ensembl_id, intgroup = "Affected", returnData = TRUE)
+  dp <- d
   gene_name <- filtered_with_only_genes$gene_name[filtered_with_only_genes$Ensembl_ID == ensembl_id]
 
   # Calculate the mean and standard deviation of counts within each condition
@@ -865,7 +855,7 @@ color_palette <- colorRampPalette(rev(brewer.pal(n = 9, name = "RdYlBu")))(50)
 # Specify the number of row clusters
 num_row_clusters <- 3
 
-png("output/all-samples-analysis/slc4a1_genes_of_interest_heatmap.png", width = 14, height = 10, units = "in", res = 1200)
+ragg::agg_png("output/all-samples-analysis/slc4a1_genes_of_interest_heatmap.png", width = 14, height = 10, units = "in", res = 1200)
 
 draw(ComplexHeatmap::pheatmap(
   mat = mat4,
@@ -900,7 +890,7 @@ gi_all_counts <- data.frame()
 # Loop through each gene to calculate and plot counts
 for (ensembl_id in filtered_with_only_madd_genes$Ensembl_ID) {
   d <- plotCounts(dds, gene = ensembl_id, intgroup = "Affected", returnData = TRUE)
-  dp <- plotCounts(dds, gene = ensembl_id, intgroup = "Affected", returnData = TRUE)
+  dp <- d
   gene_name <- filtered_with_only_madd_genes$gene_name[filtered_with_only_madd_genes$Ensembl_ID == ensembl_id]
 
   # Calculate the mean and standard deviation of counts within each condition
@@ -1029,7 +1019,7 @@ color_palette <- colorRampPalette(rev(brewer.pal(n = 9, name = "RdYlBu")))(50)
 # Specify the number of row clusters
 num_row_clusters <- 3
 
-png("output/all-samples-analysis/madd_genes_of_interest_heatmap.png", width = 14, height = 8, units = "in", res = 1200)
+ragg::agg_png("output/all-samples-analysis/madd_genes_of_interest_heatmap.png", width = 14, height = 8, units = "in", res = 1200)
 
 draw(ComplexHeatmap::pheatmap(
   mat = mat5,
@@ -1050,7 +1040,6 @@ draw(ComplexHeatmap::pheatmap(
 dev.off()
 ```
 
-
 ## Only MITO Genes
 
 We assess the mitochondrial candidate set separately to evaluate whether energy metabolism genes show coordinated case-control shifts.
@@ -1065,7 +1054,7 @@ gi_all_counts <- data.frame()
 # Loop through each gene to calculate and plot counts
 for (ensembl_id in filtered_with_only_mito_genes$Ensembl_ID) {
   d <- plotCounts(dds, gene = ensembl_id, intgroup = "Affected", returnData = TRUE)
-  dp <- plotCounts(dds, gene = ensembl_id, intgroup = "Affected", returnData = TRUE)
+  dp <- d
   gene_name <- filtered_with_only_mito_genes$gene_name[filtered_with_only_mito_genes$Ensembl_ID == ensembl_id]
 
   # Calculate the mean and standard deviation of counts within each condition
@@ -1194,7 +1183,7 @@ color_palette <- colorRampPalette(rev(brewer.pal(n = 9, name = "RdYlBu")))(50)
 # Specify the number of row clusters
 num_row_clusters <- 3
 
-png("output/all-samples-analysis/mito_genes_of_interest_heatmap.png", width = 14, height = 8, units = "in", res = 1200)
+ragg::agg_png("output/all-samples-analysis/mito_genes_of_interest_heatmap.png", width = 14, height = 8, units = "in", res = 1200)
 
 draw(ComplexHeatmap::pheatmap(
   mat = mat6,
@@ -1228,8 +1217,8 @@ all_counts <- data.frame()
 
 # Loop through each gene to calculate and plot counts
 for (ensembl_id in res_aff_vs_unaff_df_genename_padj05_lfc1$Ensembl_ID) {
-  dp <- plotCounts(dds, gene = ensembl_id, intgroup = "Affected", returnData = TRUE)
   d <- plotCounts(dds, gene = ensembl_id, intgroup = "Affected", returnData = TRUE)
+  dp <- d
   gene_name <- res_aff_vs_unaff_df_genename_padj05_lfc1$gene_name[res_aff_vs_unaff_df_genename_padj05_lfc1$Ensembl_ID == ensembl_id]
 
   # Calculate the mean and standard deviation of counts within each condition
@@ -1369,7 +1358,7 @@ all_mat <- assay(vsd_limma)[all_genes_data$Ensembl_ID, ]
 rownames(all_mat) <- gene_info$gene_name[match(all_genes_data$Ensembl_ID, gene_info$Ensembl_ID)]
 df_sub <- as.data.frame(colData(vsd_limma)[, c("Affected", "Category")])
 
-png(file_name, width = 16, height = 26, units = "in", res = 1200)
+ragg::agg_png(file_name, width = 16, height = 26, units = "in", res = 1200)
 draw(
   ComplexHeatmap::pheatmap(
     mat = all_mat,
@@ -1408,7 +1397,7 @@ all_mat <- assay(vsd_limma)[all_genes_data$Ensembl_ID, ]
 rownames(all_mat) <- gene_info$gene_name[match(all_genes_data$Ensembl_ID, gene_info$Ensembl_ID)]
 df_sub <- as.data.frame(colData(vsd_limma)[, c("Affected", "Category")])
 
-png(file_name, width = 16, height = 26, units = "in", res = 1200)
+ragg::agg_png(file_name, width = 16, height = 26, units = "in", res = 1200)
 draw(
   ComplexHeatmap::pheatmap(
     mat = all_mat,
@@ -1425,7 +1414,6 @@ draw(
 )
 dev.off()
 ```
-
 
 ### Save data
 

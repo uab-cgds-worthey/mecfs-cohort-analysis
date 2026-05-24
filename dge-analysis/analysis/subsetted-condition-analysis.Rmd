@@ -695,7 +695,7 @@ filename <- file.path(output_path, "genes-of-interest-heatmap.png")
 # Filter genes
 filtered_without_spta1_genes <- filter_genes(filtered_by_interest, spta1_genes, include = FALSE)
 
-spta1_genes_only <- filter_genes(filtered_by_interest, filtered_without_spta1_genes, include = FALSE)
+spta1_genes_only <- filter_genes(filtered_by_interest, filtered_without_spta1_genes$gene_name, include = FALSE)
 
 # Generate plots and results using the modularized functions
 results <- process_genes_of_interest(
@@ -747,7 +747,7 @@ faceted_plot <- results$faceted_plot
 
 # Prepare data for the heatmap
 mat_spta1 <- assay(vsd_limma)[spta1_genes_only$Ensembl_ID, ]
-rownames(mat_spta1) <- gene_info$gene_name[match(spta1_genes_only$Ensembl_ID, gene_info$Ensembl_ID)]
+# rownames(mat_spta1) <- gene_info$gene_name[match(spta1_genes_only$Ensembl_ID, gene_info$Ensembl_ID)]
 annotation_data <- as.data.frame(colData(vsd_limma)[, c("Affected", "Category")])
 
 # Generate a heatmap for SPTA1 genes
