@@ -47,10 +47,10 @@ library(mygene) # Available via Bioconductor
 library(DOSE) # Available via Bioconductor
 library(enrichR) # Available via Bioconductor
 library(STRINGdb) # Available via Bioconductor
-library(EnhancedVolcano) # Available via Bioconductor
-library(ComplexHeatmap) # Available via Bioconductor
-library(DT) # Available via Bioconductor
-library(igraph) 
+library(EnhancedVolcano)
+library(ComplexHeatmap)
+library(DT)
+library(igraph)
 ```
 
 ```{r, include=FALSE}
@@ -89,7 +89,7 @@ outpath_var <- paste0(analysis_name, "-analysis")
 # Check that data is ordered properly
 sample_metadata <- check_order(sample_metadata = sample_metadata, counts = counts)
 
-genes_biomart <- retrieve_gene_info(values = gene_info$Ensembl_ID, filters = "ensembl_gene_id_version")
+#genes_biomart <- retrieve_gene_info(values = gene_info$Ensembl_ID, filters = "ensembl_gene_id_version")
 ```
 
 ## DESeq2 Analysis
@@ -357,7 +357,7 @@ We have plotted genes that pass our significance and fold-change cutoffs (e.g. p
 # Parameters for the function
 annotation_columns <- c("Affected", "Category")
 annotation_colors <- ann_colors # Predefined annotation colors
-output_file <- "output/publication-analysis/supplemental_figure_4_significant_degs_padj_.05.png"
+output_file <- "output/publication-analysis/Supplemental Figure 4. Significant DEGs (Padj less than 0.05).png"
 
 # Generate the heatmap for significant genes
 generate_significant_genes_heatmap(
@@ -376,7 +376,7 @@ We also generated a heatmap using a more lenient significance threshold (padj < 
 # Parameters for the function
 annotation_columns <- c("Affected", "Category")
 annotation_colors <- ann_colors # Predefined annotation colors
-output_file <- "output/publication-analysis/degs_padj_0.1.png"
+output_file <- "output/publication-analysis/Supplemental Figure 4. DEGs (Padj less than 0.1).png"
 
 # Generate the heatmap for significant genes
 generate_significant_genes_heatmap(
@@ -393,7 +393,7 @@ We merged gene symbols and other annotations on Ensembl ID and sorted by adjuste
 
 ```{r, all-genes-list-subsetted}
 # Extract relevant columns from the gene information data
-gb_df <- genes_biomart[, c(1, ncol(genes_biomart))]
+#gb_df <- genes_biomart[, c(1, ncol(genes_biomart))]
 
 # Add Ensembl IDs to the DEG results
 res_aff_vs_unaff_df_sub_genename <- res_aff_vs_unaff_df_sub

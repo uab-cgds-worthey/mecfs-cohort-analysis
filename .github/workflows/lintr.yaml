@@ -25,7 +25,12 @@ jobs:
         shell: Rscript {0}
 
       - name: Lint dge-analysis directory
-        run: lintr::lint_dir("dge-analysis")
+        run: |
+          lint_paths <- c(
+            list.files("dge-analysis/analysis", pattern = "\\.[Rr]md$", full.names = TRUE),
+            list.files("dge-analysis/code", pattern = "\\.[Rr]$", full.names = TRUE)
+          )
+          lintr::lint(lint_paths)
         shell: Rscript {0}
         env:
           LINTR_ERROR_ON_LINT: false
