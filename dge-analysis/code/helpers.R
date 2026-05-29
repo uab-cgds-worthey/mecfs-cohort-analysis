@@ -41,47 +41,53 @@ check_order <- function(sample_metadata, counts) {
 
 
 retrieve_gene_info <- function(values, filters) {
-  # Helper function to create the biomart object
-  create_biomart <- function(host) {
-    useMart(
-      biomart = "ensembl", dataset = "hsapiens_gene_ensembl",
-      host = host
-    )
-  }
 
-  # Try block to retrieve gene information
-  tryCatch(
-    {
-      # Create biomart object with default host
-      biomart <- create_biomart("https://www.ensembl.org")
-    },
-    error = function(e) {
-      message("Error encountered. Switching to alternative Ensembl host...")
-      # Retry with alternative host
-      biomart <- create_biomart("https://oct2024.archive.ensembl.org")
-      return(biomart)
-    }
-  ) -> biomart
+  hosts <- c(
+    "https://www.ensembl.org",
+    "https://www.ensembl.org?redirect=no",
+    "https://www.useast.ensembl.org",
+    "https://www.uswest.ensembl.org",
+    "https://www.asia.ensembl.org",
+    "https://www.may2025.archive.ensembl.org/",
+    "https://www.oct2024.archive.ensembl.org"
+  )
 
-  # Define attributes to retrieve
   attributes <- c(
     "ensembl_gene_id_version",
     "entrezgene_id",
     "ensembl_gene_id",
     "description",
-    "genecards",
     "hgnc_symbol"
   )
 
-  # Retrieve gene information from biomart
-  gene_info <- getBM(
-    attributes = attributes,
-    filters = filters,
-    values = values,
-    mart = biomart
-  )
+  for (host in hosts) {
+    message(paste("[INFO]: Trying host:", host))
 
-  return(gene_info)
+    result <- tryCatch({
+      mart <- useMart(
+        biomart = "ensembl",
+        dataset = "hsapiens_gene_ensembl",
+        host = host
+      )
+
+      getBM(
+        attributes = attributes,
+        filters = filters,
+        values = values,
+        mart = mart
+      )
+    }, error = function(e) {
+      message(paste("[WARNING]: Failed on", host))
+      return(NULL)
+    })
+
+    if (!is.null(result) && nrow(result) > 0) {
+      message(paste("[INFO]: Success on", host))
+      return(result)
+    }
+  }
+
+  stop("[ERROR]: All BioMart hosts failed.")
 }
 
 
@@ -458,7 +464,7 @@ generate_significant_genes_heatmap <- function(vsd_data, res_data, gene_info, an
 generate_volcano_plot <- function(res_data, gene_labels, x_col, y_col, select_genes,
                                   xlab_text, ylab_text, p_cutoff = 0.05, fc_cutoff = 1.0,
                                   xlim_range = c(-25, 25), ylim_range = c(0, 7),
-                                  output_file = "volcano_plot.png") {
+                                  output_file = "volcano_plot.png", print_plot = TRUE) {
   # If no genes are manually selected, choose those meeting cutoff criteria
   if (length(select_genes) == 0 || all(select_genes == "")) {
     significant_rows <- res_data[[y_col]] < p_cutoff & abs(res_data[[x_col]]) >= fc_cutoff
@@ -503,14 +509,18 @@ generate_volcano_plot <- function(res_data, gene_labels, x_col, y_col, select_ge
     ggplot2::scale_x_continuous(breaks = seq(xlim_range[1], xlim_range[2], 5)) +
     ggplot2::scale_y_continuous(breaks = seq(ylim_range[1], ylim_range[2], 1))
 
-  # Show Plot
-  print(volcano_plot)
+  if (isTRUE(print_plot)) {
+    print(volcano_plot)
+  }
 
-  # Save
-  ggsave(
-    plot = volcano_plot, filename = output_file, device = "png",
-    width = 14, dpi = 1200, units = "in", create.dir = TRUE
-  )
+  if (!is.null(output_file) && nzchar(output_file)) {
+    ggsave(
+      plot = volcano_plot, filename = output_file, device = "png",
+      width = 14, dpi = 1200, units = "in", create.dir = TRUE
+    )
+  }
+
+  invisible(volcano_plot)
 }
 
 

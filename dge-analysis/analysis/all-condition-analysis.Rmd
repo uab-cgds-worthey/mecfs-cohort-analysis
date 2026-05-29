@@ -12,13 +12,19 @@ editor_options:
 
 ```{r, setup, include=FALSE}
 knitr::opts_chunk$set(echo = TRUE, warning = FALSE, message = FALSE)
+all_samples_output_dir <- file.path("output", "all-samples-analysis")
+dir.create(all_samples_output_dir, recursive = TRUE, showWarnings = FALSE)
 ```
+
+# Overview
+
+This notebook fits Affected vs Unaffected with `~ Batch + Affected` on all samples in the metadata (no removal of related individuals). The [subsetted analysis](subsetted-condition-analysis.html) applies the same model after excluding one member per multiplex family so independence assumptions are less strained for inference.
+
+Outputs here go to `output/all-samples-analysis/` and support exploratory comparisons; publication-style inference follows the subsetted page.
 
 # DGE Analysis Setup
 
-Ensure you have all necessary libraries installed and load the helper code.
-
-`renv` has been integrated to ensure reproducibility of this analysis.
+Load libraries and `code/helpers.R` with `renv` active so package versions match the project lockfile.
 
 ```{r, load libraries, warning = FALSE, message = FALSE}
 library(tidyverse) # Available via CRAN
@@ -46,13 +52,11 @@ library(ComplexHeatmap)
 
 ```{r, include=FALSE}
 source("code/helpers.R", local = knitr::knit_global())
-# or sys.source("your-script.R", envir = knitr::knit_global())
 ```
 
 ## Data Import
 
-We will be importing counts data from the star-salmon pipeline and our metadata 
-for the project which is hosted on Box. This also ensures data is properly ordered by sample id.
+Counts come from star-salmon; metadata is the project CSV in `data/`. `check_order()` aligns matrix columns with metadata rows by sample ID.
 
 ```{r, import data}
 # Import counts and metadata
@@ -80,6 +84,8 @@ genes_biomart <- retrieve_gene_info(values = gene_info$Ensembl_ID, filters = "en
 ```
 
 ## DESeq2 Analysis
+
+DESeq2 tests differential expression on counts with `~ Batch + Affected` so batch is a nuisance term and Affected carries the scientific contrast. Size factors, dispersions, and Wald statistics follow the standard pipeline (see subsetted write-up for interpretation).
 
 ```{r, start analysis}
 sample_metadata$Family <- factor(sample_metadata$Family)
@@ -110,7 +116,7 @@ counts_norm <- counts(dds, normalized = TRUE)
 
 ### Data transformation and visualization
 
-Perform count data transformation by variance stabilizing transformation (vst) on normalized counts.
+`vst()` produces a variance-stable matrix for PCA and heatmaps; it does not replace the count-based model for p-values.
 
 ```{r, vsd}
 vsd <- vst(dds, blind = FALSE)
@@ -118,9 +124,11 @@ vsd <- vst(dds, blind = FALSE)
 
 ### Batch correction with limma
 
+`removeBatchEffect()` on the VST matrix removes Batch for plotting while retaining Affected structure when the design includes both.
+
 ```{r, limma}
 counts_vst <- assay(vsd)
-write.csv(counts_vst, file = "output/all-samples-analysis/counts_vst.csv")
+write.csv(counts_vst, file = file.path(all_samples_output_dir, "counts_vst.csv"))
 mm <- model.matrix(~ Batch + Affected, colData(vsd))
 
 counts_vst_limma <- limma::removeBatchEffect(counts_vst,
@@ -128,13 +136,15 @@ counts_vst_limma <- limma::removeBatchEffect(counts_vst,
   design = mm
 )
 
-write.csv(counts_vst_limma, file = "output/all-samples-analysis/counts_vst_limma.csv")
+write.csv(counts_vst_limma, file = file.path(all_samples_output_dir, "counts_vst_limma.csv"))
 
 vsd_limma <- vsd
 assay(vsd_limma) <- counts_vst_limma
 ```
 
 ### Sample distances heatmap
+
+Euclidean distance on batch-corrected VST; darker tiles mean more similar expression profiles.
 
 ```{r, sample-dist-heatmap}
 sample_dists_all <- dist(t(assay(vsd_limma)))
@@ -155,9 +165,7 @@ pheatmap(sample_dist_matrix_all,
 
 ### Principal Components Analysis
 
-Our below PCA shows that there does not seem to be a batch-related effect 
-occurring after using limma. However, we can see that our 3 male samples are 
-grouping. Given this knowledge, removing them from downstream analyses is the best option.
+On batch-corrected VST, PCs do not separate batches cleanly, which is what we want after `removeBatchEffect()`. The three male samples partially separate from most females on these PCs, so sex structure is visible in exploratory space. The subsetted analysis applies a different restriction: it keeps one sample per multiplex family (see that page for excluded IDs), which is the rule used for publication-style inference.
 
 ```{r, principal-components-analysis-all}
 pca_data_all <- plotPCA(vsd_limma,
@@ -201,7 +209,9 @@ ggplot(pca_data_all, aes(PC1, PC2)) +
   coord_fixed()
 ```
 
-### Heatmap of all genes, top 50  & top 100 genes
+### Heatmap of all genes, top 50 & top 100 genes
+
+We define annotation colors and summarize the most variable genes to visualize major expression structure across the cohort.
 
 ```{r, heatmap-colors, out.height="570px", out.width ="800px"}
 # Specify annotation colors by columns
@@ -247,8 +257,9 @@ ComplexHeatmap::pheatmap(mat,
 )
 ```
 
+### Comparison/Contrast of Affected_Affected_vs_Unaffected
 
-### Comparison/Contrast of Affected_Affected_vs_Unaffected 
+This contrast estimates differential expression between affected and unaffected groups under the fitted model.
 
 ```{r}
 res_aff_vs_unaff <- results(dds, contrast = c("Affected", "Affected", "Unaffected"))
@@ -265,15 +276,14 @@ res_aff_vs_unaff_df_padj05_lfc1 <- subset(res_aff_vs_unaff_df_05, log2FoldChange
 summary(res_aff_vs_unaff)
 ```
 
-
-
 ## Heatmap of Significant Genes
 
+This heatmap focuses on statistically significant genes to show direction and consistency of expression changes across samples.
 
 ```{r, significant-genes-deseq-lfc1, out.height="800px", out.width ="1200px"}
 # Assuming 'res_aff_vs_unaff_df' has a column 'padj' for adjusted p-values or 'pvalue' for p-values
 # Ensure the row names of 'res_aff_vs_unaff_df' are Ensembl IDs
-res_aff_vs_unaff_df_padj05_lfc1 <- res_aff_vs_unaff_df[order(res_aff_vs_unaff_df_padj05_lfc1$padj), ]
+res_aff_vs_unaff_df_padj05_lfc1 <- res_aff_vs_unaff_df_padj05_lfc1[order(res_aff_vs_unaff_df_padj05_lfc1$padj), ]
 
 # Get the most significant genes based on adjusted p-values and log2foldchange of 1
 topgenes_byensemblid <- rownames(res_aff_vs_unaff_df_padj05_lfc1)
@@ -294,7 +304,7 @@ rownames(topgenes_aff_vs_unaff_05) <- new_row_names
 # Order the matrix based on significance (most significant to least significant)
 topgenes_aff_vs_unaff_05 <- topgenes_aff_vs_unaff_05[order(res_aff_vs_unaff_df$padj[topgenes_byensemblid]), ]
 
-df <- df <- colData(vsd_limma) %>%
+df <- colData(vsd_limma) %>%
   as.data.frame() %>%
   dplyr::select(Category)
 
@@ -305,7 +315,6 @@ ComplexHeatmap::pheatmap(topgenes_aff_vs_unaff_05, color = colorRampPalette(rev(
   title = ""
 ))
 ```
-
 
 ```{r, all-genes-list}
 gb_df <- genes_biomart[, c(1, ncol(genes_biomart))]
@@ -318,6 +327,9 @@ write.csv(res_aff_vs_unaff_df_genename, file = "output/all-samples-analysis/res_
 ```
 
 ## Volcano Plot
+
+The volcano plot combines effect size and adjusted significance to prioritize genes with strong and reliable differences.
+
 ```{r, volcano-plot, out.height="1000px", out.width ="1600px"}
 ev <- EnhancedVolcano(res_aff_vs_unaff_df_genename,
   lab = res_aff_vs_unaff_df_genename$gene_name,
@@ -356,7 +368,6 @@ ev <- ev + ggplot2::coord_cartesian(xlim = c(-25, 25)) +
   ggplot2::scale_y_continuous(breaks = seq(0, 7, 1))
 ggsave(plot = ev, filename = "output/all-samples-analysis/analysis-volcano-plot.png", device = "png", width = 14, dpi = 1200, units = "in", create.dir = TRUE)
 ```
-
 
 ```{r, significant-with-genename-padj-lfc}
 res_aff_vs_unaff_df_genename_05 <- subset(res_aff_vs_unaff_df_genename, padj < 0.05)
@@ -461,7 +472,6 @@ paged_table(filtered_by_interest, options = list(rows.print = 15))
 paged_table(filtered_counts, options = list(rows.print = 15))
 ```
 
-
 ```{r, stringdb-network-combined}
 string_db <- STRINGdb$new(version = "11.5", species = 9606, score_threshold = 200, network_type = "full", input_directory = "")
 
@@ -486,8 +496,9 @@ enrich_file_name <- "output/all-samples-analysis/stringdb_combined_enrichment.cs
 write.csv(combined_enrichment, enrich_file_name, row.names = FALSE)
 ```
 
-
 ## Genes of Interest Plot Counts
+
+Here we scrutinize predefined biologically relevant genes with per-gene count plots and summary heatmaps.
 
 ```{r, generate-plot-counts-genes-interest}
 # Create an empty list to store the results for each gene
@@ -552,7 +563,7 @@ write.csv(filtered_with_only_mito_genes, "output/all-samples-analysis/mito_genes
 # Loop through each gene to calculate and plot counts
 for (ensembl_id in filtered_without_genes$Ensembl_ID) {
   d <- plotCounts(dds, gene = ensembl_id, intgroup = "Affected", returnData = TRUE)
-  dp <- plotCounts(dds, gene = ensembl_id, intgroup = "Affected", returnData = TRUE)
+  dp <- d
   gene_name <- filtered_without_genes$gene_name[filtered_without_genes$Ensembl_ID == ensembl_id]
 
   # Calculate the mean and standard deviation of counts within each condition
@@ -667,8 +678,6 @@ file_name <- "output/all-samples-analysis/genes_of_interest_plot_counts_signals.
 write.csv(gene_results_df, file_name, row.names = FALSE)
 ```
 
-
-
 Below is a heatmap highlighting the expression of our genes of interest across batch, disease group, and affected status.
 
 ```{r, heatmap-genes-interest, out.width = "1200px"}
@@ -683,7 +692,7 @@ color_palette <- colorRampPalette(rev(brewer.pal(n = 9, name = "RdYlBu")))(50)
 # Specify the number of row clusters
 num_row_clusters <- 3
 
-png("output/all-samples-analysis/genes_of_interest_heatmap.png", width = 12, height = 10, units = "in", res = 1200)
+ragg::agg_png("output/all-samples-analysis/genes_of_interest_heatmap.png", width = 12, height = 10, units = "in", res = 1200)
 
 draw(ComplexHeatmap::pheatmap(
   mat = mat3,
@@ -703,8 +712,9 @@ draw(ComplexHeatmap::pheatmap(
 dev.off()
 ```
 
-
 ## Additional Interesting Genes
+
+This section isolates the RBC-focused candidate subset to inspect whether the same case-control patterns persist in a narrower panel.
 
 ```{r, additonal-plot-counts-genes-interest}
 # Create an empty list to store the results for each gene
@@ -716,7 +726,7 @@ gi_all_counts <- data.frame()
 # Loop through each gene to calculate and plot counts
 for (ensembl_id in filtered_with_only_genes$Ensembl_ID) {
   d <- plotCounts(dds, gene = ensembl_id, intgroup = "Affected", returnData = TRUE)
-  dp <- plotCounts(dds, gene = ensembl_id, intgroup = "Affected", returnData = TRUE)
+  dp <- d
   gene_name <- filtered_with_only_genes$gene_name[filtered_with_only_genes$Ensembl_ID == ensembl_id]
 
   # Calculate the mean and standard deviation of counts within each condition
@@ -845,7 +855,7 @@ color_palette <- colorRampPalette(rev(brewer.pal(n = 9, name = "RdYlBu")))(50)
 # Specify the number of row clusters
 num_row_clusters <- 3
 
-png("output/all-samples-analysis/slc4a1_genes_of_interest_heatmap.png", width = 14, height = 10, units = "in", res = 1200)
+ragg::agg_png("output/all-samples-analysis/slc4a1_genes_of_interest_heatmap.png", width = 14, height = 10, units = "in", res = 1200)
 
 draw(ComplexHeatmap::pheatmap(
   mat = mat4,
@@ -868,6 +878,8 @@ dev.off()
 
 ## Only MADD Genes
 
+We dissect the MADD-related candidate set separately to test whether this pathway-specific signature is coherent across samples.
+
 ```{r, generate-plot-counts-genes-interest-madd}
 # Create an empty list to store the results for each gene
 gene_results_list <- list()
@@ -878,7 +890,7 @@ gi_all_counts <- data.frame()
 # Loop through each gene to calculate and plot counts
 for (ensembl_id in filtered_with_only_madd_genes$Ensembl_ID) {
   d <- plotCounts(dds, gene = ensembl_id, intgroup = "Affected", returnData = TRUE)
-  dp <- plotCounts(dds, gene = ensembl_id, intgroup = "Affected", returnData = TRUE)
+  dp <- d
   gene_name <- filtered_with_only_madd_genes$gene_name[filtered_with_only_madd_genes$Ensembl_ID == ensembl_id]
 
   # Calculate the mean and standard deviation of counts within each condition
@@ -1007,7 +1019,7 @@ color_palette <- colorRampPalette(rev(brewer.pal(n = 9, name = "RdYlBu")))(50)
 # Specify the number of row clusters
 num_row_clusters <- 3
 
-png("output/all-samples-analysis/madd_genes_of_interest_heatmap.png", width = 14, height = 8, units = "in", res = 1200)
+ragg::agg_png("output/all-samples-analysis/madd_genes_of_interest_heatmap.png", width = 14, height = 8, units = "in", res = 1200)
 
 draw(ComplexHeatmap::pheatmap(
   mat = mat5,
@@ -1028,8 +1040,9 @@ draw(ComplexHeatmap::pheatmap(
 dev.off()
 ```
 
-
 ## Only MITO Genes
+
+We assess the mitochondrial candidate set separately to evaluate whether energy metabolism genes show coordinated case-control shifts.
 
 ```{r, generate-plot-counts-genes-interest-mito}
 # Create an empty list to store the results for each gene
@@ -1041,7 +1054,7 @@ gi_all_counts <- data.frame()
 # Loop through each gene to calculate and plot counts
 for (ensembl_id in filtered_with_only_mito_genes$Ensembl_ID) {
   d <- plotCounts(dds, gene = ensembl_id, intgroup = "Affected", returnData = TRUE)
-  dp <- plotCounts(dds, gene = ensembl_id, intgroup = "Affected", returnData = TRUE)
+  dp <- d
   gene_name <- filtered_with_only_mito_genes$gene_name[filtered_with_only_mito_genes$Ensembl_ID == ensembl_id]
 
   # Calculate the mean and standard deviation of counts within each condition
@@ -1170,7 +1183,7 @@ color_palette <- colorRampPalette(rev(brewer.pal(n = 9, name = "RdYlBu")))(50)
 # Specify the number of row clusters
 num_row_clusters <- 3
 
-png("output/all-samples-analysis/mito_genes_of_interest_heatmap.png", width = 14, height = 8, units = "in", res = 1200)
+ragg::agg_png("output/all-samples-analysis/mito_genes_of_interest_heatmap.png", width = 14, height = 8, units = "in", res = 1200)
 
 draw(ComplexHeatmap::pheatmap(
   mat = mat6,
@@ -1193,6 +1206,8 @@ dev.off()
 
 ## Significant Genes Plot Counts
 
+This section provides per-sample count views for significant DEGs to validate effect direction and identify outlier-driven signals.
+
 ```{r, generate-plot-counts-genes-significant}
 # Create an empty list to store the results for each gene
 results_list <- list()
@@ -1202,8 +1217,8 @@ all_counts <- data.frame()
 
 # Loop through each gene to calculate and plot counts
 for (ensembl_id in res_aff_vs_unaff_df_genename_padj05_lfc1$Ensembl_ID) {
-  dp <- plotCounts(dds, gene = ensembl_id, intgroup = "Affected", returnData = TRUE)
   d <- plotCounts(dds, gene = ensembl_id, intgroup = "Affected", returnData = TRUE)
+  dp <- d
   gene_name <- res_aff_vs_unaff_df_genename_padj05_lfc1$gene_name[res_aff_vs_unaff_df_genename_padj05_lfc1$Ensembl_ID == ensembl_id]
 
   # Calculate the mean and standard deviation of counts within each condition
@@ -1326,6 +1341,7 @@ write.csv(results_df, file_name, row.names = FALSE)
 
 ## Heatmap of All Genes
 
+This aggregate heatmap combines key gene sets into one view to compare global expression patterns across affected status and category.
 
 ```{r, heatmap-of-all}
 all_genes <- unique(c(blood_genes, madd_genes, mito_genes, filtered_by_interest$gene_name, significant_data$name))
@@ -1342,7 +1358,7 @@ all_mat <- assay(vsd_limma)[all_genes_data$Ensembl_ID, ]
 rownames(all_mat) <- gene_info$gene_name[match(all_genes_data$Ensembl_ID, gene_info$Ensembl_ID)]
 df_sub <- as.data.frame(colData(vsd_limma)[, c("Affected", "Category")])
 
-png(file_name, width = 16, height = 26, units = "in", res = 1200)
+ragg::agg_png(file_name, width = 16, height = 26, units = "in", res = 1200)
 draw(
   ComplexHeatmap::pheatmap(
     mat = all_mat,
@@ -1362,6 +1378,8 @@ dev.off()
 
 ## Heatmap of Genes of Interest
 
+This focused heatmap summarizes the curated gene list used in the manuscript to support interpretation of biologically motivated targets.
+
 ```{r, heatmap-of-all-samples-genes-of-interest}
 genes_of_interest <- read_csv("data/Manually_Curated_Genes_List_2024_12_05.csv")
 genes_of_interest <- unique(genes_of_interest$Genes)
@@ -1379,7 +1397,7 @@ all_mat <- assay(vsd_limma)[all_genes_data$Ensembl_ID, ]
 rownames(all_mat) <- gene_info$gene_name[match(all_genes_data$Ensembl_ID, gene_info$Ensembl_ID)]
 df_sub <- as.data.frame(colData(vsd_limma)[, c("Affected", "Category")])
 
-png(file_name, width = 16, height = 26, units = "in", res = 1200)
+ragg::agg_png(file_name, width = 16, height = 26, units = "in", res = 1200)
 draw(
   ComplexHeatmap::pheatmap(
     mat = all_mat,
@@ -1397,8 +1415,9 @@ draw(
 dev.off()
 ```
 
-
 ### Save data
+
+We save the workspace so every intermediate object can be revisited for reproducibility and downstream checks.
 
 ```{r, save-data}
 save.image(file = "output/all-samples-analysis/all-condition-analysis.RData")

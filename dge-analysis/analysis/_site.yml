@@ -1,7 +1,7 @@
 name: "mecfs-dge-analysis"
 output_dir: ../../docs
 navbar:
-  title: "mecfs-dge-analysis"
+  title: "ME/CFS DGE Analysis"
   left:
   - text: Home
     href: index.html
@@ -11,6 +11,10 @@ navbar:
     menu:
     - text: Subsetted Analysis
       href: subsetted-condition-analysis.html
+    - text: Deconvolution Analysis
+      href: deconvolution.html
+    - text: Subgroup Analysis
+      href: subgroup-analysis.html
   right:
   - text: Contact
     href: contact.html
@@ -20,7 +24,8 @@ output:
   workflowr::wflow_html:
     toc: yes
     toc_float: yes
-    theme: sandstone
+    theme:
+      bslib: true
     highlight: textmate
     css: custom.css
     includes:
