@@ -16,6 +16,7 @@ jobs:
     runs-on: windows-2022
     env:
       GITHUB_PAT: ${{ secrets.GITHUB_TOKEN }}
+      RENV_PATHS_ROOT: ${{ github.workspace }}/renv-cache
 
     steps:
       - name: Check out repository
@@ -29,6 +30,14 @@ jobs:
 
       - name: Set up Pandoc
         uses: r-lib/actions/setup-pandoc@v2
+
+      - name: Cache renv library
+        uses: actions/cache@v4
+        with:
+          path: ${{ env.RENV_PATHS_ROOT }}
+          key: ${{ runner.os }}-r-4.5.1-renv-${{ hashFiles('dge-analysis/renv.lock') }}
+          restore-keys: |
+            ${{ runner.os }}-r-4.5.1-renv-
 
       - name: Show R session
         shell: pwsh
