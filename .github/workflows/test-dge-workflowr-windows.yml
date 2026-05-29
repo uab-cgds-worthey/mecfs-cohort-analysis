@@ -46,13 +46,14 @@ jobs:
       - name: Restore project library
         shell: pwsh
         run: >
-          Rscript --vanilla -e "source('dge-analysis/renv/activate.R');
-          renv::restore(prompt = FALSE)"
+          Rscript --vanilla -e "setwd('dge-analysis');
+          source('renv/activate.R');
+          renv::restore(project = getwd(), prompt = FALSE)"
 
       - name: Run workflowr build from README
         shell: pwsh
         run: >
-          Rscript --vanilla -e "source('dge-analysis/renv/activate.R');
-          setwd('dge-analysis');
+          Rscript --vanilla -e "setwd('dge-analysis');
+          source('renv/activate.R');
           library(workflowr);
           wflow_build('analysis/*.Rmd')"
