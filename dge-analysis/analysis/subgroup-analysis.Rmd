@@ -2,14 +2,13 @@
 title: "Subgroup vs Unaffected Differential Gene Expression (DGE) Analysis"
 author: "Shaurita D. Hutchins"
 date: "`r format(Sys.Date(), 'Last updated on %Y-%m-%d')`"
-params:
-  subgroup_name: "HPP"
 output:
   workflowr::wflow_html:
     toc: true
     toc_depth: 3
     toc_float: true
     code_folding: hide
+code_download: true
 editor_options:
   chunk_output_type: console
 ---
@@ -18,9 +17,17 @@ editor_options:
 knitr::opts_chunk$set(echo = TRUE, warning = FALSE, message = FALSE)
 ```
 
+# Overview
+
+The [subsetted main analysis](subsetted-condition-analysis.html) tests Affected vs Unaffected in one model. This page repeats that workflow for each genetic subgroup vs Unaffected so subgroup means “samples carrying that label in `Subgroup`” compared to all Unaffected samples, not subgroup vs subgroup.
+
+We analyze Potassium, HPP, Ion_Channel, CHRN, Mito, and RBC. The statistical model is `~ Batch + group` where `group` is subgroup vs Unaffected. VST stabilizes variance for visualization; `removeBatchEffect()` removes batch from the VST matrix for heatmaps only; Wald tests and p-values still come from `DESeq()` on raw counts, same as the main analysis.
+
+We save tables and figures for every subgroup under `output/subgroup-{name}-analysis/`. This HTML shows only Mito and RBC padj &lt; 0.05 heatmaps and the RBC volcano (supplemental figures in the paper). Objects are redrawn in the document so the site does not depend on fragile image paths.
+
 # DGE Analysis Setup
 
-Ensure you have all necessary libraries installed and load the helper code.
+Activate `renv` and `source()` the same `code/helpers.R` as the subsetted analysis so helper names match.
 
 
 ```{r, load libraries, warning = FALSE, message = FALSE}
@@ -49,24 +56,17 @@ library(ComplexHeatmap)
 
 ```{r, include=FALSE}
 source("code/helpers.R", local = knitr::knit_global())
-# or sys.source("your-script.R", envir = knitr::knit_global())
 ```
 
 ## Data Import
 
-We will be importing counts data from the star-salmon pipeline and our metadata 
-for the project which is hosted on Box. This also ensures data is properly ordered by sample id.
+Counts and metadata match the main analysis. `Subgroup` can list multiple labels per sample (comma-separated); we split and treat each label as its own subgroup list. The chunk loads everything once; `genes_biomart` avoids repeated Ensembl lookups inside the loop.
 
 ```{r, import data}
-# Set subgroup name from RMarkdown parameter
-subgroup_name <- params$subgroup_name
-subgroup_lower <- tolower(subgroup_name)
-outpath_var <- paste0("subgroup-", subgroup_lower, "-analysis")
-
-# Load metadata and counts
-sample_metadata <- read_csv("data/Metadata_2024_11_20.csv")
-row.names(sample_metadata) <- sample_metadata$ID
-counts <- read_tsv("data/star-salmon/salmon_merged_gene_counts_length_scaled.tsv")
+# Load full metadata and counts (no subgroup filter yet)
+sample_metadata_full <- read_csv("data/Metadata_2024_11_20.csv")
+row.names(sample_metadata_full) <- sample_metadata_full$ID
+counts_full <- read_tsv("data/star-salmon/salmon_merged_gene_counts_length_scaled.tsv")
 
 # Load genes of interest
 genes_of_interest <- read_csv("data/Prioritized_Genes_From_WGS_2024_11_19.csv") %>%
@@ -75,183 +75,40 @@ genes_of_interest <- read_csv("data/Prioritized_Genes_From_WGS_2024_11_19.csv") 
   na.omit()
 genes_of_interest <- unique(c(genes_of_interest, "CHI3L1"))
 
-# Process counts
-counts <- data.frame(counts, row.names = 1, check.names = FALSE)
-counts$Ensembl_ID <- row.names(counts)
+# Process counts: use first column for row names, keep gene info
+counts_full <- data.frame(counts_full, row.names = 1, check.names = FALSE)
+counts_full$Ensembl_ID <- row.names(counts_full)
 drop <- c("Ensembl_ID", "gene_name")
-gene_info <- counts[, drop]
-counts <- counts[, !(names(counts) %in% drop)]
+gene_info <- counts_full[, drop]
+counts_full <- counts_full[, !(names(counts_full) %in% drop)]
 
-# Identify affected subgroup members
-sample_metadata <- sample_metadata %>%
-  mutate(Subgroup_list = strsplit(Subgroup, ",")) %>%
-  mutate(in_subgroup = purrr::map_lgl(Subgroup_list, ~ subgroup_name %in% trimws(.))) %>%
-  mutate(group = dplyr::case_when(
-    in_subgroup ~ subgroup_name,
-    Subgroup == "Unaffected" ~ "Unaffected",
-    TRUE ~ NA_character_
-  )) %>%
-  filter(!is.na(group))
+# Derive list of subgroups from metadata (exclude Unaffected)
+subgroup_list_raw <- unique(unlist(strsplit(trimws(sample_metadata_full$Subgroup), ",\\s*")))
+subgroups_to_analyze <- setdiff(subgroup_list_raw, c("Unaffected", ""))
+subgroups_to_analyze <- subgroups_to_analyze[!is.na(subgroups_to_analyze)]
 
-# Align metadata and counts
-sample_metadata$ID <- as.character(sample_metadata$ID)
-filtered_sample_ids <- sample_metadata$ID
-counts <- counts[, colnames(counts) %in% filtered_sample_ids, drop = FALSE]
-counts <- counts[, match(sample_metadata$ID, colnames(counts))]
+# Subgroups for which we show heatmaps and volcano in the report
+heatmap_display_subgroups <- c("Mito", "RBC")
+volcano_display_subgroup <- "RBC"
 
-# Safety check: ensure order match
-stopifnot(all(colnames(counts) == sample_metadata$ID))
-
-# Retrieve gene annotations
-genes_biomart <- retrieve_gene_info(values = gene_info$Ensembl_ID,
-                                    filters = "ensembl_gene_id_version")
-
-```
-
-## DESeq2 Analysis
-
-```{r, start analysis}
-# Ensure relevant columns are factors
-sample_metadata <- sample_metadata %>%
-  mutate(
-    Family = factor(Family),
-    Affected = factor(Affected),
-    Batch = factor(Batch),
-    Sex = factor(Sex),
-    Ancestry = factor(Ancestry),
-    Category = factor(Category),
-    group = factor(group)  # key design variable: subgroup vs. Unaffected
-  )
-
-# Create DESeqDataSet using group as the main condition
-dds <- DESeqDataSetFromMatrix(
-  countData = round(counts),
-  colData = sample_metadata,
-  design = ~ Batch + group
-)
-
-# Pre-filtering: keep genes with sufficient total counts
-keep <- rowSums(counts(dds)) >= 50
-dds <- dds[keep, ]
-
-# Run DESeq
-dds <- DESeq(dds)
-
-# Normalize counts
-counts_norm <- counts(dds, normalized = TRUE)
-```
-
-### Data transformation and visualization
-
-Perform count data transformation by variance stabilizing transformation (vst) on normalized counts.
-
-```{r, vsd}
-vsd <- vst(dds, blind = FALSE)
-```
-
-### Batch correction with limma
-
-```{r, limma}
-# Create output directory if it doesn't exist
-dir.create(file.path("output", outpath_var), recursive = TRUE, showWarnings = FALSE)
-
-# Extract VST-normalized counts
-counts_vst <- assay(vsd)
-write.csv(counts_vst, file.path("output", outpath_var, "counts_vst.csv"))
-
-# Construct design matrix using group
-mm <- model.matrix(~ Batch + group, colData(vsd))
-
-# Remove batch effect
-counts_vst_limma <- limma::removeBatchEffect(
-  counts_vst,
-  batch = vsd$Batch,
-  design = mm
-)
-
-# Save corrected matrix
-write.csv(counts_vst_limma, file = file.path("output", outpath_var, "counts_vst_limma.csv"))
-
-# Store back in DESeqTransform object
-vsd_limma <- vsd
-assay(vsd_limma) <- counts_vst_limma
-```
-
-### Sample distances heatmap
-
-```{r, sample-dist-heatmap}
-# Compute sample distance matrix from VST + batch-corrected expression
-sample_dists_all <- dist(t(assay(vsd_limma)))
-sample_dist_matrix_all <- as.matrix(sample_dists_all)
-
-# Label rows and columns using Batch and group
-rownames(sample_dist_matrix_all) <- paste(vsd_limma$Batch, vsd_limma$group, sep = " | ")
-colnames(sample_dist_matrix_all) <- paste(vsd_limma$ID, vsd_limma$group, sep = " | ")
-
-# Define color palette
-colors <- colorRampPalette(rev(brewer.pal(9, "Blues")))(255)
-
-# Plot distance heatmap
-pheatmap(sample_dist_matrix_all,
-  clustering_distance_rows = sample_dists_all,
-  clustering_distance_cols = sample_dists_all,
-  col = colors
+# Retrieve gene annotations once (shared across subgroups)
+genes_biomart <- retrieve_gene_info(
+  values = gene_info$Ensembl_ID,
+  filters = "ensembl_gene_id_version"
 )
 ```
 
-### Principal Components Analysis
+## Annotation colors
 
-Our below PCA shows that there does not seem to be a batch-related effect 
-occurring after using limma. However, we can see that our 3 male samples are 
-grouping. Given this knowledge, removing them from downstream analyses is the best option.
-
-```{r, principal-components-analysis-all}
-pca_data_all <- plotPCA(vsd_limma,
-  intgroup = c("Batch", "Variant"),
-  returnData = TRUE
-)
-percent_var_all <- round(100 * attr(pca_data_all, "percentVar"))
-
-ggplot(pca_data_all, aes(PC1, PC2)) +
-  geom_point(aes(colour = Variant, shape = Batch), size = 4) +
-  xlab(paste0("PC1: ", percent_var_all[1], "% variance")) +
-  ylab(paste0("PC2: ", percent_var_all[2], "% variance")) +
-  coord_fixed()
-```
-
-
-```{r, principal-components-analysis-category}
-# Run PCA on VST-transformed, batch-corrected data
-pca_data_all <- plotPCA(vsd_limma,
-  intgroup = c("group"),
-  returnData = TRUE
-)
-percent_var_all <- round(100 * attr(pca_data_all, "percentVar"))
-
-# Plot PCA with subgroup annotations
-ggplot(pca_data_all, aes(PC1, PC2)) +
-  geom_point(aes(colour = group), size = 5) +
-  scale_colour_manual(
-    values = c(
-      "#1b9e77", "#d95f02", "#7570b3", "#e7298a", "#66a61e",
-      "#e6ab02", "#a6761d", "#666666"
-    ),
-    name = "Group"
-  ) +
-  geom_text_repel(aes(label = name), size = 3) +
-  xlab(paste0("PC1: ", percent_var_all[1], "% variance")) +
-  ylab(paste0("PC2: ", percent_var_all[2], "% variance")) +
-  ggthemes::theme_clean()
-```
+`ann_colors` maps metadata columns to colors so heatmap legends match the publication styling.
 
 ```{r, heatmap-colors, out.height="570px", out.width ="800px"}
-# Define custom annotation colors for heatmaps or pheatmap plots
 study_group_colors <- c(
-  "ENE" = "#BFDFBF",   # Light green
-  "IMM" = "#EEBFEE",   # Light purple
-  "SOL" = "#FFFF33",   # Yellow
-  "STR" = "#BFBFFF",   # Light blue
-  "RBC" = "#FFD700",   # Gold
+  "ENE" = "#BFDFBF",
+  "IMM" = "#EEBFEE",
+  "SOL" = "#FFFF33",
+  "STR" = "#BFBFFF",
+  "RBC" = "#FFD700",
   "N/A" = "darkgray"
 )
 
@@ -273,320 +130,309 @@ ann_colors <- list(
 )
 ```
 
-### Comparison/Contrast of SPTA1 Affected vs Unaffected
+`draw_subgroup_heatmap()` wraps `ComplexHeatmap::pheatmap()` so the analysis loop and the report use identical colors and layout.
 
-```{r}
-# Perform differential expression analysis for selected subgroup vs Unaffected
-res_subgroup_vs_unaff <- results(dds, contrast = c("group", subgroup_name, "Unaffected"))
-
-# Define output file path
-res_file_name <- file.path("output", outpath_var, paste0("res_", subgroup_lower, "_vs_unaff.csv"))
-
-# Process and save results
-res_subgroup_vs_unaff_df <- process_and_save_results(res_subgroup_vs_unaff, res_file_name)
-
-# Sort by adjusted p-value
-res_subgroup_vs_unaff_df <- arrange(res_subgroup_vs_unaff_df, padj)
-
-# Filter: padj < 0.05
-res_subgroup_vs_unaff_df_05 <- subset(res_subgroup_vs_unaff_df, padj < 0.05)
-
-# Filter: padj < 0.1
-res_subgroup_vs_unaff_df_1 <- subset(res_subgroup_vs_unaff_df, padj < 0.1)
-
-# Further filter: padj < 0.1 & |log2FC| ≥ 1
-res_subgroup_vs_unaff_df_padj1_lfc1 <- subset(
-  res_subgroup_vs_unaff_df_1,
-  abs(log2FoldChange) >= 1
-)
-
-# Further filter: padj < 0.05 & |log2FC| ≥ 1
-res_subgroup_vs_unaff_df_padj05_lfc1 <- subset(
-  res_subgroup_vs_unaff_df_05,
-  abs(log2FoldChange) >= 1
-)
-
-# Print summary
-summary(res_subgroup_vs_unaff)
+```{r, heatmap-helper, include=FALSE}
+# Keep the heatmap drawing code in one place so the loop and report sections
+# render the same plot settings without relying on saved PNG paths.
+draw_subgroup_heatmap <- function(heatmap_matrix, annotation_col) {
+  ComplexHeatmap::draw(
+    ComplexHeatmap::pheatmap(
+      heatmap_matrix,
+      color = colorRampPalette(rev(brewer.pal(n = 9, name = "RdYlBu")))(50),
+      annotation_col = annotation_col,
+      annotation_colors = ann_colors,
+      fontsize = 7,
+      angle_col = "0",
+      cellheight = 10,
+      cellwidth = 24,
+      border_color = "black",
+      heatmap_legend_param = list(title = "")
+    )
+  )
+}
 ```
 
-## Heatmap of Significant Genes
+## Run DGE for all subgroups
 
+The loop runs one complete DGE run per subgroup. Full rank means every `Batch` × `group` combination needed for `~ Batch + group` is estimable; if not (often too few samples in a batch), we skip with a message. Outputs go to `output/subgroup-{name}-analysis/`.
 
-```{r, significant-genes-deseq-padj1-lfc1, out.height="100%", out.width ="100%"}
-# Ensure results are ordered by adjusted p-value
-res_subgroup_vs_unaff_df <- res_subgroup_vs_unaff_df[order(res_subgroup_vs_unaff_df$padj), ]
+Only RBC gets a saved volcano PNG. Mito, RBC padj &lt; 0.05 heatmaps, and the RBC volcano ggplot are also held in memory for the sections below.
 
-# Get top significant genes with padj < 0.1 and |log2FC| ≥ 1
-topgenes_byensemblid <- rownames(res_subgroup_vs_unaff_df_padj1_lfc1)
+```{r, run-all-subgroups, results="hold", fig.width=14, fig.height=10, out.width="100%"}
+subgroup_report_heatmaps <- list()
+subgroup_report_volcano <- NULL
 
-# Subset normalized matrix
-topgenes_mat <- assay(vsd_limma)[topgenes_byensemblid, , drop = FALSE]
+for (subgroup_name in subgroups_to_analyze) {
+  subgroup_lower <- tolower(subgroup_name)
+  outpath_var <- paste0("subgroup-", subgroup_lower, "-analysis")
+  out_dir <- file.path("output", outpath_var)
+  dir.create(out_dir, recursive = TRUE, showWarnings = FALSE)
 
-# Normalize expression by row (gene) mean
-if (nrow(topgenes_mat) == 1) {
-  topgenes_mat <- topgenes_mat - mean(topgenes_mat)
+  # Filter metadata to this subgroup + Unaffected
+  sample_metadata <- sample_metadata_full %>%
+    mutate(Subgroup_list = strsplit(Subgroup, ",")) %>%
+    mutate(in_subgroup = purrr::map_lgl(Subgroup_list, ~ subgroup_name %in% trimws(.))) %>%
+    mutate(group = dplyr::case_when(
+      in_subgroup ~ subgroup_name,
+      Subgroup == "Unaffected" ~ "Unaffected",
+      TRUE ~ NA_character_
+    )) %>%
+    filter(!is.na(group))
+
+  n_sub <- sum(sample_metadata$group == subgroup_name)
+  n_unaff <- sum(sample_metadata$group == "Unaffected")
+  if (n_sub < 1) {
+    message("Skipping ", subgroup_name, ": no samples in subgroup.")
+    next
+  }
+
+  # Subset counts to these samples and match order
+  sample_metadata$ID <- as.character(sample_metadata$ID)
+  counts <- counts_full[, colnames(counts_full) %in% sample_metadata$ID, drop = FALSE]
+  counts <- counts[, match(sample_metadata$ID, colnames(counts))]
+  stopifnot(all(colnames(counts) == sample_metadata$ID))
+
+  # DESeq2
+  sample_metadata <- sample_metadata %>%
+    mutate(
+      Family = factor(Family),
+      Affected = factor(Affected),
+      Batch = factor(Batch),
+      Sex = factor(Sex),
+      Ancestry = factor(Ancestry),
+      Category = factor(Category),
+      group = factor(group)
+    )
+
+  # Skip if design matrix is not full rank (e.g. only one batch in this subgroup)
+  mm <- model.matrix(~ Batch + group, sample_metadata)
+  if (qr(mm)$rank < ncol(mm)) {
+    message("Skipping ", subgroup_name, ": model matrix not full rank (e.g. batch and group confounded).")
+    next
+  }
+
+  dds <- DESeqDataSetFromMatrix(
+    countData = round(counts),
+    colData = sample_metadata,
+    design = ~ Batch + group
+  )
+  keep <- rowSums(counts(dds)) >= 50
+  dds <- dds[keep, ]
+  dds <- DESeq(dds)
+
+  # VST and limma batch correction
+  vsd <- vst(dds, blind = FALSE)
+  counts_vst <- assay(vsd)
+  write.csv(counts_vst, file.path(out_dir, "counts_vst.csv"))
+  mm <- model.matrix(~ Batch + group, colData(vsd))
+  counts_vst_limma <- limma::removeBatchEffect(counts_vst, batch = vsd$Batch, design = mm)
+  write.csv(counts_vst_limma, file.path(out_dir, "counts_vst_limma.csv"))
+  vsd_limma <- vsd
+  assay(vsd_limma) <- counts_vst_limma
+
+  # Results
+  res_subgroup_vs_unaff <- results(dds, contrast = c("group", subgroup_name, "Unaffected"))
+  res_file_name <- file.path(out_dir, paste0("res_", subgroup_lower, "_vs_unaff.csv"))
+  res_subgroup_vs_unaff_df <- process_and_save_results(res_subgroup_vs_unaff, res_file_name)
+  res_subgroup_vs_unaff_df <- arrange(res_subgroup_vs_unaff_df, padj)
+
+  res_subgroup_vs_unaff_df_05 <- subset(res_subgroup_vs_unaff_df, padj < 0.05)
+  res_subgroup_vs_unaff_df_1 <- subset(res_subgroup_vs_unaff_df, padj < 0.1)
+  res_subgroup_vs_unaff_df_padj1_lfc1 <- subset(res_subgroup_vs_unaff_df_1, abs(log2FoldChange) >= 1)
+  res_subgroup_vs_unaff_df_padj05_lfc1 <- subset(res_subgroup_vs_unaff_df_05, abs(log2FoldChange) >= 1)
+
+  # Annotated results with gene names
+  res_subgroup_vs_unaff_df_genename <- res_subgroup_vs_unaff_df
+  res_subgroup_vs_unaff_df_genename$Ensembl_ID <- row.names(res_subgroup_vs_unaff_df)
+  res_subgroup_vs_unaff_df_genename <- merge(
+    res_subgroup_vs_unaff_df_genename,
+    gene_info,
+    by = "Ensembl_ID",
+    all.x = TRUE
+  )
+  res_subgroup_vs_unaff_df_genename <- res_subgroup_vs_unaff_df_genename[
+    , c("gene_name", "Ensembl_ID", setdiff(names(res_subgroup_vs_unaff_df_genename), c("gene_name", "Ensembl_ID")))
+  ]
+  res_subgroup_vs_unaff_df_genename <- res_subgroup_vs_unaff_df_genename[
+    order(res_subgroup_vs_unaff_df_genename$padj),
+  ]
+  write.csv(
+    res_subgroup_vs_unaff_df_genename,
+    file.path(out_dir, "res_subgroup_vs_unaff_df_genename.csv"),
+    row.names = FALSE
+  )
+
+  # Filtered result CSVs
+  process_and_save_filtered_results(
+    res_subgroup_vs_unaff_df_genename,
+    padj_threshold = 0.05, lfc_threshold = NULL,
+    outpath = outpath_var,
+    filename = paste0("res_", subgroup_lower, "_vs_unaff_df_genename_05.csv")
+  )
+  process_and_save_filtered_results(
+    res_subgroup_vs_unaff_df_genename,
+    padj_threshold = 0.05, lfc_threshold = 1,
+    outpath = outpath_var,
+    filename = paste0("res_", subgroup_lower, "_vs_unaff_df_genename_padj05_lfc1.csv")
+  )
+  process_and_save_filtered_results(
+    res_subgroup_vs_unaff_df_genename,
+    padj_threshold = 0.1, lfc_threshold = NULL,
+    outpath = outpath_var,
+    filename = paste0("res_", subgroup_lower, "_vs_unaff_df_genename_padj1.csv")
+  )
+  process_and_save_filtered_results(
+    res_subgroup_vs_unaff_df_genename,
+    padj_threshold = 0.1, lfc_threshold = 1,
+    outpath = outpath_var,
+    filename = paste0("res_", subgroup_lower, "_vs_unaff_df_genename_padj1_lfc1.csv")
+  )
+
+  # Heatmaps: build matrix and save PNG for every subgroup
+  res_subgroup_vs_unaff_df <- res_subgroup_vs_unaff_df[order(res_subgroup_vs_unaff_df$padj), ]
+  ensembl_to_gene <- setNames(gene_info$gene_name, gene_info$Ensembl_ID)
+
+  # Heatmap padj < 0.1, |log2FC| >= 1
+  topgenes_byensemblid <- rownames(res_subgroup_vs_unaff_df_padj1_lfc1)
+  if (length(topgenes_byensemblid) > 0) {
+    topgenes_mat <- assay(vsd_limma)[topgenes_byensemblid, , drop = FALSE]
+    if (nrow(topgenes_mat) == 1) {
+      topgenes_mat <- topgenes_mat - mean(topgenes_mat)
+    } else {
+      topgenes_mat <- topgenes_mat - rowMeans(topgenes_mat)
+    }
+    rownames(topgenes_mat) <- ensembl_to_gene[rownames(topgenes_mat)]
+    topgenes_mat <- topgenes_mat[order(res_subgroup_vs_unaff_df$padj[topgenes_byensemblid]), , drop = FALSE]
+    annotation_df <- as.data.frame(colData(vsd_limma)[, c("group", "Affected"), drop = FALSE])
+    png(file.path(out_dir, paste0(subgroup_name, "_padj1_heatmap.png")), width = 14, height = 10, units = "in", res = 1200)
+    draw_subgroup_heatmap(topgenes_mat, annotation_df)
+    dev.off()
+  }
+
+  # Heatmap padj < 0.05, |log2FC| >= 1
+  topgenes_byensemblid_05 <- rownames(res_subgroup_vs_unaff_df_padj05_lfc1)
+  if (length(topgenes_byensemblid_05) > 0) {
+    topgenes_mat_05 <- assay(vsd_limma)[topgenes_byensemblid_05, , drop = FALSE]
+    if (nrow(topgenes_mat_05) == 1) {
+      topgenes_mat_05 <- topgenes_mat_05 - mean(topgenes_mat_05)
+    } else {
+      topgenes_mat_05 <- topgenes_mat_05 - rowMeans(topgenes_mat_05)
+    }
+    rownames(topgenes_mat_05) <- ensembl_to_gene[rownames(topgenes_mat_05)]
+    topgenes_mat_05 <- topgenes_mat_05[order(res_subgroup_vs_unaff_df$padj[topgenes_byensemblid_05]), , drop = FALSE]
+    df_ann <- as.data.frame(colData(vsd_limma)[, "group", drop = FALSE])
+    if (subgroup_name %in% heatmap_display_subgroups) {
+      # Store the heatmap inputs so the report can redraw the same figure inline.
+      subgroup_report_heatmaps[[subgroup_name]] <- list(
+        mat = topgenes_mat_05,
+        annotation_col = df_ann
+      )
+    }
+    png(file.path(out_dir, paste0(subgroup_name, "_significant_padj05_heatmap.png")), width = 10, height = 8, units = "in", res = 300)
+    draw_subgroup_heatmap(topgenes_mat_05, df_ann)
+    dev.off()
+  }
+
+  # Volcano: save only for RBC so it is not overwritten
+  if (subgroup_name == volcano_display_subgroup) {
+    output_volcano_file <- file.path(out_dir, paste0("volcano-plot-", subgroup_lower, ".png"))
+    subgroup_report_volcano <- generate_volcano_plot(
+      res_data = res_subgroup_vs_unaff_df_genename,
+      gene_labels = "gene_name",
+      x_col = "log2FoldChange",
+      y_col = "padj",
+      select_genes = "",
+      xlab_text = bquote(~ Log[2] ~ "fold change"),
+      ylab_text = bquote(~ -Log[10] ~ "padj"),
+      p_cutoff = 0.05,
+      fc_cutoff = 1.0,
+      xlim_range = c(-25, 25),
+      ylim_range = c(0, 7),
+      output_file = output_volcano_file,
+      print_plot = FALSE
+    )
+  }
+
+  # MA-plot significant genes CSV
+  maplot <- generate_ma_plot(
+    data = res_subgroup_vs_unaff_df,
+    genenames = as.vector(res_subgroup_vs_unaff_df_genename$gene_name),
+    main_title = paste0(subgroup_name, " vs Unaffected MA Plot"),
+    top_genes = 30
+  )
+  significant_data <- maplot$data %>%
+    filter(grepl("Up|Down", sig)) %>%
+    mutate(direction = ifelse(grepl("Up", sig), "Up", "Down")) %>%
+    dplyr::select(-sig)
+  write.csv(
+    significant_data,
+    file.path(out_dir, paste0("res_", subgroup_lower, "_vs_unaff_siggenes.csv")),
+    row.names = FALSE
+  )
+
+  # Save RData for this subgroup (for optional reload)
+  save(
+    dds, vsd, vsd_limma,
+    res_subgroup_vs_unaff_df, res_subgroup_vs_unaff_df_genename,
+    res_subgroup_vs_unaff_df_padj05_lfc1, res_subgroup_vs_unaff_df_padj1_lfc1,
+    file = file.path(out_dir, paste0(subgroup_name, "-subgroup-analysis.RData"))
+  )
+
+  message("Processed: ", subgroup_name, " (n = ", n_sub, " vs Unaffected n = ", n_unaff, ")")
+}
+```
+
+## Heatmaps (Mito and RBC only)
+
+Every subgroup gets padj &lt; 0.1 and padj &lt; 0.05 heatmaps on disk. Here, Mito and RBC padj &lt; 0.05 panels reuse the batch-corrected VST matrix from the loop, row-mean centered so color shows deviation from each gene’s average across displayed samples. Columns are annotated with `group` (subgroup vs Unaffected).
+
+### Mito vs Unaffected
+
+Genes pass padj &lt; 0.05 and |log2FC| ≥ 1 for Mito vs Unaffected in this run.
+
+```{r, heatmap-mito-padj05, fig.width=10, fig.height=8, echo=FALSE}
+hm_mito <- subgroup_report_heatmaps[["Mito"]]
+if (!is.null(hm_mito)) {
+  draw_subgroup_heatmap(hm_mito$mat, hm_mito$annotation_col)
 } else {
-  topgenes_mat <- topgenes_mat - rowMeans(topgenes_mat)
+  message("No Mito padj<0.05 heatmap in this run (no significant genes or subgroup skipped).")
 }
-
-# Map Ensembl IDs to gene symbols
-ensembl_to_gene <- setNames(gene_info$gene_name, gene_info$Ensembl_ID)
-rownames(topgenes_mat) <- ensembl_to_gene[rownames(topgenes_mat)]
-
-# Re-order matrix by significance
-topgenes_mat <- topgenes_mat[order(res_subgroup_vs_unaff_df$padj[topgenes_byensemblid]), , drop = FALSE]
-
-# Prepare annotation dataframe
-annotation_df <- colData(vsd_limma) %>%
-  as.data.frame() %>%
-  dplyr::select(group, Affected)
-
-# Define output path using lowercase subgroup name
-outpath_subgroup <- paste0("subgroup-", tolower(subgroup_name), "-analysis")
-
-# Ensure the directory exists
-if (!dir.exists(file.path("output", outpath_subgroup))) {
-  dir.create(file.path("output", outpath_subgroup), recursive = TRUE)
-}
-
-# Save heatmap to PNG
-heatmap_file <- file.path("output", outpath_subgroup, paste0(subgroup_name, "_padj1_heatmap.png"))
-
-png(heatmap_file, width = 14, height = 10, units = "in", res = 1200)
-
-ComplexHeatmap::pheatmap(
-  topgenes_mat,
-  color = colorRampPalette(rev(brewer.pal(n = 9, name = "RdYlBu")))(50),
-  annotation_col = annotation_df,
-  annotation_colors = ann_colors,
-  fontsize = 7,
-  angle_col = c("0"),
-  cellheight = 10,
-  cellwidth = 24,
-  border_color = "black",
-  heatmap_legend_param = list(title = "")
-)
-
-dev.off()
 ```
 
+### RBC vs Unaffected
 
-```{r, significant-genes-deseq-lfc1, out.height="800px", out.width ="1400px"}
-# Order results by adjusted p-value
-res_subgroup_vs_unaff_df <- res_subgroup_vs_unaff_df[order(res_subgroup_vs_unaff_df$padj), ]
+Same cutoffs for RBC vs Unaffected.
 
-# Get top significant genes with |log2FoldChange| >= 1 and padj < 0.05
-topgenes_byensemblid <- rownames(res_subgroup_vs_unaff_df_padj05_lfc1)
-
-# Extract matrix subset
-topgenes_subgroup_vs_unaff_05 <- assay(vsd_limma)[topgenes_byensemblid, , drop = FALSE]
-
-# Normalize each row by subtracting its mean
-if (nrow(topgenes_subgroup_vs_unaff_05) == 1) {
-  topgenes_subgroup_vs_unaff_05 <- topgenes_subgroup_vs_unaff_05 - mean(topgenes_subgroup_vs_unaff_05)
+```{r, heatmap-rbc-padj05, fig.width=10, fig.height=8, echo=FALSE}
+hm_rbc <- subgroup_report_heatmaps[["RBC"]]
+if (!is.null(hm_rbc)) {
+  draw_subgroup_heatmap(hm_rbc$mat, hm_rbc$annotation_col)
 } else {
-  topgenes_subgroup_vs_unaff_05 <- topgenes_subgroup_vs_unaff_05 - rowMeans(topgenes_subgroup_vs_unaff_05)
+  message("No RBC padj<0.05 heatmap in this run (no significant genes or subgroup skipped).")
 }
-
-# Map Ensembl IDs to gene names
-ensembl_to_gene <- setNames(gene_info$gene_name, gene_info$Ensembl_ID)
-current_ensembl_ids <- rownames(topgenes_subgroup_vs_unaff_05)
-new_row_names <- ensembl_to_gene[current_ensembl_ids]
-rownames(topgenes_subgroup_vs_unaff_05) <- new_row_names
-
-# Order by significance
-topgenes_subgroup_vs_unaff_05 <- topgenes_subgroup_vs_unaff_05[order(res_subgroup_vs_unaff_df$padj[topgenes_byensemblid]), , drop = FALSE]
-
-# Prepare sample annotation
-df <- colData(vsd_limma) %>%
-  as.data.frame() %>%
-  dplyr::select(group)
-
-# Define output path using lowercase subgroup name
-outpath_subgroup <- paste0("subgroup-", tolower(subgroup_name), "-analysis")
-
-# Ensure the directory exists
-if (!dir.exists(file.path("output", outpath_subgroup))) {
-  dir.create(file.path("output", outpath_subgroup), recursive = TRUE)
-}
-
-# Define file name
-heatmap_file <- file.path("output", outpath_subgroup, paste0(subgroup_name, "_significant_padj05_heatmap.png"))
-
-# Save heatmap to PNG
-png(heatmap_file, width = 10, height = 8, units = "in", res = 300)
-ComplexHeatmap::pheatmap(
-  topgenes_subgroup_vs_unaff_05,
-  color = colorRampPalette(rev(brewer.pal(n = 9, name = "RdYlBu")))(50),
-  annotation_col = df,
-  annotation_colors = ann_colors,
-  fontsize = 7,
-  angle_col = c("0"),
-  cellheight = 10,
-  cellwidth = 24,
-  border_color = "black",
-  heatmap_legend_param = list(title = "")
-)
-dev.off()
 ```
 
+## Volcano plot (RBC only)
 
-```{r, all-genes-list}
-# Extract relevant columns from genes_biomart (first and last columns)
-gb_df <- genes_biomart[, c(1, ncol(genes_biomart))]
+The volcano plot shows log2 fold change (RBC vs Unaffected) on the x-axis and −log10 FDR (`padj`) on the y-axis. Points above the horizontal line pass padj &lt; 0.05, and vertical lines mark |log2FC| = 1. The figure is the ggplot from the loop; a copy is still written to `output/subgroup-rbc-analysis/volcano-plot-rbc.png`.
 
-# Copy results dataframe to add gene annotations
-res_subgroup_vs_unaff_df_genename <- res_subgroup_vs_unaff_df
-
-# Add Ensembl IDs as a new column
-res_subgroup_vs_unaff_df_genename$Ensembl_ID <- row.names(res_subgroup_vs_unaff_df)
-
-# Merge gene annotation information from gene_info using Ensembl IDs
-res_subgroup_vs_unaff_df_genename <- merge(
-  x = res_subgroup_vs_unaff_df_genename,
-  y = gene_info,
-  by = "Ensembl_ID",
-  all.x = TRUE
-)
-
-# Reorder columns to place gene_name and Ensembl_ID at the front
-res_subgroup_vs_unaff_df_genename <- res_subgroup_vs_unaff_df_genename[
-  ,
-  c("gene_name", "Ensembl_ID", setdiff(names(res_subgroup_vs_unaff_df_genename), c("gene_name", "Ensembl_ID")))
-]
-
-# Sort the dataframe by adjusted p-value (padj)
-res_subgroup_vs_unaff_df_genename <- res_subgroup_vs_unaff_df_genename[
-  order(res_subgroup_vs_unaff_df_genename$padj),
-]
-
-# Define output file path for the annotated results
-res_file_genename <- file.path(
-  "output", outpath_var,
-  "res_subgroup_vs_unaff_df_genename.csv"
-)
-
-# Save the annotated results to a CSV file
-write.csv(res_subgroup_vs_unaff_df_genename, file = res_file_genename, row.names = FALSE)
-```
-
-## Volcano Plot
-```{r, volcano-plot, out.height="1000px", out.width ="1600px"}
-# Parameters for the function
-res_data <- res_subgroup_vs_unaff_df_genename
-gene_labels <- "gene_name"
-x_col <- "log2FoldChange"
-y_col <- "padj"
-select_genes <- ""
-xlab_text <- bquote(~ Log[2] ~ "fold change")
-ylab_text <- bquote(~ -Log[10] ~ "padj")
-xlim_range <- c(-25, 25)
-ylim_range <- c(0, 7)
-output_volcano_file <- file.path("output", outpath_var, paste0("volcano-plot-", tolower(subgroup_name), ".png"))
-
-# Generate and save the volcano plot
-generate_volcano_plot(
-  res_data = res_data, gene_labels = gene_labels, x_col = x_col,
-  y_col = y_col, select_genes = select_genes, xlab_text = xlab_text,
-  ylab_text = ylab_text, p_cutoff = 0.05, fc_cutoff = 1.0,
-  xlim_range = xlim_range, ylim_range = ylim_range,
-  output_file = output_volcano_file
-)
-```
-
-
-```{r, significant-with-genename-padj-lfc}
-# Process and save the data
-process_and_save_filtered_results(res_subgroup_vs_unaff_df_genename,
-  padj_threshold = 0.05, lfc_threshold = NULL,
-  outpath = outpath_var,
-  filename = paste0("res_", subgroup_lower, "_vs_unaff_df_genename_05.csv")
-)
-
-process_and_save_filtered_results(res_subgroup_vs_unaff_df_genename,
-  padj_threshold = 0.05, lfc_threshold = 1,
-  outpath = outpath_var,
-  filename = paste0("res_", subgroup_lower, "_vs_unaff_df_genename_padj05_lfc1.csv")
-)
-
-process_and_save_filtered_results(res_subgroup_vs_unaff_df_genename,
-  padj_threshold = 0.1, lfc_threshold = NULL,
-  outpath = outpath_var,
-  filename = paste0("res_", subgroup_lower, "_vs_unaff_df_genename_padj1.csv")
-)
-
-process_and_save_filtered_results(res_subgroup_vs_unaff_df_genename,
-  padj_threshold = 0.1, lfc_threshold = 1,
-  outpath = outpath_var,
-  filename = paste0("res_", subgroup_lower, "_vs_unaff_df_genename_padj1_lfc1.csv")
-)
-```
-
-```{r, maplot-samples}
-# Filter gene names that are not Ensembl IDs
-filtered_gene_names <- res_subgroup_vs_unaff_df_genename$gene_name[!grepl("^ENS", res_subgroup_vs_unaff_df_genename$gene_name)]
-
-# Generate MA plot
-maplot <- generate_ma_plot(
-  data = res_subgroup_vs_unaff_df,
-  genenames = as.vector(res_subgroup_vs_unaff_df_genename$gene_name),
-  main_title = paste0(subgroup_name, " vs Unaffected MA Plot"),
-  top_genes = 30
-)
-maplot
-
-# Extract significant genes from the MA plot
-significant_data <- maplot$data %>%
-  filter(grepl("Up|Down", sig)) %>%
-  mutate(direction = ifelse(grepl("Up", sig), "Up", "Down")) %>%
-  dplyr::select(-sig)
-
-# Display a paged table of significant genes
-paged_table(as.data.frame(significant_data), options = list(rows.print = 30))
-
-# Save significant genes to CSV
-output_maplot_siggenes <- file.path(
-  "output", outpath_var,
-  paste0("res_", subgroup_lower, "_vs_unaff_siggenes.csv")
-)
-write.csv(significant_data, file = output_maplot_siggenes, row.names = FALSE)
-```
-
-
-```{r, stringdb-network-significant}
-# Initialize STRINGdb
-string_db <- STRINGdb$new(
-  version = "11.5",
-  species = 9606,
-  score_threshold = 100,
-  network_type = "full",
-  input_directory = ""
-)
-
-# Map significant genes to STRING IDs
-mapped_degs <- string_db$map(significant_data, "name", removeUnmappedRows = TRUE)
-
-if (nrow(mapped_degs) > 0) {
-  # Limit to top 29 STRING IDs
-  hits <- head(mapped_degs$STRING_id, 29)
-  
-  # Add logFC-based coloring
-  mapped_degs_dec <- string_db$add_diff_exp_color(mapped_degs, logFcColStr = "lfc")
-  
-  # Generate payload and plot network
-  payload_id <- string_db$post_payload(mapped_degs_dec$STRING_id, colors = mapped_degs_dec$color)
-  string_db$plot_network(hits, payload_id = payload_id)
+```{r, volcano-rbc, fig.width=14, fig.height=8, echo=FALSE}
+if (!is.null(subgroup_report_volcano)) {
+  print(subgroup_report_volcano)
 } else {
-  message("No STRING IDs mapped — skipping STRING network plot.")
+  message("RBC volcano plot not available (RBC subgroup skipped or not in subgroups_to_analyze).")
 }
 ```
 
-### Save data
+## Output summary
 
-```{r, save-data}
-outpath_subgroup <- paste0("subgroup-", tolower(subgroup_name), "-analysis")
+For each subgroup, the following were written under `output/subgroup-{name}-analysis/` for reproducibility and sharing:
 
-save.image(file = file.path("output", outpath_subgroup, paste0(subgroup_name, "-subgroup-analysis.RData")))
-```
-
+- `counts_vst.csv`, `counts_vst_limma.csv`
+- `res_{name}_vs_unaff.csv`, `res_subgroup_vs_unaff_df_genename.csv`
+- Filtered result CSVs (padj 0.05 / 0.1, with and without LFC threshold)
+- `{Subgroup}_padj1_heatmap.png`, `{Subgroup}_significant_padj05_heatmap.png`
+- `res_{name}_vs_unaff_siggenes.csv` (MA-plot significant genes)
+- For RBC only: `volcano-plot-rbc.png`
+- `{Subgroup}-subgroup-analysis.RData` (DESeq2 and result objects for reproducibility)

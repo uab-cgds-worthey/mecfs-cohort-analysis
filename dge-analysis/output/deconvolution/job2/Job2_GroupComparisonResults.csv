@@ -1,0 +1,23 @@
+CellType,p,p.adj,significance
+B cells naive,0.14938300080728867,0.5432245415753663,ns
+B cells memory,0.68622412910879,0.8778148147872502,ns
+Plasma cells,0.9784256782111858,1,ns
+T cells CD8,0.7022518518298002,0.8778148147872502,ns
+T cells CD4 naive,0.18107484719178873,0.5432245415753663,ns
+T cells CD4 memory resting,0.900967464985456,1,ns
+T cells CD4 memory activated,0.22553019949724948,0.5638254987431237,ns
+T cells follicular helper,NA,NA,
+T cells regulatory (Tregs),0.45093612971240327,0.8455052432107562,ns
+T cells gamma delta,NA,NA,
+NK cells resting,0.0784748651315368,0.392374325657684,ns
+NK cells activated,NA,NA,
+Monocytes,0.04217250349184382,0.392374325657684,ns
+Macrophages M0,0.6803378690641468,0.8778148147872502,ns
+Macrophages M1,NA,NA,
+Macrophages M2,0.628745176273833,0.8778148147872502,ns
+Dendritic cells resting,NA,NA,
+Dendritic cells activated,0.053973170250725185,0.392374325657684,ns
+Mast cells resting,0.32819743974166765,0.7032802280178593,ns
+Mast cells activated,NA,NA,
+Eosinophils,NA,NA,
+Neutrophils,1,1,ns

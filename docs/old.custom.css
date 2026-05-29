@@ -1,0 +1,88 @@
+/* === Global Font (optional) === */
+body {
+  font-family: -apple-system, "Arimo", sans-serif, "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol", "Noto Color Emoji";
+}
+
+h1, h2, h3, h4, h5, h6 {
+  font-family: "Source Sans Pro", "Noto Sans", "Roboto", sans-serif;
+}
+
+/* === Primary (buttons, links, nav) === */
+.btn-primary,
+.label-primary,
+.bg-primary,
+.text-primary {
+  background-color: #1d5731 !important;
+  border-color: #1d5731 !important;
+  color: #fff !important;
+}
+
+.btn-default {
+    color: #ffffff;
+    background-color: #1d5731 !important;
+    border-color: rgba(0, 0, 0, 0);
+}
+
+/* === Success === */
+.btn-success,
+.label-success,
+.bg-success {
+  background-color: #1d5731 !important;
+  border-color: #1d5731 !important;
+}
+
+/* === Info === */
+.btn-info,
+.label-info,
+.bg-info {
+  background-color: #4ec6eb !important;
+  border-color: #4ec6eb !important;
+}
+
+/* === Warning === */
+.btn-warning,
+.label-warning,
+.bg-warning {
+  background-color: #fab617 !important;
+  border-color: #fab617 !important;
+  color: #000 !important;
+}
+
+/* === Danger === */
+.btn-danger,
+.label-danger,
+.bg-danger {
+  background-color: #dc3545 !important;
+  border-color: #dc3545 !important;
+}
+
+/* === Links and interactive elements === */
+a,
+a:hover,
+a:focus {
+  color: #1d5731;
+}
+
+/* === Navbar color override === */
+.navbar-default {
+  background-color: #1d5731;
+  border-color: #1d5731;
+}
+.navbar-default .navbar-brand,
+.navbar-default .navbar-nav > li > a {
+  color: #fff;
+}
+.navbar-default .navbar-nav > li > a:hover {
+  color: #fab617;
+}
+
+/* === Custom Text Colors === */
+.text-yellow {
+  color: #fab617 !important;
+}
+.text-cyan {
+  color: #4ec6eb !important;
+}
+.text-green {
+  color: #1d5731 !important;
+}

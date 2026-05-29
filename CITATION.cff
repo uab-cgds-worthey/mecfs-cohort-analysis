@@ -1,0 +1,49 @@
+# Citation File Format 1.2.0
+# https://docs.github.com/en/repositories/managing-your-repositorys-settings-and-features/customizing-your-repository/about-citation-files
+# https://citation-file-format.github.io/
+
+cff-version: 1.2.0
+message: "If you use this software or code, please cite the associated paper as below."
+title: "ME/CFS Cohort Analysis"
+version: 1.0.0
+date-released: 2026-02-10
+url: "https://github.com/uab-cgds-worthey/mecfs-cohort-analysis"
+doi: 10.5281/zenodo.17612945
+repository-code: "https://github.com/uab-cgds-worthey/mecfs-cohort-analysis"
+
+# Preferred citation: the published journal article
+# Journal timeline: Received 08 September 2025; Accepted 11 December 2025;
+# Published 24 December 2025; Version of record 10 February 2026.
+# DOI: https://doi.org/10.1186/s12967-025-07586-w
+preferred-citation:
+  type: article
+  title: "Uncovering the genetic architecture of ME/CFS: a precision approach reveals impact of rare monogenic variation"
+  authors:
+    - family-names: "Birch"
+      given-names: "Camille L."
+    - family-names: "Wilk"
+      given-names: "Brandon M."
+    - family-names: "Gajapathy"
+      given-names: "Manavalan"
+    - family-names: "Hutchins"
+      given-names: "Shaurita D."
+    - family-names: "Kaur"
+      given-names: "Gurpreet"
+    - family-names: "Brown"
+      given-names: "Donna M."
+    - family-names: "Mamidi"
+      given-names: "Tarun K. K."
+    - family-names: "Hodgin"
+      given-names: "Kathleen S."
+    - family-names: "Turgut"
+      given-names: "Alp"
+    - family-names: "Younger"
+      given-names: "Jarred W."
+    - family-names: "Worthey"
+      given-names: "Elizabeth A."
+  journal: "Journal of Translational Medicine"
+  volume: 24
+  start: 168
+  year: 2026
+  date-published: 2025-12-24
+  doi: "10.1186/s12967-025-07586-w"

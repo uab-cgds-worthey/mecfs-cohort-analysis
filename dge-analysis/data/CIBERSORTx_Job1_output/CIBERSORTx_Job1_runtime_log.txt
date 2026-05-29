@@ -1,0 +1,29 @@
+>Running CIBERSORTx GEP imputation (representative profiles only)...
+>[Options] mixture: files/shutchins@uab.edu/salmon-merged-gene_counts_length_scaled_cleaned.tsv
+>[Options] sigmatrix: files/common/LM22.update-gene-symbols.txt
+>[Options] classes: files/common/LM10_merged_classes.txt
+>[Options] threads: 7
+>[Options] nsampling: 30
+>[Options] redo: TRUE [to rerun CIBERSORT, set 'redocibersort' to TRUE]
+>[Options] QN: FALSE
+>[Options] outdir: files/shutchins@uab.edu/results/
+>[Options] label: Job1
+>Estimating cell proportions...
+done.
+>Loaded 29 mixture samples, 37484 genes, and 10 cell subsets...
+>Imputing representative cell type GEPs...done.
+>Writing output to disk...done.
+>Running time (sec): 719
+  adding: CIBERSORTxGEP_Job1_Fractions.txt (deflated 54%)
+  adding: CIBERSORTxGEP_Job1_GEPs.txt (deflated 55%)
+  adding: CIBERSORTxGEP_Job1_GEPs_CVs.txt (deflated 52%)
+  adding: CIBERSORTxGEP_Job1_GEPs_Filtered.txt (deflated 68%)
+  adding: CIBERSORTxGEP_Job1_GEPs_Pvals.txt (deflated 58%)
+  adding: CIBERSORTxGEP_Job1_GEPs_Qvals.txt (deflated 90%)
+  adding: CIBERSORTxGEP_Job1_GEPs_StdErrs.txt (deflated 52%)
+  adding: CIBERSORTxGEP_Job1_GEPs_ThresholdPlots.jpg (deflated 2%)
+  adding: CIBERSORTxGEP_Job1_GEPs_ThresholdPlots.pdf (deflated 35%)
+  adding: CIBERSORTxGEP_Job1_SM_GEPs_Filtered.txt (deflated 68%)
+  adding: CIBERSORTxGEP_Job1_Weights.txt (deflated 54%)
+  adding: CIBERSORTx_Job1_error_log.txt (stored 0%)
+  adding: CIBERSORTx_Job1_runtime_log.txt

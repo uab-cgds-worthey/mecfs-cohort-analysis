@@ -8,23 +8,42 @@ editor_options:
   chunk_output_type: console
 ---
 
-This site presents a differential gene expression analysis conducted by CGDS on 23 individuals diagnosed with ME/CFS using bulk RNA-seq.
+This site presents a differential gene expression analysis from CGDS on bulk RNA-seq from 23 individuals diagnosed with ME/CFS. DGE means testing which genes change in mean expression between defined groups while adjusting for batch and other model terms in the statistical design.
 
-Data was processed with the [nf-core/rnaseq](https://nf-co.re/rnaseq) pipeline and quantified using Salmon to identify transcriptional changes related to immune and metabolic dysregulation.
+Counts come from the [nf-core/rnaseq](https://nf-co.re/rnaseq) pipeline with Salmon quantification; we interpret results in the context of immune and metabolic readouts described in the linked pages.
 
-The site was built with [workflowr](https://jdblischak.github.io/workflowr/) to ensure transparency and reproducibility.
-
+[workflowr](https://jdblischak.github.io/workflowr/) ties each HTML page to a specific Git commit so the rendered report is the same code and data the authors used.
 
 ## Study Design and Differential Expression Results
 
 1. [Background: Study Overview and Methods](background.html)  
-2. [Subsetted Differential Gene Expression (DGE) Analysis](subsetted-condition-analysis.html)
+2. [Subsetted Differential Gene Expression (DGE) Analysis](subsetted-condition-analysis.html)  
+3. [Deconvolution Analysis](deconvolution.html)
+4. [Subgroup vs Unaffected DGE Analysis](subgroup-analysis.html) *NOTE: this is in the Supplemental Figures.*
 
 ## Results and Data Availability
 
 - Figures, statistics, and annotations from this analysis are presented in the pages above.  
 - Input files were generated via Salmon quantification and are located in the `data/star-salmon` directory of the GitHub repository.  
+- A single RData file containing key objects from the publication analysis is available: [publication-analysis.RData](https://s3.lts.rc.uab.edu/cgds-public/mecfs-cohort-analysis/publication-analysis.RData).  
+  - The file includes DESeq2 objects (`dds`, `vsd`, `counts_vst`, `vsd_limma`) and key result tables (`res_aff_vs_unaff_sub`, `res_aff_vs_unaff_df_padj1_lfc1_sub`, `res_aff_vs_unaff_df_padj05_lfc1_sub`).  
 - You can also browse the full source code and workflow on [GitHub](https://github.com/uab-cgds-worthey/mecfs-cohort-analysis).
+
+<p style="margin-top: 1.25rem;">
+  <a href="https://s3.lts.rc.uab.edu/cgds-public/mecfs-cohort-analysis/publication-analysis.RData" class="btn btn-primary px-4 py-2" download>
+    <i class="fa fa-download" aria-hidden="true"></i> Download publication-analysis.RData
+  </a>
+</p>
+
+## Reproducibility
+
+To rerun this analysis, follow the README [here](https://github.com/uab-cgds-worthey/mecfs-cohort-analysis/blob/pca-deconvolution/dge-analysis/README.md).
+
+## Citation
+
+If you use this analysis or the associated data, please cite:
+
+> Birch, C.L., Wilk, B.M., Gajapathy, M. et al. Uncovering the genetic architecture of ME/CFS: a precision approach reveals impact of rare monogenic variation. *J Transl Med* 24, 168 (2026). [https://doi.org/10.1186/s12967-025-07586-w](https://doi.org/10.1186/s12967-025-07586-w)
 
 ## License
 
