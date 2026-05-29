@@ -92,10 +92,14 @@ heatmap_display_subgroups <- c("Mito", "RBC")
 volcano_display_subgroup <- "RBC"
 
 # Retrieve gene annotations once (shared across subgroups)
-genes_biomart <- retrieve_gene_info(
-  values = gene_info$Ensembl_ID,
-  filters = "ensembl_gene_id_version"
-)
+# BioMart calls are disabled here because the CI environment can fail across
+# all configured hosts, which blocks subgroup rendering even when the rest of
+# the analysis is healthy. Re-enable when a stable annotation source is
+# available for automated builds.
+# genes_biomart <- retrieve_gene_info(
+#   values = gene_info$Ensembl_ID,
+#   filters = "ensembl_gene_id_version"
+# )
 ```
 
 ## Annotation colors

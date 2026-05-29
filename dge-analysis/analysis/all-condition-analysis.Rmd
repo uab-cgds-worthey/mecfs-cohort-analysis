@@ -80,7 +80,13 @@ counts <- counts[, !(names(counts) %in% drop)] # remove both columns
 # Check that data is ordered properly
 sample_metadata <- check_order(sample_metadata = sample_metadata, counts = counts)
 
-genes_biomart <- retrieve_gene_info(values = gene_info$Ensembl_ID, filters = "ensembl_gene_id_version")
+# BioMart calls are disabled here because the CI environment can fail across
+# all configured hosts, which blocks the rest of the report from rendering.
+# Re-enable when a stable annotation source is available for automated builds.
+# genes_biomart <- retrieve_gene_info(
+#   values = gene_info$Ensembl_ID,
+#   filters = "ensembl_gene_id_version"
+# )
 ```
 
 ## DESeq2 Analysis
