@@ -30,7 +30,8 @@ jobs:
             list.files("dge-analysis/analysis", pattern = "\\.[Rr]md$", full.names = TRUE),
             list.files("dge-analysis/code", pattern = "\\.[Rr]$", full.names = TRUE)
           )
-          lintr::lint(lint_paths)
+          lint_results <- unlist(lapply(lint_paths, lintr::lint), recursive = FALSE)
+          print(lint_results)
         shell: Rscript {0}
         env:
           LINTR_ERROR_ON_LINT: false
