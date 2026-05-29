@@ -323,7 +323,7 @@ ComplexHeatmap::pheatmap(topgenes_aff_vs_unaff_05, color = colorRampPalette(rev(
 ```
 
 ```{r, all-genes-list}
-gb_df <- genes_biomart[, c(1, ncol(genes_biomart))]
+# gb_df <- genes_biomart[, c(1, ncol(genes_biomart))]
 res_aff_vs_unaff_df_genename <- res_aff_vs_unaff_df
 res_aff_vs_unaff_df_genename$Ensembl_ID <- row.names(res_aff_vs_unaff_df)
 res_aff_vs_unaff_df_genename <- merge(x = res_aff_vs_unaff_df_genename, y = gene_info, by.x = "Ensembl_ID", by.y = "Ensembl_ID", all.x = TRUE)

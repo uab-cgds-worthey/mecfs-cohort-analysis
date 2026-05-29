@@ -60,7 +60,7 @@ source("code/helpers.R", local = knitr::knit_global())
 
 ## Data Import
 
-Counts and metadata match the main analysis. `Subgroup` can list multiple labels per sample (comma-separated); we split and treat each label as its own subgroup list. The chunk loads everything once; `genes_biomart` avoids repeated Ensembl lookups inside the loop.
+Counts and metadata match the main analysis. `Subgroup` can list multiple labels per sample (comma-separated); we split and treat each label as its own subgroup list. The chunk loads everything once so each subgroup reuses the same counts and metadata without depending on repeated external annotation lookups.
 
 ```{r, import data}
 # Load full metadata and counts (no subgroup filter yet)
