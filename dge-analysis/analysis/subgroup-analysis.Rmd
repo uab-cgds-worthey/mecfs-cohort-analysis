@@ -60,7 +60,7 @@ source("code/helpers.R", local = knitr::knit_global())
 
 ## Data Import
 
-Counts and metadata match the main analysis. `Subgroup` can list multiple labels per sample (comma-separated); we split and treat each label as its own subgroup list. The chunk loads everything once; `genes_biomart` avoids repeated Ensembl lookups inside the loop.
+Counts and metadata match the main analysis. `Subgroup` can list multiple labels per sample (comma-separated); we split and treat each label as its own subgroup list. The chunk loads everything once so each subgroup reuses the same counts and metadata without depending on repeated external annotation lookups.
 
 ```{r, import data}
 # Load full metadata and counts (no subgroup filter yet)
@@ -92,10 +92,14 @@ heatmap_display_subgroups <- c("Mito", "RBC")
 volcano_display_subgroup <- "RBC"
 
 # Retrieve gene annotations once (shared across subgroups)
-genes_biomart <- retrieve_gene_info(
-  values = gene_info$Ensembl_ID,
-  filters = "ensembl_gene_id_version"
-)
+# BioMart calls are disabled here because the CI environment can fail across
+# all configured hosts, which blocks subgroup rendering even when the rest of
+# the analysis is healthy. Re-enable when a stable annotation source is
+# available for automated builds.
+# genes_biomart <- retrieve_gene_info(
+#   values = gene_info$Ensembl_ID,
+#   filters = "ensembl_gene_id_version"
+# )
 ```
 
 ## Annotation colors

@@ -80,7 +80,13 @@ counts <- counts[, !(names(counts) %in% drop)] # remove both columns
 # Check that data is ordered properly
 sample_metadata <- check_order(sample_metadata = sample_metadata, counts = counts)
 
-genes_biomart <- retrieve_gene_info(values = gene_info$Ensembl_ID, filters = "ensembl_gene_id_version")
+# BioMart calls are disabled here because the CI environment can fail across
+# all configured hosts, which blocks the rest of the report from rendering.
+# Re-enable when a stable annotation source is available for automated builds.
+# genes_biomart <- retrieve_gene_info(
+#   values = gene_info$Ensembl_ID,
+#   filters = "ensembl_gene_id_version"
+# )
 ```
 
 ## DESeq2 Analysis
@@ -317,7 +323,7 @@ ComplexHeatmap::pheatmap(topgenes_aff_vs_unaff_05, color = colorRampPalette(rev(
 ```
 
 ```{r, all-genes-list}
-gb_df <- genes_biomart[, c(1, ncol(genes_biomart))]
+# gb_df <- genes_biomart[, c(1, ncol(genes_biomart))]
 res_aff_vs_unaff_df_genename <- res_aff_vs_unaff_df
 res_aff_vs_unaff_df_genename$Ensembl_ID <- row.names(res_aff_vs_unaff_df)
 res_aff_vs_unaff_df_genename <- merge(x = res_aff_vs_unaff_df_genename, y = gene_info, by.x = "Ensembl_ID", by.y = "Ensembl_ID", all.x = TRUE)
